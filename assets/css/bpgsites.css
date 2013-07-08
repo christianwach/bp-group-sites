@@ -1,0 +1,39 @@
+/*
+================================================================================
+BP Group Sites Stylesheet
+================================================================================
+AUTHOR: Christian Wach <needle@haystack.co.uk>
+--------------------------------------------------------------------------------
+NOTES
+=====
+
+Provide basic styles for plugin elements
+
+--------------------------------------------------------------------------------
+*/
+
+#bpgsites-post-in-box
+{
+	display: block;
+}
+
+div.bpgsites_group_filter
+{
+}
+
+div.bpgsites_group_filter form
+{
+	padding: 2%;
+}
+
+.bpgsites_comment_group_label
+{
+	cursor: pointer;
+}
+
+.bpgsites_comment_group
+{
+	display: block;
+}
+
+
