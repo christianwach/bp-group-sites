@@ -853,7 +853,7 @@ class BpGroupSites_Activity {
 			
 						// construct item
 						$html .= '<li>'.
-									'<a href="'.bp_get_group_permalink().'" id="btn_groupsites" class="css_btn" title="'.bp_get_group_name().'">'.
+									'<a href="'.bp_get_group_permalink().'" class="css_btn btn_groupsites" title="'.bp_get_group_name().'">'.
 										bp_get_group_name().
 									'</a>'.
 								 '</li>';
