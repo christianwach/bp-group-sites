@@ -41,14 +41,13 @@ define( 'BPGSITES_COMMENT_META_KEY', 'bpgsites_group_id' );
 
 
 
-
 /*
 ================================================================================
 Class Name
 ================================================================================
 */
 
-class BpGroupSites {
+class BP_Group_Sites {
 
 	/*
 	============================================================================
@@ -56,8 +55,8 @@ class BpGroupSites {
 	============================================================================
 	*/
 
-	// plugin options
-	public $options = array();
+	// admin object
+	public $admin;
 	
 	// activity object
 	public $activity;
@@ -94,19 +93,8 @@ class BpGroupSites {
 	 */
 	public function activate() {
 	
-		// are we re-activating?
-		if ( $this->site_option_get( 'bpgsites_installed', 'false' ) === 'true' ) {
-		
-			// yes, kick out
-			return;
-			
-		}
-		
-		// save options array
-		$this->site_option_set( 'bpgsites_options', $this->options );
-		
-		// set installed flag
-		$this->site_option_set( 'bpgsites_installed', 'true' );
+		// pass through to admin
+		$this->admin->activate();
 
 	}
 	
@@ -118,10 +106,8 @@ class BpGroupSites {
 	 */
 	public function deactivate() {
 		
-		// we'll delete our options in 'uninstall.php'
-		// but for testing let's delete them here
-		delete_site_option( 'bpgsites_options' );
-		delete_site_option( 'bpgsites_installed' );
+		// pass through to admin
+		$this->admin->deactivate();
 
 	}
 	
@@ -162,14 +148,17 @@ class BpGroupSites {
 	 */
 	public function initialise() {
 		
-		// get options array, if it exists
-		$this->options = $this->site_option_get( 'bpgsites_options', array() );
-		
 		// load our linkage functions file
 		require( BPGSITES_PATH . 'bpgsites-linkage.php' );
 	
 		// load our display functions file
 		require( BPGSITES_PATH . 'bpgsites-display.php' );
+	
+		// load our admin class file
+		require( BPGSITES_PATH . 'bpgsites-admin.php' );
+		
+		// init object, sending reference to this class
+		$this->admin = new BP_Group_Sites_Admin( $this );
 	
 		// load our activity functions file
 		require( BPGSITES_PATH . 'bpgsites-activity.php' );
@@ -194,10 +183,8 @@ class BpGroupSites {
 	public function register_hooks() {
 	
 		// hooks that always need to be present...
+		$this->admin->register_hooks();
 		$this->activity->register_hooks();
-		
-		// add something
-		//add_action( 'xxx', 'yyy' );
 		
 		// if the current blog is a group site...
 		if ( bpgsites_is_groupsite( get_current_blog_id() ) ) {
@@ -269,74 +256,13 @@ class BpGroupSites {
 	
 	
 	
-	/** 
-	 * @description: test existence of a specified site option
-	 */
-	function site_option_exists( $option_name = '' ) {
-	
-		// test for null
-		if ( $option_name == '' ) {
-			die( __( 'You must supply an option to option_wpms_exists()', 'bpgsites' ) );
-		}
-	
-		// get option with unlikely default
-		if ( $this->site_option_get( $option_name, 'fenfgehgefdfdjgrkj' ) == 'fenfgehgefdfdjgrkj' ) {
-		
-			// no
-			return false;
-		
-		} else {
-		
-			// yes
-			return true;
-		
-		}
-		
-	}
-	
-	
-	
-	/** 
-	 * @description: return a value for a specified site option
-	 */
-	function site_option_get( $option_name = '', $default = false ) {
-	
-		// test for null
-		if ( $option_name == '' ) {
-			die( __( 'You must supply an option to site_option_get()', 'bpgsites' ) );
-		}
-	
-		// get option
-		return get_site_option( $option_name, $default );
-		
-	}
-	
-	
-	
-	/** 
-	 * @description: set a value for a specified site option
-	 */
-	function site_option_set( $option_name = '', $value = '' ) {
-	
-		// test for null
-		if ( $option_name == '' ) {
-			die( __( 'You must supply an option to site_option_set()', 'bpgsites' ) );
-		}
-	
-		// set option
-		return update_site_option( $option_name, $value );
-		
-	}
-	
-	
-	
 } // class ends
 
 
 
 // init plugin
 global $bp_groupsites;
-$bp_groupsites = new BpGroupSites;
+$bp_groupsites = new BP_Group_Sites;
 
 // activation
 register_activation_hook( __FILE__, array( $bp_groupsites, 'activate' ) );
