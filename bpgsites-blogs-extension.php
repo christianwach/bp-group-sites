@@ -41,7 +41,7 @@ class BPGSites_Blogs_Template extends BP_Blogs_Template {
 	 * @return nothing
 	 */
 	function __construct( $type, $page, $per_page, $max, $user_id, $search_terms, $page_arg, $group_id ) {
-	
+		
 		// init parent
 		parent::__construct( $type, $page, $per_page, $max, $user_id, $search_terms, $page_arg );
 		
@@ -54,8 +54,6 @@ class BPGSites_Blogs_Template extends BP_Blogs_Template {
 		// always exclude groupblogs and the BP root blog
 		$this->filter_blogs();
 
-		//print_r( array( $this->blogs, $this->total_blog_count ) ); die();
-		
 		// add our data to each blog
 		$this->blogs = $this->modify_blog_data( $this->blogs );
 		
@@ -270,12 +268,9 @@ class BPGSites_Blogs_Template extends BP_Blogs_Template {
 	protected function _recalculate() {
 
 		// recalculate and reassign
-		//$this->total_blog_count = (int) $this->blogs['total'];
 		$this->blogs = $this->blogs['blogs'];
 		$this->blog_count = count( $this->blogs );
-		
-		//print_r( $this ); die();
-		
+
 		// rebuild pagination with new blog counts
 		if ( (int) $this->total_blog_count && (int) $this->pag_num ) {
 	
@@ -352,7 +347,7 @@ function bpgsites_has_blogs( $args = '' ) {
 	$defaults = array(
 		'type'         => $type,
 		'page'         => 1,
-		'per_page'     => 1,
+		'per_page'     => 20,
 		'max'          => false,
 
 		'page_arg'     => 'bpage',        // See https://buddypress.trac.wordpress.org/ticket/3679
