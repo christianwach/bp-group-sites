@@ -41,9 +41,12 @@ class BPGSites_Blogs_Template extends BP_Blogs_Template {
 	 * @return nothing
 	 */
 	function __construct( $type, $page, $per_page, $max, $user_id, $search_terms, $page_arg, $group_id ) {
-		
+	
 		// init parent
 		parent::__construct( $type, $page, $per_page, $max, $user_id, $search_terms, $page_arg );
+		
+		// calculate true total
+		$this->_calculate_true_total( $group_id );
 		
 		// store property for recalculation
 		$this->page_arg = $page_arg;
@@ -51,8 +54,10 @@ class BPGSites_Blogs_Template extends BP_Blogs_Template {
 		// always exclude groupblogs and the BP root blog
 		$this->filter_blogs();
 
+		//print_r( array( $this->blogs, $this->total_blog_count ) ); die();
+		
 		// add our data to each blog
-		$this->modify_blog_data();
+		$this->blogs = $this->modify_blog_data( $this->blogs );
 		
 		// filter by group, if requested
 		$this->filter_by_group( $group_id );
@@ -110,14 +115,16 @@ class BPGSites_Blogs_Template extends BP_Blogs_Template {
 	
 	/**
 	 * @description wait until after constructor has run to modify parameters
+	 * @param array $blogs an array of blogs
+	 * @return array modified blogs
 	 */
-	public function modify_blog_data() {
+	public function modify_blog_data( $blogs ) {
 		
 		// if we got some...
-		if ( is_array( $this->blogs ) AND count( $this->blogs ) > 0 ) {
+		if ( is_array( $blogs ) AND count( $blogs ) > 0 ) {
 		
 			// loop
-			foreach( $this->blogs AS $blog ) {
+			foreach( $blogs AS $blog ) {
 			
 				// get array of groups and add to blog object
 				$blog->blog_groups = bpgsites_get_groups_by_blog_id( $blog->blog_id );
@@ -125,6 +132,9 @@ class BPGSites_Blogs_Template extends BP_Blogs_Template {
 			}
 		
 		}
+		
+		// --<
+		return $blogs;
 		
 	}
 	
@@ -185,15 +195,16 @@ class BPGSites_Blogs_Template extends BP_Blogs_Template {
 	
 		}
 	
-		// count them
-		$filtered_blogs['total'] = count( $filtered_blogs['blogs'] );
+		// total blog count is calculated by _calculate_true_total()
+		$filtered_blogs['total'] = $this->total_blog_count;
 	
 		/*
 		// DIE!!!!!!
 		print_r( array(
 			'blogs' => $blogs, 
 			'group_id' => $group_id,
-			'filtered_blogs' => $filtered_blogs 
+			'filtered_blogs' => $filtered_blogs,
+			'total_blog_count' => $this->total_blog_count
 		) ); die();
 		*/
 	
@@ -234,8 +245,8 @@ class BPGSites_Blogs_Template extends BP_Blogs_Template {
 	
 		}
 	
-		// count them
-		$filtered_blogs['total'] = count( $filtered_blogs['blogs'] );
+		// total blog count is calculated by _calculate_true_total()
+		$filtered_blogs['total'] = $this->total_blog_count;
 	
 		/*
 		// DIE!!!!!!
@@ -259,10 +270,12 @@ class BPGSites_Blogs_Template extends BP_Blogs_Template {
 	protected function _recalculate() {
 
 		// recalculate and reassign
-		$this->total_blog_count = (int) $this->blogs['total'];
+		//$this->total_blog_count = (int) $this->blogs['total'];
 		$this->blogs = $this->blogs['blogs'];
 		$this->blog_count = count( $this->blogs );
-
+		
+		//print_r( $this ); die();
+		
 		// rebuild pagination with new blog counts
 		if ( (int) $this->total_blog_count && (int) $this->pag_num ) {
 	
@@ -280,6 +293,33 @@ class BPGSites_Blogs_Template extends BP_Blogs_Template {
 		
 		}
 	
+	}
+
+
+
+	/**
+	 * @description calculate true total of filtered blogs
+	 * @param int $group_id the numeric ID of the group
+	 */
+	protected function _calculate_true_total( $group_id = '' ) {
+	
+		// get all blogs first
+		$all = bp_blogs_get_all_blogs();
+		
+		// filter out root blog and group blogs
+		$filtered = $this->_exclude_groupblogs_and_root( $all['blogs'] );
+		
+		// add our data to each blog
+		$filtered['blogs'] = $this->modify_blog_data( $filtered['blogs'] );
+		
+		// optionally filter by group ID
+		if ( $group_id != '' AND is_numeric( $group_id ) ) {
+			$filtered = $this->_filter_blogs_by_group_id( $filtered['blogs'], $group_id );
+		}
+		
+		// store total
+		$this->total_blog_count = count( $filtered['blogs'] );
+		
 	}
 
 
@@ -312,7 +352,7 @@ function bpgsites_has_blogs( $args = '' ) {
 	$defaults = array(
 		'type'         => $type,
 		'page'         => 1,
-		'per_page'     => 20,
+		'per_page'     => 1,
 		'max'          => false,
 
 		'page_arg'     => 'bpage',        // See https://buddypress.trac.wordpress.org/ticket/3679
@@ -417,4 +457,33 @@ function bpgsites_admin_button_action() {
 }
 
 
+
+/** 
+ * @description: copied from bp_blogs_pagination_count() and amended
+ */
+function bpgsites_blogs_pagination_count() {
+	global $blogs_template;
+
+	$start_num = intval( ( $blogs_template->pag_page - 1 ) * $blogs_template->pag_num ) + 1;
+	$from_num  = bp_core_number_format( $start_num );
+	$to_num    = bp_core_number_format( ( $start_num + ( $blogs_template->pag_num - 1 ) > $blogs_template->total_blog_count ) ? $blogs_template->total_blog_count : $start_num + ( $blogs_template->pag_num - 1 ) );
+	$total     = bp_core_number_format( $blogs_template->total_blog_count );
+	
+	// get singular name
+	$singular = strtolower( apply_filters( 'bpgsites_extension_name', __( 'site', 'bpgsites' ) ) );
+	
+	// get plural name
+	$plural = strtolower( apply_filters( 'bpgsites_extension_plural', __( 'sites', 'bpgsites' ) ) );
+	
+	// we need to override the singular name
+	echo sprintf( 
+		__( 'Viewing %1$s %2$s to %3$s (of %4$s %5$s)', 'buddypress' ), 
+		$singular,
+		$from_num, 
+		$to_num, 
+		$total,
+		$plural
+	);
+	
+}
 

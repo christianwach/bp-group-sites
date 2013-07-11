@@ -69,7 +69,7 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	function __construct() {
 		
 		// init vars with filters applied
-		$name = apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bpgsites' ) );
+		$name = apply_filters( 'bpgsites_extension_title', __( 'Group Sites', 'bpgsites' ) );
 		$slug = apply_filters( 'bpgsites_extension_slug', 'group-sites' );
 		$pos = apply_filters( 'bpgsites_extension_pos', 31 );
 		
@@ -295,7 +295,7 @@ bp_register_group_extension( 'BPGSites_Group_Extension' );
 function bpgsites_get_extension_display() {
 	
 	// show something
-	echo '<h3>'.apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bpgsites' ) ).'</h3>';
+	echo '<h3>'.apply_filters( 'bpgsites_extension_title', __( 'Group Sites', 'bpgsites' ) ).'</h3>';
 	
 	do_action( 'bp_before_blogs_loop' );
 	
@@ -312,7 +312,7 @@ function bpgsites_get_extension_display() {
 		<div id="pag-top" class="pagination">
 
 			<div class="pag-count" id="blog-dir-count-top">
-				<?php bp_blogs_pagination_count(); ?>
+				<?php bpgsites_blogs_pagination_count(); ?>
 			</div>
 
 			<div class="pagination-links" id="blog-dir-pag-top">
@@ -366,7 +366,7 @@ function bpgsites_get_extension_display() {
 
 			<div class="pag-count" id="blog-dir-count-bottom">
 
-				<?php bp_blogs_pagination_count(); ?>
+				<?php bpgsites_blogs_pagination_count(); ?>
 
 			</div>
 
@@ -413,7 +413,7 @@ function bpgsites_get_extension_edit_screen() {
 		<div id="pag-top" class="pagination">
 
 			<div class="pag-count" id="blog-dir-count-top">
-				<?php bp_blogs_pagination_count(); ?>
+				<?php bpgsites_blogs_pagination_count(); ?>
 			</div>
 
 			<div class="pagination-links" id="blog-dir-pag-top">
@@ -458,7 +458,7 @@ function bpgsites_get_extension_edit_screen() {
 
 			<div class="pag-count" id="blog-dir-count-bottom">
 
-				<?php bp_blogs_pagination_count(); ?>
+				<?php bpgsites_blogs_pagination_count(); ?>
 
 			</div>
 
