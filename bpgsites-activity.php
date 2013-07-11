@@ -31,9 +31,6 @@ class BpGroupSites_Activity {
 	// groups
 	public $groups = array();
 	
-	// user's groups
-	public $user_group_ids = array();
-	
 	
 	
 	/** 
@@ -103,7 +100,7 @@ class BpGroupSites_Activity {
 				add_filter( 'commentpress_allowed_to_comment', array( $this, 'allow_commenting' ), 10, 1 );
 				
 				// add action to insert comments-by-group filter
-				add_action( 'commentpress_before_scrollable_comments', array( $this, 'group_comments_filter' ) );
+				add_action( 'commentpress_before_scrollable_comments', array( $this, 'get_group_comments_filter' ) );
 				
 				// add group ID as class to comment
 				add_filter( 'comment_class', array( $this, 'add_group_to_comment_class' ), 10, 4 );
@@ -632,7 +629,7 @@ class BpGroupSites_Activity {
 	/** 
 	 * @description: adds filtering above scrollable comments in CommentPress Responsive
 	 */
-	function group_comments_filter() {
+	function get_group_comments_filter() {
 
 		// init HTML output
 		$html = '';
@@ -641,7 +638,7 @@ class BpGroupSites_Activity {
 		$user_group_ids = $this->get_groups_for_user();
 	
 		// kick out if empty
-		if ( count( $user_group_ids ) == 0 ) return;
+		if ( count( $user_group_ids ) === 0 ) return;
 	
 		// define config array
 		$config_array = array(
@@ -899,7 +896,7 @@ class BpGroupSites_Activity {
 	function get_groups_for_user() {
 	
 		// have we already calculated this?
-		if ( ! empty( $this->user_group_ids ) ) return $this->user_group_ids;
+		if ( isset( $this->user_group_ids ) ) return $this->user_group_ids;
 	
 		// init return
 		$this->user_group_ids = array();

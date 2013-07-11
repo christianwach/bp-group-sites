@@ -151,11 +151,10 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 		// set group ID
 		$group_id = (int) $_POST['group-id'];
 		
-		// get action to perform on the chosen blog
-		$action = $parsed['action'];
+		//print_r( $parsed ); die();
 		
-		// couple or uncouple
-		switch ( $action ) {
+		// action to perform on the chosen blog
+		switch ( $parsed['action'] ) {
 		
 			case 'add':
 
@@ -177,13 +176,23 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 		
 				break;
 		
+			case 'update':
+				
+				// manage group linkages
+				$this->_update_group_linkages( $blog_id, $group_id );
+
+				// feedback
+				bp_core_add_message( __( 'Site successfully removed from Group', 'bpgsites' ) );
+		
+				break;
+		
 		}
 		
 		// access BP
 		global $bp;
 		
 		// return to page
-		bp_core_redirect( bp_get_group_permalink( $bp->groups->current_group ) . '/admin/' . $this->slug );
+		bp_core_redirect( bp_get_group_permalink( $bp->groups->current_group ) . 'admin/' . $this->slug );
 		
 	}
 	
@@ -276,6 +285,30 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 		// --<
 		return $return;
 
+	}
+	
+	
+	
+	/**
+	 * @description manages the linkages between "groups reading together"
+	 * @param int $group_id the numeric ID of the group
+	 * @param int $blog_id the numeric ID of the blog
+	 */
+	function _update_group_linkages( $blog_id, $group_id ) {
+	
+		// is this a comment in a group?
+		if ( isset( $_POST['bpgsites_linked_groups_'.$blog_id] ) AND is_array( $_POST['bpgsites_linked_groups_'.$blog_id] ) ) {
+	
+			// get values from post array
+			$group_ids = $_POST['bpgsites_linked_groups_'.$blog_id];
+		
+			// sanitise all the items
+			array_walk( $group_ids, create_function( '&$val', '$val = absint( $val );' ) );
+			
+			//print_r( $group_ids ); die();
+			
+		}
+	
 	}
 	
 	
@@ -426,7 +459,12 @@ function bpgsites_get_extension_edit_screen() {
 
 		<ul id="blogs-list" class="item-list" role="main">
 
-		<?php while ( bp_blogs() ) : bp_the_blog(); ?>
+		<?php while ( bp_blogs() ) : bp_the_blog(); 
+			
+			// is this blog in the group?
+			$in_group = bpgsites_is_blog_in_group()
+			
+			?>
 
 			<li>
 				<div class="item-avatar">
@@ -437,9 +475,26 @@ function bpgsites_get_extension_edit_screen() {
 					<div class="item-title"><a href="<?php bp_blog_permalink(); ?>"><?php bp_blog_name(); ?></a></div>
 					<div class="item-meta"><span class="activity"><?php bp_blog_last_active(); ?></span></div>
 					<?php do_action( 'bp_directory_blogs_item' ); ?>
+					<?php 
+					
+					// init linkage
+					$has_linkage = false;
+					
+					// if blog already in group
+					if ( $in_group ) {
+						
+						// see if we have other groups (and echo while we're at it)
+						$has_linkage = bpgsites_get_group_linkage();
+					
+					}
+					
+					?>
 				</div>
 
 				<div class="action">
+					<?php if ( $in_group AND $has_linkage ) { ?>
+						<input type="submit" class="bpgsites_manage_button" name="bpgsites_manage-<?php bp_blog_id() ?>-update" value="<?php _e( 'Update', 'bpgsites' ); ?>" />
+					<? } ?>
 					<input type="submit" class="bpgsites_manage_button" name="bpgsites_manage-<?php bp_blog_id() ?>-<?php bpgsites_admin_button_action() ?>" value="<?php bpgsites_admin_button_value(); ?>" />
 				</div>
 
@@ -496,6 +551,138 @@ function bpgsites_get_extension_edit_screen() {
 function bpgsites_get_extension_admin_screen() {
 
 	echo '<p>BP Group Sites Admin Screen</p>';
+
+}
+
+
+
+/** 
+ * @description: adds checkboxes to groups loop for "reading with" other groups
+ */
+function bpgsites_get_group_linkage() {
+
+	// init return
+	$has_linkage = false;
+
+	// init HTML output
+	$html = '';
+	
+	// init user groups array
+	$user_group_ids = array();
+	
+	// get current blog ID
+	$blog_id = bp_get_blog_id();
+	
+	// get this blog's group IDs
+	$group_ids = bpgsites_get_groups_by_blog_id( $blog_id );
+	//print_r( $group_ids ); die();
+
+	// get user ID
+	$user_id = bp_loggedin_user_id();
+	
+	// get current group ID
+	$current_group_id = bp_get_current_group_id();
+
+	// loop through the groups
+	foreach( $group_ids AS $group_id ) {
+
+		// get the group
+		$group = groups_get_group( array(
+			'group_id'   => $group_id
+		) );
+		//print_r( $group ); //die();
+
+		// either this user is a member or it's public
+		if ( 
+			groups_is_user_member( $user_id, $group_id ) OR 
+			'public' == bp_get_group_status( $group ) 
+		) {
+		
+			// exclude the current group
+			if ( $group_id != $current_group_id ) {
+				
+				// add to our array
+				$user_group_ids[] = $group_id;
+				
+			}
+
+		}
+	
+	}
+
+	// kick out if empty
+	if ( count( $user_group_ids ) == 0 ) return $has_linkage;
+
+	//print_r( $user_group_ids ); die();
+	
+	// define config array
+	$config_array = array(
+		//'user_id' => $user_id,
+		'type' => 'alphabetical',
+		'max' => 100,
+		'per_page' => 100,
+		'populate_extras' => 0,
+		'include' => $user_group_ids,
+		'page_arg' => 'bpgsites'
+	);
+	
+	// new groups query
+	$groups_query = new BP_Groups_Template( $config_array );
+
+	// get groups
+	if ( $groups_query->has_groups() ) {
+	
+		// set flag
+		$has_linkage = true;
+	
+		// only show if user has more than one...
+		//if ( $groups_query->group_count > 1 ) {
+		
+			// open div
+			$html .= '<div class="bpgsites_group_linkage">'."\n";
+		
+			// construct heading
+			$html .= '<h5 class="bpgsites_group_linkage_heading">'.__( 'Read this with:', 'bpgsites' ).'</h5>'."\n";
+		
+			// open div
+			$html .= '<div class="bpgsites_group_linkages">'."\n";
+		
+			// do the loop
+			while ( $groups_query->groups() ) { $groups_query->the_group();
+				
+				// get group ID
+				$group_id = $groups_query->group->id;
+		
+				// add arbitrary divider
+				$html .= '<span class="bpgsites_linked_group">'."\n";
+		
+				// add checkbox
+				$html .= '<input type="checkbox" class="bpgsites_group_checkbox" name="bpgsites_linked_groups_'.$blog_id.'[]" id="bpgsites_linked_group_'.$blog_id.'_'.$group_id.'" value="'.$group_id.'" />'."\n";
+			
+				// add label
+				$html .= '<label class="bpgsites_linked_group_label" for="bpgsites_linked_group_'.$blog_id.'_'.$group_id.'">'.$groups_query->group->name.'</label>'."\n";
+			
+				// close arbitrary divider
+				$html .= '</span>'."\n";
+		
+			} // end while
+		
+			// close tags
+			$html .= '</div>'."\n";
+			$html .= '</div>'."\n";
+		
+		//}
+
+	}
+	
+	// clear it
+	unset( $groups_query );
+
+	// output
+	echo $html;
+	
+	// --<
+	return $has_linkage;
 
 }
 
