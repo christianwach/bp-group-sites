@@ -82,6 +82,9 @@ class BP_Group_Sites_Admin {
 		// default name changes to "off"
 		$this->option_set( 'bpgsites_overrides', $defaults['overrides'] );
 	
+		// default plugin name to "Group Sites"
+		$this->option_set( 'bpgsites_overrides_title', $defaults['title'] );
+	
 		// default singular to "Group Site"
 		$this->option_set( 'bpgsites_overrides_name', $defaults['name'] );
 	
@@ -201,6 +204,19 @@ class BP_Group_Sites_Admin {
 		// set on/off option
 		$bpgsites_overrides = absint( $bpgsites_overrides );
 		$this->option_set( 'bpgsites_overrides', ( $bpgsites_overrides ? 1 : 0 ) );
+		
+		
+		
+		// get plugin title option
+		$bpgsites_overrides_title = $wpdb->escape( $bpgsites_overrides_title );
+		
+		// revert to default if we didn't get one...
+		if ( $bpgsites_overrides_title == '' ) {
+			$bpgsites_overrides_title = $defaults['title'];
+		}
+		
+		// set title option
+		$this->option_set( 'bpgsites_overrides_title', $bpgsites_overrides_title );
 		
 		
 		
@@ -381,6 +397,10 @@ class BP_Group_Sites_Admin {
 		$bpgsites_overrides = '';
 		if ( $this->option_get( 'bpgsites_overrides' ) == '1' ) $bpgsites_overrides = ' checked="checked"';
 		
+		// init plugin title
+		$bpgsites_overrides_title = $this->option_get( 'bpgsites_overrides_title' );
+		if ( $bpgsites_overrides_title == '' ) $bpgsites_overrides_title = esc_attr( $defaults['title'] );
+		
 		// init name
 		$bpgsites_overrides_name = $this->option_get( 'bpgsites_overrides_name' );
 		if ( $bpgsites_overrides_name == '' ) $bpgsites_overrides_name = esc_attr( $defaults['name'] );
@@ -427,8 +447,13 @@ class BP_Group_Sites_Admin {
 		<table class="form-table">
 
 			<tr valign="top">
-				<th scope="row"><label for="bpgsites_overrides">'.__( 'Change the name of a Group Site?', 'bpgsites' ).'</label></th>
+				<th scope="row"><label for="bpgsites_overrides">'.__( 'Enable name changes?', 'bpgsites' ).'</label></th>
 				<td><input id="bpgsites_overrides" name="bpgsites_overrides" value="1" type="checkbox"'.$bpgsites_overrides.' /></td>
+			</tr>
+
+			<tr valign="top">
+				<th scope="row"><label for="bpgsites_overrides_name">'.__( 'Plugin Title', 'bpgsites' ).'</label></th>
+				<td><input id="bpgsites_overrides_title" name="bpgsites_overrides_title" value="'.$bpgsites_overrides_title.'" type="text" /></td>
 			</tr>
 
 			<tr valign="top">
@@ -482,6 +507,9 @@ class BP_Group_Sites_Admin {
 		// default to off
 		$defaults['overrides'] = 0;
 	
+		// default plugin title to "Group Sites"
+		$defaults['title'] = __( 'Group Sites', 'bpgsites' );
+	
 		// default singular to "Group Site"
 		$defaults['name'] = __( 'Group Site', 'bpgsites' );
 	
@@ -514,7 +542,33 @@ Primary filters for overrides
 
 
 /** 
- * @description: override group extension name
+ * @description: override group extension title
+ */
+function bpgsites_override_extension_title( $title ) {
+	
+	// access object
+	global $bp_groupsites;
+	
+	// are we overriding?
+	if ( $bp_groupsites->admin->option_get( 'bpgsites_overrides' ) ) {
+	
+		// override with our option
+		$title = $bp_groupsites->admin->option_get( 'bpgsites_overrides_title' );
+		
+	}
+	
+	// --<
+	return $title;
+	
+}
+
+// add filter for the above
+add_filter( 'bpgsites_extension_title', 'bpgsites_override_extension_title', 10, 1 );
+
+
+
+/** 
+ * @description: override group extension singular name
  */
 function bpgsites_override_extension_name( $name ) {
 	
