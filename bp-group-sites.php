@@ -186,18 +186,21 @@ class BP_Group_Sites {
 		$this->admin->register_hooks();
 		$this->activity->register_hooks();
 		
+		// register any public styles
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ), 20 );
+	
+		// register any public scripts
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 20 );
+	
 		// if the current blog is a group site...
 		if ( bpgsites_is_groupsite( get_current_blog_id() ) ) {
 			
 			// if on front end...
 			if ( !is_admin() ) {
 			
-				// register any public scripts
-				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 20 );
+				// register our CommentPress scripts
+				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_commentpress_scripts' ), 20 );
 				
-				// register any public styles
-				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ), 20 );
-			
 			}
 		
 		}
@@ -206,31 +209,6 @@ class BP_Group_Sites {
 	
 	
 		
-	/**
-	 * @description: add our javascripts
-	 * @return nothing
-	 */
-	public function enqueue_scripts() {
-	
-		// CommentPress theme compat
-		if ( function_exists( 'commentpress_get_comments_by_para' ) ) {
-		
-			// enqueue common js
-			wp_enqueue_script(
-	
-				'bpgsites_cp_js', 
-				BPGSITES_URL . 'assets/js/bpgsites.js',
-				array( 'cp_common_js' ),
-				BPGSITES_VERSION
-	
-			);
-	
-		}
-		
-	}
-	
-	
-	
 	/**
 	 * @description: add our stylesheets
 	 * @return nothing
@@ -247,6 +225,51 @@ class BP_Group_Sites {
 			'all' // media
 			
 		);
+		
+	}
+	
+	
+	
+	/**
+	 * @description: add our global scripts
+	 * @return nothing
+	 */
+	public function enqueue_scripts() {
+	
+		// enqueue common js
+		wp_enqueue_script(
+
+			'bpgsites_js', 
+			BPGSITES_URL . 'assets/js/bpgsites.js',
+			array( 'jquery' ),
+			BPGSITES_VERSION
+
+		);
+	
+	}
+	
+	
+	
+	/**
+	 * @description: add our CommentPress-specific scripts
+	 * @return nothing
+	 */
+	public function enqueue_commentpress_scripts() {
+	
+		// CommentPress theme compat
+		if ( function_exists( 'commentpress_get_comments_by_para' ) ) {
+		
+			// enqueue common js
+			wp_enqueue_script(
+	
+				'bpgsites_cp_js', 
+				BPGSITES_URL . 'assets/js/bpgsites-commentpress.js',
+				array( 'cp_common_js' ),
+				BPGSITES_VERSION
+	
+			);
+	
+		}
 		
 	}
 	
