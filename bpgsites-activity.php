@@ -900,10 +900,14 @@ class BpGroupSites_Activity {
 	
 		// init return
 		$this->user_group_ids = array();
-
+		
+		// get current blog
+		$current_blog_id = get_current_blog_id();
+		
 		// get this blog's group IDs
-		$group_ids = bpgsites_get_groups_by_blog_id( get_current_blog_id() );
-		//print_r( $group_ids ); die();
+		$group_ids = bpgsites_get_groups_by_blog_id( $current_blog_id );
+		//print '<pre>';
+		//print_r( $group_ids ); //die();
 
 		// get user ID
 		$user_id = bp_loggedin_user_id();
@@ -911,21 +915,61 @@ class BpGroupSites_Activity {
 		// loop through the groups
 		foreach( $group_ids AS $group_id ) {
 
+			//print_r( array ('testing group_id' => $group_id ) ); //die();
+
 			// get the group
 			$group = groups_get_group( array(
 				'group_id'   => $group_id
 			) );
 			//print_r( $group ); //die();
 	
-			// either this user is a member or it's public
+			// if it's public or this user is a member, add it
 			if ( 
-				groups_is_user_member( $user_id, $group_id ) OR 
-				'public' == bp_get_group_status( $group ) 
+				
+				'public' == bp_get_group_status( $group ) OR
+				groups_is_user_member( $user_id, $group_id )
+				
 			) {
-
-				// add to our array
-				$this->user_group_ids[] = $group_id;
+				
+				// if it's not already there...
+				if ( !in_array( $group_id, $this->user_group_ids ) ) {
+					
+					// add to our array
+					$this->user_group_ids[] = $group_id;
+				
+				}
 	
+			} else {
+			
+				// if the user is not a member, is it one of the groups that is
+				// reading the site with this group?
+				
+				// get linked groups
+				$linked_groups = bpgsites_get_linked_groups_by_blog_id( $group_id, $current_blog_id );
+				//print_r( array ('linked_groups' => $linked_groups ) ); //die();
+				
+				// loop through them
+				foreach( $linked_groups AS $linked_group_id ) {
+					
+					// if the user is a member...
+					if ( groups_is_user_member( $user_id, $linked_group_id ) ) {
+					
+						// add the current one if it's not already there...
+						if ( !in_array( $group_id, $this->user_group_ids ) ) {
+					
+							// add to our array
+							$this->user_group_ids[] = $group_id;
+							//print_r( array ('adding group_id' => $group_id ) ); //die();
+							
+							// don't need to check any further
+							break;
+				
+						}
+	
+					}
+
+				}
+				
 			}
 		
 		}

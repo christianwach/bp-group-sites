@@ -740,7 +740,7 @@ function bpgsites_get_group_linkage() {
 
 
 /** 
- * @description: for a given group ID, gety linked group IDs for all blogs
+ * @description: for a given group ID, get linked group IDs for all blogs
  * @param int $group_id the numeric ID of the group
  */
 function bpgsites_get_group_linkages( $group_id ) {
@@ -753,6 +753,76 @@ function bpgsites_get_group_linkages( $group_id ) {
 
 	// --<
 	return $linked_groups;
+
+}
+
+
+
+/** 
+ * @description: for a given group ID, get linked group IDs for a specific blog
+ * @param int $group_id the numeric ID of the group
+ */
+function bpgsites_get_linked_groups_by_blog_id( $group_id, $blog_id ) {
+
+	// get linked groups
+	$linked = bpgsites_get_group_linkages( $group_id );
+	
+	// get those for this blog
+	$linked_groups = isset( $linked[$blog_id] ) ? $linked[$blog_id] : array();
+	
+	/*
+	print_r( array( 
+		'group_id' => $group_id, 
+		'blog_id' => $blog_id,
+		'linked' => $linked, 
+		'linked_groups' => $linked_groups
+	) ); //die();
+	*/
+	
+	// --<
+	return $linked_groups;
+
+}
+
+
+
+/** 
+ * @description: for a given group ID, get linked group IDs for a given blog ID
+ * @param int $group_id the numeric ID of the group
+ * @param int $blog_id the numeric ID of the blog
+ */
+function bpgsites_is_linked_group( $group_id, $blog_id ) {
+
+	// init return
+	$return = false;
+
+	// get linked groups
+	$linked = bpgsites_get_group_linkages( $group_id );
+	
+	// get those for this blog
+	$linked_groups = isset( $linked[$blog_id] ) ? $linked[$blog_id] : array();
+	
+	///*
+	print_r( array( 
+		'linked' => $linked, 
+		'group_id' => $group_id, 
+		'blog_id' => $blog_id,
+		'linked_groups' => $linked_groups
+	) ); //die();
+	//*/
+	
+	// did we get any?
+	if ( count( $linked_groups ) > 0 ) {
+	
+		// 
+	
+	}
+	
+	// if this one is in the array, it's linked
+	if ( in_array( $group_id, $linked_groups ) ) { $return = true; }
+	
+	// --<
+	return $return;
 
 }
 
