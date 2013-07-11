@@ -239,15 +239,20 @@ class BP_Group_Sites {
 	 */
 	public function enqueue_scripts() {
 	
-		// enqueue common js
-		wp_enqueue_script(
+		// only on root blog
+		if ( is_multisite() AND bp_is_root_blog() ) {
+		
+			// enqueue common js
+			wp_enqueue_script(
 
-			'bpgsites_js', 
-			BPGSITES_URL . 'assets/js/bpgsites.js',
-			array( 'jquery' ),
-			BPGSITES_VERSION
+				'bpgsites_js', 
+				BPGSITES_URL . 'assets/js/bpgsites.js',
+				array( 'jquery' ),
+				BPGSITES_VERSION
 
-		);
+			);
+		
+		}
 	
 	}
 	
