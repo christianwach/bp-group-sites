@@ -33,7 +33,10 @@ if ( !defined( 'BPGSITES_PATH' ) ) {
 // set site option prefix
 define( 'BPGSITES_PREFIX', 'bpgsites_blog_groups_' );
 
-// set group option name
+// set linked groups option name
+define( 'BPGSITES_LINKED', 'bpgsites_linked_groups' );
+
+// set group blogs option name
 define( 'BPGSITES_OPTION', 'bpgsites_group_blogs' );
 
 // set comment meta key

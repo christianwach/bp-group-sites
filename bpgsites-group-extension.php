@@ -307,6 +307,40 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 			
 			//print_r( $group_ids ); die();
 			
+			// get existing array
+			$linked = bpgsites_get_group_linkages( $group_id );
+			
+			// overwrite the nested array for this blog ID
+			$linked[$blog_id] = $group_ids;
+			
+			// save updated option
+			groups_update_groupmeta( $group_id, BPGSITES_LINKED, $linked );
+			
+			// set reciprocal linkages
+			foreach( $group_ids AS $linked_group_id ) {
+				
+				// get their linkages
+				$linked = bpgsites_get_group_linkages( $linked_group_id );
+				
+				// get the array for this blog ID
+				$remote_group_ids = isset( $linked[$blog_id] ) ? $linked[$blog_id] : array();
+				
+				// is this one in the remote list?
+				if ( !in_array( $group_id, $remote_group_ids ) ) {
+					
+					// add ours
+					$remote_group_ids[] = $group_id;
+					
+					// overwrite in parent array
+					$linked[$blog_id] = $remote_group_ids;
+				
+					// save updated option
+					groups_update_groupmeta( $linked_group_id, BPGSITES_LINKED, $linked );
+			
+				}
+			
+			}
+	
 		}
 	
 	}
@@ -635,6 +669,12 @@ function bpgsites_get_group_linkage() {
 		// set flag
 		$has_linkage = true;
 	
+		// get linkages
+		$linkages = bpgsites_get_group_linkages( $current_group_id );
+		
+		// get those for this blog
+		$linked_groups = isset( $linkages[$blog_id] ) ? $linkages[$blog_id] : array();
+		
 		// only show if user has more than one...
 		//if ( $groups_query->group_count > 1 ) {
 		
@@ -652,12 +692,23 @@ function bpgsites_get_group_linkage() {
 				
 				// get group ID
 				$group_id = $groups_query->group->id;
+				
+				// assume not linked
+				$checked = '';
+				
+				// is this one in the array?
+				if ( in_array( $group_id, $linked_groups ) ) {
+				
+					// check the box
+					$checked = ' checked="checked"';
+				
+				}
 		
 				// add arbitrary divider
 				$html .= '<span class="bpgsites_linked_group">'."\n";
 		
 				// add checkbox
-				$html .= '<input type="checkbox" class="bpgsites_group_checkbox" name="bpgsites_linked_groups_'.$blog_id.'[]" id="bpgsites_linked_group_'.$blog_id.'_'.$group_id.'" value="'.$group_id.'" />'."\n";
+				$html .= '<input type="checkbox" class="bpgsites_group_checkbox" name="bpgsites_linked_groups_'.$blog_id.'[]" id="bpgsites_linked_group_'.$blog_id.'_'.$group_id.'" value="'.$group_id.'" '.$checked.'/>'."\n";
 			
 				// add label
 				$html .= '<label class="bpgsites_linked_group_label" for="bpgsites_linked_group_'.$blog_id.'_'.$group_id.'">'.$groups_query->group->name.'</label>'."\n";
@@ -683,6 +734,25 @@ function bpgsites_get_group_linkage() {
 	
 	// --<
 	return $has_linkage;
+
+}
+
+
+
+/** 
+ * @description: for a given group ID, gety linked group IDs for all blogs
+ * @param int $group_id the numeric ID of the group
+ */
+function bpgsites_get_group_linkages( $group_id ) {
+
+	// get option if it exists
+	$linked_groups = groups_get_groupmeta( $group_id, BPGSITES_LINKED );
+
+	// sanity check
+	if ( !is_array( $linked_groups ) ) { $linked_groups = array(); }
+
+	// --<
+	return $linked_groups;
 
 }
 
