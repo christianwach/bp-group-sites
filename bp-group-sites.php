@@ -277,6 +277,14 @@ class BP_Group_Sites {
 	
 			);
 	
+			// get vars
+			$vars = array(
+				'show_public' => $this->admin->option_get( 'bpgsites_public' )
+			);
+		
+			// localise with wp function
+			wp_localize_script( 'bpgsites_cp_js', 'BpgsitesSettings', $vars );
+		
 		}
 		
 	}

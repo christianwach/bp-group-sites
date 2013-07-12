@@ -14,6 +14,19 @@ This provides compatibility with CommentPress
 
 
 
+// init var
+var bpgsites_show_public = '0';
+
+// test for our localisation object
+if ( 'undefined' !== typeof BpgsitesSettings ) {
+
+	// get our var
+	bpgsites_show_public = BpgsitesSettings.show_public;
+	
+}
+
+
+
 /** 
  * @description: set up our elements
  *
@@ -121,7 +134,68 @@ function bpgsites_update_select( comment_id ) {
  *
  */
 jQuery(document).ready( function($) {
+	
+	// if we mustn't show publci comments...
+	if ( bpgsites_show_public == '0' ) {
+	
+		/** 
+		 * @description: hide comments for initially unchecked boxes - HACK!!!
+		 *
+		 */
+		$( 'input.bpgsites_group_checkbox_public' ).each( function(i) {
+		
+			// define vars
+			var group_id, checked;
+		
+			// get group ID
+			group_id = $(this).val();
+		
+			// get checked/unchecked
+			checked = $(this).prop( 'checked' );
 
+			// if checked...
+			if ( checked ) {
+		
+				// show group comments
+				$( 'li.bpgsites-group-' + group_id ).addClass( 'bpgsites-shown' );
+				$( 'li.bpgsites-group-' + group_id ).show();
+		
+			} else {
+		
+				// hide group comments
+				$( 'li.bpgsites-group-' + group_id ).removeClass( 'bpgsites-shown' );
+				$( 'li.bpgsites-group-' + group_id ).hide();
+		
+			}
+		
+			// recalculate headings and para icons
+			$( 'a.comment_block_permalink' ).each( function( i ) {
+			
+				var wrapper, shown, text_sig;
+			
+				// get wrapper
+				wrapper = $(this).parent().next( 'div.paragraph_wrapper' );
+			
+				// get list items that are not hidden
+				shown = wrapper.find( 'li.bpgsites-shown' );
+			
+				// update heading
+				$(this).children( 'span.cp_comment_num' ).text( shown.length );
+			
+				// get text signature
+				text_sig = $(this).parent().prop( 'id' ).split( 'para_heading-' )[1];
+			
+				// set comment icon text
+				$( '#textblock-' + text_sig + ' .commenticonbox small' ).text( shown.length );
+		
+			});
+		
+		});
+		
+	}
+	
+	
+	
 	/** 
 	 * @description: activity column headings click
 	 *
