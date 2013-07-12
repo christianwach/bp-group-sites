@@ -1128,10 +1128,10 @@ class BpGroupSites_Activity {
 			if ( in_array( $group, $user_group_ids ) ) {
 			
 				// yes, kick out
-				this->user_in_group = true;
+				$this->user_in_group = true;
 				
 				// --<
-				return this->user_in_group;
+				return $this->user_in_group;
 			
 			}
 
