@@ -88,7 +88,7 @@ class BpGroupSites_Activity {
 			if ( !is_admin() ) {
 			
 				// add navigation items for groups
-				add_filter( 'cp_nav_after_network_home_title', array( $this, 'navigation_links' ) );
+				add_filter( 'cp_nav_after_network_home_title', array( $this, 'get_group_navigation_links' ) );
 			
 				// override reply to link
 				add_filter( 'comment_reply_link', array( $this, 'override_reply_to_link' ), 10, 4 );
@@ -314,15 +314,40 @@ class BpGroupSites_Activity {
 	 * @param object $comments the current query
 	 */
 	function filter_comments( $comments ) {
+	
+		// init array
+		$groups = array();
 
 		// get the groups this user can see
 		$user_group_ids = $this->get_groups_for_user();
+		//print_r( $user_group_ids ); die();
 		
+		// if we get some...
+		if ( 
+		
+			count( $user_group_ids['my_groups'] ) > 0 OR
+			count( $user_group_ids['public_groups'] ) > 0 
+			
+		) {
+	
+			// merge the arrays
+			$groups = array_unique( array_merge( 
+				$user_group_ids['my_groups'], 
+				$user_group_ids['public_groups'] 
+			) );
+		
+		}
+	
 		// if none, then what?
-		if ( count( $user_group_ids ) === 0 ) {
+		if ( 
+			
+			count( $user_group_ids['my_groups'] ) === 0 AND 
+			count( $user_group_ids['public_groups'] ) === 0 
+			
+		) {
 	
 			// set a non-existent group ID
-			$user_group_ids = array( 0 );
+			$groups = array( 0 );
 		
 		}
 	
@@ -335,7 +360,7 @@ class BpGroupSites_Activity {
 			// comments in groups
 			 array(
 				'key'   => BPGSITES_COMMENT_META_KEY,
-				'value' => $user_group_ids,
+				'value' => $groups,
 				'compare' => 'IN'
 			),
 		
@@ -619,6 +644,347 @@ class BpGroupSites_Activity {
 
 
 	/** 
+	 * @description: adds links to the Special Pages menu in CommentPress themes
+	 */
+	function get_group_navigation_links() {
+	
+		// is a CommentPress theme active?
+		if ( function_exists( 'commentpress_setup' ) ) {
+
+			// init HTML output
+			$html = '';
+	
+			// get the groups this user can see
+			$user_group_ids = $this->get_groups_for_user();
+	
+			// kick out if both are empty
+			if (
+				count( $user_group_ids['my_groups'] ) == 0 AND 
+				count( $user_group_ids['public_groups'] ) == 0 
+			) {
+				// --<
+				return;
+			}
+			
+			// init array
+			$groups = array();
+				
+			// if either has entries
+			if (
+				count( $user_group_ids['my_groups'] ) > 0 OR 
+				count( $user_group_ids['public_groups'] ) > 0 
+			) {
+
+				// merge the arrays
+				$groups = array_unique( array_merge( 
+					$user_group_ids['my_groups'], 
+					$user_group_ids['public_groups'] 
+				) );
+
+			}
+			
+			// define config array
+			$config_array = array(
+				//'user_id' => $user_id,
+				'type' => 'alphabetical',
+				'populate_extras' => 0,
+				'include' => $groups
+			);
+	
+			// get groups
+			if ( bp_has_groups( $config_array ) ) {
+		
+				// access object
+				global $groups_template, $post;
+		
+				// only show if user has more than one...
+				if ( $groups_template->group_count > 1 ) {
+				
+					// set title, but allow plugins to override
+					$title = apply_filters( 
+						'bpgsites_groupsites_menu_item_title', 
+						sprintf(
+							__( 'Groups reading this %s', 'bpgsites' ),
+							apply_filters( 'bpgsites_extension_name', __( 'site', 'bpgsites' ) )
+						)
+					);
+					
+					// construct item
+					$html .= '<li><a href="#groupsites-list" id="btn_groupsites" class="css_btn" title="'.$title.'">'.$title.'</a>';
+				
+					// open sublist
+					$html .= '<ul class="children" id="groupsites-list">'."\n";
+					
+					// init lists
+					$mine = array();
+					$public = array();
+
+					// do the loop
+					while ( bp_groups() ) {  bp_the_group();
+					
+						// construct item
+						$item = '<li>'.
+									'<a href="'.bp_get_group_permalink().'" class="css_btn btn_groupsites" title="'.bp_get_group_name().'">'.
+										bp_get_group_name().
+									'</a>'.
+								'</li>';
+			
+						// public or mine?
+						if ( in_array( bp_get_group_id(), $user_group_ids['public_groups'] ) ) {
+							
+							// public
+							$public[] = $item;
+							
+						} else {
+						
+							// public
+							$mine[] = $item;
+							
+						}
+			
+					} // end while
+					
+					// did we get any that are mine?
+					if ( count( $mine ) > 0 ) {
+						
+						// construct title
+						$title = __( 'My Groups', 'bpgsites' );
+						
+						// construct item
+						$html .= '<li><a href="#groupsites-list-mine" id="btn_groupsites" class="css_btn" title="'.$title.'">'.$title.'</a>';
+				
+						// open sublist
+						$html .= '<ul class="children" id="groupsites-list-mine">'."\n";
+						
+						// add items
+						$html .= implode( "\n", $mine );
+						
+						// close sublist
+						$html .= '</ul>'."\n";
+						$html .= '</li>'."\n";
+						
+					}
+			
+					// did we get any that are public?
+					if ( count( $public ) > 0 ) {
+					
+						// construct title
+						$title = __( 'Public Groups', 'bpgsites' );
+						
+						// construct item
+						$html .= '<li><a href="#groupsites-list-mine" id="btn_groupsites" class="css_btn" title="'.$title.'">'.$title.'</a>';
+				
+						// open sublist
+						$html .= '<ul class="children" id="groupsites-list-public">'."\n";
+						
+						// add items
+						$html .= implode( "\n", $public );
+						
+						// close sublist
+						$html .= '</ul>'."\n";
+						$html .= '</li>'."\n";
+						
+					}
+			
+					// close tags
+					$html .= '</ul>'."\n";
+					$html .= '</li>'."\n";
+			
+				} else {
+			
+					// set title
+					$title = __( 'Group Home Page', 'bpgsites' );
+				
+					// do want to use bp_get_group_name()
+			
+					// do the loop (though there will only be one item
+					while ( bp_groups() ) {  bp_the_group();
+			
+						// construct item
+						$html .= '<li><a href="'.bp_get_group_permalink().'" id="btn_groupsites" class="css_btn" title="'.$title.'">'.$title.'</a></li>';
+				
+					}
+			
+				}
+	
+			}
+	
+			// output
+			echo $html;
+	
+		}
+
+	}
+	
+	
+	
+	/** 
+	 * @description: adds filtering above scrollable comments in CommentPress Responsive
+	 */
+	function get_group_comments_filter() {
+
+		// init HTML output
+		$html = '';
+		
+		// get the groups this user can see
+		$user_group_ids = $this->get_groups_for_user();
+	
+		// kick out if both are empty
+		if (
+			count( $user_group_ids['my_groups'] ) == 0 AND 
+			count( $user_group_ids['public_groups'] ) == 0 
+		) {
+			// --<
+			return;
+		}
+		
+		// init array
+		$groups = array();
+			
+		// if either has entries
+		if (
+			count( $user_group_ids['my_groups'] ) > 0 OR 
+			count( $user_group_ids['public_groups'] ) > 0 
+		) {
+
+			// merge the arrays
+			$groups = array_unique( array_merge( 
+				$user_group_ids['my_groups'], 
+				$user_group_ids['public_groups'] 
+			) );
+
+		}
+		
+		// define config array
+		$config_array = array(
+			//'user_id' => $user_id,
+			'type' => 'alphabetical',
+			'max' => 100,
+			'per_page' => 100,
+			'populate_extras' => 0,
+			'include' => $groups
+		);
+	
+		// get groups
+		if ( bp_has_groups( $config_array ) ) {
+		
+			// access object
+			global $groups_template, $post;
+		
+			// only show if user has more than one...
+			if ( $groups_template->group_count > 1 ) {
+			
+				// construct heading (the no_comments class prevents this from printing)
+				$html .= '<h3 class="bpgsites_group_filter_heading no_comments">'.
+							'<a href="#bpgsites_group_filter">'.__( 'Filter comments by group', 'bpgsites' ).'</a>'.
+						 '</h3>'."\n";
+			
+				// open div
+				$html .= '<div id="bpgsites_group_filter" class="bpgsites_group_filter">'."\n";
+			
+				// open form
+				$html .= '<form id="bpgsites_comment_group_filter" name="bpgsites_comment_group_filter" action="'.get_permalink( $post->ID ).'" method="post">'."\n";
+			
+				// init lists
+				$mine = array();
+				$public = array();
+				
+				// init checked for public groups
+				$checked = '';
+				
+				// get option
+				global $bp_groupsites;
+				$public_shown = $bp_groupsites->admin->option_get( 'bpgsites_public' );
+				
+				// are they to be shown?
+				if ( $public_shown == '1' ) {
+					$checked = ' checked="checked"';
+				}
+				
+				// do the loop
+				while ( bp_groups() ) {  bp_the_group();
+			
+					// add arbitrary divider
+					$item = '<span class="bpgsites_comment_group">'."\n";
+		
+					// public or mine?
+					if ( in_array( bp_get_group_id(), $user_group_ids['public_groups'] ) ) {
+						
+						// add checkbox
+						$item .= '<input type="checkbox" class="bpgsites_group_checkbox bpgsites_group_checkbox_public" name="bpgsites_comment_groups[]" id="bpgsites_comment_group_'.bp_get_group_id().'" value="'.bp_get_group_id().'"'.$checked.' />'."\n";
+				
+						// add label
+						$item .= '<label class="bpgsites_comment_group_label" for="bpgsites_comment_group_'.bp_get_group_id().'">'.
+									bp_get_group_name().
+								 '</label>'."\n";
+				
+						// close arbitrary divider
+						$item .= '</span>'."\n";
+					
+						// public
+						$public[] = $item;
+						
+					} else {
+					
+						// add checkbox
+						$item .= '<input type="checkbox" class="bpgsites_group_checkbox" name="bpgsites_comment_groups[]" id="bpgsites_comment_group_'.bp_get_group_id().'" value="'.bp_get_group_id().'" checked="checked" />'."\n";
+				
+						// add label
+						$item .= '<label class="bpgsites_comment_group_label" for="bpgsites_comment_group_'.bp_get_group_id().'">'.
+									bp_get_group_name().
+								 '</label>'."\n";
+				
+						// close arbitrary divider
+						$item .= '</span>'."\n";
+					
+						// public
+						$mine[] = $item;
+						
+					}
+		
+				} // end while
+			
+				// did we get any that are mine?
+				if ( count( $mine ) > 0 ) {
+				
+					// add heading
+					$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_mine">'.__( 'My Groups', 'bpgsites' ).'</span>'."\n";
+			
+					// add items
+					$html .= implode( "\n", $mine );
+					
+				}
+					
+				// did we get any that are public?
+				if ( count( $public ) > 0 ) {
+				
+					// add heading
+					$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_public">'.__( 'Public Groups', 'bpgsites' ).'</span>'."\n";
+			
+					// add items
+					$html .= implode( "\n", $public );
+					
+				}
+					
+				// add submit button
+				$html .= '<input type="submit" id="bpgsites_comment_group_submit" value="'.__( 'Filter', 'bpgsites' ).'" />'."\n";
+			
+				// close tags
+				$html .= '</form>'."\n";
+				$html .= '</div>'."\n";
+			
+			}
+	
+		}
+	
+		// output
+		echo $html;
+	
+	}
+
+
+
+	/** 
 	 * @description: inserts a dropdown (or hidden input) into the comment form
 	 * @param string $result existing markup to be sent to browser
 	 * @param int $comment_id the comment ID
@@ -668,7 +1034,7 @@ class BpGroupSites_Activity {
 			'populate_extras' => 0,
 			'include' => $group_ids
 		);
-	
+		
 		// get groups
 		if ( bp_has_groups( $config_array ) ) {
 		
@@ -711,85 +1077,6 @@ class BpGroupSites_Activity {
 		// --<
 		return $result;
 			
-	}
-
-
-
-	/** 
-	 * @description: adds filtering above scrollable comments in CommentPress Responsive
-	 */
-	function get_group_comments_filter() {
-
-		// init HTML output
-		$html = '';
-		
-		// get the groups this user can see
-		$user_group_ids = $this->get_groups_for_user();
-	
-		// kick out if empty
-		if ( count( $user_group_ids ) === 0 ) return;
-	
-		// define config array
-		$config_array = array(
-			//'user_id' => $user_id,
-			'type' => 'alphabetical',
-			'max' => 100,
-			'per_page' => 100,
-			'populate_extras' => 0,
-			'include' => $user_group_ids
-		);
-	
-		// get groups
-		if ( bp_has_groups( $config_array ) ) {
-		
-			// access object
-			global $groups_template, $post;
-		
-			// only show if user has more than one...
-			if ( $groups_template->group_count > 1 ) {
-			
-				// construct heading (the no_comments class prevents this from printing)
-				$html .= '<h3 class="bpgsites_group_filter_heading no_comments">'.
-							'<a href="#bpgsites_group_filter">'.__( 'Filter comments by group', 'bpgsites' ).'</a>'.
-						 '</h3>'."\n";
-			
-				// open div
-				$html .= '<div id="bpgsites_group_filter" class="bpgsites_group_filter">'."\n";
-			
-				// open form
-				$html .= '<form id="bpgsites_comment_group_filter" name="bpgsites_comment_group_filter" action="'.get_permalink( $post->ID ).'" method="post">'."\n";
-			
-				// do the loop
-				while ( bp_groups() ) {  bp_the_group();
-			
-					// add arbitrary divider
-					$html .= '<span class="bpgsites_comment_group">'."\n";
-			
-					// add checkbox
-					$html .= '<input type="checkbox" class="bpgsites_group_checkbox" name="bpgsites_comment_groups[]" id="bpgsites_comment_group_'.bp_get_group_id().'" value="'.bp_get_group_id().'" checked="checked" />'."\n";
-				
-					// add label
-					$html .= '<label class="bpgsites_comment_group_label" for="bpgsites_comment_group_'.bp_get_group_id().'">'.bp_get_group_name().'</label>'."\n";
-				
-					// close arbitrary divider
-					$html .= '</span>'."\n";
-			
-				} // end while
-			
-				// add submit button
-				$html .= '<input type="submit" id="bpgsites_comment_group_submit" value="'.__( 'Filter', 'bpgsites' ).'" />'."\n";
-			
-				// close tags
-				$html .= '</form>'."\n";
-				$html .= '</div>'."\n";
-			
-			}
-	
-		}
-	
-		// output
-		echo $html;
-	
 	}
 
 
@@ -889,101 +1176,8 @@ class BpGroupSites_Activity {
 
 
 	/** 
-	 * @description: adds links to the Special Pages menu in CommentPress themes
-	 */
-	function navigation_links() {
-	
-		// is a CommentPress theme active?
-		if ( function_exists( 'commentpress_setup' ) ) {
-
-			// init HTML output
-			$html = '';
-	
-			// get the groups this user can see
-			$user_group_ids = $this->get_groups_for_user();
-	
-			// kick out if empty
-			if ( count( $user_group_ids ) == 0 ) return;
-	
-			// define config array
-			$config_array = array(
-				//'user_id' => $user_id,
-				'type' => 'alphabetical',
-				'populate_extras' => 0,
-				'include' => $user_group_ids
-			);
-	
-			// get groups
-			if ( bp_has_groups( $config_array ) ) {
-		
-				// access object
-				global $groups_template, $post;
-		
-				// only show if user has more than one...
-				if ( $groups_template->group_count > 1 ) {
-				
-					// set title, but allow plugins to override
-					$title = apply_filters( 
-						'bpgsites_groupsites_menu_item_title', 
-						sprintf(
-							__( 'Groups reading this %s', 'bpgsites' ),
-							apply_filters( 'bpgsites_extension_name', __( 'site', 'bpgsites' ) )
-						)
-					);
-					
-					// construct item
-					$html .= '<li><a href="#groupsites-list" id="btn_groupsites" class="css_btn" title="'.$title.'">'.$title.'</a>';
-				
-					// open sublist
-					$html .= '<ul class="children" id="groupsites-list">'."\n";
-
-					// do the loop
-					while ( bp_groups() ) {  bp_the_group();
-			
-						// construct item
-						$html .= '<li>'.
-									'<a href="'.bp_get_group_permalink().'" class="css_btn btn_groupsites" title="'.bp_get_group_name().'">'.
-										bp_get_group_name().
-									'</a>'.
-								 '</li>';
-				
-					} // end while
-			
-					// close tags
-					$html .= '</ul>'."\n";
-					$html .= '</li>'."\n";
-			
-				} else {
-			
-					// set title
-					$title = __( 'Group Home Page', 'bpgsites' );
-				
-					// do want to use bp_get_group_name()
-			
-					// do the loop (though there will only be one item
-					while ( bp_groups() ) {  bp_the_group();
-			
-						// construct item
-						$html .= '<li><a href="'.bp_get_group_permalink().'" id="btn_groupsites" class="css_btn" title="'.$title.'">'.$title.'</a></li>';
-				
-					}
-			
-				}
-	
-			}
-	
-			// output
-			echo $html;
-	
-		}
-
-	}
-	
-	
-	
-	/** 
 	 * @description: parse groups by user membership
-	 * @return array $user_group_ids the group IDs to which the user has access
+	 * @return array $user_group_ids associative array of group IDs to which the user has access
 	 */
 	function get_groups_for_user() {
 	
@@ -991,7 +1185,10 @@ class BpGroupSites_Activity {
 		if ( isset( $this->user_group_ids ) ) return $this->user_group_ids;
 	
 		// init return
-		$this->user_group_ids = array();
+		$this->user_group_ids = array( 
+			'my_groups' => array(), 
+			'public_groups' => array()
+		);
 		
 		// get current blog
 		$current_blog_id = get_current_blog_id();
@@ -999,16 +1196,17 @@ class BpGroupSites_Activity {
 		// get this blog's group IDs
 		$group_ids = bpgsites_get_groups_by_blog_id( $current_blog_id );
 		//print '<pre>';
-		//print_r( $group_ids ); //die();
-
+		//print_r( $group_ids ); die();
+		
 		// get user ID
 		$user_id = bp_loggedin_user_id();
-
+		
 		// loop through the groups
 		foreach( $group_ids AS $group_id ) {
-
+			
 			//print_r( array ('testing group_id' => $group_id ) ); //die();
-
+			
+			/*
 			// get the group
 			$group = groups_get_group( array(
 				'group_id'   => $group_id
@@ -1039,48 +1237,76 @@ class BpGroupSites_Activity {
 				$allowed = true;
 			
 			}
-	
-			// if it's allowed or this user is a member, add it
-			if ( $allowed OR groups_is_user_member( $user_id, $group_id ) ) {
+			*/
+			
+			// if this user is a member, add it
+			if ( groups_is_user_member( $user_id, $group_id ) ) {
 				
 				// if it's not already there...
-				if ( !in_array( $group_id, $this->user_group_ids ) ) {
+				if ( !in_array( $group_id, $this->user_group_ids['my_groups'] ) ) {
 					
 					// add to our array
-					$this->user_group_ids[] = $group_id;
+					$this->user_group_ids['my_groups'][] = $group_id;
 				
 				}
-	
+				
 			} else {
-			
-				// if the user is not a member, is it one of the groups that is
-				// reading the site with this group?
 				
-				// get linked groups
-				$linked_groups = bpgsites_get_linked_groups_by_blog_id( $group_id, $current_blog_id );
-				//print_r( array ('linked_groups' => $linked_groups ) ); //die();
+				// get the group
+				$group = groups_get_group( array(
+					'group_id'   => $group_id
+				) );
+				//print_r( $group ); //die();
 				
-				// loop through them
-				foreach( $linked_groups AS $linked_group_id ) {
+				// get status of group
+				$status = bp_get_group_status( $group );
+				
+				// if public...
+				if ( $status == 'public' ) {
 					
-					// if the user is a member...
-					if ( groups_is_user_member( $user_id, $linked_group_id ) ) {
+					// access object
+					//global $bp_groupsites;
 					
-						// add the current one if it's not already there...
-						if ( !in_array( $group_id, $this->user_group_ids ) ) {
+					// do we allow public comments?
+					//if ( $bp_groupsites->admin->option_get( 'bpgsites_public' ) ) {
+						
+						// add to our array
+						$this->user_group_ids['public_groups'][] = $group_id;
+						
+					//}
 					
-							// add to our array
-							$this->user_group_ids[] = $group_id;
-							//print_r( array ('adding group_id' => $group_id ) ); //die();
+				} else {
+					
+					// if the user is not a member, is it one of the groups that is
+					// reading the site with this group?
+					
+					// get linked groups
+					$linked_groups = bpgsites_get_linked_groups_by_blog_id( $group_id, $current_blog_id );
+					//print_r( array ('linked_groups' => $linked_groups ) ); //die();
+					
+					// loop through them
+					foreach( $linked_groups AS $linked_group_id ) {
+						
+						// if the user is a member...
+						if ( groups_is_user_member( $user_id, $linked_group_id ) ) {
 							
-							// don't need to check any further
-							break;
-				
+							// add the current one if it's not already there...
+							if ( !in_array( $group_id, $this->user_group_ids['my_groups'] ) ) {
+								
+								// add to our array
+								$this->user_group_ids['my_groups'][] = $group_id;
+								//print_r( array ('adding group_id' => $group_id ) ); //die();
+								
+								// don't need to check any further
+								break;
+								
+							}
+							
 						}
-	
+						
 					}
-
-				}
+					
+				} // end public check
 				
 			}
 		
@@ -1125,7 +1351,7 @@ class BpGroupSites_Activity {
 		foreach( $groups['groups'] AS $group ) {
 		
 			// if the user is a member...
-			if ( in_array( $group, $user_group_ids ) ) {
+			if ( in_array( $group, $user_group_ids['my_groups'] ) ) {
 			
 				// yes, kick out
 				$this->user_in_group = true;
