@@ -53,12 +53,13 @@ Default styles for filtering group linkages
 .bpgsites_group_linkage
 {
 	clear: both;
+	border: 1px solid #eee;
+	padding: 0.2em 1em 0 1em;
 }
 
 .bpgsites_group_linkages
 {
-	border: 1px solid #eee;
-	padding: 1em;
+	margin: 0 0 1em 0;
 }
 
 .bpgsites_linked_group

@@ -97,7 +97,7 @@ class BpGroupSites_Activity {
 				add_filter( 'cp_override_tinymce', array( $this, 'disable_tinymce' ), 10, 1 );
 				
 				// add filter for commenting capability
-				add_filter( 'commentpress_allowed_to_comment', array( $this, 'allow_commenting' ), 10, 1 );
+				add_filter( 'commentpress_allowed_to_comment', array( $this, 'allow_anon_commenting' ), 10, 1 );
 				
 				// add action to insert comments-by-group filter
 				add_action( 'commentpress_before_scrollable_comments', array( $this, 'get_group_comments_filter' ) );
@@ -110,6 +110,9 @@ class BpGroupSites_Activity {
 				
 				// override what is reported by get_comments_number
 				add_filter( 'get_comments_number', array( $this, 'get_comments_number' ), 20, 2 );
+				
+				// override comment form if no group membership
+				add_filter( 'commentpress_show_comment_form', array( $this, 'show_comment_form' ), 10, 1 );
 				
 			}
 		
@@ -431,6 +434,7 @@ class BpGroupSites_Activity {
 	/** 
 	 * @description: override CommentPress TinyMCE setting
 	 * @param bool $tinymce whether TinyMCE is enabled or not
+	 * @return bool $tinymce whether TinyMCE is enabled or not
 	 */
 	function disable_tinymce( $tinymce ) {
 
@@ -439,7 +443,20 @@ class BpGroupSites_Activity {
 	
 		// pass through if not group site
 		if ( ! bpgsites_is_groupsite( $blog_id ) ) return $tinymce;
-	
+		
+		// is the current member in a relevant group?
+		if ( ! $this->is_user_in_group_reading_this_site() ) {
+		
+			// add filters on reply to link
+			add_filter( 'commentpress_reply_to_para_link_text', array( $this, 'override_reply_to_text' ), 10, 2 );
+			add_filter( 'commentpress_reply_to_para_link_href', array( $this, 'override_reply_to_href' ), 10, 1 );
+			add_filter( 'commentpress_reply_to_para_link_onclick', array( $this, 'override_reply_to_onclick' ), 10, 2 );
+		
+			// disable
+			return 0;
+			
+		}
+		
 		// use TinyMCE if logged in
 		if ( is_user_logged_in() ) return $tinymce;
 	
@@ -451,10 +468,82 @@ class BpGroupSites_Activity {
 
 
 	/** 
+	 * @description: decides whether or not to show comment form
+	 * @param bool $show whether or not to show comment form
+	 * @return bool $show Show the comment form
+	 */
+	function show_comment_form( $show ) {
+	
+		// get current blog ID
+		$blog_id = get_current_blog_id();
+	
+		// pass through if not group site
+		if ( ! bpgsites_is_groupsite( $blog_id ) ) return $show;
+		
+		// is the current member in a relevant group?
+		if ( $this->is_user_in_group_reading_this_site() ) return $show;
+		
+		// --<
+		return false;
+	
+	}
+
+
+
+	/** 
+	 * @description: override content of the reply to link
+	 * @param string $link_text the full text of the reply to link
+	 * @param string $paragraph_text paragraph text
+	 * @return string $link_text updated content of the reply to link
+	 */
+	function override_reply_to_text( $link_text, $paragraph_text ) {
+	
+		// construct link content
+		$link_text = sprintf(
+			__( 'Join a group to leave a comment on %s', 'bpgsites' ),
+			$paragraph_text
+		);
+		
+		// --<
+		return $link_text;
+	
+	}
+
+
+
+	/** 
+	 * @description: override content of the reply to link target
+	 * @param string $href existing target URL
+	 * @return string $href permalink of the groups directory
+	 */
+	function override_reply_to_href( $href ) {
+	
+		// --<
+		return bp_get_groups_directory_permalink();
+	
+	}
+
+
+
+	/** 
+	 * @description: override content of the reply to link
+	 * @return string $onclick the reply to onclick attribute
+	 */
+	function override_reply_to_onclick( $onclick ) {
+	
+		// --<
+		return '';
+	
+	}
+
+
+
+	/** 
 	 * @description: check if anonymous commenting is allowed
 	 * @param bool $allowed whether commenting is is allowed or not
+	 * @return bool $allowed whether commenting is is allowed or not
 	 */
-	function allow_commenting( $allowed ) {
+	function allow_anon_commenting( $allowed ) {
 
 		// get current blog ID
 		$blog_id = get_current_blog_id();
@@ -836,9 +925,12 @@ class BpGroupSites_Activity {
 					// set title, but allow plugins to override
 					$title = apply_filters( 
 						'bpgsites_groupsites_menu_item_title', 
-						__( 'Groups for this Site', 'bpgsites' )
+						sprintf(
+							__( 'Groups reading this %s', 'bpgsites' ),
+							apply_filters( 'bpgsites_extension_name', __( 'site', 'bpgsites' ) )
+						)
 					);
-		
+					
 					// construct item
 					$html .= '<li><a href="#groupsites-list" id="btn_groupsites" class="css_btn" title="'.$title.'">'.$title.'</a>';
 				
@@ -922,14 +1014,34 @@ class BpGroupSites_Activity {
 				'group_id'   => $group_id
 			) );
 			//print_r( $group ); //die();
+			
+			// get status of group
+			$status = bp_get_group_status( $group );
+			
+			// if public...
+			if ( $status == 'public' ) {
+				
+				// access object
+				global $bp_groupsites;
+				
+				// assume not allowed
+				$allowed = false;
+				
+				// do we allow public comments?
+				if ( $bp_groupsites->admin->option_get( 'public' ) ) {
+				
+					// override
+					$allowed = true;
+				
+				}
+				
+				// override for now
+				$allowed = true;
+			
+			}
 	
-			// if it's public or this user is a member, add it
-			if ( 
-				
-				'public' == bp_get_group_status( $group ) OR
-				groups_is_user_member( $user_id, $group_id )
-				
-			) {
+			// if it's allowed or this user is a member, add it
+			if ( $allowed OR groups_is_user_member( $user_id, $group_id ) ) {
 				
 				// if it's not already there...
 				if ( !in_array( $group_id, $this->user_group_ids ) ) {
@@ -984,6 +1096,54 @@ class BpGroupSites_Activity {
 	
 	
 	
+	/** 
+	 * @description: when a comment is saved, get the ID of the group it was submitted to
+	 * @return integer $group_id the group ID of the input in the comment form
+	 */
+	function is_user_in_group_reading_this_site() {
+
+		// have we already calculated this?
+		if ( isset( $this->user_in_group ) ) return $this->user_in_group;
+	
+		// init return
+		$this->user_in_group = false;
+		
+		// get the groups this user can see
+		$user_group_ids = $this->get_groups_for_user();
+	
+		// does the user have any groups reading this site?
+		$groups = groups_get_user_groups( bp_loggedin_user_id() );
+		
+		/*
+		print_r( array( 
+			$user_group_ids,
+			$groups['groups'] 
+		) ); die();
+		*/
+		
+		// loop through them
+		foreach( $groups['groups'] AS $group ) {
+		
+			// if the user is a member...
+			if ( in_array( $group, $user_group_ids ) ) {
+			
+				// yes, kick out
+				this->user_in_group = true;
+				
+				// --<
+				return this->user_in_group;
+			
+			}
+
+		}
+		
+		// --<
+		return $this->user_in_group;
+
+	}
+
+
+
 	// =============================================================================
 	// We may or may not use what follows...
 	// =============================================================================

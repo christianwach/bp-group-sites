@@ -81,7 +81,7 @@ function bpgsites_page_load() {
 
 
 /** 
- * @description: update dropdown and hide
+ * @description: update dropdown and hide it
  *
  */
 function bpgsites_update_select( comment_id ) {
@@ -107,7 +107,7 @@ function bpgsites_update_select( comment_id ) {
 		// set select option
 		jQuery( '#bpgsites-post-in' ).val( group_id );
 	
-		// hide enclosing div
+		// hide enclosing div because the reply is in the same group as the comment
 		jQuery( '#bpgsites-post-in-box' ).hide();
 	
 	}

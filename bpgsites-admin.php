@@ -79,6 +79,9 @@ class BP_Group_Sites_Admin {
 		// get defaults
 		$defaults = $this->_get_defaults();
 		
+		// default public comment visibility to "off"
+		$this->option_set( 'bpgsites_public', $defaults['public'] );
+	
 		// default name changes to "off"
 		$this->option_set( 'bpgsites_overrides', $defaults['overrides'] );
 	
@@ -201,7 +204,13 @@ class BP_Group_Sites_Admin {
 		
 
 
-		// set on/off option
+		// set public comments visibility on/off option
+		$bpgsites_public = absint( $bpgsites_public );
+		$this->option_set( 'bpgsites_public', ( $bpgsites_public ? 1 : 0 ) );
+		
+		
+		
+		// set name change on/off option
 		$bpgsites_overrides = absint( $bpgsites_overrides );
 		$this->option_set( 'bpgsites_overrides', ( $bpgsites_overrides ? 1 : 0 ) );
 		
@@ -393,7 +402,11 @@ class BP_Group_Sites_Admin {
 		// get defaults
 		$defaults = $this->_get_defaults();
 		
-		// init checkbox
+		// init public comments checkbox
+		$bpgsites_public = '';
+		if ( $this->option_get( 'bpgsites_public' ) == '1' ) $bpgsites_public = ' checked="checked"';
+		
+		// init name change checkbox
 		$bpgsites_overrides = '';
 		if ( $this->option_get( 'bpgsites_overrides' ) == '1' ) $bpgsites_overrides = ' checked="checked"';
 		
@@ -443,6 +456,21 @@ class BP_Group_Sites_Admin {
 		// add global options
 		echo '
 		<h4>'.__( 'Global Options', 'bpgsites' ).'</h4>
+
+		<table class="form-table">
+
+			<tr valign="top">
+				<th scope="row"><label for="bpgsites_public">'.__( 'Should comments in public groups be visible to readers who are not members of those groups?', 'bpgsites' ).'</label></th>
+				<td><input id="bpgsites_public" name="bpgsites_public" value="1" type="checkbox"'.$bpgsites_public.' /></td>
+			</tr>
+
+		</table>'."\n\n";
+		
+		
+		
+		// add global options
+		echo '
+		<h4>'.__( 'Naming Options', 'bpgsites' ).'</h4>
 
 		<table class="form-table">
 
@@ -503,6 +531,9 @@ class BP_Group_Sites_Admin {
 	
 		// init return
 		$defaults = array();
+	
+		// default visibility of public group comments to off
+		$defaults['public'] = 0;
 	
 		// default to off
 		$defaults['overrides'] = 0;
