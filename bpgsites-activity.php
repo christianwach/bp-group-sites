@@ -114,6 +114,12 @@ class BpGroupSites_Activity {
 				// override comment form if no group membership
 				add_filter( 'commentpress_show_comment_form', array( $this, 'show_comment_form' ), 10, 1 );
 				
+				// add section to activity sidebar in CommentPress
+				add_filter( 'commentpress_bp_activity_sidebar_before_members', array( $this, 'get_activity_sidebar_section' ) );
+				
+				// override cp_activity_tab_recent_title_blog
+				add_filter( 'cp_activity_tab_recent_title_blog', array( $this, 'get_activity_sidebar_recent_title' ) );
+				
 			}
 		
 		}
@@ -293,7 +299,7 @@ class BpGroupSites_Activity {
 		$comments = get_comments( array(
 			'post_id' => $post_id
 		) );
-	
+		
 		// did we get any?
 		if ( is_array( $comments ) ) {
 		
@@ -301,7 +307,7 @@ class BpGroupSites_Activity {
 			return count( $comments );
 		
 		}
-
+		
 		// otherwise, pass through
 		return $count;
 
@@ -1370,6 +1376,178 @@ class BpGroupSites_Activity {
 
 
 
+	/** 
+	 * @description: show group sites activity in sidebar
+	 */
+	function get_activity_sidebar_section() {
+	
+		// All Activity
+		
+		// get activities	
+		if ( bp_has_activities( array(
+
+			'scope' => 'groups',
+			'action' => 'new_groupsite_comment,new_groupsite_post',
+	
+		) ) ) {
+
+			// change header depending on logged in status
+			if ( is_user_logged_in() ) {
+	
+				// set default
+				$section_header_text = apply_filters(
+					'bpgsites_activity_tab_recent_title_all_yours', 
+					sprintf(
+						__( 'All Recent Activity in your %s', 'bpgsites' ),
+						apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bpgsites' ) )
+					)
+				);
+		
+			} else { 
+	
+				// set default
+				$section_header_text = apply_filters(
+					'bpgsites_activity_tab_recent_title_all_public', 
+					sprintf(
+						__( 'Recent Activity in Public %s', 'bpgsites' ),
+						apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bpgsites' ) )
+					)
+				);
+	
+			}
+			
+			// open section
+			echo '<h3 class="activity_heading">'.$section_header_text.'</h3>
+			
+			<div class="paragraph_wrapper groupsites_comments_output">
+	
+			<ol class="comment_activity">';
+			
+			// do the loop
+			while ( bp_activities() ) { bp_the_activity();
+				echo $this->get_activity_item();
+			}
+			
+			// close section
+			echo '</ol>
+	
+			</div>';
+ 
+		}
+		
+		
+		
+		// Friends Activity
+		
+		// for logged in users only...
+		if ( is_user_logged_in() ) {
+
+			// get activities	
+			if ( bp_has_activities( array(
+
+				'scope' => 'friends',
+				'action' => 'new_groupsite_comment,new_groupsite_post',
+	
+			) ) ) {
+
+				// set default
+				$section_header_text = apply_filters(
+					'bpgsites_activity_tab_recent_title_all_yours', 
+					sprintf(
+						__( 'Friends Activity in your %s', 'bpgsites' ),
+						apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bpgsites' ) )
+					)
+				);
+	
+				// open section
+				echo '<h3 class="activity_heading">'.$section_header_text.'</h3>
+			
+				<div class="paragraph_wrapper groupsites_comments_output">
+	
+				<ol class="comment_activity">';
+			
+				// do the loop
+				while ( bp_activities() ) { bp_the_activity();
+					echo $this->get_activity_item();
+				}
+			
+				// close section
+				echo '</ol>
+	
+				</div>';
+ 
+			}
+		
+		}
+
+	}
+	
+	
+	
+	/** 
+	 * @description: show group sites activity in sidebar
+	 */
+	function get_activity_item() {
+		
+		$same_post = '';
+
+		?>
+
+		<?php do_action( 'bp_before_activity_entry' ); ?>
+
+		<li class="<?php bp_activity_css_class(); echo $same_post; ?>" id="activity-<?php bp_activity_id(); ?>">
+
+			<div class="comment-wrapper">
+	
+				<div class="comment-identifier">
+		
+					<a href="<?php bp_activity_user_link(); ?>"><?php bp_activity_avatar( 'width=32&height=32' ); ?></a>
+					<?php bp_activity_action(); ?>
+	
+				</div>
+	
+				<div class="comment-content">
+	
+					<?php if ( bp_activity_has_content() ) : ?>
+	
+						<?php bp_activity_content_body(); ?>
+	
+					<?php endif; ?>
+	
+					<?php do_action( 'bp_activity_entry_content' ); ?>
+	
+				</div>
+	
+			</div>
+
+		</li>
+
+		<?php do_action( 'bp_after_activity_entry' ); ?>
+		
+		<?php
+
+	}
+	
+	
+	
+	/** 
+	 * @description: override the title of the Recent Posts section in the activity sidebar
+	 */
+	function get_activity_sidebar_recent_title() {
+	
+		// set title, but allow plugins to override
+		$title = sprintf(
+			__( 'Recent Comments in this %s', 'bpgsites' ),
+			apply_filters( 'bpgsites_extension_name', __( 'Group Site', 'bpgsites' ) )
+		);
+		
+		// --<
+		return $title;
+		
+	}
+	
+	
+	
 	// =============================================================================
 	// We may or may not use what follows...
 	// =============================================================================
