@@ -757,7 +757,7 @@ class BpGroupSites_Activity {
 						$title = __( 'My Groups', 'bpgsites' );
 						
 						// construct item
-						$html .= '<li><a href="#groupsites-list-mine" id="btn_groupsites" class="css_btn" title="'.$title.'">'.$title.'</a>';
+						$html .= '<li><a href="#groupsites-list-mine" id="btn_groupsites_mine" class="css_btn" title="'.$title.'">'.$title.'</a>';
 				
 						// open sublist
 						$html .= '<ul class="children" id="groupsites-list-mine">'."\n";
@@ -778,7 +778,7 @@ class BpGroupSites_Activity {
 						$title = __( 'Public Groups', 'bpgsites' );
 						
 						// construct item
-						$html .= '<li><a href="#groupsites-list-mine" id="btn_groupsites" class="css_btn" title="'.$title.'">'.$title.'</a>';
+						$html .= '<li><a href="#groupsites-list-public" id="btn_groupsites_public" class="css_btn" title="'.$title.'">'.$title.'</a>';
 				
 						// open sublist
 						$html .= '<ul class="children" id="groupsites-list-public">'."\n";
