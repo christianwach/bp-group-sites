@@ -185,10 +185,7 @@ class BP_Group_Sites_Admin {
 	 */
 	public function options_update() {
 	
-		// database object
-		global $wpdb;
-		
-	 	// kick out if the form wasd not submitted
+	 	// kick out if the form was not submitted
 		if( !isset( $_POST['bpgsites_submit'] ) ) return;
 		
 		// check that we trust the source of the data
@@ -217,7 +214,7 @@ class BP_Group_Sites_Admin {
 		
 		
 		// get plugin title option
-		$bpgsites_overrides_title = $wpdb->escape( $bpgsites_overrides_title );
+		$bpgsites_overrides_title = esc_sql( $bpgsites_overrides_title );
 		
 		// revert to default if we didn't get one...
 		if ( $bpgsites_overrides_title == '' ) {
@@ -230,7 +227,7 @@ class BP_Group_Sites_Admin {
 		
 		
 		// get name option
-		$bpgsites_overrides_name = $wpdb->escape( $bpgsites_overrides_name );
+		$bpgsites_overrides_name = esc_sql( $bpgsites_overrides_name );
 		
 		// revert to default if we didn't get one...
 		if ( $bpgsites_overrides_name == '' ) {
@@ -243,7 +240,7 @@ class BP_Group_Sites_Admin {
 		
 		
 		// get plural option
-		$bpgsites_overrides_plural = $wpdb->escape( $bpgsites_overrides_plural );
+		$bpgsites_overrides_plural = esc_sql( $bpgsites_overrides_plural );
 		
 		// revert to default if we didn't get one...
 		if ( $bpgsites_overrides_plural == '' ) {
@@ -256,7 +253,7 @@ class BP_Group_Sites_Admin {
 		
 		
 		// get button option
-		$bpgsites_overrides_button = $wpdb->escape( $bpgsites_overrides_button );
+		$bpgsites_overrides_button = esc_sql( $bpgsites_overrides_button );
 		
 		// revert to default if we didn't get one...
 		if ( $bpgsites_overrides_button == '' ) {
