@@ -443,10 +443,16 @@ class BpGroupSites_Activity {
 	
 		// get comment group
 		$group_id = $this->get_comment_group_id( $comment->comment_ID );
+		
+		// get user ID
+		$user_id = bp_loggedin_user_id();
 	
-		// is this user is a member?
-		if ( groups_is_user_member( bp_loggedin_user_id(), $group_id ) ) return $link;
+		// get the groups this user can see
+		$user_group_ids = $this->get_groups_for_user();
 	
+		// is this group one of these?
+		if ( in_array( $group_id, $user_group_ids['my_groups'] ) ) return $link;
+		
 		// get the group
 		$group = groups_get_group( array(
 			'group_id'   => $group_id
@@ -886,7 +892,7 @@ class BpGroupSites_Activity {
 						 '</h3>'."\n";
 			
 				// open div
-				$html .= '<div id="bpgsites_group_filter" class="bpgsites_group_filter">'."\n";
+				$html .= '<div id="bpgsites_group_filter" class="bpgsites_group_filter no_comments">'."\n";
 			
 				// open form
 				$html .= '<form id="bpgsites_comment_group_filter" name="bpgsites_comment_group_filter" action="'.get_permalink( $post->ID ).'" method="post">'."\n";
@@ -1329,8 +1335,8 @@ class BpGroupSites_Activity {
 	
 	
 	/** 
-	 * @description: when a comment is saved, get the ID of the group it was submitted to
-	 * @return integer $group_id the group ID of the input in the comment form
+	 * @description: check if the user is a member of a group reading this site
+	 * @return boolean $this->user_in_group user is a member or not
 	 */
 	function is_user_in_group_reading_this_site() {
 
