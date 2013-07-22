@@ -330,26 +330,25 @@ class BpGroupSites_Activity {
 		
 		// if we get some...
 		if ( 
-		
 			count( $user_group_ids['my_groups'] ) > 0 OR
+			count( $user_group_ids['linked_groups'] ) > 0 OR
 			count( $user_group_ids['public_groups'] ) > 0 
-			
 		) {
 	
 			// merge the arrays
 			$groups = array_unique( array_merge( 
 				$user_group_ids['my_groups'], 
+				$user_group_ids['linked_groups'], 
 				$user_group_ids['public_groups'] 
 			) );
 		
 		}
 	
-		// if none, then what?
-		if ( 
-			
+		// if none...
+		if (
 			count( $user_group_ids['my_groups'] ) === 0 AND 
+			count( $user_group_ids['linked_groups'] ) === 0 AND 
 			count( $user_group_ids['public_groups'] ) === 0 
-			
 		) {
 	
 			// set a non-existent group ID
@@ -451,7 +450,14 @@ class BpGroupSites_Activity {
 		$user_group_ids = $this->get_groups_for_user();
 	
 		// is this group one of these?
-		if ( in_array( $group_id, $user_group_ids['my_groups'] ) ) return $link;
+		if ( 
+			in_array( $group_id, $user_group_ids['my_groups'] ) OR 
+			in_array( $group_id, $user_group_ids['linked_groups'] )
+		) {
+			// --<
+			return $link;
+		}
+		
 		
 		// get the group
 		$group = groups_get_group( array(
@@ -669,9 +675,10 @@ class BpGroupSites_Activity {
 			// get the groups this user can see
 			$user_group_ids = $this->get_groups_for_user();
 	
-			// kick out if both are empty
+			// kick out if all are empty
 			if (
 				count( $user_group_ids['my_groups'] ) == 0 AND 
+				count( $user_group_ids['linked_groups'] ) == 0 AND 
 				count( $user_group_ids['public_groups'] ) == 0 
 			) {
 				// --<
@@ -681,7 +688,7 @@ class BpGroupSites_Activity {
 			// init array
 			$groups = array();
 				
-			// if either has entries
+			// if any has entries
 			if (
 				count( $user_group_ids['my_groups'] ) > 0 OR 
 				count( $user_group_ids['public_groups'] ) > 0 
@@ -690,6 +697,7 @@ class BpGroupSites_Activity {
 				// merge the arrays
 				$groups = array_unique( array_merge( 
 					$user_group_ids['my_groups'], 
+					$user_group_ids['linked_groups'], 
 					$user_group_ids['public_groups'] 
 				) );
 
@@ -729,6 +737,7 @@ class BpGroupSites_Activity {
 					
 					// init lists
 					$mine = array();
+					$linked = array();
 					$public = array();
 
 					// do the loop
@@ -740,62 +749,132 @@ class BpGroupSites_Activity {
 										bp_get_group_name().
 									'</a>'.
 								'</li>';
-			
-						// public or mine?
-						if ( in_array( bp_get_group_id(), $user_group_ids['public_groups'] ) ) {
-							
-							// public
-							$public[] = $item;
-							
-						} else {
 						
-							// public
+						// get group ID
+						$group_id = bp_get_group_id();
+						
+						// mine?
+						if ( in_array( $group_id, $user_group_ids['my_groups'] ) ) {
 							$mine[] = $item;
-							
+							continue;
 						}
 			
+						// linked?
+						if ( in_array( $group_id, $user_group_ids['linked_groups'] ) ) {
+							$linked[] = $item;
+							continue;
+						}
+			
+						// public?
+						if ( in_array( $group_id, $user_group_ids['public_groups'] ) ) {
+							$public[] = $item;
+						}
+						
 					} // end while
 					
 					// did we get any that are mine?
 					if ( count( $mine ) > 0 ) {
+					
+						// join items
+						$items = implode( "\n", $mine );
+					
+						// only show if we one of the other lists is populated
+						if ( count( $linked ) > 0 OR count( $public ) > 0 ) {
 						
-						// construct title
-						$title = __( 'My Groups', 'bpgsites' );
+							// construct title
+							$title = __( 'My Groups', 'bpgsites' );
 						
-						// construct item
-						$html .= '<li><a href="#groupsites-list-mine" id="btn_groupsites_mine" class="css_btn" title="'.$title.'">'.$title.'</a>';
+							// construct item
+							$sublist = '<li><a href="#groupsites-list-mine" id="btn_groupsites_mine" class="css_btn" title="'.$title.'">'.$title.'</a>';
+						
+							// open sublist
+							$sublist .= '<ul class="children" id="groupsites-list-mine">'."\n";
+							
+							// insert items
+							$sublist .= $items;
+						
+							// close sublist
+							$sublist .= '</ul>'."\n";
+							$sublist .= '</li>'."\n";
+							
+							// replace items
+							$items = $sublist;
+						
+						}
+						
+						// add to html
+						$html .= $items;
 				
-						// open sublist
-						$html .= '<ul class="children" id="groupsites-list-mine">'."\n";
+					}
+			
+					// did we get any that are linked?
+					if ( count( $linked ) > 0 ) {
+					
+						// join items
+						$items = implode( "\n", $linked );
+					
+						// only show if we one of the other lists is populated
+						if ( count( $mine ) > 0 OR count( $public ) > 0 ) {
 						
-						// add items
-						$html .= implode( "\n", $mine );
+							// construct title
+							$title = __( 'Linked Groups', 'bpgsites' );
 						
-						// close sublist
-						$html .= '</ul>'."\n";
-						$html .= '</li>'."\n";
+							// construct item
+							$sublist = '<li><a href="#groupsites-list-linked" id="btn_groupsites_linked" class="css_btn" title="'.$title.'">'.$title.'</a>';
 						
+							// open sublist
+							$sublist .= '<ul class="children" id="groupsites-list-linked">'."\n";
+							
+							// insert items
+							$sublist .= $items;
+						
+							// close sublist
+							$sublist .= '</ul>'."\n";
+							$sublist .= '</li>'."\n";
+							
+							// replace items
+							$items = $sublist;
+						
+						}
+						
+						// add to html
+						$html .= $items;
+				
 					}
 			
 					// did we get any that are public?
 					if ( count( $public ) > 0 ) {
 					
-						// construct title
-						$title = __( 'Public Groups', 'bpgsites' );
+						// join items
+						$items = implode( "\n", $public );
+					
+						// only show if we one of the other lists is populated
+						if ( count( $mine ) > 0 OR count( $linked ) > 0 ) {
 						
-						// construct item
-						$html .= '<li><a href="#groupsites-list-public" id="btn_groupsites_public" class="css_btn" title="'.$title.'">'.$title.'</a>';
+							// construct title
+							$title = __( 'Public Groups', 'bpgsites' );
+						
+							// construct item
+							$sublist = '<li><a href="#groupsites-list-public" id="btn_groupsites_public" class="css_btn" title="'.$title.'">'.$title.'</a>';
+						
+							// open sublist
+							$sublist .= '<ul class="children" id="groupsites-list-public">'."\n";
+							
+							// insert items
+							$sublist .= $items;
+						
+							// close sublist
+							$sublist .= '</ul>'."\n";
+							$sublist .= '</li>'."\n";
+							
+							// replace items
+							$items = $sublist;
+						
+						}
+						
+						// add to html
+						$html .= $items;
 				
-						// open sublist
-						$html .= '<ul class="children" id="groupsites-list-public">'."\n";
-						
-						// add items
-						$html .= implode( "\n", $public );
-						
-						// close sublist
-						$html .= '</ul>'."\n";
-						$html .= '</li>'."\n";
-						
 					}
 			
 					// close tags
@@ -807,13 +886,17 @@ class BpGroupSites_Activity {
 					// set title
 					$title = __( 'Group Home Page', 'bpgsites' );
 				
-					// do want to use bp_get_group_name()
+					// do we want to use bp_get_group_name()
 			
 					// do the loop (though there will only be one item
 					while ( bp_groups() ) {  bp_the_group();
 			
 						// construct item
-						$html .= '<li><a href="'.bp_get_group_permalink().'" id="btn_groupsites" class="css_btn" title="'.$title.'">'.$title.'</a></li>';
+						$html .= '<li>'.
+									'<a href="'.bp_get_group_permalink().'" id="btn_groupsites" class="css_btn" title="'.$title.'">'.
+										$title.
+									'</a>'.
+								 '</li>';
 				
 					}
 			
@@ -841,9 +924,10 @@ class BpGroupSites_Activity {
 		// get the groups this user can see
 		$user_group_ids = $this->get_groups_for_user();
 	
-		// kick out if both are empty
+		// kick out if all are empty
 		if (
 			count( $user_group_ids['my_groups'] ) == 0 AND 
+			count( $user_group_ids['linked_groups'] ) == 0 AND 
 			count( $user_group_ids['public_groups'] ) == 0 
 		) {
 			// --<
@@ -853,15 +937,17 @@ class BpGroupSites_Activity {
 		// init array
 		$groups = array();
 			
-		// if either has entries
+		// if any has entries
 		if (
 			count( $user_group_ids['my_groups'] ) > 0 OR 
+			count( $user_group_ids['linked_groups'] ) > 0 OR 
 			count( $user_group_ids['public_groups'] ) > 0 
 		) {
 
 			// merge the arrays
 			$groups = array_unique( array_merge( 
 				$user_group_ids['my_groups'], 
+				$user_group_ids['linked_groups'], 
 				$user_group_ids['public_groups'] 
 			) );
 
@@ -899,6 +985,7 @@ class BpGroupSites_Activity {
 			
 				// init lists
 				$mine = array();
+				$linked = array();
 				$public = array();
 				
 				// init checked for public groups
@@ -918,31 +1005,18 @@ class BpGroupSites_Activity {
 			
 					// add arbitrary divider
 					$item = '<span class="bpgsites_comment_group">'."\n";
-		
-					// public or mine?
-					if ( in_array( bp_get_group_id(), $user_group_ids['public_groups'] ) ) {
+					
+					// get group ID
+					$group_id = bp_get_group_id();
+					
+					// mine?
+					if ( in_array( $group_id, $user_group_ids['my_groups'] ) ) {
 						
 						// add checkbox
-						$item .= '<input type="checkbox" class="bpgsites_group_checkbox bpgsites_group_checkbox_public" name="bpgsites_comment_groups[]" id="bpgsites_comment_group_'.bp_get_group_id().'" value="'.bp_get_group_id().'"'.$checked.' />'."\n";
+						$item .= '<input type="checkbox" class="bpgsites_group_checkbox bpgsites_group_checkbox_mine" name="bpgsites_comment_groups[]" id="bpgsites_comment_group_'.$group_id.'" value="'.$group_id.'" checked="checked" />'."\n";
 				
 						// add label
-						$item .= '<label class="bpgsites_comment_group_label" for="bpgsites_comment_group_'.bp_get_group_id().'">'.
-									bp_get_group_name().
-								 '</label>'."\n";
-				
-						// close arbitrary divider
-						$item .= '</span>'."\n";
-					
-						// public
-						$public[] = $item;
-						
-					} else {
-					
-						// add checkbox
-						$item .= '<input type="checkbox" class="bpgsites_group_checkbox" name="bpgsites_comment_groups[]" id="bpgsites_comment_group_'.bp_get_group_id().'" value="'.bp_get_group_id().'" checked="checked" />'."\n";
-				
-						// add label
-						$item .= '<label class="bpgsites_comment_group_label" for="bpgsites_comment_group_'.bp_get_group_id().'">'.
+						$item .= '<label class="bpgsites_comment_group_label" for="bpgsites_comment_group_'.$group_id.'">'.
 									bp_get_group_name().
 								 '</label>'."\n";
 				
@@ -952,32 +1026,102 @@ class BpGroupSites_Activity {
 						// public
 						$mine[] = $item;
 						
+						// next
+						continue;
+						
 					}
 		
+					// linked?
+					if ( in_array( $group_id, $user_group_ids['linked_groups'] ) ) {
+						
+						// add checkbox
+						$item .= '<input type="checkbox" class="bpgsites_group_checkbox bpgsites_group_checkbox_linked" name="bpgsites_comment_groups[]" id="bpgsites_comment_group_'.$group_id.'" value="'.$group_id.'" checked="checked" />'."\n";
+				
+						// add label
+						$item .= '<label class="bpgsites_comment_group_label" for="bpgsites_comment_group_'.$group_id.'">'.
+									bp_get_group_name().
+								 '</label>'."\n";
+				
+						// close arbitrary divider
+						$item .= '</span>'."\n";
+					
+						// public
+						$linked[] = $item;
+						
+						// next
+						continue;
+						
+					}
+		
+					// public?
+					if ( in_array( $group_id, $user_group_ids['public_groups'] ) ) {
+						
+						// add checkbox
+						$item .= '<input type="checkbox" class="bpgsites_group_checkbox bpgsites_group_checkbox_public" name="bpgsites_comment_groups[]" id="bpgsites_comment_group_'.$group_id.'" value="'.$group_id.'"'.$checked.' />'."\n";
+				
+						// add label
+						$item .= '<label class="bpgsites_comment_group_label" for="bpgsites_comment_group_'.$group_id.'">'.
+									bp_get_group_name().
+								 '</label>'."\n";
+				
+						// close arbitrary divider
+						$item .= '</span>'."\n";
+					
+						// public
+						$public[] = $item;
+						
+					}
+						
 				} // end while
-			
+				
 				// did we get any that are mine?
 				if ( count( $mine ) > 0 ) {
 				
-					// add heading
-					$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_mine">'.__( 'My Groups', 'bpgsites' ).'</span>'."\n";
+					// only show if we one of the other lists is populated
+					if ( count( $public ) > 0 OR count( $linked ) > 0 ) {
+					
+						// add heading
+						$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_mine">'.__( 'My Groups', 'bpgsites' ).'</span>'."\n";
+						
+					}
 			
 					// add items
 					$html .= implode( "\n", $mine );
 					
 				}
+				
+				// did we get any that are linked?
+				if ( count( $linked ) > 0 ) {
+				
+					// only show if we one of the other lists is populated
+					if ( count( $mine ) > 0 OR count( $public ) > 0 ) {
 					
+						// add heading
+						$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_linked">'.__( 'Linked Groups', 'bpgsites' ).'</span>'."\n";
+					
+					}
+					
+					// add items
+					$html .= implode( "\n", $linked );
+					
+				}
+				
 				// did we get any that are public?
 				if ( count( $public ) > 0 ) {
 				
-					// add heading
-					$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_public">'.__( 'Public Groups', 'bpgsites' ).'</span>'."\n";
-			
+					// only show if we one of the other lists is populated
+					if ( count( $mine ) > 0 OR count( $linked ) > 0 ) {
+					
+						// add heading
+						$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_public">'.__( 'Public Groups', 'bpgsites' ).'</span>'."\n";
+					
+					}
+					
 					// add items
 					$html .= implode( "\n", $public );
 					
 				}
-					
+				
 				// add submit button
 				$html .= '<input type="submit" id="bpgsites_comment_group_submit" value="'.__( 'Filter', 'bpgsites' ).'" />'."\n";
 			
@@ -1034,17 +1178,43 @@ class BpGroupSites_Activity {
 		// kick out if not group site
 		if ( ! bpgsites_is_groupsite( $blog_id ) ) { return $result; }
 	
-		// get this blog's group IDs
-		$group_ids = bpgsites_get_groups_by_blog_id( $blog_id );
+		// get the groups this user can see
+		$user_group_ids = $this->get_groups_for_user();
 	
+		// kick out if the ones the user can post into are empty
+		if (
+			count( $user_group_ids['my_groups'] ) == 0 AND 
+			count( $user_group_ids['linked_groups'] ) == 0
+		) {
+			// --<
+			return $result;
+		}
+		
+		// init array
+		$groups = array();
+			
+		// if any has entries
+		if (
+			count( $user_group_ids['my_groups'] ) > 0 OR 
+			count( $user_group_ids['linked_groups'] ) > 0
+		) {
+
+			// merge the arrays
+			$groups = array_unique( array_merge( 
+				$user_group_ids['my_groups'], 
+				$user_group_ids['linked_groups']
+			) );
+
+		}
+		
 		// define config array
 		$config_array = array(
-			'user_id' => bp_loggedin_user_id(),
+			//'user_id' => bp_loggedin_user_id(),
 			'type' => 'alphabetical',
 			'max' => 100,
 			'per_page' => 100,
 			'populate_extras' => 0,
-			'include' => $group_ids
+			'include' => $groups
 		);
 		
 		// get groups
@@ -1055,19 +1225,101 @@ class BpGroupSites_Activity {
 			// if more than one...
 			if ( $groups_template->group_count > 1 ) {
 			
-				// construct dropdown
-				$result .= '<span id="bpgsites-post-in-box">'."\n";
-				$result .= '<span>'.__( 'Post in', 'bpgsites' ).':</span>'."\n";
-				$result .= '<select id="bpgsites-post-in" name="bpgsites-post-in">'."\n";
+				// init lists
+				$mine = array();
+				$linked = array();
 			
 				// do the loop
 				while ( bp_groups() ) {  bp_the_group();
 			
-					// add option
-					$result .= '<option value="'.bp_get_group_id().'">'.bp_get_group_name().'</option>'."\n";
+					// get group ID
+					$group_id = bp_get_group_id();
+					
+					// mine?
+					if ( in_array( $group_id, $user_group_ids['my_groups'] ) ) {
+						
+						// add option
+						$mine[] = '<option value="'.$group_id.'">'.bp_get_group_name().'</option>';
+						
+					}
+				
+					// linked?
+					if ( in_array( $group_id, $user_group_ids['linked_groups'] ) ) {
+						
+						// add option
+						$linked[] = '<option value="'.$group_id.'">'.bp_get_group_name().'</option>'."\n";
+						
+					}
 				
 				} // end while
 			
+				// construct dropdown
+				$result .= '<span id="bpgsites-post-in-box">'."\n";
+				$result .= '<span>'.__( 'Post in', 'bpgsites' ).':</span>'."\n";
+				$result .= '<select id="bpgsites-post-in" name="bpgsites-post-in">'."\n";
+				
+				// did we get any that are mine?
+				if ( count( $mine ) > 0 ) {
+				
+					// join items
+					$items = implode( "\n", $mine );
+				
+					// only show optgroup if the other list is populated
+					if ( count( $linked ) > 0 ) {
+					
+						// construct title
+						$title = __( 'My Groups', 'bpgsites' );
+					
+						// construct item
+						$sublist = '<optgroup label="'.$title.'">'."\n";
+					
+						// insert items
+						$sublist .= $items;
+					
+						// close sublist
+						$sublist .= '</optgroup>'."\n";
+						
+						// replace items
+						$items = $sublist;
+					
+					}
+					
+					// add to html
+					$result .= $items;
+			
+				}
+		
+				// did we get any that are linked?
+				if ( count( $linked ) > 0 ) {
+				
+					// join items
+					$items = implode( "\n", $linked );
+				
+					// only show optgroup if the other list is populated
+					if ( count( $mine ) > 0 ) {
+					
+						// construct title
+						$title = __( 'Linked Groups', 'bpgsites' );
+					
+						// construct item
+						$sublist = '<optgroup label="'.$title.'">'."\n";
+					
+						// insert items
+						$sublist .= $items;
+					
+						// close sublist
+						$sublist .= '</optgroup>'."\n";
+						
+						// replace items
+						$items = $sublist;
+					
+					}
+					
+					// add to html
+					$result .= $items;
+			
+				}
+		
 				// close tags
 				$result .= '</select>'."\n";
 				$result .= '</span>'."\n";
@@ -1199,6 +1451,7 @@ class BpGroupSites_Activity {
 		// init return
 		$this->user_group_ids = array( 
 			'my_groups' => array(), 
+			'linked_groups' => array(), 
 			'public_groups' => array()
 		);
 		
@@ -1306,7 +1559,7 @@ class BpGroupSites_Activity {
 							if ( !in_array( $group_id, $this->user_group_ids['my_groups'] ) ) {
 								
 								// add to our array
-								$this->user_group_ids['my_groups'][] = $group_id;
+								$this->user_group_ids['linked_groups'][] = $group_id;
 								//print_r( array ('adding group_id' => $group_id ) ); //die();
 								
 								// don't need to check any further
@@ -1363,7 +1616,10 @@ class BpGroupSites_Activity {
 		foreach( $groups['groups'] AS $group ) {
 		
 			// if the user is a member...
-			if ( in_array( $group, $user_group_ids['my_groups'] ) ) {
+			if ( 
+				in_array( $group, $user_group_ids['my_groups'] ) OR 
+				in_array( $group, $user_group_ids['linked_groups'] ) 
+			) {
 			
 				// yes, kick out
 				$this->user_in_group = true;
