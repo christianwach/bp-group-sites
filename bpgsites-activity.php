@@ -356,32 +356,18 @@ class BpGroupSites_Activity {
 		
 		}
 	
-		// init meta query
+		// costruct our meta query addition
 		$meta_query = array(
-
-			// we want comments with any relevant group ID
-			//'relation'  => 'OR',
-		
-			// comments in groups
-			 array(
-				'key'   => BPGSITES_COMMENT_META_KEY,
-				'value' => $groups,
-				'compare' => 'IN'
-			),
-		
-			/*
-			// comments not in a group (doesn't show, unfortunately)
-			// perhaps we need to save comment_meta with a zero value?
-			 array(
-				'key'   => BPGSITES_COMMENT_META_KEY,
-				'value' => ''
-			)
-			*/
-
+			'key'   => BPGSITES_COMMENT_META_KEY,
+			'value' => $groups,
+			'compare' => 'IN'
 		);
 
 		// add our meta query
-		$comments->query_vars['meta_query'] = $meta_query;
+		$comments->query_vars['meta_query'][] = $meta_query;
+		
+		// we need an AND relation too
+		$comments->query_vars['meta_query']['relation'] = 'AND';
 	
 		// parse meta query again
 		$comments->meta_query->parse_query_vars( $comments->query_vars );
@@ -917,7 +903,7 @@ class BpGroupSites_Activity {
 	 * @description: adds filtering above scrollable comments in CommentPress Responsive
 	 */
 	function get_group_comments_filter() {
-
+		
 		// init HTML output
 		$html = '';
 		

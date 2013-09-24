@@ -1,0 +1,278 @@
+# Copyright (C) 2013 BP Group Sites
+# This file is distributed under the same license as the BP Group Sites package.
+msgid ""
+msgstr ""
+"Project-Id-Version: BP Group Sites 0.1\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/bp-group-sites\n"
+"POT-Creation-Date: 2013-09-24 12:57:07+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2013-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: bpgsites-activity.php:208
+msgid "Anonymous"
+msgstr ""
+
+#: bpgsites-activity.php:215 bpgsites-activity.php:1886
+msgid "post"
+msgstr ""
+
+#: bpgsites-activity.php:227
+msgid "%s left a %s on a %s %s in the group %s:"
+msgstr ""
+
+#: bpgsites-activity.php:230
+msgid "comment"
+msgstr ""
+
+#: bpgsites-activity.php:274
+msgid "Group Site Comments"
+msgstr ""
+
+#: bpgsites-activity.php:454
+msgid "Join group to reply"
+msgstr ""
+
+#: bpgsites-activity.php:532
+msgid "Join a group to leave a comment on %s"
+msgstr ""
+
+#: bpgsites-activity.php:713
+msgid "Groups reading this %s"
+msgstr ""
+
+#: bpgsites-activity.php:714 bpgsites-blogs-extension.php:468
+msgid "site"
+msgstr ""
+
+#: bpgsites-activity.php:771 bpgsites-activity.php:1070
+#: bpgsites-activity.php:1257
+msgid "My Groups"
+msgstr ""
+
+#: bpgsites-activity.php:806 bpgsites-activity.php:1086
+#: bpgsites-activity.php:1288
+msgid "Linked Groups"
+msgstr ""
+
+#: bpgsites-activity.php:841 bpgsites-activity.php:1102
+msgid "Public Groups"
+msgstr ""
+
+#: bpgsites-activity.php:873
+msgid "Group Home Page"
+msgstr ""
+
+#: bpgsites-activity.php:963
+msgid "Filter comments by group"
+msgstr ""
+
+#: bpgsites-activity.php:1112
+msgid "Filter"
+msgstr ""
+
+#: bpgsites-activity.php:1244
+msgid "Post in"
+msgstr ""
+
+#: bpgsites-activity.php:1649
+msgid "All Recent Activity in your %s"
+msgstr ""
+
+#: bpgsites-activity.php:1650 bpgsites-activity.php:1661
+#: bpgsites-activity.php:1706 bpgsites-admin.php:539 bpgsites-admin.php:545
+#: bpgsites-group-extension.php:72 bpgsites-group-extension.php:365
+msgid "Group Sites"
+msgstr ""
+
+#: bpgsites-activity.php:1660
+msgid "Recent Activity in Public %s"
+msgstr ""
+
+#: bpgsites-activity.php:1705
+msgid "Friends Activity in your %s"
+msgstr ""
+
+#: bpgsites-activity.php:1788
+msgid "Recent Comments in this %s"
+msgstr ""
+
+#: bpgsites-activity.php:1789 bpgsites-admin.php:542
+msgid "Group Site"
+msgstr ""
+
+#: bpgsites-activity.php:1924
+msgid " &amp; "
+msgstr ""
+
+#: bpgsites-activity.php:1954
+msgid "%s updated a %s %s in the group %s:"
+msgstr ""
+
+#: bpgsites-activity.php:1968
+msgid "%s wrote a new %s %s in the group %s:"
+msgstr ""
+
+#: bpgsites-activity.php:2011
+msgid "Group Site Posts"
+msgstr ""
+
+#: bpgsites-admin.php:147 bpgsites-admin.php:148
+msgid "BP Group Sites"
+msgstr ""
+
+#: bpgsites-admin.php:303
+msgid "You must supply an option to option_exists()"
+msgstr ""
+
+#: bpgsites-admin.php:323
+msgid "You must supply an option to option_get()"
+msgstr ""
+
+#: bpgsites-admin.php:342
+msgid "You must supply an option to option_set()"
+msgstr ""
+
+#: bpgsites-admin.php:347
+msgid "You must supply the option as a string to option_set()"
+msgstr ""
+
+#: bpgsites-admin.php:365
+msgid "You must supply an option to option_delete()"
+msgstr ""
+
+#: bpgsites-admin.php:382
+msgid "You do not have permission to access this page."
+msgstr ""
+
+#: bpgsites-admin.php:387
+msgid "Options saved."
+msgstr ""
+
+#: bpgsites-admin.php:434 bpgsites-admin.php:447
+msgid "BP Group Sites Settings"
+msgstr ""
+
+#: bpgsites-admin.php:449
+msgid "Configure how BP Group Sites behaves."
+msgstr ""
+
+#: bpgsites-admin.php:455
+msgid "Global Options"
+msgstr ""
+
+#: bpgsites-admin.php:460
+msgid "Should comments in public groups be visible to readers who are not members of those groups?"
+msgstr ""
+
+#: bpgsites-admin.php:470
+msgid "Naming Options"
+msgstr ""
+
+#: bpgsites-admin.php:475
+msgid "Enable name changes?"
+msgstr ""
+
+#: bpgsites-admin.php:480
+msgid "Plugin Title"
+msgstr ""
+
+#: bpgsites-admin.php:485
+msgid "Singular name for a Group Site"
+msgstr ""
+
+#: bpgsites-admin.php:490
+msgid "Plural name for Group Sites"
+msgstr ""
+
+#: bpgsites-admin.php:495
+msgid "Visit Group Site button text"
+msgstr ""
+
+#: bpgsites-admin.php:511
+msgid "Save Changes"
+msgstr ""
+
+#: bpgsites-admin.php:548
+msgid "Visit Group Site"
+msgstr ""
+
+#: bpgsites-admin.php:739
+msgid "You must supply an option to bpgsites_option_wpms_exists()"
+msgstr ""
+
+#: bpgsites-admin.php:760
+msgid "You must supply an option to bpgsites_site_option_get()"
+msgstr ""
+
+#: bpgsites-admin.php:777
+msgid "You must supply an option to bpgsites_site_option_set()"
+msgstr ""
+
+#: bpgsites-blogs-extension.php:283
+msgctxt "Blog pagination previous text"
+msgid "&larr;"
+msgstr ""
+
+#: bpgsites-blogs-extension.php:284
+msgctxt "Blog pagination next text"
+msgid "&rarr;"
+msgstr ""
+
+#: bpgsites-blogs-extension.php:431
+msgid "Remove"
+msgstr ""
+
+#: bpgsites-blogs-extension.php:433
+msgid "Add"
+msgstr ""
+
+#: bpgsites-blogs-extension.php:471
+msgid "sites"
+msgstr ""
+
+#: bpgsites-blogs-extension.php:475
+msgid "Viewing %1$s %2$s to %3$s (of %4$s %5$s)"
+msgstr ""
+
+#: bpgsites-group-extension.php:165
+msgid "Site successfully added to Group"
+msgstr ""
+
+#: bpgsites-group-extension.php:175 bpgsites-group-extension.php:185
+msgid "Site successfully removed from Group"
+msgstr ""
+
+#: bpgsites-group-extension.php:455 bpgsites-group-extension.php:573
+msgid "Sorry, there were no sites found."
+msgstr ""
+
+#: bpgsites-group-extension.php:534
+msgid "Update"
+msgstr ""
+
+#: bpgsites-group-extension.php:689
+msgid "Read this with:"
+msgstr ""
+#. Plugin Name of the plugin/theme
+msgid "BP Group Sites"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "http://haystack.co.uk"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "In WordPress Multisite, create a many-to-many replationship between BuddyPress Groups and WordPress Sites."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Christian Wach"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://haystack.co.uk"
+msgstr ""

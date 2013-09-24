@@ -470,6 +470,10 @@ function bpgsites_get_extension_display() {
  */
 function bpgsites_get_extension_edit_screen() {
 
+	?><p>In order to "Read With" other groups, <em>all admins of this group</em> should be members of those groups.</p>
+	
+	<?php
+
 	do_action( 'bp_before_blogs_loop' );
 	
 	// get all blogs - TODO: add AJAX query string compatibility?
@@ -626,7 +630,7 @@ function bpgsites_get_group_linkage() {
 		) );
 		//print_r( $group ); //die();
 
-		// either this user is a member or it's public
+		// either this admin user is a member or it's public
 		if ( 
 			groups_is_user_member( $user_id, $group_id ) OR 
 			'public' == bp_get_group_status( $group ) 

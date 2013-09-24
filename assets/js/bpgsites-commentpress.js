@@ -135,7 +135,7 @@ function bpgsites_update_select( comment_id ) {
  */
 jQuery(document).ready( function($) {
 	
-	// if we mustn't show publci comments...
+	// if we mustn't show public comments...
 	if ( bpgsites_show_public == '0' ) {
 	
 		/** 
