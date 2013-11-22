@@ -844,7 +844,7 @@ function bpgsites_authoritative_group_settings_form() {
 	$checked = '';
 	
 	// get existing option
-	$auth_groups = bpgsites_site_option_get( 'bpgsites_auth_groups', array() );
+	$auth_groups = bpgsites_authoritative_groups_get();
 	
 	// get current group ID
 	$group_id = bpgsites_get_current_group_id();
@@ -886,6 +886,7 @@ add_action ( 'bp_after_group_settings_creation_step' ,'bpgsites_authoritative_gr
 
 /** 
  * @description: get group ID on admin and creation screens
+ * @return int $group_id the current group ID
  */
 function bpgsites_get_current_group_id() {
 
@@ -923,7 +924,7 @@ function bpgsites_authoritative_group_save( $group ) {
 	*/
 	
 	// get existing option
-	$auth_groups = bpgsites_site_option_get( 'bpgsites_auth_groups', array() );
+	$auth_groups = bpgsites_authoritative_groups_get();
 	
 	// if not checked
 	if ( !isset( $_POST['bpgsites-authoritative-group'] ) ) {
@@ -966,6 +967,52 @@ function bpgsites_authoritative_group_save( $group ) {
 
 // add action for the above
 add_action( 'groups_group_after_save', 'bpgsites_authoritative_group_save' );
+
+
+
+/** 
+ * @description: get all authoritative groups
+ * @return array $auth_groups the authoritative group IDs
+ */
+function bpgsites_authoritative_groups_get() {
+	
+	// get existing option
+	$auth_groups = bpgsites_site_option_get( 'bpgsites_auth_groups', array() );
+	
+	// --<
+	return $auth_groups;
+	
+}
+
+
+
+/** 
+ * @description: get all authoritative groups
+ * @param int $group_id the group ID
+ * @return bool $is_auth_group the group is or is not authoritative
+ */
+function bpgsites_is_authoritative_group( $group_id ) {
+	
+	// get existing option
+	$auth_groups = bpgsites_authoritative_groups_get();
+	
+	// sanity check list
+	if ( count( $auth_groups ) > 0 ) {
+	
+		// is this group's ID in the list?
+		if ( in_array( $group_id, $auth_groups ) ) {
+		
+			// --<
+			return true;
+	
+		}
+		
+	}
+		
+	// --<
+	return false;
+	
+}
 
 
 

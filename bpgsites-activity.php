@@ -332,14 +332,16 @@ class BpGroupSites_Activity {
 		if ( 
 			count( $user_group_ids['my_groups'] ) > 0 OR
 			count( $user_group_ids['linked_groups'] ) > 0 OR
-			count( $user_group_ids['public_groups'] ) > 0 
+			count( $user_group_ids['public_groups'] ) > 0 OR
+			count( $user_group_ids['auth_groups'] ) > 0
 		) {
 	
 			// merge the arrays
 			$groups = array_unique( array_merge( 
 				$user_group_ids['my_groups'], 
 				$user_group_ids['linked_groups'], 
-				$user_group_ids['public_groups'] 
+				$user_group_ids['public_groups'],
+				$user_group_ids['auth_groups']
 			) );
 		
 		}
@@ -348,7 +350,8 @@ class BpGroupSites_Activity {
 		if (
 			count( $user_group_ids['my_groups'] ) === 0 AND 
 			count( $user_group_ids['linked_groups'] ) === 0 AND 
-			count( $user_group_ids['public_groups'] ) === 0 
+			count( $user_group_ids['public_groups'] ) === 0 AND 
+			count( $user_group_ids['auth_groups'] ) === 0 
 		) {
 	
 			// set a non-existent group ID
@@ -449,9 +452,22 @@ class BpGroupSites_Activity {
 		$group = groups_get_group( array(
 			'group_id'   => $group_id
 		) );
+		
+		// get authoritative groups
+		$auth_groups = bpgsites_authoritative_groups_get();
+		
+		// is it an authoritative group?
+		if ( in_array( $group_id, $auth_groups ) ) {
+		
+			// clear link
+			$link = '';
+		
+		} else {
 	
-		// construct link
-		$link = '<a rel="nofollow" href="'.bp_get_group_permalink( $group ).'">'.__( 'Join group to reply', 'bpgsites' ).'</a>';
+			// construct link
+			$link = '<a rel="nofollow" href="'.bp_get_group_permalink( $group ).'">'.__( 'Join group to reply', 'bpgsites' ).'</a>';
+		
+		}
 	
 		// --<
 		return $link;
@@ -1411,8 +1427,17 @@ class BpGroupSites_Activity {
 	
 		// did we get one?
 		if ( $group_id != '' AND is_numeric( $group_id ) ) {
-		
+			
+			// add group identifier
 			$classes[] = 'bpgsites-group-'.$group_id;
+	
+		}
+		
+		// is the group authoritative?
+		if ( bpgsites_is_authoritative_group( $group_id ) ) {
+			
+			// add class so auth groups can be styled
+			$classes[] = 'bpgsites-auth-group';
 	
 		}
 
@@ -1438,7 +1463,8 @@ class BpGroupSites_Activity {
 		$this->user_group_ids = array( 
 			'my_groups' => array(), 
 			'linked_groups' => array(), 
-			'public_groups' => array()
+			'public_groups' => array(),
+			'auth_groups' => bpgsites_authoritative_groups_get(),
 		);
 		
 		// get current blog
