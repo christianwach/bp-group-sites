@@ -19,8 +19,9 @@ if ( !defined( 'WP_UNINSTALL_PLUGIN' ) ) { exit(); }
 
 
 // delete plugin options
-delete_site_option( 'bpgbms_options' );
-delete_site_option( 'bpgbms_installed' );
+delete_site_option( 'bpgsites_options' );
+delete_site_option( 'bpgsites_installed' );
+delete_site_option( 'bpgsites_auth_groups' );
 
 
 

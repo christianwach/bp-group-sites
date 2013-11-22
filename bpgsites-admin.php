@@ -120,6 +120,7 @@ class BP_Group_Sites_Admin {
 		// but for testing let's delete them here
 		delete_site_option( 'bpgsites_options' );
 		delete_site_option( 'bpgsites_installed' );
+		delete_site_option( 'bpgsites_auth_groups' );
 
 	}
 	

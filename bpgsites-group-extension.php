@@ -832,3 +832,140 @@ function bpgsites_is_linked_group( $group_id, $blog_id ) {
 
 
 
+/** 
+ * @description: show option to make a group an authoritative group
+ */
+function bpgsites_authoritative_group_settings_form() {
+	
+	// get name
+	$name = apply_filters( 'bpgsites_extension_title', __( 'Group Sites', 'bpgsites' ) );
+	
+	// init checked
+	$checked = '';
+	
+	// get existing option
+	$auth_groups = bpgsites_site_option_get( 'bpgsites_auth_groups', array() );
+	
+	// get current group ID
+	$group_id = bpgsites_get_current_group_id();
+	
+	// sanity check list and group ID
+	if ( count( $auth_groups ) > 0 AND !is_null( $group_id ) ) {
+	
+		// is this group's ID in the list
+		if ( in_array( $group_id, $auth_groups ) ) {
+		
+			// override checked
+			$checked = ' checked="checked"';
+	
+		}
+	
+	}
+	
+	?>
+	<h4><?php echo $name; ?></h4>
+	
+	<p><?php _e( 'To make this group an authoritative group, make sure that it is set to "Private" above, then check the box below. The effect will be that the comments left by members of this group will always appear to readers. Only other members of this group will be able to reply to those comments.', 'bpgsites' ); ?></p>
+	
+	<div class="checkbox">
+		<label><input type="checkbox" id="bpgsites-authoritative-group" name="bpgsites-authoritative-group" value="1"<?php echo $checked ?> /> <?php _e( 'Make this group an authoritative group', 'bpgsites' ) ?></label>
+	</div>
+	
+	<hr />
+	
+	<?php
+	
+}
+
+// add actions for the above
+add_action ( 'bp_after_group_settings_admin' ,'bpgsites_authoritative_group_settings_form' );
+add_action ( 'bp_after_group_settings_creation_step' ,'bpgsites_authoritative_group_settings_form' );
+
+
+
+
+/** 
+ * @description: get group ID on admin and creation screens
+ */
+function bpgsites_get_current_group_id() {
+
+	// access BP global
+	global $bp;
+	
+	// init return
+	$group_id = null;
+	
+	// test for new group ID
+	if ( isset( $bp->groups->new_group_id ) ) {
+		$group_id = $bp->groups->new_group_id;
+		
+	// test for current group ID
+	} elseif ( isset( $bp->groups->current_group->id ) ) {
+		$group_id = $bp->groups->current_group->id;
+	}
+	
+	// --<
+	return $group_id;
+
+}
+
+
+
+/** 
+ * @description: intercept group settings save process
+ * @param object $group the group object
+ */
+function bpgsites_authoritative_group_save( $group ) {
+	
+	/*
+	If the checkbox IS NOT checked, remove from option if it is there
+	If the checkbox IS checked, add it to the option if not already there
+	*/
+	
+	// get existing option
+	$auth_groups = bpgsites_site_option_get( 'bpgsites_auth_groups', array() );
+	
+	// if not checked
+	if ( !isset( $_POST['bpgsites-authoritative-group'] ) ) {
+	
+		// sanity check list
+		if ( count( $auth_groups ) > 0 ) {
+		
+			// is this group's ID in the list?
+			if ( in_array( $group->id, $auth_groups ) ) {
+			
+				// yes, remove group ID and re-index
+				$updated = array_merge( array_diff( $auth_groups, array( $group->id ) ) );
+				
+				// save option
+				bpgsites_site_option_set( 'bpgsites_auth_groups', $updated );
+	
+			}
+	
+		}
+	
+	} else {
+	
+		// kick out if value is not 1
+		if ( absint( $_POST['bpgsites-authoritative-group'] ) !== 1 ) { return; }
+		
+		// is this group's ID missing from the list?
+		if ( !in_array( $group->id, $auth_groups ) ) {
+		
+			// add it
+			$auth_groups[] = $group->id;
+	
+			// save option
+			bpgsites_site_option_set( 'bpgsites_auth_groups', $auth_groups );
+
+		}
+
+	}
+	
+}
+
+// add action for the above
+add_action( 'groups_group_after_save', 'bpgsites_authoritative_group_save' );
+
+
+
