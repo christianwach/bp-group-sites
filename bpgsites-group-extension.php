@@ -1016,3 +1016,112 @@ function bpgsites_is_authoritative_group( $group_id ) {
 
 
 
+/** 
+ * @description: check if user is a member of an authoritative group for this blog
+ * @return bool $passed user is a member of an authoritative group for this blog
+ */
+function bpgsites_is_authoritative_group_member() {
+	
+	// false by default
+	$passed = false;
+	
+	// get existing option
+	$auth_groups = bpgsites_authoritative_groups_get();
+	
+	// sanity check list
+	if ( count( $auth_groups ) > 0 ) {
+		
+		// get current blog
+		$current_blog_id = get_current_blog_id();
+		
+		// get user ID
+		$user_id = bp_loggedin_user_id();
+		
+		// loop
+		foreach( $auth_groups AS $group_id ) {
+		
+			// is this user a member?
+			if ( groups_is_user_member( $user_id, $group_id ) ) {
+				
+				// if this auth group is an auth group for this blog
+				if ( bpgsites_check_group_by_blog_id( $current_blog_id, $group_id ) ) {
+				
+					// no need to delve further
+					return true;
+				
+				}
+				
+			}
+			
+		}
+	
+	}
+	
+	// --<
+	return $passed;
+	
+}
+
+
+
+/** 
+ * @description: filter media buttons by authoritative groups context
+ * @param bool $enabled if media buttons are enabled
+ * @return bool $enabled if media buttons are enabled
+ */
+function bpgsites_authoritative_group_media_buttons( $allowed ) {
+	
+	// disallow by default
+	$allowed = false;
+	
+	// is this user a member of an auth group on this blog?
+	if ( bpgsites_is_authoritative_group_member() ) {
+		
+		// allow
+		return true;
+	
+	}
+	
+	// --<
+	return $allowed;
+	
+}
+
+// add filter for the above
+add_filter( 'commentpress_rte_media_buttons', 'bpgsites_authoritative_group_media_buttons', 10, 1 );
+
+
+
+/** 
+ * @description: filter quicktags by authoritative groups context
+ * @param array $quicktags the quicktags
+ * @return array/bool $quicktags false if quicktags are disabled, array of buttons otherwise
+ */
+function bpgsites_authoritative_group_quicktags( $quicktags ) {
+	
+	// disallow quicktags by default
+	$quicktags = false;
+
+	// is this user a member of an auth group on this blog?
+	if ( bpgsites_is_authoritative_group_member() ) {
+		
+		// allow quicktags
+		$quicktags = array(
+			'buttons' => 'strong,em,ul,ol,li,link,close'
+		);
+
+		// --<
+		return $quicktags;
+	
+	}
+	
+	// --<
+	return $quicktags;
+	
+}
+
+// add filter for the above
+add_filter( 'commentpress_rte_quicktags', 'bpgsites_authoritative_group_quicktags', 10, 1 );
+
+
+
