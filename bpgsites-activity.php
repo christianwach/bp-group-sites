@@ -84,43 +84,38 @@ class BpGroupSites_Activity {
 			// add action for checking comment moderation
 			add_filter( 'pre_comment_approved', array( $this, 'check_comment_approval' ), 100, 2 );
 			
-			// if on front end...
-			if ( !is_admin() ) {
+			// add navigation items for groups
+			add_filter( 'cp_nav_after_network_home_title', array( $this, 'get_group_navigation_links' ) );
+		
+			// override reply to link
+			add_filter( 'comment_reply_link', array( $this, 'override_reply_to_link' ), 10, 4 );
+		
+			// override CommentPress TinyMCE
+			add_filter( 'cp_override_tinymce', array( $this, 'disable_tinymce' ), 10, 1 );
 			
-				// add navigation items for groups
-				add_filter( 'cp_nav_after_network_home_title', array( $this, 'get_group_navigation_links' ) );
+			// add filter for commenting capability
+			add_filter( 'commentpress_allowed_to_comment', array( $this, 'allow_anon_commenting' ), 10, 1 );
 			
-				// override reply to link
-				add_filter( 'comment_reply_link', array( $this, 'override_reply_to_link' ), 10, 4 );
-			
-				// override CommentPress TinyMCE
-				add_filter( 'cp_override_tinymce', array( $this, 'disable_tinymce' ), 10, 1 );
-				
-				// add filter for commenting capability
-				add_filter( 'commentpress_allowed_to_comment', array( $this, 'allow_anon_commenting' ), 10, 1 );
-				
-				// add action to insert comments-by-group filter
-				add_action( 'commentpress_before_scrollable_comments', array( $this, 'get_group_comments_filter' ) );
-				
-				// add group ID as class to comment
-				add_filter( 'comment_class', array( $this, 'add_group_to_comment_class' ), 10, 4 );
+			// add action to insert comments-by-group filter
+			add_action( 'commentpress_before_scrollable_comments', array( $this, 'get_group_comments_filter' ) );
 
-				// filter comments by group membership
-				add_action( 'pre_get_comments', array( $this, 'filter_comments' ), 100, 1 );
-				
-				// override what is reported by get_comments_number
-				add_filter( 'get_comments_number', array( $this, 'get_comments_number' ), 20, 2 );
-				
-				// override comment form if no group membership
-				add_filter( 'commentpress_show_comment_form', array( $this, 'show_comment_form' ), 10, 1 );
-				
-				// add section to activity sidebar in CommentPress
-				add_filter( 'commentpress_bp_activity_sidebar_before_members', array( $this, 'get_activity_sidebar_section' ) );
-				
-				// override cp_activity_tab_recent_title_blog
-				add_filter( 'cp_activity_tab_recent_title_blog', array( $this, 'get_activity_sidebar_recent_title' ) );
-				
-			}
+			// add group ID as class to comment
+			add_filter( 'comment_class', array( $this, 'add_group_to_comment_class' ), 10, 4 );
+
+			// filter comments by group membership
+			add_action( 'pre_get_comments', array( $this, 'filter_comments' ), 100, 1 );
+			
+			// override what is reported by get_comments_number
+			add_filter( 'get_comments_number', array( $this, 'get_comments_number' ), 20, 2 );
+			
+			// override comment form if no group membership
+			add_filter( 'commentpress_show_comment_form', array( $this, 'show_comment_form' ), 10, 1 );
+			
+			// add section to activity sidebar in CommentPress
+			add_filter( 'commentpress_bp_activity_sidebar_before_members', array( $this, 'get_activity_sidebar_section' ) );
+			
+			// override cp_activity_tab_recent_title_blog
+			add_filter( 'cp_activity_tab_recent_title_blog', array( $this, 'get_activity_sidebar_recent_title' ) );
 		
 		}
 		
