@@ -189,9 +189,6 @@ class BP_Group_Sites {
 		$this->admin->register_hooks();
 		$this->activity->register_hooks();
 		
-		// use translation
-		add_action( 'plugins_loaded', array( $this, 'enable_translation' ) );
-		
 		// register any public styles
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ), 20 );
 	
