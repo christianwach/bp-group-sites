@@ -130,10 +130,10 @@ function bpgsites_update_select( comment_id ) {
 
 
 /** 
- * @description: define what happens when the page is ready
+ * @description: initialise elements
  *
  */
-jQuery(document).ready( function($) {
+function bpgsites_init_elements() {
 	
 	// if we mustn't show public comments...
 	if ( bpgsites_show_public == '0' ) {
@@ -142,51 +142,51 @@ jQuery(document).ready( function($) {
 		 * @description: hide comments for initially unchecked boxes - HACK!!!
 		 *
 		 */
-		$( 'input.bpgsites_group_checkbox_public' ).each( function(i) {
+		jQuery( 'input.bpgsites_group_checkbox_public' ).each( function(i) {
 		
 			// define vars
 			var group_id, checked;
 		
 			// get group ID
-			group_id = $(this).val();
+			group_id = jQuery(this).val();
 		
 			// get checked/unchecked
-			checked = $(this).prop( 'checked' );
+			checked = jQuery(this).prop( 'checked' );
 
 			// if checked...
 			if ( checked ) {
 		
 				// show group comments
-				$( 'li.bpgsites-group-' + group_id ).addClass( 'bpgsites-shown' );
-				$( 'li.bpgsites-group-' + group_id ).show();
+				jQuery( 'li.bpgsites-group-' + group_id ).addClass( 'bpgsites-shown' );
+				jQuery( 'li.bpgsites-group-' + group_id ).show();
 		
 			} else {
 		
 				// hide group comments
-				$( 'li.bpgsites-group-' + group_id ).removeClass( 'bpgsites-shown' );
-				$( 'li.bpgsites-group-' + group_id ).hide();
+				jQuery( 'li.bpgsites-group-' + group_id ).removeClass( 'bpgsites-shown' );
+				jQuery( 'li.bpgsites-group-' + group_id ).hide();
 		
 			}
 		
 			// recalculate headings and para icons
-			$( 'a.comment_block_permalink' ).each( function( i ) {
+			jQuery( 'a.comment_block_permalink' ).each( function( i ) {
 			
 				var wrapper, shown, text_sig;
 			
 				// get wrapper
-				wrapper = $(this).parent().next( 'div.paragraph_wrapper' );
+				wrapper = jQuery(this).parent().next( 'div.paragraph_wrapper' );
 			
 				// get list items that are not hidden
 				shown = wrapper.find( 'li.bpgsites-shown' );
 			
 				// update heading
-				$(this).children( 'span.cp_comment_num' ).text( shown.length );
+				jQuery(this).children( 'span.cp_comment_num' ).text( shown.length );
 			
 				// get text signature
-				text_sig = $(this).parent().prop( 'id' ).split( 'para_heading-' )[1];
+				text_sig = jQuery(this).parent().prop( 'id' ).split( 'para_heading-' )[1];
 			
 				// set comment icon text
-				$( '#textblock-' + text_sig + ' .commenticonbox small' ).text( shown.length );
+				jQuery( '#textblock-' + text_sig + ' .commenticonbox small' ).text( shown.length );
 		
 			});
 		
@@ -200,7 +200,7 @@ jQuery(document).ready( function($) {
 	 * @description: activity column headings click
 	 *
 	 */
-	$( 'h3.bpgsites_group_filter_heading' ).click( function( event ) {
+	jQuery( 'h3.bpgsites_group_filter_heading' ).click( function( event ) {
 	
 		// define vars
 		var form_wrapper;
@@ -209,10 +209,10 @@ jQuery(document).ready( function($) {
 		event.preventDefault();
 	
 		// get form wrapper
-		form_wrapper = $(this).next( 'div.bpgsites_group_filter' );
+		form_wrapper = jQuery(this).next( 'div.bpgsites_group_filter' );
 		
 		// set width to prevent rendering error
-		form_wrapper.css( 'width', $(this).parent().css( 'width' ) );
+		form_wrapper.css( 'width', jQuery(this).parent().css( 'width' ) );
 		
 		// toggle next paragraph_wrapper
 		form_wrapper.slideToggle( 'slow', function() {
@@ -233,7 +233,7 @@ jQuery(document).ready( function($) {
 	 * @description: activity column headings click
 	 *
 	 */
-	$( 'a.comment-reply-link' ).click( function( event ) {
+	jQuery( 'a.comment-reply-link' ).click( function( event ) {
 		
 		// define vars
 		var reply_to_classes, spliced, group_id, comment_id, comment_form;
@@ -242,7 +242,7 @@ jQuery(document).ready( function($) {
 		event.preventDefault();
 		
 		// get comment ID
-		comment_id = $(this).parent().parent().prop( 'id' ).split( 'comment-' )[1];
+		comment_id = jQuery(this).parent().parent().prop( 'id' ).split( 'comment-' )[1];
 		
 		// update our dropdown and hide
 		bpgsites_update_select( comment_id );
@@ -258,13 +258,13 @@ jQuery(document).ready( function($) {
 	 * @description: activity column headings click
 	 *
 	 */
-	$( 'a#cancel-comment-reply-link' ).click( function( event ) {
+	jQuery( 'a#cancel-comment-reply-link' ).click( function( event ) {
 		
 		// override event
 		event.preventDefault();
 		
 		// show enclosing div
-		$( '#bpgsites-post-in-box' ).show();
+		jQuery( '#bpgsites-post-in-box' ).show();
 		
 		// --<
 		return false;
@@ -277,51 +277,51 @@ jQuery(document).ready( function($) {
 	 * @description: activity column headings click
 	 *
 	 */
-	$( 'input.bpgsites_group_checkbox' ).click( function( event ) {
+	jQuery( 'input.bpgsites_group_checkbox' ).click( function( event ) {
 		
 		// define vars
 		var group_id, checked;
 		
 		// get group ID
-		group_id = $(this).val();
+		group_id = jQuery(this).val();
 		
 		// get checked/unchecked
-		checked = $(this).prop( 'checked' );
+		checked = jQuery(this).prop( 'checked' );
 
 		// if checked...
 		if ( checked ) {
 		
 			// show group comments
-			$( 'li.bpgsites-group-' + group_id ).addClass( 'bpgsites-shown' );
-			$( 'li.bpgsites-group-' + group_id ).show();
+			jQuery( 'li.bpgsites-group-' + group_id ).addClass( 'bpgsites-shown' );
+			jQuery( 'li.bpgsites-group-' + group_id ).show();
 		
 		} else {
 		
 			// hide group comments
-			$( 'li.bpgsites-group-' + group_id ).removeClass( 'bpgsites-shown' );
-			$( 'li.bpgsites-group-' + group_id ).hide();
+			jQuery( 'li.bpgsites-group-' + group_id ).removeClass( 'bpgsites-shown' );
+			jQuery( 'li.bpgsites-group-' + group_id ).hide();
 		
 		}
 		
 		// recalculate headings and para icons
-		$( 'a.comment_block_permalink' ).each( function( i ) {
+		jQuery( 'a.comment_block_permalink' ).each( function( i ) {
 			
 			var wrapper, shown, text_sig;
 			
 			// get wrapper
-			wrapper = $(this).parent().next( 'div.paragraph_wrapper' );
+			wrapper = jQuery(this).parent().next( 'div.paragraph_wrapper' );
 			
 			// get list items that are not hidden
 			shown = wrapper.find( 'li.bpgsites-shown' );
 			
 			// update heading
-			$(this).children( 'span.cp_comment_num' ).text( shown.length );
+			jQuery(this).children( 'span.cp_comment_num' ).text( shown.length );
 			
 			// get text signature
-			text_sig = $(this).parent().prop( 'id' ).split( 'para_heading-' )[1];
+			text_sig = jQuery(this).parent().prop( 'id' ).split( 'para_heading-' )[1];
 			
 			// set comment icon text
-			$( '#textblock-' + text_sig + ' .commenticonbox small' ).text( shown.length );
+			jQuery( '#textblock-' + text_sig + ' .commenticonbox small' ).text( shown.length );
 		
 		});
 		
@@ -329,10 +329,21 @@ jQuery(document).ready( function($) {
 	
 	
 	
+}
+
+
+
+/** 
+ * @description: define what happens when the page is ready
+ *
+ */
+jQuery(document).ready( function($) {
+	
+	// init elements
+	bpgsites_init_elements();
+
 	// check page load
 	bpgsites_page_load();
-	
-	
 	
 });
 
