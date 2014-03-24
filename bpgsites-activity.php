@@ -116,7 +116,13 @@ class BpGroupSites_Activity {
 			
 			// override cp_activity_tab_recent_title_blog
 			add_filter( 'cp_activity_tab_recent_title_blog', array( $this, 'get_activity_sidebar_recent_title' ) );
-		
+			
+			// register a meta box
+			add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
+			
+			// intercept comment edit process
+			add_action( 'edit_comment', array( $this, 'save_comment_metadata' ) );
+			
 		}
 		
 	}
@@ -124,6 +130,90 @@ class BpGroupSites_Activity {
 	
 		
 	//##########################################################################
+	
+	
+	
+	/**
+	 * @description: register a meta box for the comment edit screen
+	 */
+	function add_meta_box() {
+		
+		// add meta box
+		add_meta_box( 
+			'bpgsites_comment_options_meta_box', 
+			__( 'BuddyPress Comment Group', 'bpgsites' ), 
+			array( $this, 'comment_meta_box' ), 
+			'comment', 
+			'normal'
+		);
+		
+	}
+	
+	
+	
+	/**
+	 * @description: add a meta box to the comment edit screen
+	 */
+	function comment_meta_box() {
+		
+		// access comment
+		global $comment;
+		
+		//print_r( $comment ); die();
+		
+		// comment ID
+		$comment_id = $comment->comment_ID;
+		
+		// get reply-to ID, if present
+		$reply_to_id = is_numeric( $comment->comment_parent ) ? absint( $comment->comment_parent ) : 0;
+		
+		// use nonce for verification
+		wp_nonce_field( 'bpgsites_comments_metabox', 'bpgsites_comments_nonce' );
+		
+		// open para
+		echo '<p>';
+
+		// get select dropdown
+		echo $this->get_comment_group_select( 
+		
+			'', // no existing content
+			$comment_id, 
+			$reply_to_id, 
+			true // trigger edit mode
+			
+		);
+		
+		// close para
+		echo '</p>';
+
+	}
+	
+	
+	
+	/**
+	 * @description: save data returned by our comment meta box
+	 * @param int $comment_id the ID of the comment being saved
+	 */
+	function save_comment_metadata( $comment_id ) {
+
+		// authenticate
+		$_nonce = isset( $_POST['bpgsites_comments_nonce'] ) ? $_POST['bpgsites_comments_nonce'] : '';
+		if ( !wp_verify_nonce( $_nonce, 'bpgsites_comments_metabox' ) ) { return; }
+		
+		// check capabilities
+		if ( !current_user_can( 'moderate_comments', $comment_id ) ) {
+			
+			// cheating!
+			comment_footer_die( 
+				__( 'You are not allowed to edit comments on this post.', 'bpgsites' )
+			);
+		
+		}
+		
+		// save data, ignoring comment status param
+		$this->save_comment_group_id( $comment_id, null );
+		
+	}
 	
 	
 	
@@ -1146,6 +1236,23 @@ class BpGroupSites_Activity {
 	 */
 	function get_comment_group_selector( $result, $comment_id, $reply_to_id ) {
 	
+		// pass to general method without 4th param
+		return $this->get_comment_group_select( $result, $comment_id, $reply_to_id );
+	
+	}
+	
+	
+	
+	/** 
+	 * @description: gets a dropdown (or hidden input) for a comment
+	 * @param string $result existing markup to be sent to browser
+	 * @param int $comment_id the comment ID
+	 * @param int $reply_to_id the comment ID to which this comment is a reply
+	 * @param bool $edit triggers edit mode to return an option selected
+	 * @return string $result the markup sent to the browser
+	 */
+	function get_comment_group_select( $result, $comment_id, $reply_to_id, $edit = false ) {
+	
 		// if the comment is a reply to another...
 		if ( $reply_to_id !== 0 ) {
 	
@@ -1168,7 +1275,14 @@ class BpGroupSites_Activity {
 			return $result;
 		
 		}
-	
+		
+		/*
+		print_r( array(
+			$comment_id,
+			$reply_to_id,
+		) ); die();
+		*/
+		
 		// get current blog ID
 		$blog_id = get_current_blog_id();
 	
@@ -1222,6 +1336,14 @@ class BpGroupSites_Activity {
 			// if more than one...
 			if ( $groups_template->group_count > 1 ) {
 			
+				// is this edit?
+				if ( $edit ) {
+			
+					// get the group of the comment ID
+					$comment_group_id = $this->get_comment_group_id( $comment_id );
+				
+				}
+		
 				// init lists
 				$mine = array();
 				$linked = array();
@@ -1232,11 +1354,27 @@ class BpGroupSites_Activity {
 					// get group ID
 					$group_id = bp_get_group_id();
 					
+					// init selected
+					$selected = '';
+					
+					// is this edit?
+					if ( $edit ) {
+					
+						// is this the relevant group?
+						if ( $comment_group_id == $group_id ) {
+						
+							// yes, insert selected
+							$selected = ' selected="selected"';
+						
+						}
+					
+					}
+					
 					// mine?
 					if ( in_array( $group_id, $user_group_ids['my_groups'] ) ) {
 						
 						// add option
-						$mine[] = '<option value="'.$group_id.'">'.bp_get_group_name().'</option>';
+						$mine[] = '<option value="'.$group_id.'"'.$selected.'>'.bp_get_group_name().'</option>';
 						
 					}
 				
@@ -1244,7 +1382,7 @@ class BpGroupSites_Activity {
 					if ( in_array( $group_id, $user_group_ids['linked_groups'] ) ) {
 						
 						// add option
-						$linked[] = '<option value="'.$group_id.'">'.bp_get_group_name().'</option>'."\n";
+						$linked[] = '<option value="'.$group_id.'"'.$selected.'>'.bp_get_group_name().'</option>'."\n";
 						
 					}
 				
