@@ -291,58 +291,152 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	
 	/**
 	 * @description manages the linkages between "groups reading together"
-	 * @param int $group_id the numeric ID of the group
 	 * @param int $blog_id the numeric ID of the blog
+	 * @param int $group_id the numeric ID of the group
 	 */
 	function _update_group_linkages( $blog_id, $group_id ) {
 	
-		// is this a comment in a group?
-		if ( isset( $_POST['bpgsites_linked_groups_'.$blog_id] ) AND is_array( $_POST['bpgsites_linked_groups_'.$blog_id] ) ) {
-	
-			// get values from post array
-			$group_ids = $_POST['bpgsites_linked_groups_'.$blog_id];
+		// bail if the update button has not been pressed
+		if ( ! isset( $_POST['bpgsites_manage-'.$blog_id.'-update'] ) ) { return; }
+		if ( $_POST['bpgsites_manage-'.$blog_id.'-update'] == '' ) { return; }
 		
+		// get existing array
+		$linked = bpgsites_get_group_linkages( $group_id );
+		
+		// init new groups array
+		$group_ids = array();
+	
+		// do we have a post array for our checkboxes?
+		if ( isset( $_POST['bpgsites_linked_groups_'.$blog_id] ) ) {
+
+			// YES - get values from post array
+			$group_ids = $_POST['bpgsites_linked_groups_'.$blog_id];
+	
 			// sanitise all the items
 			array_walk( $group_ids, create_function( '&$val', '$val = absint( $val );' ) );
 			
-			//print_r( $group_ids ); die();
-			
-			// get existing array
-			$linked = bpgsites_get_group_linkages( $group_id );
-			
+		}
+		
+		/*
+		print_r( array( 
+			'linked' => $linked,
+			'group_ids' => $group_ids, 
+		) ); die();
+		*/
+	
+		// set reciprocal linkages
+		$this->_update_reciprocal_linkages( $blog_id, $group_id, $linked[$blog_id], $group_ids );
+		
+		// if we have some group IDs to link
+		if ( count( $group_ids ) > 0 ) {
+		
 			// overwrite the nested array for this blog ID
 			$linked[$blog_id] = $group_ids;
 			
-			// save updated option
-			groups_update_groupmeta( $group_id, BPGSITES_LINKED, $linked );
-			
-			// set reciprocal linkages
-			foreach( $group_ids AS $linked_group_id ) {
-				
+		} else {
+		
+			// empty the nested array for this blog ID
+			unset( $linked[$blog_id] );
+		
+		}
+	
+		// save updated option for this group
+		groups_update_groupmeta( $group_id, BPGSITES_LINKED, $linked );
+	
+	}
+	
+	
+	
+	/**
+	 * @description manages the linkages between "groups reading together"
+	 * @param int $blog_id the numeric ID of the blog
+	 * @param int $group_id the numeric ID of the group
+	 * @param array $existing_group_ids the numeric IDs of the groups that are already linked
+	 * @param array $new_group_ids the numeric IDs of the groups to link
+	 */
+	function _update_reciprocal_linkages( $blog_id, $group_id, $existing_group_ids, $new_group_ids ) {
+		
+		// bail if we didn't get any
+		//if ( count( $new_group_ids ) === 0 ) { return; }
+		
+		// parse incoming arrays
+		$to_keep = array_intersect( $existing_group_ids, $new_group_ids );
+		$to_add = array_diff( $new_group_ids, $existing_group_ids );
+		$to_delete = array_diff( $existing_group_ids, $new_group_ids );
+		
+		/*
+		print_r( array( 
+			'existing_group_ids' => $existing_group_ids, 
+			'new_group_ids' => $new_group_ids,
+			'to_keep' => $to_keep,
+			'to_delete' => $to_delete,
+			'to_add' => $to_add,
+		) ); die();
+		*/
+	
+		// first add/keep
+		$keep_and_add = array_merge( $to_keep, $to_add );
+		
+		// sanity check
+		if ( count( $keep_and_add ) > 0 ) {
+		
+			// loop through them
+			foreach( $keep_and_add AS $linked_group_id ) {
+		
 				// get their linkages
 				$linked = bpgsites_get_group_linkages( $linked_group_id );
-				
+			
 				// get the array for this blog ID
 				$remote_group_ids = isset( $linked[$blog_id] ) ? $linked[$blog_id] : array();
-				
+			
 				// is this one in the remote list?
 				if ( !in_array( $group_id, $remote_group_ids ) ) {
-					
-					// add ours
+			
+					// no, add it
 					$remote_group_ids[] = $group_id;
-					
+				
 					// overwrite in parent array
 					$linked[$blog_id] = $remote_group_ids;
 				
 					// save updated option
 					groups_update_groupmeta( $linked_group_id, BPGSITES_LINKED, $linked );
-			
+				
 				}
 			
 			}
-	
+		
 		}
-	
+		
+		// sanity check
+		if ( count( $to_delete ) > 0 ) {
+		
+			// loop through them
+			foreach( $to_delete AS $linked_group_id ) {
+		
+				// get their linkages
+				$linked = bpgsites_get_group_linkages( $linked_group_id );
+			
+				// get the array for this blog ID
+				$remote_group_ids = isset( $linked[$blog_id] ) ? $linked[$blog_id] : array();
+			
+				// is this one in the remote list?
+				if ( in_array( $group_id, $remote_group_ids ) ) {
+			
+					// yes - remove group and re-index
+					$updated = array_merge( array_diff( $remote_group_ids, array( $group_id ) ) );
+				
+					// overwrite in parent array
+					$linked[$blog_id] = $updated;
+				
+					// save updated option
+					groups_update_groupmeta( $linked_group_id, BPGSITES_LINKED, $linked );
+				
+				}
+			
+			}
+		
+		}
+		
 	}
 	
 	
