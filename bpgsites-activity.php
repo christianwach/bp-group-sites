@@ -167,24 +167,53 @@ class BpGroupSites_Activity {
 		// get reply-to ID, if present
 		$reply_to_id = is_numeric( $comment->comment_parent ) ? absint( $comment->comment_parent ) : 0;
 		
-		// use nonce for verification
-		wp_nonce_field( 'bpgsites_comments_metabox', 'bpgsites_comments_nonce' );
+		// if this is a reply...
+		if ( $reply_to_id !== 0 ) {
 		
-		// open para
-		echo '<p>';
-
-		// get select dropdown
-		echo $this->get_comment_group_select( 
+			// the group that comment replies have must be the same as its parent
 		
-			'', // no existing content
-			$comment_id, 
-			$reply_to_id, 
-			true // trigger edit mode
+			// show message
+			echo '<p>'.__( 'This comment is a reply. It appears in the same group as the comment it is in reply to. If there is a deeper thread of replies, then the original comment determines the group in which it appears.', 'bpgsites' ).'</p>';
 			
-		);
+			// get group ID
+			$group_id = $this->get_comment_group_id( $comment_id );
+			
+			// get group name
+			$name = bp_get_group_name( groups_get_group( array( 'group_id' => $group_id ) ) );
+			
+			// construct message
+			$message = sprintf(
+				__( 'This comment appears in the group %1$s.', 'bpgsites' ),
+				$name
+			);
+
+			echo '<p>'.$message.'</p>';
+			;
+			
+		} else {
 		
-		// close para
-		echo '</p>';
+			// top level comments can be re-assigned
+		
+			// use nonce for verification
+			wp_nonce_field( 'bpgsites_comments_metabox', 'bpgsites_comments_nonce' );
+		
+			// open para
+			echo '<p>';
+
+			// get select dropdown
+			echo $this->get_comment_group_select( 
+		
+				'', // no existing content
+				$comment_id, 
+				$reply_to_id, 
+				true // trigger edit mode
+			
+			);
+		
+			// close para
+			echo '</p>';
+		
+		}
 
 	}
 	
@@ -195,10 +224,12 @@ class BpGroupSites_Activity {
 	 * @param int $comment_id the ID of the comment being saved
 	 */
 	function save_comment_metadata( $comment_id ) {
+		
+		// if there's no nonce then there's no comment meta data
+		if ( isset( $_POST['bpgsites_comments_nonce'] ) ) { return; }
 
-		// authenticate
-		$_nonce = isset( $_POST['bpgsites_comments_nonce'] ) ? $_POST['bpgsites_comments_nonce'] : '';
-		if ( !wp_verify_nonce( $_nonce, 'bpgsites_comments_metabox' ) ) { return; }
+		// authenticate submission
+		if ( !wp_verify_nonce( $_POST['bpgsites_comments_nonce'], 'bpgsites_comments_metabox' ) ) { return; }
 		
 		// check capabilities
 		if ( !current_user_can( 'moderate_comments', $comment_id ) ) {
