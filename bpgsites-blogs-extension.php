@@ -34,6 +34,9 @@ class BPGSites_Blogs_Template extends BP_Blogs_Template {
 	// need to store this for recalculation
 	public $page_arg = 'bpage';
 	
+	// store group ID
+	public $group_id;
+	
 	
 	
 	/** 
@@ -44,6 +47,9 @@ class BPGSites_Blogs_Template extends BP_Blogs_Template {
 		
 		// init parent
 		parent::__construct( $type, $page, $per_page, $max, $user_id, $search_terms, $page_arg );
+		
+		// store group ID
+		$this->group_id = $group_id;
 		
 		// calculate true total
 		$this->_calculate_true_total( $group_id );
@@ -177,18 +183,22 @@ class BPGSites_Blogs_Template extends BP_Blogs_Template {
 			foreach( $blogs AS $blog ) {
 			
 				// is it the BP root blog?
-				if ( $blog->blog_id != bp_get_root_blog_id() ) {
+				if ( $blog->blog_id == bp_get_root_blog_id() ) { continue; }
 				
-					// is it a groupblog?
-					if ( ! bpgsites_is_groupblog( $blog->blog_id ) ) {
+				// is it a groupblog?
+				if ( bpgsites_is_groupblog( $blog->blog_id ) ) { continue; }
 				
-						// okay, none of those - add it
-						$filtered_blogs['blogs'][] = $blog;
+				// if we're showing the component directory, include only group sites
+				if ( bp_is_bpgsites_component() ) {
 				
-					}
+					// is it a group site?
+					if ( !bpgsites_is_groupsite( $blog->blog_id ) ) { continue; }
 					
 				}
-			
+				
+				// okay, none of those - add it
+				$filtered_blogs['blogs'][] = $blog;
+		
 			}
 	
 		}
@@ -481,4 +491,75 @@ function bpgsites_blogs_pagination_count() {
 	);
 	
 }
+
+
+
+/**
+ * @description: get the total number of group sites being tracked.
+ * copied from bp_total_blogs() and amended
+ *
+ * @return int $count Total blog count.
+ */
+function bpgsites_total_blogs() {
+	
+	// get from cache if possible
+	if ( !$count = wp_cache_get( 'bpgsites_total_blogs', 'bpgsites' ) ) {
+		
+		// access blogs template
+		global $blogs_template;
+		
+		// if we haven't got one yet, create one
+		if ( !isset( $blogs_template ) ) { bpgsites_has_blogs(); }
+		
+		// get total
+		$total = bp_core_number_format( $blogs_template->total_blog_count );
+		
+		// stash it
+		wp_cache_set( 'bpgsites_total_blogs', $count, 'bpgsites' );
+		
+	}
+	
+	// --<
+	return $total;
+	
+}
+
+
+
+/**
+ * Output the total number of group sites on the site.
+ */
+function bpgsites_total_blog_count() {
+	echo bpgsites_get_total_blog_count();
+}
+
+	/**
+	 * Return the total number of group sites on the site.
+	 * @return int Total number of group sites.
+	 */
+	function bpgsites_get_total_blog_count() {
+		return apply_filters( 'bpgsites_get_total_blog_count', bpgsites_total_blogs() );
+	}
+
+	// format number that gets returned
+	add_filter( 'bpgsites_get_total_blog_count', 'bp_core_number_format' );
+
+
+
+/**
+ * Output the group sites component root slug.
+ * @uses bpgsites_get_root_slug()
+ */
+function bpgsites_root_slug() {
+	echo bpgsites_get_root_slug();
+}
+
+	/**
+	 * Return the group sites component root slug.
+	 * @return string The 'blogs' root slug.
+	 */
+	function bpgsites_get_root_slug() {
+		return apply_filters( 'bpgsites_get_root_slug', buddypress()->bpgsites->root_slug );
+	}
+
 

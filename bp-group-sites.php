@@ -78,6 +78,7 @@ class BP_Group_Sites {
 		// add actions for plugin init on BuddyPress init
 		add_action( 'bp_loaded', array( $this, 'initialise' ) );
 		add_action( 'bp_loaded', array( $this, 'register_hooks' ) );
+		add_action( 'bp_include', array( $this, 'register_theme_hooks' ) );
 		
 		// --<
 		return $this;
@@ -175,6 +176,9 @@ class BP_Group_Sites {
 		// load our group extension
 		require( BPGSITES_PATH . 'bpgsites-group-extension.php' );
 	
+		// load our component file
+		require( BPGSITES_PATH . 'bp-bpgsites-component.php' );
+	
 	}
 	
 	
@@ -212,6 +216,96 @@ class BP_Group_Sites {
 	
 	
 		
+	/**
+	 * @description: register theme hooks on bp include
+	 * @return nothing
+	 */
+	public function register_theme_hooks() {
+	
+		// add our templates to the theme compatibility layer
+		add_action( 'bp_register_theme_packages', array( $this, 'theme_compat' ) );
+		//add_filter( 'pre_option__bp_theme_package_id', array( $this, 'package_id' ) );
+		//add_filter( 'bp_get_template_part', array( $this, 'template_part' ), 10, 3 );
+		//add_filter( 'bp_get_template_stack', array( $this, 'template_stack' ), 10, 1 );
+		
+	}
+	
+	
+	
+	/**
+	 * @description: add our templates to the theme stack
+	 * @return nothing
+	 */
+	public function theme_compat() {
+	
+		//print_r( 'theme_compat' ); die();
+		
+		/*
+		bp_register_theme_package( array(
+			'id'      => 'bpgsites',
+			'name'    => __( 'BuddyPress Default', 'buddypress' ),
+			'version' => bp_get_version(),
+			'dir'     => trailingslashit( $this->themes_dir . '/bp-legacy' ),
+			'url'     => trailingslashit( $this->themes_url . '/bp-legacy' )
+		) );
+		*/
+		
+		// add templates dir to BuddyPress
+		bp_register_template_stack( 'bpgsites_templates_dir',  16 );
+		
+	}
+	
+	
+	
+	/**
+	 * @description: returns the unique package ID for our plugin's templates
+	 * @return str $package_id unique package ID
+	 */
+	public function package_id( $package_id ) {
+		
+		// return unique package ID
+		return 'bpgsites';
+		
+	}
+	
+	
+	
+	/**
+	 * @description: returns our template part
+	 * @return array $template path to required template
+	 */
+	public function template_part( $templates, $slug, $name ) {
+		
+		print_r( 'template_part' ); die();
+		
+		// kick out if not our slug
+		if ( 'texts' != $slug ) { return $templates; }
+		
+		// --<
+		return array( 'bpgsites/index.php' );
+		
+	}
+	
+	
+	
+	/**
+	 * @description: returns our template stack
+	 * @return array $template path to required template
+	 */
+	public function template_stack( $template_stack ) {
+		
+		print_r( array( 'template_stack' => $template_stack ) ); die();
+		
+		// kick out if not our slug
+		if ( 'texts' != $slug ) { return $templates; }
+		
+		// --<
+		return array( 'bpgsites/index.php' );
+		
+	}
+	
+	
+	
 	/**
 	 * @description: add our stylesheets
 	 * @return nothing
@@ -311,6 +405,32 @@ register_deactivation_hook( __FILE__, array( $bp_groupsites, 'deactivate' ) );
 
 // will use the 'uninstall.php' method
 // see: http://codex.wordpress.org/Function_Reference/register_uninstall_hook
+
+
+
+/**
+ * @description: returns the path to our templates directory
+ * @return str $path path to this plugin's templates directory
+ */
+function bpgsites_templates_dir() {
+	
+	// return filterable path to templates
+	$path = apply_filters(
+		'bpgsites_templates_dir', // hook
+		BPGSITES_PATH . 'assets/templates' // path
+	);
+	
+	/*
+	print_r( array( 
+		'method' => 'bpgsites_theme_dir',
+		'path' => $path,
+	) ); die();
+	*/
+	
+	// --<
+	return $path;
+	
+}
 
 
 
