@@ -31,7 +31,7 @@ class BP_Group_Sites_Component extends BP_Component {
 		//print_r( $this->id ); die();
 		
 		// store component name
-		$this->name = apply_filters( 'bpgsites_extension_title', __( 'Group Sites', 'bpgsites' ) );
+		$this->name = apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bpgsites' ) );
 		
 		// add this component to active components
 		$bp->active_components[$this->id] = '1';
