@@ -31,6 +31,7 @@ class BP_Group_Sites_Component extends BP_Component {
 		//print_r( $this->id ); die();
 		
 		// store component name
+		// NOTE: ideally we'll use BP theme compatibility - see bpgsites_load_template_filter() below
 		$this->name = apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bpgsites' ) );
 		
 		// add this component to active components
@@ -43,6 +44,24 @@ class BP_Group_Sites_Component extends BP_Component {
 			BPGSITES_PATH,
 			null // don't need menu item in WP admin bar
 		);
+		
+		/**
+		 * BuddyPress-dependent plugins are loaded too late to depend on BP_Component's
+		 * hooks, so we must call the function directly.
+		 */
+		 $this->includes();
+
+	}
+	
+	
+	
+	/**
+	 * Include our component's files
+	 */
+	public function includes() {
+		
+		// include screens file
+		include( BPGSITES_PATH . 'includes/bp-bpgsites-screens.php' );
 		
 	}
 	
@@ -67,7 +86,7 @@ class BP_Group_Sites_Component extends BP_Component {
 		
 		// construct args
 		$args = array(
-			// non-multisite installs don't need a top-level Group Sites directory, since there's only one site
+			// non-multisite installs don't need a top-level BP Group Sites directory, since there's only one site
 			'root_slug'             => isset( $bp->pages->{$this->id}->slug ) ? $bp->pages->{$this->id}->slug : $this->id,
 			'has_directory'         => true, 
 			'search_string'         => $search_string,
@@ -90,9 +109,9 @@ buddypress()->bpgsites = new BP_Group_Sites_Component();
 
 
 /**
- * Check whether the current page is part of the Group Sites component.
+ * Check whether the current page is part of the BP Group Sites component.
  *
- * @return bool True if the current page is part of the Group Sites component.
+ * @return bool True if the current page is part of the BP Group Sites component.
  */
 function bp_is_bpgsites_component() {
 
@@ -112,35 +131,11 @@ function bp_is_bpgsites_component() {
 
 
 /**
- * Load the top-level Group Sites directory.
- */
-function bpgsites_screen_index() {
-	
-	// is this our component page?
-	if ( is_multisite() && bp_is_bpgsites_component() && !bp_current_action() ) {
-		
-		// make sure BP knows that it's our directory
-		bp_update_is_directory( true, 'bpgsites' );
-		
-		// allow plugins to handle this
-		do_action( 'bpgsites_screen_index' );
-		
-		// load our directory template
-		bp_core_load_template( apply_filters( 'bpgsites_screen_index', 'bpgsites/index' ) );
-
-	}
-	
-}
-
-// add action for the above
-add_action( 'bp_screens', 'bpgsites_screen_index', 20 );
-
-
-
-/**
- * A custom load template filter for this component.
+ * A custom load template filter for this component
  */
 function bpgsites_load_template_filter( $found_template, $templates ) {
+	
+	// check for BP theme compatibility here?
 
 	// only filter the template location when we're on our component's page
 	if ( is_multisite() && bp_is_bpgsites_component() && !bp_current_action() ) {
@@ -170,6 +165,7 @@ function bpgsites_load_template_filter( $found_template, $templates ) {
 }
 
 // add filter for the above
+// NOTE: adding this disables BP_Group_Sites_Theme_Compat
 add_filter( 'bp_located_template', 'bpgsites_load_template_filter', 10, 2 );
 
 

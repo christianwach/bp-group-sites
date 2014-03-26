@@ -153,31 +153,31 @@ class BP_Group_Sites {
 	public function initialise() {
 		
 		// load our linkage functions file
-		require( BPGSITES_PATH . 'bpgsites-linkage.php' );
+		require( BPGSITES_PATH . 'includes/bpgsites-linkage.php' );
 	
 		// load our display functions file
-		require( BPGSITES_PATH . 'bpgsites-display.php' );
+		require( BPGSITES_PATH . 'includes/bpgsites-display.php' );
 	
 		// load our admin class file
-		require( BPGSITES_PATH . 'bpgsites-admin.php' );
+		require( BPGSITES_PATH . 'includes/bpgsites-admin.php' );
 		
 		// init object, sending reference to this class
 		$this->admin = new BP_Group_Sites_Admin( $this );
 	
 		// load our activity functions file
-		require( BPGSITES_PATH . 'bpgsites-activity.php' );
+		require( BPGSITES_PATH . 'includes/bpgsites-activity.php' );
 		
 		// init object
 		$this->activity = new BpGroupSites_Activity;
 	
 		// load our blogs extension
-		require( BPGSITES_PATH . 'bpgsites-blogs-extension.php' );
+		require( BPGSITES_PATH . 'includes/bpgsites-blogs-extension.php' );
 	
 		// load our group extension
-		require( BPGSITES_PATH . 'bpgsites-group-extension.php' );
+		require( BPGSITES_PATH . 'includes/bpgsites-group-extension.php' );
 	
 		// load our component file
-		require( BPGSITES_PATH . 'bp-bpgsites-component.php' );
+		require( BPGSITES_PATH . 'includes/bp-bpgsites-component.php' );
 	
 	}
 	
