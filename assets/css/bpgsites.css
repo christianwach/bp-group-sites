@@ -76,3 +76,17 @@ Default styles for filtering group linkages
 
 
 
+/*
+--------------------------------------------------------------------------------
+Default styles for comment amendments
+--------------------------------------------------------------------------------
+*/
+.bpgsites_comment_posted_in
+{
+	font-size: 70%;
+	text-transform: uppercase;
+	font-family: sans-serif;
+	margin: 0.7em 0;
+}
+
+

@@ -123,6 +123,9 @@ class BpGroupSites_Activity {
 			// intercept comment edit process
 			add_action( 'edit_comment', array( $this, 'save_comment_metadata' ) );
 			
+			// show group at top of comment content
+			add_filter( 'get_comment_text', array( $this, 'show_comment_group' ), 10, 3 );
+			
 		}
 		
 	}
@@ -130,6 +133,46 @@ class BpGroupSites_Activity {
 	
 		
 	//##########################################################################
+	
+	
+	
+	/**
+	 * @description: show the group into which a comment has been posted
+	 */
+	function show_comment_group( $comment_content, $comment, $args ) {
+		
+		// init prefix
+		$prefix = '';
+		
+		// get group ID
+		$group_id = $this->get_comment_group_id( $comment->comment_ID );
+		
+		// sanity check
+		if ( is_numeric( $group_id ) ) {
+		
+			// get group name
+			$name = bp_get_group_name( groups_get_group( array( 'group_id' => $group_id ) ) );
+			
+			// construct prefix
+			$prefix = apply_filters( 
+				'bpgsites_comment_prefix',
+				sprintf( __( 'Posted in: %s', 'bpgsites' ), $name ),
+				$name,
+				$comment,
+				$group_id
+			);	
+					
+		}
+		
+		// prepend to comment content
+		$comment_content = '<div class="bpgsites_comment_posted_in">'.$prefix."</div>\n\n".$comment_content;
+		
+		//print_r( $comment_content ); die();
+		
+		// --<
+		return $comment_content;
+		
+	}
 	
 	
 	
