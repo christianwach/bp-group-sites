@@ -153,10 +153,18 @@ class BpGroupSites_Activity {
 			// get group name
 			$name = bp_get_group_name( groups_get_group( array( 'group_id' => $group_id ) ) );
 			
+			// get the group
+			$group = groups_get_group( array(
+				'group_id'   => $group_id
+			) );
+			
+			// wrap name in anchor
+			$link = '<a href="'.bp_get_group_permalink( $group ).'">'.$name.'</a>';
+			
 			// construct prefix
 			$prefix = apply_filters( 
 				'bpgsites_comment_prefix',
-				sprintf( __( 'Posted in: %s', 'bpgsites' ), $name ),
+				sprintf( __( 'Posted in: %s', 'bpgsites' ), $link ),
 				$name,
 				$comment,
 				$group_id
