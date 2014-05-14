@@ -478,7 +478,7 @@ class BP_Group_Sites_Admin {
 			</tr>
 
 			<tr valign="top">
-				<th scope="row"><label for="bpgsites_overrides_name">'.__( 'Plugin Title', 'bpgsites' ).'</label></th>
+				<th scope="row"><label for="bpgsites_overrides_title">'.__( 'Component Title', 'bpgsites' ).'</label></th>
 				<td><input id="bpgsites_overrides_title" name="bpgsites_overrides_title" value="'.$bpgsites_overrides_title.'" type="text" /></td>
 			</tr>
 
