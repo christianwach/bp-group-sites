@@ -142,10 +142,10 @@ function bpgsites_load_template_filter( $found_template, $templates ) {
 	
 		// we've got to find the template manually
 		foreach ( (array) $templates as $template ) {
-			if ( file_exists( STYLESHEETPATH . '/' . $template ) ) {
-				$filtered_templates[] = STYLESHEETPATH . '/' . $template;
-			} elseif ( is_child_theme() && file_exists( TEMPLATEPATH . '/' . $template ) ) {
-				$filtered_templates[] = TEMPLATEPATH . '/' . $template;
+			if ( file_exists( get_stylesheet_directory() . '/' . $template ) ) {
+				$filtered_templates[] = get_stylesheet_directory() . '/' . $template;
+			} elseif ( is_child_theme() && file_exists( get_template_directory() . '/' . $template ) ) {
+				$filtered_templates[] = get_template_directory() . '/' . $template;
 			} else {
 				$filtered_templates[] = BPGSITES_PATH . 'assets/templates/' . $template;
 			}
