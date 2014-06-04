@@ -2234,7 +2234,7 @@ class BpGroupSites_Activity {
 		//print_r( array( 'activity AFTER' => $activity ) ); die();
 	
 		// prevent from firing again
-		remove_action( 'bp_activity_before_save', 'bpgsites_group_custom_post_activity' );
+		remove_action( 'bp_activity_before_save', array( $this, 'custom_post_activity' ) );
 	
 		// --<
 		return $activity;
