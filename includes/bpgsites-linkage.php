@@ -147,7 +147,7 @@ function bpgsites_unlink_blog_and_group( $blog_id, $group_id ) {
 
 
 /**
- * @description: set comment registration
+ * @description: set blog options
  * @param int $blog_id the numeric ID of the blog
  */
 function bpgsites_configure_blog_options( $blog_id ) {
@@ -176,12 +176,15 @@ function bpgsites_configure_blog_options( $blog_id ) {
 	// switch back
 	restore_current_blog();
 	
+	// add blog ID to globally stored option
+	bpgsites_register_groupsite( $blog_id );
+	
 }
 
 
 
 /**
- * @description: unset comment registration
+ * @description: unset blog options
  * @param int $blog_id the numeric ID of the blog
  */
 function bpgsites_reset_blog_options( $blog_id ) {
@@ -203,6 +206,9 @@ function bpgsites_reset_blog_options( $blog_id ) {
 	
 	// switch back
 	restore_current_blog();
+	
+	// remove blog ID from globally stored option
+	bpgsites_deregister_groupsite( $blog_id );
 	
 }
 
@@ -395,7 +401,7 @@ function bpgsites_is_groupblog( $blog_id ) {
 
 
 /** 
- * @description: check if blog is a groupblog
+ * @description: check if blog is a groupsite
  * @param int $blog_id the numeric ID of the blog
  */
 function bpgsites_is_groupsite( $blog_id ) {
@@ -413,6 +419,92 @@ function bpgsites_is_groupsite( $blog_id ) {
 	
 	// --<
 	return $return;
+	
+}
+
+
+
+/**
+ * @description: get array of all groupsite blog IDs
+ * @return array $blog_ids Array of numeric IDs of the group site blogs
+ */
+function bpgsites_get_groupsites() {
+	
+	// access object
+	global $bp_groupsites;
+	
+	// create option if it doesn't exist
+	if ( ! $bp_groupsites->admin->option_exists( 'bpgsites_groupsites' ) ) {
+		$bp_groupsites->admin->option_set( 'bpgsites_groupsites', array() );
+		$bp_groupsites->admin->options_save();
+	}
+	
+	// get existing option
+	$existing = $bp_groupsites->admin->option_get( 'bpgsites_groupsites' );
+	
+	// --<
+	return $existing;
+	
+}
+
+
+
+/**
+ * @description: store blog ID in plugin data
+ * @param int $blog_id the numeric ID of the blog
+ */
+function bpgsites_register_groupsite( $blog_id ) {
+	
+	// access object
+	global $bp_groupsites;
+	
+	// create option if it doesn't exist
+	if ( ! $bp_groupsites->admin->option_exists( 'bpgsites_groupsites' ) ) {
+		$bp_groupsites->admin->option_set( 'bpgsites_groupsites', array() );
+	}
+	
+	// get existing option
+	$existing = $bp_groupsites->admin->option_get( 'bpgsites_groupsites' );
+	
+	// bail if the blog already present
+	if ( in_array( $blog_id, $existing ) ) return;
+	
+	// add to the array (key is the same for easier removal)
+	$existing[$blog_id] = $blog_id;
+	
+	// overwrite
+	$bp_groupsites->admin->option_set( 'bpgsites_groupsites', $existing );
+	
+	// save
+	$bp_groupsites->admin->options_save();
+	
+}
+
+
+
+/**
+ * @description: clear blog ID from plugin data
+ * @param int $blog_id the numeric ID of the blog
+ */
+function bpgsites_deregister_groupsite( $blog_id ) {
+	
+	// get existing option
+	$existing = $bp_groupsites->admin->option_get( 'bpgsites_groupsites' );
+	
+	// sanity check
+	if ( $existing === false ) return;
+	
+	// bail if the blog is not present
+	if ( ! in_array( $blog_id, $existing ) ) return;
+	
+	// add to the array (key is the same as the value)
+	unset( $existing[$blog_id] );
+	
+	// overwrite
+	$bp_groupsites->admin->option_set( 'bpgsites_groupsites', $existing );
+	
+	// save
+	$bp_groupsites->admin->options_save();
 	
 }
 

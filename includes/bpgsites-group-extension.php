@@ -570,7 +570,7 @@ function bpgsites_get_extension_edit_screen() {
 
 	do_action( 'bp_before_blogs_loop' );
 	
-	// get all blogs - TODO: add AJAX query string compatibility?
+	// get all group sites - TODO: add AJAX query string compatibility?
 	if ( bpgsites_has_blogs() ) {
 	
 		?>
@@ -594,7 +594,7 @@ function bpgsites_get_extension_edit_screen() {
 		<?php while ( bp_blogs() ) : bp_the_blog(); 
 			
 			// is this blog in the group?
-			$in_group = bpgsites_is_blog_in_group()
+			$in_group = bpgsites_is_blog_in_group();
 			
 			?>
 

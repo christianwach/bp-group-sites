@@ -100,6 +100,9 @@ class BP_Group_Sites_Admin {
 		// default slug to "group-sites"
 		$this->option_set( 'bpgsites_overrides_slug', $defaults['slug'] );
 	
+		// default list of group sites to an empty array
+		$this->option_set( 'bpgsites_groupsites', $defaults['groupsites'] );
+	
 		// save options array
 		$this->options_save();
 		
@@ -191,6 +194,18 @@ class BP_Group_Sites_Admin {
 		
 		// check that we trust the source of the data
 		check_admin_referer( 'bpgsites_admin_action', 'bpgsites_nonce' );
+		
+		
+		
+		// debugging switch for admins and network admins - if set, triggers do_debug() below
+		if ( is_super_admin() AND isset( $_POST['bpgsites_debug'] ) ) {
+			$settings_debug = absint( $_POST['bpgsites_debug'] );
+			$debug = $settings_debug ? 1 : 0;
+			if ( $debug ) { $this->do_debug(); }
+			return;
+		}
+		
+		
 		
 		// okay, we're through - get variables
 		extract( $_POST );
@@ -373,6 +388,40 @@ class BP_Group_Sites_Admin {
 	
 	
 	
+	/** 
+	 * General debugging utility
+	 * @return void
+	 */
+	public function do_debug() {
+		
+		return;
+		//print_r( $this->option_get( 'bpgsites_groupsites' ) ); die();
+		
+		// get all blogs via BP_Blogs_Blog
+		$all = BP_Blogs_Blog::get_all();
+		
+		// init ID array
+		$blog_ids = array();
+		
+		// get existing groupsites
+		if ( is_array( $all['blogs'] ) AND count( $all['blogs'] ) > 0 ) {
+			foreach ( $all['blogs'] AS $blog ) {
+				if ( bpgsites_is_groupsite( $blog->blog_id ) ) {
+					$blog_ids[$blog->blog_id] = $blog->blog_id;
+				}
+			}
+		}
+	
+		// set option
+		$this->option_set( 'bpgsites_groupsites', $blog_ids );
+		
+		// save
+		$this->options_save();
+	
+	}
+	
+	
+	
 	/**
 	 * @description: show our admin page
 	 */
@@ -501,6 +550,29 @@ class BP_Group_Sites_Admin {
 		
 		
 		
+		if ( is_super_admin() ) {
+			
+			// show debugger
+			echo '
+			<hr>
+			<h3>'.__( 'Developer Testing', 'bpgsites' ).'</h3> 
+
+			<table class="form-table">
+
+				<tr>
+					<th scope="row">'.__( 'Debug', 'bpgsites' ).'</th>
+					<td>
+						<input type="checkbox" class="settings-checkbox" name="bpgsites_debug" id="bpgsites_debug" value="1" />
+						<label class="civi_wp_member_sync_settings_label" for="bpgsites_debug">'.__( 'Check this to trigger do_debug().', 'bpgsites' ).'</label>
+					</td>
+				</tr>
+			
+			</table>'."\n\n";
+		
+		}
+		
+		
+		
 		// close form
 		echo '</div>'."\n\n";
 
@@ -550,6 +622,9 @@ class BP_Group_Sites_Admin {
 	
 		// default slug to "group-sites"
 		$defaults['slug'] = 'group-sites';
+		
+		// default list of group sites to empty
+		$defaults['groupsites'] = array();
 		
 		// --<
 		return $defaults;
