@@ -438,7 +438,10 @@ class BpGroupSites_Activity {
 		// default name, but allow plugins to override
 		$comment_name = apply_filters( 
 			'bpgsites_comment_name', 
-			__( 'Group Site Comments', 'bpgsites' )
+			sprintf(
+				__( 'Comments in %s', 'bpgsites' ),
+				apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bpgsites' ) )
+			)
 		);
 		
 		// construct option
