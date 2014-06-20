@@ -63,8 +63,9 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	
 	
 	/** 
-	 * @description: initialises this object
-	 * @return nothing
+	 * Initialises this object
+	 *
+	 * @return void
 	 */
 	function __construct() {
 		
@@ -104,8 +105,9 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	
 	
 	/** 
-	 * @description: the content of the extension tab in the group admin
-	 * @return nothing
+	 * The content of the extension tab in the group admin
+	 *
+	 * @return void
 	 */
 	function edit_screen() {
 		
@@ -126,8 +128,9 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	
 	
 	/** 
-	 * @description: runs after the user clicks a submit button on the edit screen
-	 * @return nothing
+	 * Runs after the user clicks a submit button on the edit screen
+	 *
+	 * @return void
 	 */
 	function edit_screen_save() {
 		
@@ -199,7 +202,9 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	
 	
 	/**
-	 * @description display our content when the nav item is selected
+	 * Display our content when the nav item is selected
+	 *
+	 * @return void
 	 */
 	function display() {
 		
@@ -221,6 +226,7 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	 * admin panel, don't define this method in your class.
 	 *
 	 * @param int $group_id the numeric ID of the group being edited
+	 * @return void
 	 */
 	function admin_screen( $group_id ) {
 		
@@ -235,6 +241,7 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	 * The routine run after the group is saved on the Dashboard group admin screen
 	 *
 	 * @param int $group_id the numeric ID of the group being edited
+	 * @return void
 	 */
 	function admin_screen_save( $group_id ) {
 	
@@ -245,7 +252,9 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	
 	
 	/**
-	 * @return array contains $blog_id and $action
+	 * Parse the name of the input to extract blog Id and action
+	 *
+	 * @return array Contains $blog_id and $action
 	 */
 	protected function _parse_input_name() {
 	
@@ -290,9 +299,11 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	
 	
 	/**
-	 * @description manages the linkages between "groups reading together"
+	 * Manages the linkages between "groups reading together"
+	 *
 	 * @param int $blog_id the numeric ID of the blog
 	 * @param int $group_id the numeric ID of the group
+	 * @return void
 	 */
 	function _update_group_linkages( $blog_id, $group_id ) {
 	
@@ -348,11 +359,13 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	
 	
 	/**
-	 * @description manages the linkages between "groups reading together"
+	 * Manages the linkages between "groups reading together"
+	 *
 	 * @param int $blog_id the numeric ID of the blog
 	 * @param int $group_id the numeric ID of the group
 	 * @param array $existing_group_ids the numeric IDs of the groups that are already linked
 	 * @param array $new_group_ids the numeric IDs of the groups to link
+	 * @return void
 	 */
 	function _update_reciprocal_linkages( $blog_id, $group_id, $existing_group_ids, $new_group_ids ) {
 		
@@ -451,7 +464,9 @@ bp_register_group_extension( 'BPGSites_Group_Extension' );
 
 
 /** 
- * @description: the content of the public extension page
+ * The content of the public extension page
+ *
+ * @return void
  */
 function bpgsites_get_extension_display() {
 	
@@ -560,7 +575,9 @@ function bpgsites_get_extension_display() {
 
 
 /** 
- * @description: the content of the extension group admin page
+ * The content of the extension group admin page
+ *
+ * @return void
  */
 function bpgsites_get_extension_edit_screen() {
 
@@ -678,7 +695,9 @@ function bpgsites_get_extension_edit_screen() {
 
 
 /** 
- * @description: the content of the extension admin screen
+ * The content of the extension admin screen
+ *
+ * @return void
  */
 function bpgsites_get_extension_admin_screen() {
 
@@ -689,9 +708,12 @@ function bpgsites_get_extension_admin_screen() {
 
 
 /** 
- * @description: adds checkboxes to groups loop for "reading with" other groups
+ * Adds checkboxes to groups loop for "reading with" other groups
+ *
+ * @param bool $echo Whether to echo or not
+ * @return bool $has_linkage Whether there is a linkage or not
  */
-function bpgsites_get_group_linkage() {
+function bpgsites_get_group_linkage( $echo = true ) {
 
 	// init return
 	$has_linkage = false;
@@ -838,8 +860,10 @@ function bpgsites_get_group_linkage() {
 
 
 /** 
- * @description: for a given group ID, get linked group IDs for all blogs
+ * For a given group ID, get linked group IDs for all blogs
+ *
  * @param int $group_id the numeric ID of the group
+ * @return array $linked_groups Array of numeric IDs of linked groups
  */
 function bpgsites_get_group_linkages( $group_id ) {
 
@@ -857,8 +881,11 @@ function bpgsites_get_group_linkages( $group_id ) {
 
 
 /** 
- * @description: for a given group ID, get linked group IDs for a specific blog
+ * For a given group ID, get linked group IDs for a specific blog
+ *
  * @param int $group_id the numeric ID of the group
+ * @param int $blog_id the numeric ID of the blog
+ * @return array $linked_groups Array of numeric IDs of linked groups
  */
 function bpgsites_get_linked_groups_by_blog_id( $group_id, $blog_id ) {
 
@@ -885,9 +912,11 @@ function bpgsites_get_linked_groups_by_blog_id( $group_id, $blog_id ) {
 
 
 /** 
- * @description: for a given group ID, get linked group IDs for a given blog ID
+ * For a given group ID, get linked group IDs for a given blog ID
+ *
  * @param int $group_id the numeric ID of the group
  * @param int $blog_id the numeric ID of the blog
+ * @return bool $return Whether or not the group is linked
  */
 function bpgsites_is_linked_group( $group_id, $blog_id ) {
 
@@ -927,7 +956,9 @@ function bpgsites_is_linked_group( $group_id, $blog_id ) {
 
 
 /** 
- * @description: show option to make a group an authoritative group
+ * Show option to make a group an authoritative group
+ *
+ * @return void
  */
 function bpgsites_authoritative_group_settings_form() {
 	
@@ -979,7 +1010,8 @@ add_action ( 'bp_after_group_settings_creation_step' ,'bpgsites_authoritative_gr
 
 
 /** 
- * @description: get group ID on admin and creation screens
+ * Get group ID on admin and creation screens
+ *
  * @return int $group_id the current group ID
  */
 function bpgsites_get_current_group_id() {
@@ -1007,8 +1039,10 @@ function bpgsites_get_current_group_id() {
 
 
 /** 
- * @description: intercept group settings save process
+ * Intercept group settings save process
+ *
  * @param object $group the group object
+ * @return void
  */
 function bpgsites_authoritative_group_save( $group ) {
 	
@@ -1065,7 +1099,8 @@ add_action( 'groups_group_after_save', 'bpgsites_authoritative_group_save' );
 
 
 /** 
- * @description: get all authoritative groups
+ * Get all authoritative groups
+ *
  * @return array $auth_groups the authoritative group IDs
  */
 function bpgsites_authoritative_groups_get() {
@@ -1081,7 +1116,8 @@ function bpgsites_authoritative_groups_get() {
 
 
 /** 
- * @description: get all authoritative groups
+ * Get all authoritative groups
+ *
  * @param int $group_id the group ID
  * @return bool $is_auth_group the group is or is not authoritative
  */
@@ -1111,7 +1147,8 @@ function bpgsites_is_authoritative_group( $group_id ) {
 
 
 /** 
- * @description: check if user is a member of an authoritative group for this blog
+ * Check if user is a member of an authoritative group for this blog
+ *
  * @return bool $passed user is a member of an authoritative group for this blog
  */
 function bpgsites_is_authoritative_group_member() {
@@ -1159,7 +1196,8 @@ function bpgsites_is_authoritative_group_member() {
 
 
 /** 
- * @description: filter media buttons by authoritative groups context
+ * Filter media buttons by authoritative groups context
+ *
  * @param bool $enabled if media buttons are enabled
  * @return bool $enabled if media buttons are enabled
  */
@@ -1187,7 +1225,8 @@ add_filter( 'commentpress_rte_media_buttons', 'bpgsites_authoritative_group_medi
 
 
 /** 
- * @description: filter quicktags by authoritative groups context
+ * Filter quicktags by authoritative groups context
+ *
  * @param array $quicktags the quicktags
  * @return array/bool $quicktags false if quicktags are disabled, array of buttons otherwise
  */

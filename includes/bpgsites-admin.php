@@ -34,7 +34,8 @@ class BP_Group_Sites_Admin {
 	
 	
 	/** 
-	 * @description: initialises this object
+	 * Initialises this object
+	 *
 	 * @return object
 	 */
 	function __construct() {
@@ -50,8 +51,9 @@ class BP_Group_Sites_Admin {
 	
 	
 	/**
-	 * @description: register hooks on plugin init
-	 * @return nothing
+	 * Register hooks on plugin init
+	 *
+	 * @return void
 	 */
 	public function register_hooks() {
 	
@@ -68,8 +70,9 @@ class BP_Group_Sites_Admin {
 	
 		
 	/**
-	 * @description: actions to perform on plugin activation
-	 * @return nothing
+	 * Actions to perform on plugin activation
+	 *
+	 * @return void
 	 */
 	public function activate() {
 	
@@ -114,8 +117,9 @@ class BP_Group_Sites_Admin {
 	
 	
 	/**
-	 * @description: actions to perform on plugin deactivation (NOT deletion)
-	 * @return nothing
+	 * Actions to perform on plugin deactivation (NOT deletion)
+	 *
+	 * @return void
 	 */
 	public function deactivate() {
 		
@@ -130,7 +134,9 @@ class BP_Group_Sites_Admin {
 	
 		
 	/** 
-	 * @description: add an admin page for this plugin
+	 * Add an admin page for this plugin
+	 *
+	 * @return void
 	 */
 	public function add_admin_menu() {
 		
@@ -165,7 +171,9 @@ class BP_Group_Sites_Admin {
 	
 	
 	/**
-	 * @description: enqueue any styles and scripts needed by our admin page
+	 * Enqueue any styles and scripts needed by our admin page
+	 *
+	 * @return void
 	 */
 	public function add_admin_styles() {
 		
@@ -185,7 +193,9 @@ class BP_Group_Sites_Admin {
 	
 	
 	/** 
-	 * @description: update options based on content of form
+	 * Update options based on content of form
+	 *
+	 * @return void
 	 */
 	public function options_update() {
 	
@@ -295,7 +305,8 @@ class BP_Group_Sites_Admin {
 	
 	
 	/** 
-	 * @description: save array as site option
+	 * Aave array as site option
+	 *
 	 * @return bool Success or failure
 	 */
 	function options_save() {
@@ -308,7 +319,8 @@ class BP_Group_Sites_Admin {
 	
 	
 	/** 
-	 * @description: return a value for a specified option
+	 * Return a value for a specified option
+	 *
 	 * @param string $option_name The name of the option
 	 * @return bool Whether or not the option exists
 	 */
@@ -327,10 +339,11 @@ class BP_Group_Sites_Admin {
 	
 	
 	/** 
-	 * @description: return a value for a specified option
+	 * Return a value for a specified option
+	 *
 	 * @param string $option_name The name of the option
 	 * @param mixed $default The default value if the option does not exist
-	 * @return mixed the option or the default
+	 * @return mixed The option or the default
 	 */
 	public function option_get( $option_name = '', $default = false ) {
 	
@@ -347,9 +360,11 @@ class BP_Group_Sites_Admin {
 	
 	
 	/** 
-	 * @description: sets a value for a specified option
+	 * Sets a value for a specified option
+	 *
 	 * @param string $option_name The name of the option
 	 * @param mixed $value The value of the option
+	 * @return void
 	 */
 	public function option_set( $option_name = '', $value = '' ) {
 	
@@ -371,8 +386,10 @@ class BP_Group_Sites_Admin {
 	
 	
 	/** 
-	 * @description: deletes a specified option
+	 * Deletes a specified option
+	 *
 	 * @param string $option_name The name of the option
+	 * @return void
 	 */
 	public function option_delete( $option_name = '' ) {
 	
@@ -390,6 +407,7 @@ class BP_Group_Sites_Admin {
 	
 	/** 
 	 * General debugging utility
+	 *
 	 * @return void
 	 */
 	public function do_debug() {
@@ -423,7 +441,9 @@ class BP_Group_Sites_Admin {
 	
 	
 	/**
-	 * @description: show our admin page
+	 * Show our admin page
+	 *
+	 * @return void
 	 */
 	public function _network_admin_form() {
 	
@@ -594,7 +614,8 @@ class BP_Group_Sites_Admin {
 	
 	
 	/**
-	 * @description: get default values for this plugin
+	 * Get default values for this plugin
+	 *
 	 * @return array The default values for this plugin
 	 */
 	function _get_defaults() {
@@ -646,7 +667,10 @@ Primary filters for overrides
 
 
 /** 
- * @description: override group extension title
+ * Override group extension title
+ *
+ * @param str $title The existing title
+ * @return str $title The overridden title
  */
 function bpgsites_override_extension_title( $title ) {
 	
@@ -672,7 +696,10 @@ add_filter( 'bpgsites_extension_title', 'bpgsites_override_extension_title', 10,
 
 
 /** 
- * @description: override group extension singular name
+ * Override group extension singular name
+ *
+ * @param str $name The existing name
+ * @return str $name The overridden name
  */
 function bpgsites_override_extension_name( $name ) {
 	
@@ -698,7 +725,10 @@ add_filter( 'bpgsites_extension_name', 'bpgsites_override_extension_name', 10, 1
 
 
 /** 
- * @description: override group extension plural
+ * Override group extension plural
+ *
+ * @param str $plural The existing plural name
+ * @return str $plural The overridden plural name
  */
 function bpgsites_override_extension_plural( $plural ) {
 	
@@ -724,7 +754,10 @@ add_filter( 'bpgsites_extension_plural', 'bpgsites_override_extension_plural', 1
 
 
 /** 
- * @description: override group extension slug
+ * Override group extension slug
+ *
+ * @param str $slug The existing slug
+ * @return str $slug The overridden slug
  */
 function bpgsites_override_extension_slug( $slug ) {
 	
@@ -750,9 +783,10 @@ add_filter( 'bpgsites_extension_slug', 'bpgsites_override_extension_slug', 10, 1
 
 
 /** 
- * @description: override the name of the button on the BP Group Sites "sites" screen
- * @todo: 
+ * Override the name of the button on the BP Group Sites "sites" screen
  *
+ * @param array $button The existing button config array
+ * @return array $button The modified button config array
  */
 function bpgsites_get_visit_site_button( $button ) {
 	
@@ -806,7 +840,10 @@ Globally available utility functions
 
 
 /** 
- * @description: test existence of a specified site option
+ * Test existence of a specified site option
+ *
+ * @param str $option_name The name of the option
+ * @return bool $exists Whether or not the option exists
  */
 function bpgsites_site_option_exists( $option_name = '' ) {
 
@@ -827,7 +864,11 @@ function bpgsites_site_option_exists( $option_name = '' ) {
 
 
 /** 
- * @description: return a value for a specified site option
+ * Return a value for a specified site option
+ *
+ * @param str $option_name The name of the option
+ * @param str $default The default value of the option if it has no value
+ * @return mixed $value the value of the option
  */
 function bpgsites_site_option_get( $option_name = '', $default = false ) {
 
@@ -844,7 +885,11 @@ function bpgsites_site_option_get( $option_name = '', $default = false ) {
 
 
 /** 
- * @description: set a value for a specified site option
+ * Set a value for a specified site option
+ *
+ * @param str $option_name The name of the option
+ * @param mixed $value The value to set the option to
+ * @return bool $success If the value of the option was successfully saved
  */
 function bpgsites_site_option_set( $option_name = '', $value = '' ) {
 

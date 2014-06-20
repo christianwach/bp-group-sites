@@ -67,7 +67,8 @@ class BP_Group_Sites {
 	
 	
 	/** 
-	 * @description: initialises this object
+	 * Initialises this object
+	 *
 	 * @return object
 	 */
 	function __construct() {
@@ -92,8 +93,9 @@ class BP_Group_Sites {
 	
 	
 	/**
-	 * @description: actions to perform on plugin activation
-	 * @return nothing
+	 * Actions to perform on plugin activation
+	 *
+	 * @return void
 	 */
 	public function activate() {
 	
@@ -105,8 +107,9 @@ class BP_Group_Sites {
 	
 	
 	/**
-	 * @description: actions to perform on plugin deactivation (NOT deletion)
-	 * @return nothing
+	 * Actions to perform on plugin deactivation (NOT deletion)
+	 *
+	 * @return void
 	 */
 	public function deactivate() {
 		
@@ -122,9 +125,11 @@ class BP_Group_Sites {
 	
 	
 	/** 
-	 * @description: load translation files
+	 * Load translation files
 	 * A good reference on how to implement translation in WordPress:
 	 * http://ottopress.com/2012/internationalization-youre-probably-doing-it-wrong/
+	 *
+	 * @return void
 	 */
 	public function enable_translation() {
 		
@@ -147,8 +152,9 @@ class BP_Group_Sites {
 	
 	
 	/**
-	 * @description: do stuff on plugin init
-	 * @return nothing
+	 * Do stuff on plugin init
+	 *
+	 * @return void
 	 */
 	public function initialise() {
 		
@@ -184,8 +190,9 @@ class BP_Group_Sites {
 	
 		
 	/**
-	 * @description: register hooks on plugin init
-	 * @return nothing
+	 * Register hooks on plugin init
+	 *
+	 * @return void
 	 */
 	public function register_hooks() {
 	
@@ -217,8 +224,9 @@ class BP_Group_Sites {
 	
 		
 	/**
-	 * @description: register theme hooks on bp include
-	 * @return nothing
+	 * Register theme hooks on bp include
+	 *
+	 * @return void
 	 */
 	public function register_theme_hooks() {
 	
@@ -233,8 +241,9 @@ class BP_Group_Sites {
 	
 	
 	/**
-	 * @description: add our templates to the theme stack
-	 * @return nothing
+	 * Add our templates to the theme stack
+	 *
+	 * @return void
 	 */
 	public function theme_compat() {
 	
@@ -258,8 +267,10 @@ class BP_Group_Sites {
 	
 	
 	/**
-	 * @description: returns the unique package ID for our plugin's templates
-	 * @return str $package_id unique package ID
+	 * Returns the unique package ID for our plugin's templates
+	 *
+	 * @param str $package_id Unique package ID
+	 * @return str $package_id Modified unique package ID
 	 */
 	public function package_id( $package_id ) {
 		
@@ -271,8 +282,12 @@ class BP_Group_Sites {
 	
 	
 	/**
-	 * @description: returns our template part
-	 * @return array $template path to required template
+	 * Returns our template part
+	 *
+	 * @param array $templates Array of paths to templates
+	 * @param str $slug The template slug
+	 * @param str $name The name of the template
+	 * @return array $template Path to required template
 	 */
 	public function template_part( $templates, $slug, $name ) {
 		
@@ -289,7 +304,9 @@ class BP_Group_Sites {
 	
 	
 	/**
-	 * @description: returns our template stack
+	 * Returns our template stack
+	 *
+	 * @param array $template_stack Array of paths to required templates
 	 * @return array $template path to required template
 	 */
 	public function template_stack( $template_stack ) {
@@ -307,8 +324,9 @@ class BP_Group_Sites {
 	
 	
 	/**
-	 * @description: add our stylesheets
-	 * @return nothing
+	 * Add our stylesheets
+	 *
+	 * @return void
 	 */
 	public function enqueue_styles() {
 	
@@ -328,8 +346,9 @@ class BP_Group_Sites {
 	
 	
 	/**
-	 * @description: add our global scripts
-	 * @return nothing
+	 * Add our non-specific Javascripts
+	 *
+	 * @return void
 	 */
 	public function enqueue_scripts() {
 	
@@ -353,8 +372,9 @@ class BP_Group_Sites {
 	
 	
 	/**
-	 * @description: add our CommentPress-specific scripts
-	 * @return nothing
+	 * Add our CommentPress-specific scripts
+	 *
+	 * @return void
 	 */
 	public function enqueue_commentpress_scripts() {
 	
@@ -409,7 +429,8 @@ register_deactivation_hook( __FILE__, array( $bp_groupsites, 'deactivate' ) );
 
 
 /**
- * @description: returns the path to our templates directory
+ * Returns the path to our templates directory
+ *
  * @return str $path path to this plugin's templates directory
  */
 function bpgsites_templates_dir() {

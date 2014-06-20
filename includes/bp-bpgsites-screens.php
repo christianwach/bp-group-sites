@@ -13,6 +13,8 @@ if ( !defined( 'ABSPATH' ) ) exit;
 
 /**
  * Load the top-level BP Group Sites directory.
+ *
+ * @return void
  */
 function bpgsites_screen_index() {
 	
@@ -51,6 +53,8 @@ class BP_Group_Sites_Theme_Compat {
 	
 	/**
 	 * Set up theme compatibility for the BP Group Sites component.
+	 *
+	 * @return void
 	 */
 	public function __construct() {
 		
@@ -63,6 +67,8 @@ class BP_Group_Sites_Theme_Compat {
 	
 	/**
 	 * Are we looking at something that needs BP Group Sites theme compatability?
+	 *
+	 * @return void
 	 */
 	public function is_bpgsites() {
 		
@@ -92,7 +98,7 @@ class BP_Group_Sites_Theme_Compat {
 	/**
 	 * Add template hierarchy to theme compat for the BP Group Sites directory page.
 	 *
-	 * @param string $templates The templates from bp_get_theme_compat_templates().
+	 * @param array $templates The templates from bp_get_theme_compat_templates().
 	 * @return array $templates Array of custom templates to look for.
 	 */
 	public function directory_template_hierarchy( $templates ) {
@@ -118,7 +124,7 @@ class BP_Group_Sites_Theme_Compat {
 	/**
 	 * Update the global $post with directory data.
 	 *
-	 * @since BuddyPress (1.7.0)
+	 * @return void
 	 */
 	public function directory_dummy_post() {
 
@@ -144,6 +150,8 @@ class BP_Group_Sites_Theme_Compat {
 	
 	/**
 	 * Filter the_content with the BP Group Sites index template part.
+	 *
+	 * @return str $buffer The buffered template part
 	 */
 	public function directory_content() {
 		

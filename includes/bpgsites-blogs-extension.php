@@ -221,7 +221,9 @@ Functions which may only be used in the loop
 
 
 /** 
- * @description: copied from bp_blogs_pagination_count() and amended
+ * Copied from bp_blogs_pagination_count() and amended
+ *
+ * @return void
  */
 function bpgsites_blogs_pagination_count() {
 	global $blogs_template;
@@ -253,7 +255,7 @@ function bpgsites_blogs_pagination_count() {
 
 /**
  * Get the total number of groupsites being tracked.
- * copied from bp_total_blogs() and amended
+ * Copied from bp_total_blogs() and amended
  *
  * @return int $count Total blog count.
  */
@@ -282,6 +284,8 @@ function bpgsites_total_blogs() {
 
 /**
  * Output the total number of groupsites on the site.
+ *
+ * @return void
  */
 function bpgsites_total_blog_count() {
 	echo bpgsites_get_total_blog_count();
@@ -303,7 +307,7 @@ function bpgsites_total_blog_count() {
 
 /**
  * Get the total number of groupsites for a user
- * copied from bp_blogs_total_blogs_for_user() and amended
+ * Copied from bp_blogs_total_blogs_for_user() and amended
  *
  * @return int $count Total blog count for a user
  */
@@ -336,6 +340,8 @@ function bpgsites_total_blogs_for_user( $user_id = 0 ) {
 
 /**
  * Output the total number of working blogs for a user
+ *
+ * @return void
  */
 function bpgsites_total_blog_count_for_user( $user_id = 0 ) {
 	echo bpgsites_get_total_blog_count_for_user( $user_id );
@@ -354,7 +360,9 @@ function bpgsites_total_blog_count_for_user( $user_id = 0 ) {
 
 
 /**
- * @description: for a blog in the loop, check if it is associated with the current group
+ * For a blog in the loop, check if it is associated with the current group
+ *
+ * @return bool Whether or not the blog is in the group
  */
 function bpgsites_is_blog_in_group() {
 
@@ -387,7 +395,9 @@ function bpgsites_is_blog_in_group() {
 
 
 /** 
- * @description: get the text value of a submit button
+ * Get the text value of a submit button
+ *
+ * @return void
  */
 function bpgsites_admin_button_value() {
 
@@ -403,7 +413,9 @@ function bpgsites_admin_button_value() {
 
 
 /** 
- * @description: get the action of a submit button
+ * Get the action of a submit button
+ *
+ * @return void
  */
 function bpgsites_admin_button_action() {
 
@@ -420,14 +432,17 @@ function bpgsites_admin_button_action() {
 
 /**
  * Output the group sites component root slug.
+ *
  * @uses bpgsites_get_root_slug()
+ * @return void
  */
 function bpgsites_root_slug() {
 	echo bpgsites_get_root_slug();
 }
 
 	/**
-	 * Return the group sites component root slug.
+	 * Return the group sites component root slug
+	 *
 	 * @return string The 'blogs' root slug.
 	 */
 	function bpgsites_get_root_slug() {

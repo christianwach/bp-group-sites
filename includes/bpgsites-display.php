@@ -15,7 +15,9 @@ Throw any functions which build markup in here.
 
 
 /** 
- * @description: adds icon to menu in CBOX theme
+ * Adds icon to menu in CBOX theme
+ *
+ * @return void
  */
 function bpgsites_cbox_theme_compatibility() {
 	

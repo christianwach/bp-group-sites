@@ -19,7 +19,9 @@ class BP_Group_Sites_Component extends BP_Component {
 	
 	
 	/**
-	 * Start the group_sites component creation process.
+	 * Start the group_sites component creation process
+	 *
+	 * @return void
 	 */
 	function __construct() {
 		
@@ -57,6 +59,8 @@ class BP_Group_Sites_Component extends BP_Component {
 	
 	/**
 	 * Include our component's files
+	 *
+	 * @return void
 	 */
 	public function includes() {
 		
@@ -72,6 +76,7 @@ class BP_Group_Sites_Component extends BP_Component {
 	 *
 	 * @see BP_Component::setup_globals() for description of parameters.
 	 * @param array $args See {@link BP_Component::setup_globals()}.
+	 * @return void
 	 */
 	public function setup_globals( $args = array() ) {
 	
@@ -132,6 +137,10 @@ function bp_is_bpgsites_component() {
 
 /**
  * A custom load template filter for this component
+ *
+ * @return str $found_template The existing path to the template
+ * @return array $templates The array of template paths
+ * @return str $found_template The modified path to the template
  */
 function bpgsites_load_template_filter( $found_template, $templates ) {
 	
@@ -172,6 +181,8 @@ add_filter( 'bp_located_template', 'bpgsites_load_template_filter', 10, 2 );
 
 /** 
  * Load our loop when requested
+ *
+ * @return void
  */
 function bpgsites_object_template_loader() {
 	
