@@ -305,7 +305,7 @@ class BP_Group_Sites_Admin {
 	
 	
 	/** 
-	 * Aave array as site option
+	 * Save array as site option
 	 *
 	 * @return bool Success or failure
 	 */
