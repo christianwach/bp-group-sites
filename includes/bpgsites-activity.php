@@ -512,6 +512,9 @@ class BpGroupSites_Activity {
 	 * @return void
 	 */
 	function filter_comments( $comments ) {
+		
+		// only on front-end
+		if ( is_admin() ) return $comments;
 	
 		// init array
 		$groups = array();
