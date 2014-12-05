@@ -475,7 +475,46 @@ function bpgsites_get_groupsites() {
 	
 	// --<
 	return $existing;
-	
+
+}
+
+
+
+/**
+ * Get all blogs that are (or can be) group sites
+ *
+ * At present, this means excluding the root blog and group blogs, but additional
+ * blogs (such as "working papers") can be excluded using the provided filter
+ *
+ * @return array $filtered_blogs An array of all possible group sites
+ */
+function bpgsites_get_all_possible_groupsites() {
+
+	// get all blogs via BP_Blogs_Blog
+	$all = BP_Blogs_Blog::get_all();
+
+	// init return
+	$filtered_blogs = array();
+
+	// get array of blog IDs
+	if ( is_array( $all['blogs'] ) AND count( $all['blogs'] ) > 0 ) {
+		foreach ( $all['blogs'] AS $blog ) {
+
+			// is it the BP root blog?
+			if ( $blog->blog_id == bp_get_root_blog_id() ) continue;
+
+			// is it a groupblog?
+			if ( bpgsites_is_groupblog( $blog->blog_id ) ) continue;
+
+			// okay, none of those - add it
+			$filtered_blogs[] = $blog->blog_id;
+
+		}
+	}
+
+	// allow other plugins to exclude further blogs
+	return apply_filters( 'bpgsites_get_all_possible_groupsites', $filtered_blogs );
+
 }
 
 

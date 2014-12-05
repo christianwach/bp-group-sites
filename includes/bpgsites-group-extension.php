@@ -587,8 +587,11 @@ function bpgsites_get_extension_edit_screen() {
 
 	do_action( 'bp_before_blogs_loop' );
 	
+	// configure to get all possible group sites
+	$args = array( 'possible_sites' => true );
+	
 	// get all group sites - TODO: add AJAX query string compatibility?
-	if ( bpgsites_has_blogs() ) {
+	if ( bpgsites_has_blogs( $args ) ) {
 	
 		?>
 		

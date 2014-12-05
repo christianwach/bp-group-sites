@@ -32,8 +32,18 @@ function bpgsites_has_blogs( $args = '' ) {
 		$user_id = bp_displayed_user_id();
 	}
 	
-	// get groupsite IDs
-	$groupsites = bpgsites_get_groupsites();
+	// do we want all possible group sites?
+	if ( isset( $args['possible_sites'] ) AND $args['possible_sites'] === true ) {
+		
+		// get all possible group sites
+		$groupsites = bpgsites_get_all_possible_groupsites();
+	
+	} else {
+	
+		// get groupsite IDs
+		$groupsites = bpgsites_get_groupsites();
+	
+	}
 	
 	// declare defaults
 	$defaults = array(
