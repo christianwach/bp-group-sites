@@ -1831,7 +1831,6 @@ class BpGroupSites_Activity {
 
 					// get linked groups
 					$linked_groups = bpgsites_get_linked_groups_by_blog_id( $group_id, $current_blog_id );
-					//print_r( array ('linked_groups' => $linked_groups ) ); //die();
 
 					// loop through them
 					foreach( $linked_groups AS $linked_group_id ) {
@@ -1861,9 +1860,6 @@ class BpGroupSites_Activity {
 
 		}
 
-		//die();
-		//print_r( $this->user_group_ids ); die();
-
 		// --<
 		return $this->user_group_ids;
 
@@ -1889,13 +1885,6 @@ class BpGroupSites_Activity {
 
 		// does the user have any groups reading this site?
 		$groups = groups_get_user_groups( bp_loggedin_user_id() );
-
-		/*
-		print_r( array(
-			$user_group_ids,
-			$groups['groups']
-		) ); die();
-		*/
 
 		// loop through them
 		foreach( $groups['groups'] AS $group ) {

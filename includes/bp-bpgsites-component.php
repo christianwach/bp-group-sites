@@ -30,7 +30,6 @@ class BP_Group_Sites_Component extends BP_Component {
 
 		// store component ID
 		$this->id = 'bpgsites';
-		//print_r( $this->id ); die();
 
 		// store component name
 		// NOTE: ideally we'll use BP theme compatibility - see bpgsites_load_template_filter() below
@@ -203,8 +202,6 @@ function bpgsites_object_template_loader() {
 	if ( ! bp_is_active( $object ) ) {
 		return;
 	}
-
-	//trigger_error( print_r( $_POST, true ), E_USER_ERROR ); die();
 
 	// enable visit button
 	if ( bp_is_active( 'bpgsites' ) ) {

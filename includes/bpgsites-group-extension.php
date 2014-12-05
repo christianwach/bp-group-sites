@@ -134,8 +134,6 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	 */
 	function edit_screen_save() {
 
-		//print_r( $_POST ); die();
-
 		// parse input name for our values
 		$parsed = $this->_parse_input_name();
 
@@ -328,13 +326,6 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 
 		}
 
-		/*
-		print_r( array(
-			'linked' => $linked,
-			'group_ids' => $group_ids,
-		) ); die();
-		*/
-
 		// set reciprocal linkages
 		$this->_update_reciprocal_linkages( $blog_id, $group_id, $linked[$blog_id], $group_ids );
 
@@ -376,16 +367,6 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 		$to_keep = array_intersect( $existing_group_ids, $new_group_ids );
 		$to_add = array_diff( $new_group_ids, $existing_group_ids );
 		$to_delete = array_diff( $existing_group_ids, $new_group_ids );
-
-		/*
-		print_r( array(
-			'existing_group_ids' => $existing_group_ids,
-			'new_group_ids' => $new_group_ids,
-			'to_keep' => $to_keep,
-			'to_delete' => $to_delete,
-			'to_add' => $to_add,
-		) ); die();
-		*/
 
 		// first add/keep
 		$keep_and_add = array_merge( $to_keep, $to_add );
@@ -732,7 +713,6 @@ function bpgsites_get_group_linkage( $echo = true ) {
 
 	// get this blog's group IDs
 	$group_ids = bpgsites_get_groups_by_blog_id( $blog_id );
-	//print_r( $group_ids ); die();
 
 	// get user ID
 	$user_id = bp_loggedin_user_id();
@@ -747,7 +727,6 @@ function bpgsites_get_group_linkage( $echo = true ) {
 		$group = groups_get_group( array(
 			'group_id'   => $group_id
 		) );
-		//print_r( $group ); //die();
 
 		// either this admin user is a member or it's public
 		if (
@@ -769,8 +748,6 @@ function bpgsites_get_group_linkage( $echo = true ) {
 
 	// kick out if empty
 	if ( count( $user_group_ids ) == 0 ) return $has_linkage;
-
-	//print_r( $user_group_ids ); die();
 
 	// define config array
 	$config_array = array(
@@ -897,15 +874,6 @@ function bpgsites_get_linked_groups_by_blog_id( $group_id, $blog_id ) {
 
 	// get those for this blog
 	$linked_groups = isset( $linked[$blog_id] ) ? $linked[$blog_id] : array();
-
-	/*
-	print_r( array(
-		'group_id' => $group_id,
-		'blog_id' => $blog_id,
-		'linked' => $linked,
-		'linked_groups' => $linked_groups
-	) ); //die();
-	*/
 
 	// --<
 	return $linked_groups;

@@ -398,7 +398,6 @@ add_action( 'groups_before_delete_group', 'bpgsites_remove_group_from_blogs', 10
 
 
 
-
 /**
  * Check if blog is a groupblog
  *

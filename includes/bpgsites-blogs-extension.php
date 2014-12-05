@@ -121,17 +121,6 @@ function bpgsites_filter_groupsites( $has_blogs, $blogs_template, $params ) {
 
 	}
 
-	/*
-	print_r( array(
-		'method' => 'after',
-		'params' => $params,
-		'include_blog_ids' => $include_blog_ids,
-		'blog_ids' => $blog_ids,
-		'groupsites' => $groupsites,
-		'groupsites_excluded' => $groupsites_excluded,
-	) ); die();
-	*/
-
 	// remove this filter to avoid recursion
 	remove_filter( 'bp_has_blogs', 'bpgsites_filter_groupsites', 20 );
 
