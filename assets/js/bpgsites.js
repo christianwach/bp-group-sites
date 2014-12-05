@@ -13,8 +13,9 @@ NOTES
 
 
 /**
- * @description: set up our elements
+ * Set up our elements
  *
+ * @return void
  */
 function bpgsites_setup() {
 
@@ -52,14 +53,16 @@ bpgsites_setup();
 
 
 /**
- * @description: define what happens when the page is ready
+ * Define what happens when the page is ready
  *
+ * @return void
  */
 jQuery(document).ready( function($) {
 
 	/**
-	 * @description: activity column headings click
+	 * Activity column headings click
 	 *
+	 * @return false
 	 */
 	$( 'h5.bpgsites_group_linkage_heading' ).click( function( event ) {
 

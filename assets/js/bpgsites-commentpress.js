@@ -28,8 +28,9 @@ if ( 'undefined' !== typeof BpgsitesSettings ) {
 
 
 /**
- * @description: set up our elements
+ * Set up our elements
  *
+ * @return void
  */
 function bpgsites_setup() {
 
@@ -67,8 +68,9 @@ bpgsites_setup();
 
 
 /**
- * @description: check page load
+ * Check page load
  *
+ * @return void
  */
 function bpgsites_page_load() {
 
@@ -94,8 +96,9 @@ function bpgsites_page_load() {
 
 
 /**
- * @description: update dropdown and hide it
+ * Update dropdown and hide it
  *
+ * @return void
  */
 function bpgsites_update_select( comment_id ) {
 
@@ -130,8 +133,9 @@ function bpgsites_update_select( comment_id ) {
 
 
 /**
- * @description: initialise elements
+ * Initialise elements
  *
+ * @return void
  */
 function bpgsites_init_elements() {
 
@@ -139,8 +143,7 @@ function bpgsites_init_elements() {
 	if ( bpgsites_show_public == '0' ) {
 
 		/**
-		 * @description: hide comments for initially unchecked boxes - HACK!!!
-		 *
+		 * Hide comments for initially unchecked boxes - HACK!!!
 		 */
 		jQuery( 'input.bpgsites_group_checkbox_public' ).each( function(i) {
 
@@ -197,8 +200,9 @@ function bpgsites_init_elements() {
 
 
 	/**
-	 * @description: activity column headings click
+	 * Activity column headings click
 	 *
+	 * @return false
 	 */
 	jQuery( 'h3.bpgsites_group_filter_heading' ).click( function( event ) {
 
@@ -230,8 +234,9 @@ function bpgsites_init_elements() {
 
 
 	/**
-	 * @description: activity column headings click
+	 * Activity column headings click
 	 *
+	 * @return false
 	 */
 	jQuery( 'a.comment-reply-link' ).click( function( event ) {
 
@@ -255,8 +260,9 @@ function bpgsites_init_elements() {
 
 
 	/**
-	 * @description: activity column headings click
+	 * Activity column headings click
 	 *
+	 * @return false
 	 */
 	jQuery( 'a#cancel-comment-reply-link' ).click( function( event ) {
 
@@ -274,8 +280,9 @@ function bpgsites_init_elements() {
 
 
 	/**
-	 * @description: activity column headings click
+	 * Activity column headings click
 	 *
+	 * @return void
 	 */
 	jQuery( 'input.bpgsites_group_checkbox' ).click( function( event ) {
 
@@ -334,8 +341,9 @@ function bpgsites_init_elements() {
 
 
 /**
- * @description: define what happens when the page is ready
+ * Define what happens when the page is ready
  *
+ * @return void
  */
 jQuery(document).ready( function($) {
 
