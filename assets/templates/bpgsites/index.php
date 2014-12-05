@@ -21,11 +21,11 @@ get_header( 'buddypress' );
 
 		<form action="" method="post" id="bpgsites-directory-form" class="dir-form">
 
-			<h3><?php 
-			
+			<h3><?php
+
 			// show title
-			echo sprintf( 
-				__( '%s Directory', 'bpgsites' ), 
+			echo sprintf(
+				__( '%s Directory', 'bpgsites' ),
 				apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bpgsites' ) )
 			);
 
@@ -41,33 +41,33 @@ get_header( 'buddypress' );
 
 			<div class="item-list-tabs" role="navigation">
 				<ul>
-					<li class="selected" id="bpgsites-all"><a href="<?php bp_root_domain(); ?>/<?php bpgsites_root_slug(); ?>"><?php 
-						
+					<li class="selected" id="bpgsites-all"><a href="<?php bp_root_domain(); ?>/<?php bpgsites_root_slug(); ?>"><?php
+
 						// filter subnav title
-						printf( 
-							__( 'All %1$s <span>%2$s</span>', 'bpgsites' ), 
+						printf(
+							__( 'All %1$s <span>%2$s</span>', 'bpgsites' ),
 							apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bpgsites' ) ),
 							bpgsites_get_total_blog_count()
-						); 
-							
+						);
+
 					?></a></li>
 
-					<?php 
-					
+					<?php
+
 					/*
 					------------------------------------------------------------
 					What would we mean by "My Texts"?
 					------------------------------------------------------------
 					*/
-					
+
 					/*
 					if ( is_user_logged_in() && bp_get_total_blog_count_for_user( bp_loggedin_user_id() ) ) : ?>
 
 						<li id="bpgsites-personal"><a href="<?php echo bp_loggedin_user_domain() . bp_get_blogs_slug(); ?>"><?php printf( __( 'My Group Sites <span>%s</span>', 'bpgsites' ), bp_get_total_blog_count_for_user( bp_loggedin_user_id() ) ); ?></a></li>
 
-					<?php endif; 
+					<?php endif;
 					*/
-					
+
 					?>
 
 					<?php do_action( 'bp_blogs_directory_blog_types' ); ?>

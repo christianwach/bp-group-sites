@@ -2,7 +2,7 @@
 /*
 --------------------------------------------------------------------------------
 Plugin Name: BP Group Sites
-Description: In WordPress Multisite, create a many-to-many replationship between BuddyPress Groups and WordPress Sites. 
+Description: In WordPress Multisite, create a many-to-many replationship between BuddyPress Groups and WordPress Sites.
 Version: 0.1
 Author: Christian Wach
 Author URI: http://haystack.co.uk
@@ -60,71 +60,71 @@ class BP_Group_Sites {
 
 	// admin object
 	public $admin;
-	
+
 	// activity object
 	public $activity;
-	
-	
-	
-	/** 
+
+
+
+	/**
 	 * Initialises this object
 	 *
 	 * @return object
 	 */
 	function __construct() {
-	
+
 		// use translation files
 		add_action( 'plugins_loaded', array( $this, 'enable_translation' ) );
-		
+
 		// add actions for plugin init on BuddyPress init
 		add_action( 'bp_loaded', array( $this, 'initialise' ) );
 		add_action( 'bp_loaded', array( $this, 'register_hooks' ) );
 		add_action( 'bp_include', array( $this, 'register_theme_hooks' ) );
-		
+
 		// --<
 		return $this;
 
 	}
-	
-	
-	
+
+
+
 	//##########################################################################
-	
-	
-	
+
+
+
 	/**
 	 * Actions to perform on plugin activation
 	 *
 	 * @return void
 	 */
 	public function activate() {
-	
+
 		// pass through to admin
 		$this->admin->activate();
 
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Actions to perform on plugin deactivation (NOT deletion)
 	 *
 	 * @return void
 	 */
 	public function deactivate() {
-		
+
 		// pass through to admin
 		$this->admin->deactivate();
 
 	}
-	
-	
-		
+
+
+
 	//##########################################################################
-	
-	
-	
-	/** 
+
+
+
+	/**
 	 * Load translation files
 	 * A good reference on how to implement translation in WordPress:
 	 * http://ottopress.com/2012/internationalization-youre-probably-doing-it-wrong/
@@ -132,123 +132,123 @@ class BP_Group_Sites {
 	 * @return void
 	 */
 	public function enable_translation() {
-		
+
 		// not used, as there are no translations as yet
 		load_plugin_textdomain(
-		
+
 			// unique name
-			'bpgsites', 
-			
+			'bpgsites',
+
 			// deprecated argument
 			false,
-			
+
 			// relative path to directory containing translation files
 			dirname( plugin_basename( __FILE__ ) ) . '/languages/'
 
 		);
-		
+
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Do stuff on plugin init
 	 *
 	 * @return void
 	 */
 	public function initialise() {
-		
+
 		// load our linkage functions file
 		require( BPGSITES_PATH . 'includes/bpgsites-linkage.php' );
-	
+
 		// load our display functions file
 		require( BPGSITES_PATH . 'includes/bpgsites-display.php' );
-	
+
 		// load our admin class file
 		require( BPGSITES_PATH . 'includes/bpgsites-admin.php' );
-		
+
 		// init object, sending reference to this class
 		$this->admin = new BP_Group_Sites_Admin( $this );
-	
+
 		// load our activity functions file
 		require( BPGSITES_PATH . 'includes/bpgsites-activity.php' );
-		
+
 		// init object
 		$this->activity = new BpGroupSites_Activity;
-	
+
 		// load our blogs extension
 		require( BPGSITES_PATH . 'includes/bpgsites-blogs-extension.php' );
-	
+
 		// load our group extension
 		require( BPGSITES_PATH . 'includes/bpgsites-group-extension.php' );
-	
+
 		// load our component file
 		require( BPGSITES_PATH . 'includes/bp-bpgsites-component.php' );
-	
+
 	}
-	
-	
-		
+
+
+
 	/**
 	 * Register hooks on plugin init
 	 *
 	 * @return void
 	 */
 	public function register_hooks() {
-	
+
 		// hooks that always need to be present...
 		$this->admin->register_hooks();
 		$this->activity->register_hooks();
-		
+
 		// register any public styles
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ), 20 );
-	
+
 		// register any public scripts
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 20 );
-	
+
 		// if the current blog is a group site...
 		if ( bpgsites_is_groupsite( get_current_blog_id() ) ) {
-			
+
 			// if on front end...
 			if ( !is_admin() ) {
-			
+
 				// register our CommentPress scripts
 				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_commentpress_scripts' ), 20 );
-				
+
 			}
-		
+
 		}
-		
+
 	}
-	
-	
-		
+
+
+
 	/**
 	 * Register theme hooks on bp include
 	 *
 	 * @return void
 	 */
 	public function register_theme_hooks() {
-	
+
 		// add our templates to the theme compatibility layer
 		add_action( 'bp_register_theme_packages', array( $this, 'theme_compat' ) );
 		//add_filter( 'pre_option__bp_theme_package_id', array( $this, 'package_id' ) );
 		//add_filter( 'bp_get_template_part', array( $this, 'template_part' ), 10, 3 );
 		//add_filter( 'bp_get_template_stack', array( $this, 'template_stack' ), 10, 1 );
-		
+
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Add our templates to the theme stack
 	 *
 	 * @return void
 	 */
 	public function theme_compat() {
-	
+
 		//print_r( 'theme_compat' ); die();
-		
+
 		/*
 		bp_register_theme_package( array(
 			'id'      => 'bpgsites',
@@ -258,14 +258,14 @@ class BP_Group_Sites {
 			'url'     => trailingslashit( $this->themes_url . '/bp-legacy' )
 		) );
 		*/
-		
+
 		// add templates dir to BuddyPress
 		bp_register_template_stack( 'bpgsites_templates_dir',  16 );
-		
+
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Returns the unique package ID for our plugin's templates
 	 *
@@ -273,14 +273,14 @@ class BP_Group_Sites {
 	 * @return str $package_id Modified unique package ID
 	 */
 	public function package_id( $package_id ) {
-		
+
 		// return unique package ID
 		return 'bpgsites';
-		
+
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Returns our template part
 	 *
@@ -290,19 +290,19 @@ class BP_Group_Sites {
 	 * @return array $template Path to required template
 	 */
 	public function template_part( $templates, $slug, $name ) {
-		
+
 		print_r( 'template_part' ); die();
-		
+
 		// kick out if not our slug
 		if ( 'texts' != $slug ) { return $templates; }
-		
+
 		// --<
 		return array( 'bpgsites/index.php' );
-		
+
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Returns our template stack
 	 *
@@ -310,105 +310,105 @@ class BP_Group_Sites {
 	 * @return array $template path to required template
 	 */
 	public function template_stack( $template_stack ) {
-		
+
 		print_r( array( 'template_stack' => $template_stack ) ); die();
-		
+
 		// kick out if not our slug
 		if ( 'texts' != $slug ) { return $templates; }
-		
+
 		// --<
 		return array( 'bpgsites/index.php' );
-		
+
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Add our stylesheets
 	 *
 	 * @return void
 	 */
 	public function enqueue_styles() {
-	
+
 		// add basic stylesheet
 		wp_enqueue_style(
-		
-			'bpgsites_css', 
+
+			'bpgsites_css',
 			BPGSITES_URL . 'assets/css/bpgsites.css',
 			false,
 			BPGSITES_VERSION, // version
 			'all' // media
-			
+
 		);
-		
+
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Add our non-specific Javascripts
 	 *
 	 * @return void
 	 */
 	public function enqueue_scripts() {
-	
+
 		// only on root blog
 		if ( is_multisite() AND bp_is_root_blog() ) {
-		
+
 			// enqueue common js
 			wp_enqueue_script(
 
-				'bpgsites_js', 
+				'bpgsites_js',
 				BPGSITES_URL . 'assets/js/bpgsites.js',
 				array( 'jquery' ),
 				BPGSITES_VERSION
 
 			);
-		
+
 		}
-	
+
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Add our CommentPress-specific scripts
 	 *
 	 * @return void
 	 */
 	public function enqueue_commentpress_scripts() {
-	
+
 		// CommentPress theme compat
 		if ( function_exists( 'commentpress_get_comments_by_para' ) ) {
-		
+
 			// enqueue common js
 			wp_enqueue_script(
-	
-				'bpgsites_cp_js', 
+
+				'bpgsites_cp_js',
 				BPGSITES_URL . 'assets/js/bpgsites-commentpress.js',
 				array( 'cp_common_js' ),
 				BPGSITES_VERSION
-	
+
 			);
-	
+
 			// get vars
 			$vars = array(
 				'show_public' => $this->admin->option_get( 'bpgsites_public' )
 			);
-		
+
 			// localise with wp function
 			wp_localize_script( 'bpgsites_cp_js', 'BpgsitesSettings', $vars );
-		
+
 		}
-		
+
 	}
-	
-	
-	
+
+
+
 	//##########################################################################
-	
-	
-	
+
+
+
 } // class ends
 
 
@@ -434,23 +434,23 @@ register_deactivation_hook( __FILE__, array( $bp_groupsites, 'deactivate' ) );
  * @return str $path path to this plugin's templates directory
  */
 function bpgsites_templates_dir() {
-	
+
 	// return filterable path to templates
 	$path = apply_filters(
 		'bpgsites_templates_dir', // hook
 		BPGSITES_PATH . 'assets/templates' // path
 	);
-	
+
 	/*
-	print_r( array( 
+	print_r( array(
 		'method' => 'bpgsites_theme_dir',
 		'path' => $path,
 	) ); die();
 	*/
-	
+
 	// --<
 	return $path;
-	
+
 }
 
 

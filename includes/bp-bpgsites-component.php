@@ -15,30 +15,30 @@ if ( !defined( 'ABSPATH' ) ) exit;
  * Class definition
  */
 class BP_Group_Sites_Component extends BP_Component {
-	
-	
-	
+
+
+
 	/**
 	 * Start the group_sites component creation process
 	 *
 	 * @return void
 	 */
 	function __construct() {
-		
+
 		// get BP reference
 		$bp = buddypress();
 
 		// store component ID
 		$this->id = 'bpgsites';
 		//print_r( $this->id ); die();
-		
+
 		// store component name
 		// NOTE: ideally we'll use BP theme compatibility - see bpgsites_load_template_filter() below
 		$this->name = apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bpgsites' ) );
-		
+
 		// add this component to active components
 		$bp->active_components[$this->id] = '1';
-		
+
 		// init parent
 		parent::start(
 			$this->id, // unique ID, also used as slug
@@ -46,7 +46,7 @@ class BP_Group_Sites_Component extends BP_Component {
 			BPGSITES_PATH,
 			null // don't need menu item in WP admin bar
 		);
-		
+
 		/**
 		 * BuddyPress-dependent plugins are loaded too late to depend on BP_Component's
 		 * hooks, so we must call the function directly.
@@ -54,23 +54,23 @@ class BP_Group_Sites_Component extends BP_Component {
 		 $this->includes();
 
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Include our component's files
 	 *
 	 * @return void
 	 */
 	public function includes() {
-		
+
 		// include screens file
 		include( BPGSITES_PATH . 'includes/bp-bpgsites-screens.php' );
-		
+
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Set up global settings for the group_sites component.
 	 *
@@ -79,31 +79,31 @@ class BP_Group_Sites_Component extends BP_Component {
 	 * @return void
 	 */
 	public function setup_globals( $args = array() ) {
-	
+
 		// get BP reference
 		$bp = buddypress();
-		
+
 		// construct search string
-		$search_string = sprintf( 
+		$search_string = sprintf(
 			__( 'Search %s...', 'bpgsites' ),
 			apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bpgsites' ) )
 		);
-		
+
 		// construct args
 		$args = array(
 			// non-multisite installs don't need a top-level BP Group Sites directory, since there's only one site
 			'root_slug'             => isset( $bp->pages->{$this->id}->slug ) ? $bp->pages->{$this->id}->slug : $this->id,
-			'has_directory'         => true, 
+			'has_directory'         => true,
 			'search_string'         => $search_string,
 		);
 
 		// set up the globals
 		parent::setup_globals( $args );
-		
+
 	}
-	
-	
-	
+
+
+
 } // class ends
 
 
@@ -122,15 +122,15 @@ function bp_is_bpgsites_component() {
 
 	// is this our component?
 	if ( is_multisite() AND bp_is_current_component( 'bpgsites' ) ) {
-	
+
 		// yep
 		return true;
-		
+
 	}
-	
+
 	// --<
 	return false;
-	
+
 }
 
 
@@ -143,12 +143,12 @@ function bp_is_bpgsites_component() {
  * @return str $found_template The modified path to the template
  */
 function bpgsites_load_template_filter( $found_template, $templates ) {
-	
+
 	// check for BP theme compatibility here?
 
 	// only filter the template location when we're on our component's page
 	if ( is_multisite() && bp_is_bpgsites_component() && !bp_current_action() ) {
-	
+
 		// we've got to find the template manually
 		foreach ( (array) $templates as $template ) {
 			if ( file_exists( get_stylesheet_directory() . '/' . $template ) ) {
@@ -159,15 +159,15 @@ function bpgsites_load_template_filter( $found_template, $templates ) {
 				$filtered_templates[] = BPGSITES_PATH . 'assets/templates/' . $template;
 			}
 		}
-		
+
 		// should be one by now
 		$found_template = $filtered_templates[0];
-		
+
 		// --<
 		return apply_filters( 'bpgsites_load_template_filter', $found_template );
-	
+
 	}
-	
+
 	// --<
 	return $found_template;
 
@@ -179,13 +179,13 @@ add_filter( 'bp_located_template', 'bpgsites_load_template_filter', 10, 2 );
 
 
 
-/** 
+/**
  * Load our loop when requested
  *
  * @return void
  */
 function bpgsites_object_template_loader() {
-	
+
 	// Bail if not a POST action
 	if ( 'POST' !== strtoupper( $_SERVER['REQUEST_METHOD'] ) ) {
 		return;
@@ -195,7 +195,7 @@ function bpgsites_object_template_loader() {
 	if ( empty( $_POST['object'] ) ) {
 		return;
 	}
-	
+
 	// Sanitize the object
 	$object = sanitize_title( $_POST['object'] );
 
@@ -205,12 +205,12 @@ function bpgsites_object_template_loader() {
 	}
 
 	//trigger_error( print_r( $_POST, true ), E_USER_ERROR ); die();
-	
+
 	// enable visit button
 	if ( bp_is_active( 'bpgsites' ) ) {
 		add_action( 'bp_directory_blogs_actions',  'bp_blogs_visit_blog_button' );
 	}
-	
+
  	/**
 	 * AJAX requests happen too early to be seen by bp_update_is_directory()
 	 * so we do it manually here to ensure templates load with the correct
@@ -220,7 +220,7 @@ function bpgsites_object_template_loader() {
 	if ( ! bp_current_action() ) {
 		bp_update_is_directory( true, bp_current_component() );
 	}
-	
+
 	// Locate the object template
 	bp_get_template_part( "$object/$object-loop" );
 	exit();

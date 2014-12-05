@@ -17,7 +17,7 @@ do_action( 'bp_before_blogs_loop' );
 if ( bpgsites_has_blogs( bp_ajax_querystring( 'bpgsites' ) ) ) {
 
 	?>
-	
+
 	<div id="pag-top" class="pagination">
 
 		<div class="pag-count" id="blog-dir-count-top">
@@ -87,9 +87,9 @@ if ( bpgsites_has_blogs( bp_ajax_querystring( 'bpgsites' ) ) ) {
 
 	</div>
 
-	<?php 
-	
-} else { 
+	<?php
+
+} else {
 
 	?>
 

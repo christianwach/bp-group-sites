@@ -17,34 +17,34 @@ association, whilst retaining useful stuff like pagination.
 
 /**
  * Query only Group Site blogs
- * 
+ *
  * @param array $args Array of arguments with which the query was configured
  * @return bool $has_blogs Whether or not our modified query has found blogs
  */
 function bpgsites_has_blogs( $args = '' ) {
-	
+
 	// remove default exclusion filter
 	remove_filter( 'bp_has_blogs', 'bpgsites_filter_groupsites', 20 );
-	
+
 	// user filtering
 	$user_id = 0;
 	if ( bp_displayed_user_id() ) {
 		$user_id = bp_displayed_user_id();
 	}
-	
+
 	// do we want all possible group sites?
 	if ( isset( $args['possible_sites'] ) AND $args['possible_sites'] === true ) {
-		
+
 		// get all possible group sites
 		$groupsites = bpgsites_get_all_possible_groupsites();
-	
+
 	} else {
-	
+
 		// get groupsite IDs
 		$groupsites = bpgsites_get_groupsites();
-	
+
 	}
-	
+
 	// declare defaults
 	$defaults = array(
 		'type'         => 'active',
@@ -57,93 +57,93 @@ function bpgsites_has_blogs( $args = '' ) {
 		'search_terms' => null,
 		'update_meta_cache' => true,
 	);
-	
+
 	// parse args
 	$parsed_args = wp_parse_args( $args, $defaults );
 
 	// re-query with our params
 	$has_blogs = bp_has_blogs( $parsed_args );
-	
+
 	// add exclusion filter back as default
 	add_filter( 'bp_has_blogs', 'bpgsites_filter_groupsites', 20, 3 );
-	
+
 	// fallback
 	return $has_blogs;
-	
+
 }
 
 
 
 /**
  * Intercept the bp_has_blogs() query and exclude groupsites
- * 
+ *
  * @param bool $has_blogs Whether or not this query has found blogs
  * @param object $blogs_template BuddyPress blogs template object
  * @param array $params Array of arguments with which the query was configured
  * @return bool $has_blogs Whether or not this query has found blogs
  */
 function bpgsites_filter_groupsites( $has_blogs, $blogs_template, $params ) {
-	
+
 	// get groupsite IDs
 	$groupsites = bpgsites_get_groupsites();
-	
+
 	// get all blogs via BP_Blogs_Blog
 	$all = BP_Blogs_Blog::get_all();
-	
+
 	// init ID array
 	$blog_ids = array();
-	
+
 	if ( is_array( $all['blogs'] ) AND count( $all['blogs'] ) > 0 ) {
 		foreach ( $all['blogs'] AS $blog ) {
 			$blog_ids[] = $blog->blog_id;
 		}
 	}
-	
+
 	// let's exclude
 	$groupsites_excluded = array_merge( array_diff( $blog_ids, $groupsites ) );
-	
+
 	// do we have an array of blogs to include?
 	if ( isset( $params['include_blog_ids'] ) AND ! empty( $params['include_blog_ids'] ) ) {
-		
+
 		// convert from comma-delimited if needed
 		$include_blog_ids = array_filter( wp_parse_id_list( $params['include_blog_ids'] ) );
-	
+
 		// exclude groupsites
 		$params['include_blog_ids'] = array_merge( array_diff( $include_blog_ids, $groupsites ) );
-		
+
 		// if we have none left, return false
 		if ( count( $params['include_blog_ids'] ) === 0 ) return false;
-	
+
 	} else {
-	
+
 		// exclude groupsites
 		$params['include_blog_ids'] = $groupsites_excluded;
-		
+
 	}
-	
+
 	/*
-	print_r( array( 
-		'method' => 'after', 
-		'params' => $params, 
-		'include_blog_ids' => $include_blog_ids, 
+	print_r( array(
+		'method' => 'after',
+		'params' => $params,
+		'include_blog_ids' => $include_blog_ids,
 		'blog_ids' => $blog_ids,
 		'groupsites' => $groupsites,
 		'groupsites_excluded' => $groupsites_excluded,
 	) ); die();
 	*/
-	
+
 	// remove this filter to avoid recursion
 	remove_filter( 'bp_has_blogs', 'bpgsites_filter_groupsites', 20 );
-	
+
 	// re-query with our params
 	$has_blogs = bp_has_blogs( $params );
-	
+
 	// re-add filter
 	add_filter( 'bp_has_blogs', 'bpgsites_filter_groupsites', 20, 3 );
 
 	// fallback
 	return $has_blogs;
-	
+
 }
 
 // only on front end OR ajax
@@ -162,22 +162,22 @@ if ( ! is_admin() OR ( defined( 'DOING_AJAX' ) AND DOING_AJAX ) ) {
  * @return int $filtered_count The filtered total number of BuddyPress Groups
  */
 function bpgsites_filter_total_blog_count() {
-	
+
 	// remove filter to prevent recursion
 	remove_filter( 'bp_get_total_blog_count', 'bpgsites_filter_total_blog_count', 8 );
-	
+
 	// get actual count
 	$actual_count = bp_blogs_total_blogs();
-	
+
 	// get groupsites
 	$groupsites = bpgsites_total_blogs();
-	
+
 	// calculate
 	$filtered_count = $actual_count - $groupsites;
 
 	// add filter again
 	add_filter( 'bp_get_total_blog_count', 'bpgsites_filter_total_blog_count', 8 );
-	
+
 	// --<
 	return $filtered_count;
 
@@ -200,13 +200,13 @@ if ( ! is_admin() OR ( defined( 'DOING_AJAX' ) AND DOING_AJAX ) ) {
  * @return int $filtered_count The filtered total number of blogs for a user
  */
 function bpgsites_filter_total_blog_count_for_user( $count ) {
-	
+
 	// get working groupsites for this user
 	$groupsite_count = bpgsites_get_total_blog_count_for_user( $user_id );
-	
+
 	// calculate
 	$filtered_count = $count - $groupsite_count;
-	
+
 	// --<
 	return $filtered_count;
 
@@ -230,7 +230,7 @@ Functions which may only be used in the loop
 
 
 
-/** 
+/**
  * Copied from bp_blogs_pagination_count() and amended
  *
  * @return void
@@ -242,23 +242,23 @@ function bpgsites_blogs_pagination_count() {
 	$from_num  = bp_core_number_format( $start_num );
 	$to_num    = bp_core_number_format( ( $start_num + ( $blogs_template->pag_num - 1 ) > $blogs_template->total_blog_count ) ? $blogs_template->total_blog_count : $start_num + ( $blogs_template->pag_num - 1 ) );
 	$total     = bp_core_number_format( $blogs_template->total_blog_count );
-	
+
 	// get singular name
 	$singular = strtolower( apply_filters( 'bpgsites_extension_name', __( 'site', 'bpgsites' ) ) );
-	
+
 	// get plural name
 	$plural = strtolower( apply_filters( 'bpgsites_extension_plural', __( 'sites', 'bpgsites' ) ) );
-	
+
 	// we need to override the singular name
-	echo sprintf( 
-		__( 'Viewing %1$s %2$s to %3$s (of %4$s %5$s)', 'bpgsites' ), 
+	echo sprintf(
+		__( 'Viewing %1$s %2$s to %3$s (of %4$s %5$s)', 'bpgsites' ),
 		$singular,
-		$from_num, 
-		$to_num, 
+		$from_num,
+		$to_num,
 		$total,
 		$plural
 	);
-	
+
 }
 
 
@@ -270,24 +270,24 @@ function bpgsites_blogs_pagination_count() {
  * @return int $count Total blog count.
  */
 function bpgsites_total_blogs() {
-	
+
 	// get from cache if possible
 	if ( !$count = wp_cache_get( 'bpgsites_groupsites', 'bpgsites' ) ) {
-		
+
 		// use function
 		$groupsites = bpgsites_get_groupsites();
-	
+
 		// get total
 		$count = bp_core_number_format( count( $groupsites ) );
-		
+
 		// stash it
 		wp_cache_set( 'bpgsites_groupsites', $count, 'bpgsites' );
-		
+
 	}
-	
+
 	// --<
 	return $count;
-	
+
 }
 
 
@@ -303,7 +303,7 @@ function bpgsites_total_blog_count() {
 
 	/**
 	 * Return the total number of groupsites on the site
-	 * 
+	 *
 	 * @return int Total number of groupsites.
 	 */
 	function bpgsites_get_total_blog_count() {
@@ -322,28 +322,28 @@ function bpgsites_total_blog_count() {
  * @return int $count Total blog count for a user
  */
 function bpgsites_total_blogs_for_user( $user_id = 0 ) {
-	
+
 	// get user ID if none passed
 	if ( empty( $user_id ) ) {
 		$user_id = ( bp_displayed_user_id() ) ? bp_displayed_user_id() : bp_loggedin_user_id();
 	}
-	
+
 	if ( !$count = wp_cache_get( 'bpgsites_total_blogs_for_user_' . $user_id, 'bpgsites' ) ) {
 
 		// get groupsites for this user (kind meaningless, so empty)
 		$blogs = array();
-		
+
 		// get count
 		$count = bp_core_number_format( count( $blogs ) );
-		
+
 		// stash it
 		wp_cache_set( 'bpgsites_total_blogs_for_user_' . $user_id, $count, 'bpgsites' );
-		
+
 	}
-	
+
 	// --<
 	return $count;
-	
+
 }
 
 
@@ -359,7 +359,7 @@ function bpgsites_total_blog_count_for_user( $user_id = 0 ) {
 
 	/**
 	 * Return the total number of working blogs for this user
-	 * 
+	 *
 	 * @return int Total number of working blogs for this user
 	 */
 	function bpgsites_get_total_blog_count_for_user( $user_id = 0 ) {
@@ -378,33 +378,33 @@ function bpgsites_is_blog_in_group() {
 
 	// get groups for this blog
 	$groups = bpgsites_get_groups_by_blog_id( bp_get_blog_id() );
-	
+
 	// init return
 	$return = false;
-	
+
 	// sanity check
-	if ( 
-	
-		is_array( $groups ) AND 
-		count( $groups ) > 0 
-	
+	if (
+
+		is_array( $groups ) AND
+		count( $groups ) > 0
+
 	) {
-		
+
 		// is the current group in the array?
 		if ( in_array( bp_get_current_group_id(), $groups ) ) {
 			$return = true;
 		}
 
 	}
-	
+
 	// --<
 	return apply_filters( 'bpgsites_is_blog_in_group', $return );
-	
+
 }
 
 
 
-/** 
+/**
  * Get the text value of a submit button
  *
  * @return void
@@ -417,12 +417,12 @@ function bpgsites_admin_button_value() {
 	} else {
 		echo __( 'Add', 'bpgsites' );
 	}
-	
+
 }
 
 
 
-/** 
+/**
  * Get the action of a submit button
  *
  * @return void
@@ -435,7 +435,7 @@ function bpgsites_admin_button_action() {
 	} else {
 		echo 'add';
 	}
-	
+
 }
 
 
