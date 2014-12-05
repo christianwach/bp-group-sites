@@ -562,7 +562,7 @@ function bpgsites_get_extension_display() {
  */
 function bpgsites_get_extension_edit_screen() {
 
-	?><p>In order to "Read With" other groups, <em>all admins of this group</em> should be members of those groups.</p>
+	?><p><?php _e( 'In order to "Read With" other groups, <em>all admins of this group</em> should be members of those groups.', 'bpgsites' ); ?></p>
 
 	<?php
 
