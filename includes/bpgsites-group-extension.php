@@ -885,6 +885,8 @@ function bpgsites_get_linked_groups_by_blog_id( $group_id, $blog_id ) {
 /**
  * For a given group ID, get linked group IDs for a given blog ID
  *
+ * TODO: This function is not yet used - or finished.
+ *
  * @param int $group_id the numeric ID of the group
  * @param int $blog_id the numeric ID of the blog
  * @return bool $return Whether or not the group is linked
