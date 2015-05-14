@@ -261,7 +261,7 @@ function bpgsites_blogs_pagination_count() {
 function bpgsites_total_blogs() {
 
 	// get from cache if possible
-	if ( !$count = wp_cache_get( 'bpgsites_groupsites', 'bpgsites' ) ) {
+	if ( ! $count = wp_cache_get( 'bpgsites_groupsites', 'bpgsites' ) ) {
 
 		// use function
 		$groupsites = bpgsites_get_groupsites();
@@ -317,7 +317,7 @@ function bpgsites_total_blogs_for_user( $user_id = 0 ) {
 		$user_id = ( bp_displayed_user_id() ) ? bp_displayed_user_id() : bp_loggedin_user_id();
 	}
 
-	if ( !$count = wp_cache_get( 'bpgsites_total_blogs_for_user_' . $user_id, 'bpgsites' ) ) {
+	if ( ! $count = wp_cache_get( 'bpgsites_total_blogs_for_user_' . $user_id, 'bpgsites' ) ) {
 
 		// get groupsites for this user (kind meaningless, so empty)
 		$blogs = array();

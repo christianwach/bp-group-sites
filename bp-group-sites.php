@@ -6,7 +6,7 @@ Description: In WordPress Multisite, create a many-to-many replationship between
 Version: 0.1
 Author: Christian Wach
 Author URI: http://haystack.co.uk
-Plugin URI: http://haystack.co.uk
+Plugin URI: https://github.com/christianwach/bp-group-sites
 Network: true
 --------------------------------------------------------------------------------
 */
@@ -17,16 +17,16 @@ Network: true
 define( 'BPGSITES_VERSION', '0.1' );
 
 // store reference to this file
-if ( !defined( 'BPGSITES_FILE' ) ) {
+if ( ! defined( 'BPGSITES_FILE' ) ) {
 	define( 'BPGSITES_FILE', __FILE__ );
 }
 
 // store URL to this plugin's directory
-if ( !defined( 'BPGSITES_URL' ) ) {
+if ( ! defined( 'BPGSITES_URL' ) ) {
 	define( 'BPGSITES_URL', plugin_dir_url( BPGSITES_FILE ) );
 }
 // store PATH to this plugin's directory
-if ( !defined( 'BPGSITES_PATH' ) ) {
+if ( ! defined( 'BPGSITES_PATH' ) ) {
 	define( 'BPGSITES_PATH', plugin_dir_path( BPGSITES_FILE ) );
 }
 
@@ -210,7 +210,7 @@ class BP_Group_Sites {
 		if ( bpgsites_is_groupsite( get_current_blog_id() ) ) {
 
 			// if on front end...
-			if ( !is_admin() ) {
+			if ( ! is_admin() ) {
 
 				// register our CommentPress scripts
 				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_commentpress_scripts' ), 20 );

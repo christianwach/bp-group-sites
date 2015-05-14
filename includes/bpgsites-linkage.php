@@ -44,7 +44,7 @@ function bpgsites_get_blogs_by_group_id( $group_id ) {
 	$blog_ids = groups_get_groupmeta( $group_id, BPGSITES_OPTION );
 
 	// sanity check
-	if ( !is_array( $blog_ids ) ) { $blog_ids = array(); }
+	if ( ! is_array( $blog_ids ) ) { $blog_ids = array(); }
 
 	// --<
 	return $blog_ids;
@@ -263,7 +263,7 @@ function bpgsites_add_blog_to_group( $group_id, $blog_id ) {
 	$blog_ids = bpgsites_get_blogs_by_group_id( $group_id );
 
 	// is the blog ID present?
-	if ( !in_array( $blog_id, $blog_ids ) ) {
+	if ( ! in_array( $blog_id, $blog_ids ) ) {
 
 		// no, add blog ID
 		$blog_ids[] = $blog_id;

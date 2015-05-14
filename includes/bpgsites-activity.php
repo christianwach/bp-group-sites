@@ -166,7 +166,7 @@ class BpGroupSites_Activity {
 			) );
 
 			// wrap name in anchor
-			$link = '<a href="'.bp_get_group_permalink( $group ).'">'.$name.'</a>';
+			$link = '<a href="' . bp_get_group_permalink( $group ) . '">' . $name . '</a>';
 
 			// construct prefix
 			$prefix = apply_filters(
@@ -180,7 +180,7 @@ class BpGroupSites_Activity {
 		}
 
 		// prepend to comment content
-		$comment_content = '<div class="bpgsites_comment_posted_in">'.$prefix."</div>\n\n".$comment_content;
+		$comment_content = '<div class="bpgsites_comment_posted_in">' . $prefix . "</div>\n\n" . $comment_content;
 
 		//print_r( $comment_content ); die();
 
@@ -235,7 +235,7 @@ class BpGroupSites_Activity {
 			// the group that comment replies have must be the same as its parent
 
 			// show message
-			echo '<p>'.__( 'This comment is a reply. It appears in the same group as the comment it is in reply to. If there is a deeper thread of replies, then the original comment determines the group in which it appears.', 'bpgsites' ).'</p>';
+			echo '<p>' . __( 'This comment is a reply. It appears in the same group as the comment it is in reply to. If there is a deeper thread of replies, then the original comment determines the group in which it appears.', 'bpgsites' ) . '</p>';
 
 			// get group ID
 			$group_id = $this->get_comment_group_id( $comment_id );
@@ -249,7 +249,7 @@ class BpGroupSites_Activity {
 				$name
 			);
 
-			echo '<p>'.$message.'</p>';
+			echo '<p>' . $message . '</p>';
 			;
 
 		} else {
@@ -293,10 +293,10 @@ class BpGroupSites_Activity {
 		if ( isset( $_POST['bpgsites_comments_nonce'] ) ) { return; }
 
 		// authenticate submission
-		if ( !wp_verify_nonce( $_POST['bpgsites_comments_nonce'], 'bpgsites_comments_metabox' ) ) { return; }
+		if ( ! wp_verify_nonce( $_POST['bpgsites_comments_nonce'], 'bpgsites_comments_metabox' ) ) { return; }
 
 		// check capabilities
-		if ( !current_user_can( 'moderate_comments', $comment_id ) ) {
+		if ( ! current_user_can( 'moderate_comments', $comment_id ) ) {
 
 			// cheating!
 			comment_footer_die(
@@ -350,7 +350,7 @@ class BpGroupSites_Activity {
 		) );
 
 		// if we don't find a modified item...
-		if ( !$id ) {
+		if ( ! $id ) {
 
 			// see if we have an unmodified activity item
 			$id = bp_activity_get_activity_id( array(
@@ -388,7 +388,7 @@ class BpGroupSites_Activity {
 		} else {
 
 			// show anonymous user
-			$user_link = '<span class="anon-commenter">'.__( 'Anonymous', 'bpgsites' ).'</span>';
+			$user_link = '<span class="anon-commenter">' . __( 'Anonymous', 'bpgsites' ) . '</span>';
 
 		}
 
@@ -400,7 +400,7 @@ class BpGroupSites_Activity {
 		);
 
 		// init target link
-		$target_post_link = '<a href="' . get_permalink( $post->ID ) .'">' .
+		$target_post_link = '<a href="' . get_permalink( $post->ID ) . '">' .
 								esc_html( $post->post_title ) .
 							'</a>';
 
@@ -410,7 +410,7 @@ class BpGroupSites_Activity {
 			__( '%s left a %s on a %s %s in the group %s:', 'bpgsites' ),
 
 			$user_link,
-			'<a href="' . $activity->primary_link .'">' . __( 'comment', 'bpgsites' ) . '</a>',
+			'<a href="' . $activity->primary_link . '">' . __( 'comment', 'bpgsites' ) . '</a>',
 			$activity_name,
 			$target_post_link,
 			'<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>'
@@ -463,7 +463,7 @@ class BpGroupSites_Activity {
 		);
 
 		// construct option
-		$option = '<option value="new_groupsite_comment">'.$comment_name.'</option>'."\n";
+		$option = '<option value="new_groupsite_comment">' . $comment_name . '</option>' . "\n";
 
 		// print
 		echo $option;
@@ -664,7 +664,7 @@ class BpGroupSites_Activity {
 		} else {
 
 			// construct link
-			$link = '<a rel="nofollow" href="'.bp_get_group_permalink( $group ).'">'.__( 'Join group to reply', 'bpgsites' ).'</a>';
+			$link = '<a rel="nofollow" href="' . bp_get_group_permalink( $group ) . '">' . __( 'Join group to reply', 'bpgsites' ) . '</a>';
 
 		}
 
@@ -943,10 +943,10 @@ class BpGroupSites_Activity {
 					);
 
 					// construct item
-					$html .= '<li><a href="#groupsites-list" id="btn_groupsites" class="css_btn" title="'.$title.'">'.$title.'</a>';
+					$html .= '<li><a href="#groupsites-list" id="btn_groupsites" class="css_btn" title="' . $title . '">' . $title . '</a>';
 
 					// open sublist
-					$html .= '<ul class="children" id="groupsites-list">'."\n";
+					$html .= '<ul class="children" id="groupsites-list">' . "\n";
 
 					// init lists
 					$mine = array();
@@ -957,10 +957,10 @@ class BpGroupSites_Activity {
 					while ( bp_groups() ) {  bp_the_group();
 
 						// construct item
-						$item = '<li>'.
-									'<a href="'.bp_get_group_permalink().'" class="css_btn btn_groupsites" title="'.bp_get_group_name().'">'.
-										bp_get_group_name().
-									'</a>'.
+						$item = '<li>' .
+									'<a href="' . bp_get_group_permalink() . '" class="css_btn btn_groupsites" title="' . bp_get_group_name() . '">' .
+										bp_get_group_name() .
+									'</a>' .
 								'</li>';
 
 						// get group ID
@@ -998,17 +998,17 @@ class BpGroupSites_Activity {
 							$title = __( 'My Groups', 'bpgsites' );
 
 							// construct item
-							$sublist = '<li><a href="#groupsites-list-mine" id="btn_groupsites_mine" class="css_btn" title="'.$title.'">'.$title.'</a>';
+							$sublist = '<li><a href="#groupsites-list-mine" id="btn_groupsites_mine" class="css_btn" title="' . $title . '">' . $title . '</a>';
 
 							// open sublist
-							$sublist .= '<ul class="children" id="groupsites-list-mine">'."\n";
+							$sublist .= '<ul class="children" id="groupsites-list-mine">' . "\n";
 
 							// insert items
 							$sublist .= $items;
 
 							// close sublist
-							$sublist .= '</ul>'."\n";
-							$sublist .= '</li>'."\n";
+							$sublist .= '</ul>' . "\n";
+							$sublist .= '</li>' . "\n";
 
 							// replace items
 							$items = $sublist;
@@ -1033,17 +1033,17 @@ class BpGroupSites_Activity {
 							$title = __( 'Linked Groups', 'bpgsites' );
 
 							// construct item
-							$sublist = '<li><a href="#groupsites-list-linked" id="btn_groupsites_linked" class="css_btn" title="'.$title.'">'.$title.'</a>';
+							$sublist = '<li><a href="#groupsites-list-linked" id="btn_groupsites_linked" class="css_btn" title="' . $title . '">' . $title . '</a>';
 
 							// open sublist
-							$sublist .= '<ul class="children" id="groupsites-list-linked">'."\n";
+							$sublist .= '<ul class="children" id="groupsites-list-linked">' . "\n";
 
 							// insert items
 							$sublist .= $items;
 
 							// close sublist
-							$sublist .= '</ul>'."\n";
-							$sublist .= '</li>'."\n";
+							$sublist .= '</ul>' . "\n";
+							$sublist .= '</li>' . "\n";
 
 							// replace items
 							$items = $sublist;
@@ -1068,17 +1068,17 @@ class BpGroupSites_Activity {
 							$title = __( 'Public Groups', 'bpgsites' );
 
 							// construct item
-							$sublist = '<li><a href="#groupsites-list-public" id="btn_groupsites_public" class="css_btn" title="'.$title.'">'.$title.'</a>';
+							$sublist = '<li><a href="#groupsites-list-public" id="btn_groupsites_public" class="css_btn" title="' . $title . '">' . $title . '</a>';
 
 							// open sublist
-							$sublist .= '<ul class="children" id="groupsites-list-public">'."\n";
+							$sublist .= '<ul class="children" id="groupsites-list-public">' . "\n";
 
 							// insert items
 							$sublist .= $items;
 
 							// close sublist
-							$sublist .= '</ul>'."\n";
-							$sublist .= '</li>'."\n";
+							$sublist .= '</ul>' . "\n";
+							$sublist .= '</li>' . "\n";
 
 							// replace items
 							$items = $sublist;
@@ -1091,8 +1091,8 @@ class BpGroupSites_Activity {
 					}
 
 					// close tags
-					$html .= '</ul>'."\n";
-					$html .= '</li>'."\n";
+					$html .= '</ul>' . "\n";
+					$html .= '</li>' . "\n";
 
 				} else {
 
@@ -1105,10 +1105,10 @@ class BpGroupSites_Activity {
 					while ( bp_groups() ) {  bp_the_group();
 
 						// construct item
-						$html .= '<li>'.
-									'<a href="'.bp_get_group_permalink().'" id="btn_groupsites" class="css_btn" title="'.$title.'">'.
-										$title.
-									'</a>'.
+						$html .= '<li>' .
+									'<a href="' . bp_get_group_permalink() . '" id="btn_groupsites" class="css_btn" title="' . $title . '">' .
+										$title .
+									'</a>' .
 								 '</li>';
 
 					}
@@ -1188,15 +1188,15 @@ class BpGroupSites_Activity {
 			if ( $groups_template->group_count > 1 ) {
 
 				// construct heading (the no_comments class prevents this from printing)
-				$html .= '<h3 class="bpgsites_group_filter_heading no_comments">'.
-							'<a href="#bpgsites_group_filter">'.__( 'Filter comments by group', 'bpgsites' ).'</a>'.
-						 '</h3>'."\n";
+				$html .= '<h3 class="bpgsites_group_filter_heading no_comments">' .
+							'<a href="#bpgsites_group_filter">' . __( 'Filter comments by group', 'bpgsites' ) . '</a>' .
+						 '</h3>' . "\n";
 
 				// open div
-				$html .= '<div id="bpgsites_group_filter" class="bpgsites_group_filter no_comments">'."\n";
+				$html .= '<div id="bpgsites_group_filter" class="bpgsites_group_filter no_comments">' . "\n";
 
 				// open form
-				$html .= '<form id="bpgsites_comment_group_filter" name="bpgsites_comment_group_filter" action="'.get_permalink( $post->ID ).'" method="post">'."\n";
+				$html .= '<form id="bpgsites_comment_group_filter" name="bpgsites_comment_group_filter" action="' . get_permalink( $post->ID ) . '" method="post">' . "\n";
 
 				// init lists
 				$mine = array();
@@ -1219,7 +1219,7 @@ class BpGroupSites_Activity {
 				while ( bp_groups() ) {  bp_the_group();
 
 					// add arbitrary divider
-					$item = '<span class="bpgsites_comment_group">'."\n";
+					$item = '<span class="bpgsites_comment_group">' . "\n";
 
 					// get group ID
 					$group_id = bp_get_group_id();
@@ -1228,15 +1228,15 @@ class BpGroupSites_Activity {
 					if ( in_array( $group_id, $user_group_ids['my_groups'] ) ) {
 
 						// add checkbox
-						$item .= '<input type="checkbox" class="bpgsites_group_checkbox bpgsites_group_checkbox_mine" name="bpgsites_comment_groups[]" id="bpgsites_comment_group_'.$group_id.'" value="'.$group_id.'" checked="checked" />'."\n";
+						$item .= '<input type="checkbox" class="bpgsites_group_checkbox bpgsites_group_checkbox_mine" name="bpgsites_comment_groups[]" id="bpgsites_comment_group_' . $group_id . '" value="' . $group_id . '" checked="checked" />' . "\n";
 
 						// add label
-						$item .= '<label class="bpgsites_comment_group_label" for="bpgsites_comment_group_'.$group_id.'">'.
-									bp_get_group_name().
-								 '</label>'."\n";
+						$item .= '<label class="bpgsites_comment_group_label" for="bpgsites_comment_group_' . $group_id . '">' .
+									bp_get_group_name() .
+								 '</label>' . "\n";
 
 						// close arbitrary divider
-						$item .= '</span>'."\n";
+						$item .= '</span>' . "\n";
 
 						// public
 						$mine[] = $item;
@@ -1250,15 +1250,15 @@ class BpGroupSites_Activity {
 					if ( in_array( $group_id, $user_group_ids['linked_groups'] ) ) {
 
 						// add checkbox
-						$item .= '<input type="checkbox" class="bpgsites_group_checkbox bpgsites_group_checkbox_linked" name="bpgsites_comment_groups[]" id="bpgsites_comment_group_'.$group_id.'" value="'.$group_id.'" checked="checked" />'."\n";
+						$item .= '<input type="checkbox" class="bpgsites_group_checkbox bpgsites_group_checkbox_linked" name="bpgsites_comment_groups[]" id="bpgsites_comment_group_' . $group_id . '" value="' . $group_id . '" checked="checked" />' . "\n";
 
 						// add label
-						$item .= '<label class="bpgsites_comment_group_label" for="bpgsites_comment_group_'.$group_id.'">'.
-									bp_get_group_name().
-								 '</label>'."\n";
+						$item .= '<label class="bpgsites_comment_group_label" for="bpgsites_comment_group_' . $group_id . '">' .
+									bp_get_group_name() .
+								 '</label>' . "\n";
 
 						// close arbitrary divider
-						$item .= '</span>'."\n";
+						$item .= '</span>' . "\n";
 
 						// public
 						$linked[] = $item;
@@ -1272,15 +1272,15 @@ class BpGroupSites_Activity {
 					if ( in_array( $group_id, $user_group_ids['public_groups'] ) ) {
 
 						// add checkbox
-						$item .= '<input type="checkbox" class="bpgsites_group_checkbox bpgsites_group_checkbox_public" name="bpgsites_comment_groups[]" id="bpgsites_comment_group_'.$group_id.'" value="'.$group_id.'"'.$checked.' />'."\n";
+						$item .= '<input type="checkbox" class="bpgsites_group_checkbox bpgsites_group_checkbox_public" name="bpgsites_comment_groups[]" id="bpgsites_comment_group_' . $group_id . '" value="' . $group_id . '"' . $checked . ' />' . "\n";
 
 						// add label
-						$item .= '<label class="bpgsites_comment_group_label" for="bpgsites_comment_group_'.$group_id.'">'.
-									bp_get_group_name().
-								 '</label>'."\n";
+						$item .= '<label class="bpgsites_comment_group_label" for="bpgsites_comment_group_' . $group_id . '">' .
+									bp_get_group_name() .
+								 '</label>' . "\n";
 
 						// close arbitrary divider
-						$item .= '</span>'."\n";
+						$item .= '</span>' . "\n";
 
 						// public
 						$public[] = $item;
@@ -1296,7 +1296,7 @@ class BpGroupSites_Activity {
 					if ( count( $public ) > 0 OR count( $linked ) > 0 ) {
 
 						// add heading
-						$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_mine">'.__( 'My Groups', 'bpgsites' ).'</span>'."\n";
+						$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_mine">' . __( 'My Groups', 'bpgsites' ) . '</span>' . "\n";
 
 					}
 
@@ -1312,7 +1312,7 @@ class BpGroupSites_Activity {
 					if ( count( $mine ) > 0 OR count( $public ) > 0 ) {
 
 						// add heading
-						$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_linked">'.__( 'Linked Groups', 'bpgsites' ).'</span>'."\n";
+						$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_linked">' . __( 'Linked Groups', 'bpgsites' ) . '</span>' . "\n";
 
 					}
 
@@ -1328,7 +1328,7 @@ class BpGroupSites_Activity {
 					if ( count( $mine ) > 0 OR count( $linked ) > 0 ) {
 
 						// add heading
-						$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_public">'.__( 'Public Groups', 'bpgsites' ).'</span>'."\n";
+						$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_public">' . __( 'Public Groups', 'bpgsites' ) . '</span>' . "\n";
 
 					}
 
@@ -1338,11 +1338,11 @@ class BpGroupSites_Activity {
 				}
 
 				// add submit button
-				$html .= '<input type="submit" id="bpgsites_comment_group_submit" value="'.__( 'Filter', 'bpgsites' ).'" />'."\n";
+				$html .= '<input type="submit" id="bpgsites_comment_group_submit" value="' . __( 'Filter', 'bpgsites' ) . '" />' . "\n";
 
 				// close tags
-				$html .= '</form>'."\n";
-				$html .= '</div>'."\n";
+				$html .= '</form>' . "\n";
+				$html .= '</div>' . "\n";
 
 			}
 
@@ -1397,7 +1397,7 @@ class BpGroupSites_Activity {
 			if ( $group_id != '' AND is_numeric( $group_id ) ) {
 
 				// show a hidden input so that this comment is also posted in that group
-				$result .= '<input type="hidden" id="bpgsites-post-in" name="bpgsites-post-in" value="'.$group_id.'" />'."\n";
+				$result .= '<input type="hidden" id="bpgsites-post-in" name="bpgsites-post-in" value="' . $group_id . '" />' . "\n";
 
 			}
 
@@ -1504,7 +1504,7 @@ class BpGroupSites_Activity {
 					if ( in_array( $group_id, $user_group_ids['my_groups'] ) ) {
 
 						// add option
-						$mine[] = '<option value="'.$group_id.'"'.$selected.'>'.bp_get_group_name().'</option>';
+						$mine[] = '<option value="' . $group_id . '"' . $selected . '>' . bp_get_group_name() . '</option>';
 
 					}
 
@@ -1512,16 +1512,16 @@ class BpGroupSites_Activity {
 					if ( in_array( $group_id, $user_group_ids['linked_groups'] ) ) {
 
 						// add option
-						$linked[] = '<option value="'.$group_id.'"'.$selected.'>'.bp_get_group_name().'</option>'."\n";
+						$linked[] = '<option value="' . $group_id . '"' . $selected . '>' . bp_get_group_name() . '</option>' . "\n";
 
 					}
 
 				} // end while
 
 				// construct dropdown
-				$result .= '<span id="bpgsites-post-in-box">'."\n";
-				$result .= '<span>'.__( 'Post in', 'bpgsites' ).':</span>'."\n";
-				$result .= '<select id="bpgsites-post-in" name="bpgsites-post-in">'."\n";
+				$result .= '<span id="bpgsites-post-in-box">' . "\n";
+				$result .= '<span>' . __( 'Post in', 'bpgsites' ) . ':</span>' . "\n";
+				$result .= '<select id="bpgsites-post-in" name="bpgsites-post-in">' . "\n";
 
 				// did we get any that are mine?
 				if ( count( $mine ) > 0 ) {
@@ -1536,13 +1536,13 @@ class BpGroupSites_Activity {
 						$title = __( 'My Groups', 'bpgsites' );
 
 						// construct item
-						$sublist = '<optgroup label="'.$title.'">'."\n";
+						$sublist = '<optgroup label="' . $title . '">' . "\n";
 
 						// insert items
 						$sublist .= $items;
 
 						// close sublist
-						$sublist .= '</optgroup>'."\n";
+						$sublist .= '</optgroup>' . "\n";
 
 						// replace items
 						$items = $sublist;
@@ -1567,13 +1567,13 @@ class BpGroupSites_Activity {
 						$title = __( 'Linked Groups', 'bpgsites' );
 
 						// construct item
-						$sublist = '<optgroup label="'.$title.'">'."\n";
+						$sublist = '<optgroup label="' . $title . '">' . "\n";
 
 						// insert items
 						$sublist .= $items;
 
 						// close sublist
-						$sublist .= '</optgroup>'."\n";
+						$sublist .= '</optgroup>' . "\n";
 
 						// replace items
 						$items = $sublist;
@@ -1586,8 +1586,8 @@ class BpGroupSites_Activity {
 				}
 
 				// close tags
-				$result .= '</select>'."\n";
-				$result .= '</span>'."\n";
+				$result .= '</select>' . "\n";
+				$result .= '</span>' . "\n";
 
 			} else {
 
@@ -1595,7 +1595,7 @@ class BpGroupSites_Activity {
 				while ( bp_groups() ) { bp_the_group();
 
 					// show a hidden input
-					$result .= '<input type="hidden" id="bpgsites-post-in" name="bpgsites-post-in" value="'.bp_get_group_id().'" />'."\n";
+					$result .= '<input type="hidden" id="bpgsites-post-in" name="bpgsites-post-in" value="' . bp_get_group_id() . '" />' . "\n";
 
 				} // end while
 
@@ -1700,7 +1700,7 @@ class BpGroupSites_Activity {
 		if ( $group_id != '' AND is_numeric( $group_id ) ) {
 
 			// add group identifier
-			$classes[] = 'bpgsites-group-'.$group_id;
+			$classes[] = 'bpgsites-group-' . $group_id;
 
 		}
 
@@ -1792,7 +1792,7 @@ class BpGroupSites_Activity {
 			if ( groups_is_user_member( $user_id, $group_id ) ) {
 
 				// if it's not already there...
-				if ( !in_array( $group_id, $this->user_group_ids['my_groups'] ) ) {
+				if ( ! in_array( $group_id, $this->user_group_ids['my_groups'] ) ) {
 
 					// add to our array
 					$this->user_group_ids['my_groups'][] = $group_id;
@@ -1839,7 +1839,7 @@ class BpGroupSites_Activity {
 						if ( groups_is_user_member( $user_id, $linked_group_id ) ) {
 
 							// add the current one if it's not already there...
-							if ( !in_array( $group_id, $this->user_group_ids['my_groups'] ) ) {
+							if ( ! in_array( $group_id, $this->user_group_ids['my_groups'] ) ) {
 
 								// add to our array
 								$this->user_group_ids['linked_groups'][] = $group_id;
@@ -1955,7 +1955,7 @@ class BpGroupSites_Activity {
 			}
 
 			// open section
-			echo '<h3 class="activity_heading">'.$section_header_text.'</h3>
+			echo '<h3 class="activity_heading">' . $section_header_text . '</h3>
 
 			<div class="paragraph_wrapper groupsites_comments_output">
 
@@ -1998,7 +1998,7 @@ class BpGroupSites_Activity {
 				);
 
 				// open section
-				echo '<h3 class="activity_heading">'.$section_header_text.'</h3>
+				echo '<h3 class="activity_heading">' . $section_header_text . '</h3>
 
 				<div class="paragraph_wrapper groupsites_comments_output">
 
@@ -2130,7 +2130,7 @@ class BpGroupSites_Activity {
 		$group_ids = bpgsites_get_groups_by_blog_id( $blog_id );
 
 		// sanity check
-		if ( !is_array( $group_ids ) OR count( $group_ids ) == 0 ) return $activity;
+		if ( ! is_array( $group_ids ) OR count( $group_ids ) == 0 ) return $activity;
 
 
 
@@ -2157,7 +2157,7 @@ class BpGroupSites_Activity {
 		) );
 
 		// if we don't find a modified item...
-		if ( !$id ) {
+		if ( ! $id ) {
 
 			// see if we have an unmodified activity item
 			$id = bp_activity_get_activity_id( array(
@@ -2194,7 +2194,7 @@ class BpGroupSites_Activity {
 			//print_r( $authors ); die();
 
 			// if we get some
-			if ( !empty( $authors ) ) {
+			if ( ! empty( $authors ) ) {
 
 				// we only want to override if we have more than one...
 				if ( count( $authors ) > 1 ) {
@@ -2252,7 +2252,7 @@ class BpGroupSites_Activity {
 
 				$activity_author,
 				$activity_name,
-				'<a href="' . get_permalink( $post->ID ) .'">' . esc_attr( $post->post_title ) . '</a>',
+				'<a href="' . get_permalink( $post->ID ) . '">' . esc_attr( $post->post_title ) . '</a>',
 				'<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>'
 
 			);
@@ -2266,7 +2266,7 @@ class BpGroupSites_Activity {
 
 				$activity_author,
 				$activity_name,
-				'<a href="' . get_permalink( $post->ID ) .'">' . esc_attr( $post->post_title ) . '</a>',
+				'<a href="' . get_permalink( $post->ID ) . '">' . esc_attr( $post->post_title ) . '</a>',
 				'<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>'
 
 			);
@@ -2313,7 +2313,7 @@ class BpGroupSites_Activity {
 		$post_name = apply_filters( 'bpgsites_post_name', $post_name );
 
 		// construct option
-		$option = '<option value="new_groupsite_post">'.$post_name.'</option>'."\n";
+		$option = '<option value="new_groupsite_post">' . $post_name . '</option>' . "\n";
 
 		// print
 		echo $option;

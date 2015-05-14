@@ -7,7 +7,7 @@
  */
 
 // exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 
 
@@ -146,7 +146,7 @@ function bpgsites_load_template_filter( $found_template, $templates ) {
 	// check for BP theme compatibility here?
 
 	// only filter the template location when we're on our component's page
-	if ( is_multisite() && bp_is_bpgsites_component() && !bp_current_action() ) {
+	if ( is_multisite() && bp_is_bpgsites_component() && ! bp_current_action() ) {
 
 		// we've got to find the template manually
 		foreach ( (array) $templates as $template ) {

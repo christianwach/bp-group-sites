@@ -7,7 +7,7 @@
 
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 
 
@@ -19,7 +19,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
 function bpgsites_screen_index() {
 
 	// is this our component page?
-	if ( is_multisite() && bp_is_bpgsites_component() && !bp_current_action() ) {
+	if ( is_multisite() && bp_is_bpgsites_component() && ! bp_current_action() ) {
 
 		// make sure BP knows that it's our directory
 		bp_update_is_directory( true, 'bpgsites' );

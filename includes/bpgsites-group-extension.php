@@ -16,7 +16,7 @@ See: http://codex.buddypress.org/developer/plugin-development/group-extension-ap
 
 
 // prevent problems during upgrade or when Groups are disabled
-if ( !class_exists( 'BP_Group_Extension' ) ) { return; }
+if ( ! class_exists( 'BP_Group_Extension' ) ) { return; }
 
 
 
@@ -112,10 +112,10 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	function edit_screen() {
 
 		// kick out if not on our edit screen
-		if ( !bp_is_group_admin_screen( $this->slug ) ) { return false; }
+		if ( ! bp_is_group_admin_screen( $this->slug ) ) { return false; }
 
 		// show name
-		echo '<h2>'.esc_html( $this->name ).'</h2>';
+		echo '<h2>' . esc_html( $this->name ) . '</h2>';
 
 		// hand off to function
 		echo bpgsites_get_extension_edit_screen();
@@ -141,13 +141,13 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 		$blog_id = $parsed['blog_id'];
 
 		// kick out if blog ID is somehow invalid
-		if ( !$blog_id ) { return false; }
+		if ( ! $blog_id ) { return false; }
 
 		// validate form
 		check_admin_referer( 'groups_edit_save_' . $this->slug );
 
 		// kick out if group ID is missing
-		if ( !isset( $_POST['group-id'] ) ) { return false; }
+		if ( ! isset( $_POST['group-id'] ) ) { return false; }
 
 		// set group ID
 		$group_id = (int) $_POST['group-id'];
@@ -306,8 +306,8 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	function _update_group_linkages( $blog_id, $group_id ) {
 
 		// bail if the update button has not been pressed
-		if ( ! isset( $_POST['bpgsites_manage-'.$blog_id.'-update'] ) ) { return; }
-		if ( $_POST['bpgsites_manage-'.$blog_id.'-update'] == '' ) { return; }
+		if ( ! isset( $_POST['bpgsites_manage-' . $blog_id . '-update'] ) ) { return; }
+		if ( $_POST['bpgsites_manage-' . $blog_id . '-update'] == '' ) { return; }
 
 		// get existing array
 		$linked = bpgsites_get_group_linkages( $group_id );
@@ -316,10 +316,10 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 		$group_ids = array();
 
 		// do we have a post array for our checkboxes?
-		if ( isset( $_POST['bpgsites_linked_groups_'.$blog_id] ) ) {
+		if ( isset( $_POST['bpgsites_linked_groups_' . $blog_id] ) ) {
 
 			// YES - get values from post array
-			$group_ids = $_POST['bpgsites_linked_groups_'.$blog_id];
+			$group_ids = $_POST['bpgsites_linked_groups_' . $blog_id];
 
 			// sanitise all the items
 			array_walk( $group_ids, create_function( '&$val', '$val = absint( $val );' ) );
@@ -384,7 +384,7 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 				$remote_group_ids = isset( $linked[$blog_id] ) ? $linked[$blog_id] : array();
 
 				// is this one in the remote list?
-				if ( !in_array( $group_id, $remote_group_ids ) ) {
+				if ( ! in_array( $group_id, $remote_group_ids ) ) {
 
 					// no, add it
 					$remote_group_ids[] = $group_id;
@@ -452,7 +452,7 @@ bp_register_group_extension( 'BPGSites_Group_Extension' );
 function bpgsites_get_extension_display() {
 
 	// show something
-	echo '<h3>'.apply_filters( 'bpgsites_extension_title', __( 'Group Sites', 'bpgsites' ) ).'</h3>';
+	echo '<h3>' . apply_filters( 'bpgsites_extension_title', __( 'Group Sites', 'bpgsites' ) ) . '</h3>';
 
 	do_action( 'bp_before_blogs_loop' );
 
@@ -779,13 +779,13 @@ function bpgsites_get_group_linkage( $echo = true ) {
 		//if ( $groups_query->group_count > 1 ) {
 
 			// open div
-			$html .= '<div class="bpgsites_group_linkage">'."\n";
+			$html .= '<div class="bpgsites_group_linkage">' . "\n";
 
 			// construct heading
-			$html .= '<h5 class="bpgsites_group_linkage_heading">'.__( 'Read this with:', 'bpgsites' ).'</h5>'."\n";
+			$html .= '<h5 class="bpgsites_group_linkage_heading">' . __( 'Read this with:', 'bpgsites' ) . '</h5>' . "\n";
 
 			// open div
-			$html .= '<div class="bpgsites_group_linkages">'."\n";
+			$html .= '<div class="bpgsites_group_linkages">' . "\n";
 
 			// do the loop
 			while ( $groups_query->groups() ) { $groups_query->the_group();
@@ -805,22 +805,22 @@ function bpgsites_get_group_linkage( $echo = true ) {
 				}
 
 				// add arbitrary divider
-				$html .= '<span class="bpgsites_linked_group">'."\n";
+				$html .= '<span class="bpgsites_linked_group">' . "\n";
 
 				// add checkbox
-				$html .= '<input type="checkbox" class="bpgsites_group_checkbox" name="bpgsites_linked_groups_'.$blog_id.'[]" id="bpgsites_linked_group_'.$blog_id.'_'.$group_id.'" value="'.$group_id.'" '.$checked.'/>'."\n";
+				$html .= '<input type="checkbox" class="bpgsites_group_checkbox" name="bpgsites_linked_groups_' . $blog_id . '[]" id="bpgsites_linked_group_' . $blog_id . '_' . $group_id . '" value="' . $group_id . '" ' . $checked . '/>' . "\n";
 
 				// add label
-				$html .= '<label class="bpgsites_linked_group_label" for="bpgsites_linked_group_'.$blog_id.'_'.$group_id.'">'.$groups_query->group->name.'</label>'."\n";
+				$html .= '<label class="bpgsites_linked_group_label" for="bpgsites_linked_group_' . $blog_id . '_' . $group_id . '">' . $groups_query->group->name . '</label>' . "\n";
 
 				// close arbitrary divider
-				$html .= '</span>'."\n";
+				$html .= '</span>' . "\n";
 
 			} // end while
 
 			// close tags
-			$html .= '</div>'."\n";
-			$html .= '</div>'."\n";
+			$html .= '</div>' . "\n";
+			$html .= '</div>' . "\n";
 
 		//}
 
@@ -851,7 +851,7 @@ function bpgsites_get_group_linkages( $group_id ) {
 	$linked_groups = groups_get_groupmeta( $group_id, BPGSITES_LINKED );
 
 	// sanity check
-	if ( !is_array( $linked_groups ) ) { $linked_groups = array(); }
+	if ( ! is_array( $linked_groups ) ) { $linked_groups = array(); }
 
 	// --<
 	return $linked_groups;
@@ -948,7 +948,7 @@ function bpgsites_authoritative_group_settings_form() {
 	$group_id = bpgsites_get_current_group_id();
 
 	// sanity check list and group ID
-	if ( count( $auth_groups ) > 0 AND !is_null( $group_id ) ) {
+	if ( count( $auth_groups ) > 0 AND ! is_null( $group_id ) ) {
 
 		// is this group's ID in the list
 		if ( in_array( $group_id, $auth_groups ) ) {
@@ -1028,7 +1028,7 @@ function bpgsites_authoritative_group_save( $group ) {
 	$auth_groups = bpgsites_authoritative_groups_get();
 
 	// if not checked
-	if ( !isset( $_POST['bpgsites-authoritative-group'] ) ) {
+	if ( ! isset( $_POST['bpgsites-authoritative-group'] ) ) {
 
 		// sanity check list
 		if ( count( $auth_groups ) > 0 ) {
@@ -1052,7 +1052,7 @@ function bpgsites_authoritative_group_save( $group ) {
 		if ( absint( $_POST['bpgsites-authoritative-group'] ) !== 1 ) { return; }
 
 		// is this group's ID missing from the list?
-		if ( !in_array( $group->id, $auth_groups ) ) {
+		if ( ! in_array( $group->id, $auth_groups ) ) {
 
 			// add it
 			$auth_groups[] = $group->id;
