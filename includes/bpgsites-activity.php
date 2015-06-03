@@ -619,8 +619,25 @@ class BpGroupSites_Activity {
 	 */
 	function override_reply_to_link( $link, $args, $comment, $post ) {
 
-		// pass through if not logged in
-		if ( ! is_user_logged_in() ) return $link;
+		// if not logged in
+		if ( ! is_user_logged_in() ) {
+
+			// is registration allowed?
+			if ( bp_get_signup_allowed() ) {
+				$link_text = __( 'Create an account to reply', 'bpgsites' );
+				$href = bp_get_signup_page();
+			} else {
+				$link_text = __( 'Login to reply', 'bpgsites' );
+				$href = wp_login_url();
+			}
+
+			// construct link
+			$link = '<a rel="nofollow" href="' . $href . '">' . $link_text . '</a>';
+
+			// --<
+			return $link;
+
+		}
 
 		// get current blog ID
 		$blog_id = get_current_blog_id();
@@ -694,8 +711,8 @@ class BpGroupSites_Activity {
 
 			// add filters on reply to link
 			add_filter( 'commentpress_reply_to_para_link_text', array( $this, 'override_reply_to_text' ), 10, 2 );
-			add_filter( 'commentpress_reply_to_para_link_href', array( $this, 'override_reply_to_href' ), 10, 1 );
-			add_filter( 'commentpress_reply_to_para_link_onclick', array( $this, 'override_reply_to_onclick' ), 10, 2 );
+			add_filter( 'commentpress_reply_to_para_link_href', array( $this, 'override_reply_to_href' ), 10, 2 );
+			add_filter( 'commentpress_reply_to_para_link_onclick', array( $this, 'override_reply_to_onclick' ), 10, 1 );
 
 			// disable
 			return 0;
@@ -745,6 +762,21 @@ class BpGroupSites_Activity {
 	 */
 	function override_reply_to_text( $link_text, $paragraph_text ) {
 
+		// if not logged in...
+		if ( ! is_user_logged_in() ) {
+
+			// is registration allowed?
+			if ( bp_get_signup_allowed() ) {
+				$link_text = __( 'Create an account to leave a comment', 'bpgsites' );
+			} else {
+				$link_text = __( 'Login to leave a comment', 'bpgsites' );
+			}
+
+			// show helpful message
+			return apply_filters( 'bpgsites_override_reply_to_text_denied', $link_text, $paragraph_text );
+
+		}
+
 		// construct link content
 		$link_text = sprintf(
 			__( 'Join a group to leave a comment on %s', 'bpgsites' ),
@@ -752,7 +784,7 @@ class BpGroupSites_Activity {
 		);
 
 		// --<
-		return $link_text;
+		return apply_filters( 'bpgsites_override_reply_to_text', $link_text, $paragraph_text );
 
 	}
 
@@ -761,13 +793,32 @@ class BpGroupSites_Activity {
 	/**
 	 * Override content of the reply to link target
 	 *
-	 * @param string $href Existing target URL
-	 * @return string $href Permalink of the groups directory
+	 * @param string $href The existing target URL
+	 * @param string $text_sig The text signature of the paragraph
+	 * @return string $href Overridden target URL
 	 */
-	function override_reply_to_href( $href ) {
+	function override_reply_to_href( $href, $text_sig ) {
+
+		// if not logged in...
+		if ( ! is_user_logged_in() ) {
+
+			// is registration allowed?
+			if ( bp_get_signup_allowed() ) {
+				$href = bp_get_signup_page();
+			} else {
+				$href = wp_login_url();
+			}
+
+			// --<
+			return apply_filters( 'bpgsites_override_reply_to_href_denied', $href );
+
+		}
+
+		// send to groups directory
+		$href = bp_get_groups_directory_permalink();
 
 		// --<
-		return bp_get_groups_directory_permalink();
+		return apply_filters( 'bpgsites_override_reply_to_href', $href, $text_sig );
 
 	}
 
