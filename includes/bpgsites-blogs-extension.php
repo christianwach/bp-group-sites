@@ -24,7 +24,7 @@ association, whilst retaining useful stuff like pagination.
 function bpgsites_has_blogs( $args = '' ) {
 
 	// remove default exclusion filter
-	remove_filter( 'bp_has_blogs', 'bpgsites_filter_groupsites', 20 );
+	remove_filter( 'bp_after_has_blogs_parse_args', 'bpgsites_pre_filter_groupsites', 30, 1 );
 
 	// user filtering
 	$user_id = 0;
@@ -45,6 +45,11 @@ function bpgsites_has_blogs( $args = '' ) {
 
 	}
 
+	// Check for and use search terms
+	$search_terms = ! empty( $_REQUEST['s'] )
+		? $_REQUEST['s']
+		: false;
+
 	// declare defaults
 	$defaults = array(
 		'type'         => 'active',
@@ -54,18 +59,23 @@ function bpgsites_has_blogs( $args = '' ) {
 		'page_arg'     => 'bpage',
 		'user_id'      => $user_id,
 		'include_blog_ids'  => $groupsites,
-		'search_terms' => null,
+		'search_terms' => $search_terms,
 		'update_meta_cache' => true,
 	);
 
 	// parse args
-	$parsed_args = wp_parse_args( $args, $defaults );
+	$parsed_args = bp_parse_args( $args, $defaults, 'has_blogs' );
+
+	// Set per_page to maximum if max is enforced
+	if ( ! empty( $parsed_args['max'] ) && ( (int) $parsed_args['per_page'] > (int) $parsed_args['max'] ) ) {
+		$parsed_args['per_page'] = (int) $parsed_args['max'];
+	}
 
 	// re-query with our params
 	$has_blogs = bp_has_blogs( $parsed_args );
 
 	// add exclusion filter back as default
-	add_filter( 'bp_has_blogs', 'bpgsites_filter_groupsites', 20, 3 );
+	add_filter( 'bp_after_has_blogs_parse_args', 'bpgsites_pre_filter_groupsites', 30, 1 );
 
 	// fallback
 	return $has_blogs;
@@ -135,11 +145,70 @@ function bpgsites_filter_groupsites( $has_blogs, $blogs_template, $params ) {
 
 }
 
+
+
+/**
+ * Intercept blogs query and manage display of blogs
+ *
+ * @param array $args The existing arguments used for the query
+ * @return array $args The modified arguments used for the query
+ */
+function bpgsites_pre_filter_groupsites( $args ) {
+
+	/*
+	print_r( array(
+		'args' => $args,
+	) ); die();
+	*/
+
+	// get groupsite IDs
+	$groupsites = bpgsites_get_groupsites();
+
+	// get all blogs via BP_Blogs_Blog
+	$all = BP_Blogs_Blog::get_all();
+
+	// init ID array
+	$blog_ids = array();
+
+	if ( is_array( $all['blogs'] ) AND count( $all['blogs'] ) > 0 ) {
+		foreach ( $all['blogs'] AS $blog ) {
+			$blog_ids[] = $blog->blog_id;
+		}
+	}
+
+	// let's exclude
+	$groupsites_excluded = array_merge( array_diff( $blog_ids, $groupsites ) );
+
+	// do we have an array of blogs to include?
+	if ( isset( $args['include_blog_ids'] ) AND ! empty( $args['include_blog_ids'] ) ) {
+
+		// convert from comma-delimited if needed
+		$include_blog_ids = array_filter( wp_parse_id_list( $args['include_blog_ids'] ) );
+
+		// exclude groupsites
+		$args['include_blog_ids'] = array_merge( array_diff( $include_blog_ids, $groupsites ) );
+
+		// if we have none left, set as false
+		if ( count( $args['include_blog_ids'] ) === 0 ) $args['include_blog_ids'] = false;
+
+	} else {
+
+		// exclude groupsites
+		$args['include_blog_ids'] = $groupsites_excluded;
+
+	}
+
+	// --<
+	return $args;
+
+}
+
+
 // only on front end OR ajax
 if ( ! is_admin() OR ( defined( 'DOING_AJAX' ) AND DOING_AJAX ) ) {
 
-	// add filter for the above
-	add_filter( 'bp_has_blogs', 'bpgsites_filter_groupsites', 20, 3 );
+	// use bp_parse_args post-parse filter (requires BP 2.0)
+	add_filter( 'bp_after_has_blogs_parse_args', 'bpgsites_pre_filter_groupsites', 30, 1 );
 
 }
 
@@ -153,7 +222,7 @@ if ( ! is_admin() OR ( defined( 'DOING_AJAX' ) AND DOING_AJAX ) ) {
 function bpgsites_filter_total_blog_count() {
 
 	// remove filter to prevent recursion
-	remove_filter( 'bp_get_total_blog_count', 'bpgsites_filter_total_blog_count', 8 );
+	remove_filter( 'bp_get_total_blog_count', 'bpgsites_filter_total_blog_count', 50 );
 
 	// get actual count
 	$actual_count = bp_blogs_total_blogs();
@@ -165,7 +234,15 @@ function bpgsites_filter_total_blog_count() {
 	$filtered_count = $actual_count - $groupsites;
 
 	// add filter again
-	add_filter( 'bp_get_total_blog_count', 'bpgsites_filter_total_blog_count', 8 );
+	add_filter( 'bp_get_total_blog_count', 'bpgsites_filter_total_blog_count', 50 );
+
+	/*
+	print_r( array(
+		'actual_count' => $actual_count,
+		'groupsites' => $groupsites,
+		'filtered_count' => $filtered_count,
+	) ); die();
+	*/
 
 	// --<
 	return $filtered_count;
@@ -176,7 +253,7 @@ function bpgsites_filter_total_blog_count() {
 if ( ! is_admin() OR ( defined( 'DOING_AJAX' ) AND DOING_AJAX ) ) {
 
 	// add filter for the above
-	add_filter( 'bp_get_total_blog_count', 'bpgsites_filter_total_blog_count', 8 );
+	add_filter( 'bp_get_total_blog_count', 'bpgsites_filter_total_blog_count', 50 );
 
 }
 
@@ -354,6 +431,8 @@ function bpgsites_total_blog_count_for_user( $user_id = 0 ) {
 	function bpgsites_get_total_blog_count_for_user( $user_id = 0 ) {
 		return apply_filters( 'bpgsites_get_total_blog_count_for_user', bpgsites_total_blogs_for_user( $user_id ) );
 	}
+
+	// format number that gets returned
 	add_filter( 'bpgsites_get_total_blog_count_for_user', 'bp_core_number_format' );
 
 
