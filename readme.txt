@@ -16,7 +16,11 @@ In WordPress Multisite, BuddyPress Group Sites enables the creation of a many-to
 
 The BuddyPress Group Sites plugin enables the creation of a many-to-many relationship between BuddyPress Groups and WordPress Sites. This is useful when you have a BuddyPress network in which you want, say, many groups to comment simultaneously on sites which they share access to.
 
-The plugin is specifically designed to work with CommentPress "documents" (which are themselves complete sub-sites) so that there can be many reading groups for each document and many documents for each reading group.
+The plugin is specifically designed to work with *CommentPress* "documents" (which are themselves complete sub-sites) so that there can be many reading groups for each document and many documents for each reading group.
+
+### Requirements
+
+This plugin requires a minimum of *BuddyPress 2.0*.
 
 ### Plugin Development
 
