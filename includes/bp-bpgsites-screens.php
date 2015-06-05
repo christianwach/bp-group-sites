@@ -11,34 +11,6 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 
 
-/**
- * Load the top-level BP Group Sites directory.
- *
- * @return void
- */
-function bpgsites_screen_index() {
-
-	// is this our component page?
-	if ( is_multisite() && bp_is_bpgsites_component() && ! bp_current_action() ) {
-
-		// make sure BP knows that it's our directory
-		bp_update_is_directory( true, 'bpgsites' );
-
-		// allow plugins to handle this
-		do_action( 'bpgsites_screen_index' );
-
-		// load our directory template
-		bp_core_load_template( apply_filters( 'bpgsites_screen_index', 'bpgsites/index' ) );
-
-	}
-
-}
-
-// add action for the above
-add_action( 'bp_screens', 'bpgsites_screen_index', 20 );
-
-
-
 /** Theme Compatability *******************************************************/
 
 /**
@@ -168,6 +140,38 @@ class BP_Group_Sites_Theme_Compat {
 
 // init
 new BP_Group_Sites_Theme_Compat();
+
+
+
+//==============================================================================
+
+
+
+/**
+ * Load the top-level BP Group Sites directory.
+ *
+ * @return void
+ */
+function bpgsites_screen_index() {
+
+	// is this our component page?
+	if ( is_multisite() && bp_is_bpgsites_component() && ! bp_current_action() ) {
+
+		// make sure BP knows that it's our directory
+		bp_update_is_directory( true, 'bpgsites' );
+
+		// allow plugins to handle this
+		do_action( 'bpgsites_screen_index' );
+
+		// load our directory template
+		bp_core_load_template( apply_filters( 'bpgsites_screen_index', 'bpgsites/index' ) );
+
+	}
+
+}
+
+// add action for the above
+add_action( 'bp_screens', 'bpgsites_screen_index', 20 );
 
 
 
