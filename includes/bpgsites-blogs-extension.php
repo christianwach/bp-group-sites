@@ -528,3 +528,28 @@ function bpgsites_root_slug() {
 	}
 
 
+
+/**
+ * Capture "Site Image" uploads and store
+ *
+ * @param mixed|array $old_value The previous value
+ * @param mixed|array $new_value The new value
+ * @return void
+ */
+function bpgsites_commentpress_site_image( $old_value, $new_value ) {
+
+	// do we have a site image?
+	if ( isset( $new_value['cp_site_image'] ) AND ! empty( $new_value['cp_site_image'] ) ) {
+
+		// we should get the attachment ID
+		$attachment_full = wp_get_attachment_image( $new_value['cp_site_image'], 'full' );
+
+		print_r( $attachment_full ); die();
+
+	}
+
+}
+//add_action( 'update_option_commentpress_theme_settings', 'bpgsites_commentpress_site_image', 10, 2 );
+
+
+
