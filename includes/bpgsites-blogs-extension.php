@@ -267,6 +267,9 @@ if ( ! is_admin() OR ( defined( 'DOING_AJAX' ) AND DOING_AJAX ) ) {
  */
 function bpgsites_filter_total_blog_count_for_user( $count ) {
 
+	// get user ID if none passed
+	$user_id = ( bp_displayed_user_id() ) ? bp_displayed_user_id() : bp_loggedin_user_id();
+
 	// get working groupsites for this user
 	$groupsite_count = bpgsites_get_total_blog_count_for_user( $user_id );
 
