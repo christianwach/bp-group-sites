@@ -574,8 +574,10 @@ function bpgsites_commentpress_site_image( $old_value, $new_value ) {
 			$attachment_id = $new_value['cp_site_image'];
 
 			// get the attachment data
-			$attachment_thumb = wp_get_attachment_image_src( $attachment_id, 'thumb' );
+			$attachment_thumb = wp_get_attachment_image_src( $attachment_id, 'thumbnail' );
 			$attachment_medium = wp_get_attachment_image_src( $attachment_id, 'medium' );
+			$attachment_large = wp_get_attachment_image_src( $attachment_id, 'large' );
+			$attachment_full = wp_get_attachment_image_src( $attachment_id, 'full' );
 
 			// get existing option
 			$existing = $bp_groupsites->admin->option_get( 'bpgsites_bloginfo' );
@@ -586,6 +588,8 @@ function bpgsites_commentpress_site_image( $old_value, $new_value ) {
 				'attachment_id' => $attachment_id,
 				'thumb' => $attachment_thumb,
 				'medium' => $attachment_medium,
+				'large' => $attachment_large,
+				'full' => $attachment_full,
 			);
 
 		} else {
@@ -635,23 +639,16 @@ function bpgsites_commentpress_site_image_avatar( $avatar, $blog_id, $r ) {
 		// get type to use
 		$type = apply_filters( 'bpgsites_bloginfo_avatar_type', 'thumb' );
 
-		// switch depending on type
-		switch( $type ) {
+		// sanity check
+		if ( isset( $existing[$blog_id][$type] ) ) {
 
-			// get thumbnail image
-			case 'thumb':
-				$image = $existing[$blog_id]['thumb'];
-				break;
+			// get image by type
+			$image = $existing[$blog_id][$type];
 
-			// get medium image
-			case 'medium':
-				$image = $existing[$blog_id]['medium'];
-				break;
+			// override
+			$avatar = '<img src="' . $image[0] . '" class="avatar avatar-' . $image[1] . ' groupsite-avatar photo" width="' . $image[1] . '" height="' . $image[2] . '" alt="Site image" title="Site image" />';
 
 		}
-
-		// override
-		$avatar = '<img src="' . $image[0] . '" class="avatar avatar-' . $image[1] . ' photo" width="' . $image[1] . '" height="' . $image[2] . '" alt="Site image" title="Site image" />';
 
 	}
 
