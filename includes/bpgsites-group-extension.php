@@ -480,7 +480,7 @@ function bpgsites_get_extension_display() {
 
 		<?php do_action( 'bp_before_directory_blogs_list' ); ?>
 
-		<ul id="blogs-list" class="item-list" role="main">
+		<ul id="blogs-list" class="item-list group-groupsites-list" role="main">
 
 		<?php while ( bp_blogs() ) : bp_the_blog(); ?>
 
@@ -590,7 +590,7 @@ function bpgsites_get_extension_edit_screen() {
 
 		<?php do_action( 'bp_before_directory_blogs_list' ); ?>
 
-		<ul id="blogs-list" class="item-list" role="main">
+		<ul id="blogs-list" class="item-list group-manage-groupsites-list" role="main">
 
 		<?php while ( bp_blogs() ) : bp_the_blog();
 
