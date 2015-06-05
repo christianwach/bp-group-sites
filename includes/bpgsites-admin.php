@@ -217,6 +217,16 @@ class BP_Group_Sites_Admin {
 
 
 
+		// init vars
+		$bpgsites_public = 0;
+		$bpgsites_overrides = 0;
+		$bpgsites_overrides_title = '';
+		$bpgsites_overrides_name = '';
+		$bpgsites_overrides_plural = '';
+		$bpgsites_overrides_button = '';
+
+
+
 		// okay, we're through - get variables
 		extract( $_POST );
 
@@ -583,7 +593,7 @@ class BP_Group_Sites_Admin {
 					<th scope="row">' . __( 'Debug', 'bpgsites' ) . '</th>
 					<td>
 						<input type="checkbox" class="settings-checkbox" name="bpgsites_debug" id="bpgsites_debug" value="1" />
-						<label class="civi_wp_member_sync_settings_label" for="bpgsites_debug">' . __( 'Check this to trigger do_debug() . ', 'bpgsites' ) . '</label>
+						<label class="bpgsites_settings_label" for="bpgsites_debug">' . __( 'Check this to trigger do_debug() . ', 'bpgsites' ) . '</label>
 					</td>
 				</tr>
 
