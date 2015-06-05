@@ -45,6 +45,9 @@ function bpgsites_has_blogs( $args = '' ) {
 
 	}
 
+	// if empty, create array guaranteed to produce no result
+	if ( empty( $groupsites ) ) $groupsites = array( PHP_INT_MAX );
+
 	// Check for and use search terms
 	$search_terms = ! empty( $_REQUEST['s'] )
 		? $_REQUEST['s']
