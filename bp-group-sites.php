@@ -73,6 +73,9 @@ class BP_Group_Sites {
 	 */
 	function __construct() {
 
+		// always init admin
+		$this->initialise_admin();
+
 		// use translation files
 		add_action( 'plugins_loaded', array( $this, 'enable_translation' ) );
 
@@ -152,6 +155,23 @@ class BP_Group_Sites {
 
 
 	/**
+	 * Initialise the admin object
+	 *
+	 * @return void
+	 */
+	public function initialise_admin() {
+
+		// load our admin class file
+		require( BPGSITES_PATH . 'includes/bpgsites-admin.php' );
+
+		// init object, sending reference to this class
+		$this->admin = new BP_Group_Sites_Admin( $this );
+
+	}
+
+
+
+	/**
 	 * Do stuff on plugin init
 	 *
 	 * @return void
@@ -163,12 +183,6 @@ class BP_Group_Sites {
 
 		// load our display functions file
 		require( BPGSITES_PATH . 'includes/bpgsites-display.php' );
-
-		// load our admin class file
-		require( BPGSITES_PATH . 'includes/bpgsites-admin.php' );
-
-		// init object, sending reference to this class
-		$this->admin = new BP_Group_Sites_Admin( $this );
 
 		// load our activity functions file
 		require( BPGSITES_PATH . 'includes/bpgsites-activity.php' );
