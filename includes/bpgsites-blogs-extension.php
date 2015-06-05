@@ -535,6 +535,14 @@ function bpgsites_root_slug() {
 
 
 
+/*
+================================================================================
+Functions which enable loop compatibility with CommentPress "Site Image"
+================================================================================
+*/
+
+
+
 /**
  * Capture "Site Image" uploads and store
  *
@@ -544,18 +552,116 @@ function bpgsites_root_slug() {
  */
 function bpgsites_commentpress_site_image( $old_value, $new_value ) {
 
-	// do we have a site image?
-	if ( isset( $new_value['cp_site_image'] ) AND ! empty( $new_value['cp_site_image'] ) ) {
+	// get current blog ID
+	$blog_id = get_current_blog_id();
 
-		// we should get the attachment ID
-		$attachment_full = wp_get_attachment_image( $new_value['cp_site_image'], 'full' );
+	// is this a group site?
+	if ( bpgsites_is_groupsite( $blog_id ) ) {
 
-		print_r( $attachment_full ); die();
+		// access object
+		global $bp_groupsites;
+
+		// create option if it doesn't exist
+		if ( ! $bp_groupsites->admin->option_exists( 'bpgsites_bloginfo' ) ) {
+			$bp_groupsites->admin->option_set( 'bpgsites_bloginfo', array() );
+			$bp_groupsites->admin->options_save();
+		}
+
+		// do we have a site image?
+		if ( isset( $new_value['cp_site_image'] ) AND ! empty( $new_value['cp_site_image'] ) ) {
+
+			// we should get the attachment ID
+			$attachment_id = $new_value['cp_site_image'];
+
+			// get the attachment data
+			$attachment_thumb = wp_get_attachment_image_src( $attachment_id, 'thumb' );
+			$attachment_medium = wp_get_attachment_image_src( $attachment_id, 'medium' );
+
+			// get existing option
+			$existing = $bp_groupsites->admin->option_get( 'bpgsites_bloginfo' );
+
+			// overwrite (or create if it doesn't already exist)
+			$existing[$blog_id] = array(
+				'blog_id' => $blog_id,
+				'attachment_id' => $attachment_id,
+				'thumb' => $attachment_thumb,
+				'medium' => $attachment_medium,
+			);
+
+		} else {
+
+			// get existing option
+			$existing = $bp_groupsites->admin->option_get( 'bpgsites_bloginfo' );
+
+			// remove entry
+			unset( $existing[$blog_id] );
+
+		}
+
+		// overwrite
+		$bp_groupsites->admin->option_set( 'bpgsites_bloginfo', $existing );
+
+		// save
+		$bp_groupsites->admin->options_save();
 
 	}
 
 }
-//add_action( 'update_option_commentpress_theme_settings', 'bpgsites_commentpress_site_image', 10, 2 );
+
+// add action for the above
+add_action( 'update_option_commentpress_theme_settings', 'bpgsites_commentpress_site_image', 10, 2 );
+
+
+
+/**
+ * Replace groupsite avatar with "Site Image"
+ *
+ * @param string $avatar  Formatted HTML <img> element, or raw avatar
+ *                        URL based on $html arg.
+ * @param int    $blog_id ID of the blog whose avatar is being displayed.
+ * @param array  $r       Array of arguments used when fetching avatar.
+ */
+function bpgsites_commentpress_site_image_avatar( $avatar, $blog_id, $r ) {
+
+	// access object
+	global $bp_groupsites;
+
+	// get existing option
+	$existing = $bp_groupsites->admin->option_get( 'bpgsites_bloginfo' );
+
+	// do we have an entry?
+	if ( array_key_exists( $blog_id, $existing ) ) {
+
+		// get type to use
+		$type = apply_filters( 'bpgsites_bloginfo_avatar_type', 'thumb' );
+
+		// switch depending on type
+		switch( $type ) {
+
+			// get thumbnail image
+			case 'thumb':
+				$image = $existing[$blog_id]['thumb'];
+				break;
+
+			// get medium image
+			case 'medium':
+				$image = $existing[$blog_id]['medium'];
+				break;
+
+		}
+
+		// override
+		$avatar = '<img src="' . $image[0] . '" class="avatar avatar-' . $image[1] . ' photo" width="' . $image[1] . '" height="' . $image[2] . '" alt="Site image" title="Site image" />';
+
+	}
+
+	// --<
+	return $avatar;
+
+}
+
+// add action for the above
+add_filter( 'bp_get_blog_avatar', 'bpgsites_commentpress_site_image_avatar', 100, 3 );
 
 
 
