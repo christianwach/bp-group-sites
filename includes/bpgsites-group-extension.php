@@ -154,6 +154,9 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 
 		//print_r( $parsed ); die();
 
+		// get name, but allow plugins to override
+		$name = apply_filters( 'bpgsites_extension_name', __( 'Group Site', 'bpgsites' ) );
+
 		// action to perform on the chosen blog
 		switch ( $parsed['action'] ) {
 
@@ -163,7 +166,7 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 				bpgsites_link_blog_and_group( $blog_id, $group_id );
 
 				// feedback
-				bp_core_add_message( __( 'Site successfully added to Group', 'bpgsites' ) );
+				bp_core_add_message( sprintf( __( '%s successfully added to Group', 'bpgsites' ), $name ) );
 
 				break;
 
@@ -173,7 +176,7 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 				bpgsites_unlink_blog_and_group( $blog_id, $group_id );
 
 				// feedback
-				bp_core_add_message( __( 'Site successfully removed from Group', 'bpgsites' ) );
+				bp_core_add_message( sprintf( __( '%s successfully removed from Group', 'bpgsites' ), $name ) );
 
 				break;
 
@@ -183,7 +186,7 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 				$this->_update_group_linkages( $blog_id, $group_id );
 
 				// feedback
-				bp_core_add_message( __( 'Site successfully removed from Group', 'bpgsites' ) );
+				bp_core_add_message( sprintf( __( '%s successfully updated', 'bpgsites' ), $name ) );
 
 				break;
 
