@@ -109,7 +109,7 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	 *
 	 * @return void
 	 */
-	function edit_screen() {
+	public function edit_screen() {
 
 		// kick out if not on our edit screen
 		if ( ! bp_is_group_admin_screen( $this->slug ) ) { return false; }
@@ -132,7 +132,7 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	 *
 	 * @return void
 	 */
-	function edit_screen_save() {
+	public function edit_screen_save() {
 
 		// parse input name for our values
 		$parsed = $this->_parse_input_name();
@@ -204,7 +204,7 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	 *
 	 * @return void
 	 */
-	function display() {
+	public function display() {
 
 		// hand off to function
 		echo bpgsites_get_extension_display();
@@ -226,7 +226,7 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	 * @param int $group_id the numeric ID of the group being edited
 	 * @return void
 	 */
-	function admin_screen( $group_id ) {
+	public function admin_screen( $group_id ) {
 
 		// hand off to function
 		echo bpgsites_get_extension_admin_screen();
@@ -241,7 +241,7 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	 * @param int $group_id the numeric ID of the group being edited
 	 * @return void
 	 */
-	function admin_screen_save( $group_id ) {
+	public function admin_screen_save( $group_id ) {
 
 		// Grab your data out of the $_POST global and save as necessary
 
@@ -303,7 +303,7 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	 * @param int $group_id the numeric ID of the group
 	 * @return void
 	 */
-	function _update_group_linkages( $blog_id, $group_id ) {
+	public function _update_group_linkages( $blog_id, $group_id ) {
 
 		// bail if the update button has not been pressed
 		if ( ! isset( $_POST['bpgsites_manage-' . $blog_id . '-update'] ) ) { return; }
@@ -358,7 +358,7 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	 * @param array $new_group_ids the numeric IDs of the groups to link
 	 * @return void
 	 */
-	function _update_reciprocal_linkages( $blog_id, $group_id, $existing_group_ids, $new_group_ids ) {
+	public function _update_reciprocal_linkages( $blog_id, $group_id, $existing_group_ids, $new_group_ids ) {
 
 		// bail if we didn't get any
 		//if ( count( $new_group_ids ) === 0 ) { return; }

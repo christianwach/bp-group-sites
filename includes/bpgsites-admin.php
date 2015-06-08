@@ -319,7 +319,7 @@ class BP_Group_Sites_Admin {
 	 *
 	 * @return bool Success or failure
 	 */
-	function options_save() {
+	public function options_save() {
 
 		// save array as site option
 		return bpgsites_site_option_set( 'bpgsites_options', $this->bpgsites_options );
@@ -628,7 +628,7 @@ class BP_Group_Sites_Admin {
 	 *
 	 * @return array The default values for this plugin
 	 */
-	function _get_defaults() {
+	public function _get_defaults() {
 
 		// init return
 		$defaults = array();

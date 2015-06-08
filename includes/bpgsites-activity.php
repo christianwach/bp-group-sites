@@ -146,7 +146,7 @@ class BpGroupSites_Activity {
 	 * @param array $args The arguments
 	 * @return str $comment_content The content of the comment
 	 */
-	function show_comment_group( $comment_content, $comment, $args ) {
+	public function show_comment_group( $comment_content, $comment, $args ) {
 
 		// init prefix
 		$prefix = '';
@@ -196,7 +196,7 @@ class BpGroupSites_Activity {
 	 *
 	 * @return void
 	 */
-	function add_meta_box() {
+	public function add_meta_box() {
 
 		// add meta box
 		add_meta_box(
@@ -216,7 +216,7 @@ class BpGroupSites_Activity {
 	 *
 	 * @return void
 	 */
-	function comment_meta_box() {
+	public function comment_meta_box() {
 
 		// access comment
 		global $comment;
@@ -287,7 +287,7 @@ class BpGroupSites_Activity {
 	 * @param int $comment_id The ID of the comment being saved
 	 * @return void
 	 */
-	function save_comment_metadata( $comment_id ) {
+	public function save_comment_metadata( $comment_id ) {
 
 		// if there's no nonce then there's no comment meta data
 		if ( isset( $_POST['bpgsites_comments_nonce'] ) ) { return; }
@@ -319,7 +319,7 @@ class BpGroupSites_Activity {
 	 * @param object $activity The BP activity object
 	 * @return object $activity The modified BP activity object
 	 */
-	function custom_comment_activity( $activity ) {
+	public function custom_comment_activity( $activity ) {
 
 		//print_r( array( 'a1' => $activity ) ); //die();
 
@@ -451,7 +451,7 @@ class BpGroupSites_Activity {
 	 *
 	 * @return void
 	 */
-	function comments_filter_option() {
+	public function comments_filter_option() {
 
 		// default name, but allow plugins to override
 		$comment_name = apply_filters(
@@ -483,7 +483,7 @@ class BpGroupSites_Activity {
 	 * @param int $post_id The current post
 	 * @return void
 	 */
-	function get_comments_number( $count, $post_id ) {
+	public function get_comments_number( $count, $post_id ) {
 
 		// get comments for this post again
 		$comments = get_comments( array(
@@ -511,7 +511,7 @@ class BpGroupSites_Activity {
 	 * @param object $comments The current query
 	 * @return void
 	 */
-	function filter_comments( $comments ) {
+	public function filter_comments( $comments ) {
 
 		// only on front-end
 		if ( is_admin() ) return $comments;
@@ -581,7 +581,7 @@ class BpGroupSites_Activity {
 	 * @param integer $comment_status The approval status of the comment
 	 * @return void
 	 */
-	function save_comment_group_id( $comment_id, $comment_status ) {
+	public function save_comment_group_id( $comment_id, $comment_status ) {
 
 		// we don't need to look at approval status
 		$group_id = $this->get_group_id_from_comment_form();
@@ -617,7 +617,7 @@ class BpGroupSites_Activity {
 	 * @param object $post The post
 	 * @return string $link The modified link
 	 */
-	function override_reply_to_link( $link, $args, $comment, $post ) {
+	public function override_reply_to_link( $link, $args, $comment, $post ) {
 
 		// if not logged in
 		if ( ! is_user_logged_in() ) {
@@ -698,7 +698,7 @@ class BpGroupSites_Activity {
 	 * @param bool $tinymce Whether TinyMCE is enabled or not
 	 * @return bool $tinymce Modified value for whether TinyMCE is enabled or not
 	 */
-	function disable_tinymce( $tinymce ) {
+	public function disable_tinymce( $tinymce ) {
 
 		// get current blog ID
 		$blog_id = get_current_blog_id();
@@ -735,7 +735,7 @@ class BpGroupSites_Activity {
 	 * @param bool $show Whether or not to show comment form
 	 * @return bool $show Show the comment form
 	 */
-	function show_comment_form( $show ) {
+	public function show_comment_form( $show ) {
 
 		// get current blog ID
 		$blog_id = get_current_blog_id();
@@ -760,7 +760,7 @@ class BpGroupSites_Activity {
 	 * @param string $paragraph_text Paragraph text
 	 * @return string $link_text Updated content of the reply to link
 	 */
-	function override_reply_to_text( $link_text, $paragraph_text ) {
+	public function override_reply_to_text( $link_text, $paragraph_text ) {
 
 		// if not logged in...
 		if ( ! is_user_logged_in() ) {
@@ -797,7 +797,7 @@ class BpGroupSites_Activity {
 	 * @param string $text_sig The text signature of the paragraph
 	 * @return string $href Overridden target URL
 	 */
-	function override_reply_to_href( $href, $text_sig ) {
+	public function override_reply_to_href( $href, $text_sig ) {
 
 		// if not logged in...
 		if ( ! is_user_logged_in() ) {
@@ -830,7 +830,7 @@ class BpGroupSites_Activity {
 	 * @param string $onclick The reply-to onclick attribute
 	 * @return string $onclick The modified reply-to onclick attribute
 	 */
-	function override_reply_to_onclick( $onclick ) {
+	public function override_reply_to_onclick( $onclick ) {
 
 		// --<
 		return '';
@@ -845,7 +845,7 @@ class BpGroupSites_Activity {
 	 * @param bool $allowed Whether commenting is is allowed or not
 	 * @return bool $allowed Modified value for whether commenting is is allowed or not
 	 */
-	function allow_anon_commenting( $allowed ) {
+	public function allow_anon_commenting( $allowed ) {
 
 		// get current blog ID
 		$blog_id = get_current_blog_id();
@@ -867,7 +867,7 @@ class BpGroupSites_Activity {
 	 * @param array $commentdata The comment data
 	 * @return int $approved The modified comment status
 	 */
-	function check_comment_approval( $approved, $commentdata ) {
+	public function check_comment_approval( $approved, $commentdata ) {
 
 		// get current blog ID
 		$blog_id = get_current_blog_id();
@@ -907,7 +907,7 @@ class BpGroupSites_Activity {
 	 * @param int $comment_id The comment ID
 	 * @return int $group_id The group ID (empty string if none found)
 	 */
-	function get_comment_group_id( $comment_id ) {
+	public function get_comment_group_id( $comment_id ) {
 
 		// get group ID from comment meta
 		$group_id = get_comment_meta(
@@ -928,7 +928,7 @@ class BpGroupSites_Activity {
 	 *
 	 * @return void
 	 */
-	function get_group_navigation_links() {
+	public function get_group_navigation_links() {
 
 		// is a CommentPress theme active?
 		if ( function_exists( 'commentpress_setup' ) ) {
@@ -1182,7 +1182,7 @@ class BpGroupSites_Activity {
 	 *
 	 * @return void
 	 */
-	function get_group_comments_filter() {
+	public function get_group_comments_filter() {
 
 		// init HTML output
 		$html = '';
@@ -1414,7 +1414,7 @@ class BpGroupSites_Activity {
 	 * @param int $reply_to_id The comment ID to which this comment is a reply
 	 * @return string $result The modified markup sent to the browser
 	 */
-	function get_comment_group_selector( $result, $comment_id, $reply_to_id ) {
+	public function get_comment_group_selector( $result, $comment_id, $reply_to_id ) {
 
 		// pass to general method without 4th param
 		return $this->get_comment_group_select( $result, $comment_id, $reply_to_id );
@@ -1432,7 +1432,7 @@ class BpGroupSites_Activity {
 	 * @param bool $edit Triggers edit mode to return an option selected
 	 * @return string $result The modified markup sent to the browser
 	 */
-	function get_comment_group_select( $result, $comment_id, $reply_to_id, $edit = false ) {
+	public function get_comment_group_select( $result, $comment_id, $reply_to_id, $edit = false ) {
 
 		// if the comment is a reply to another...
 		if ( $reply_to_id !== 0 ) {
@@ -1666,7 +1666,7 @@ class BpGroupSites_Activity {
 	 *
 	 * @return int $group_id the group ID of the input in the comment form
 	 */
-	function get_group_id_from_comment_form() {
+	public function get_group_id_from_comment_form() {
 
 		// init as false
 		$group_id = false;
@@ -1692,7 +1692,7 @@ class BpGroupSites_Activity {
 	 * @param array $group_ids The group IDs
 	 * @return array $group_ids The filtered group IDs
 	 */
-	function filter_groups_by_checkboxes( $group_ids ) {
+	public function filter_groups_by_checkboxes( $group_ids ) {
 
 		// is this a comment in a group?
 		if ( isset( $_POST['bpgsites_comment_groups'] ) AND is_array( $_POST['bpgsites_comment_groups'] ) ) {
@@ -1739,7 +1739,7 @@ class BpGroupSites_Activity {
 	 * @param array $post_id The numerical ID of the post
 	 * @return array $filtered the filtered group IDs
 	 */
-	function add_group_to_comment_class( $classes, $class, $comment_id, $post_id ) {
+	public function add_group_to_comment_class( $classes, $class, $comment_id, $post_id ) {
 
 		// add utility class to all comments
 		$classes[] = 'bpgsites-shown';
@@ -1777,7 +1777,7 @@ class BpGroupSites_Activity {
 	 *
 	 * @return array $user_group_ids Associative array of group IDs to which the user has access
 	 */
-	function get_groups_for_user() {
+	public function get_groups_for_user() {
 
 		// have we already calculated this?
 		if ( isset( $this->user_group_ids ) ) return $this->user_group_ids;
@@ -1923,7 +1923,7 @@ class BpGroupSites_Activity {
 	 *
 	 * @return boolean $this->user_in_group Whether the user is a member or not
 	 */
-	function is_user_in_group_reading_this_site() {
+	public function is_user_in_group_reading_this_site() {
 
 		// have we already calculated this?
 		if ( isset( $this->user_in_group ) ) return $this->user_in_group;
@@ -1968,7 +1968,7 @@ class BpGroupSites_Activity {
 	 *
 	 * @return void
 	 */
-	function get_activity_sidebar_section() {
+	public function get_activity_sidebar_section() {
 
 		// All Activity
 
@@ -2078,7 +2078,7 @@ class BpGroupSites_Activity {
 	 *
 	 * @return void
 	 */
-	function get_activity_item() {
+	public function get_activity_item() {
 
 		$same_post = '';
 
@@ -2126,7 +2126,7 @@ class BpGroupSites_Activity {
 	 *
 	 * @return str $title The overridden value of the Recent Posts section
 	 */
-	function get_activity_sidebar_recent_title() {
+	public function get_activity_sidebar_recent_title() {
 
 		// set title, but allow plugins to override
 		$title = sprintf(
@@ -2154,7 +2154,7 @@ class BpGroupSites_Activity {
 	 * @param object $activity The existing activity
 	 * @return object $activity The modified activity
 	 */
-	function custom_post_activity( $activity ) {
+	public function custom_post_activity( $activity ) {
 
 		//print_r( array( 'activity BEFORE' => $activity ) ); //die();
 
@@ -2355,7 +2355,7 @@ class BpGroupSites_Activity {
 	 *
 	 * @return void
 	 */
-	function posts_filter_option() {
+	public function posts_filter_option() {
 
 		// default name
 		$post_name = __( 'Group Site Posts', 'bpgsites' );
