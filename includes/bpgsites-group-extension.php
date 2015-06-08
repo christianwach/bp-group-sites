@@ -326,8 +326,11 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 
 		}
 
+		// get blog data, which could be empty
+		$blog_data = isset( $linked[$blog_id] ) ? $linked[$blog_id] : array();
+
 		// set reciprocal linkages
-		$this->_update_reciprocal_linkages( $blog_id, $group_id, $linked[$blog_id], $group_ids );
+		$this->_update_reciprocal_linkages( $blog_id, $group_id, $blog_data, $group_ids );
 
 		// if we have some group IDs to link
 		if ( count( $group_ids ) > 0 ) {
