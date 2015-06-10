@@ -1881,7 +1881,7 @@ class BpGroupSites_Activity {
 					// reading the site with this group?
 
 					// get linked groups
-					$linked_groups = bpgsites_get_linked_groups_by_blog_id( $group_id, $current_blog_id );
+					$linked_groups = bpgsites_group_linkages_get_groups_by_blog_id( $group_id, $current_blog_id );
 
 					// loop through them
 					foreach( $linked_groups AS $linked_group_id ) {

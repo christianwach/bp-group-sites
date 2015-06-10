@@ -61,7 +61,7 @@ class BP_Group_Sites_Component extends BP_Component {
 	 *
 	 * @return void
 	 */
-	public function includes() {
+	public function includes( $includes = array() ) {
 
 		// include screens file
 		include( BPGSITES_PATH . 'includes/bp-bpgsites-screens.php' );

@@ -36,6 +36,9 @@ define( 'BPGSITES_PREFIX', 'bpgsites_blog_groups_' );
 // set linked groups option name
 define( 'BPGSITES_LINKED', 'bpgsites_linked_groups' );
 
+// set linked groups (pending sent) option name
+define( 'BPGSITES_PENDING', 'bpgsites_pending_groups' );
+
 // set group blogs option name
 define( 'BPGSITES_OPTION', 'bpgsites_group_blogs' );
 
@@ -338,21 +341,33 @@ class BP_Group_Sites {
 
 
 	/**
-	 * Add our stylesheets
+	 * Add our front-end stylesheets
 	 *
 	 * @return void
 	 */
 	public function enqueue_styles() {
 
+		// if on group admin screen
+		if ( bp_is_group_admin_screen( apply_filters( 'bpgsites_extension_slug', 'group-sites' ) ) ) {
+
+			// register Select2 styles
+			wp_register_style(
+				'bpgsites_select2_css',
+				set_url_scheme( 'http://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css' )
+			);
+
+			// enqueue styles
+			wp_enqueue_style( 'bpgsites_select2_css' );
+
+		}
+
 		// add basic stylesheet
 		wp_enqueue_style(
-
 			'bpgsites_css',
 			BPGSITES_URL . 'assets/css/bpgsites.css',
 			false,
 			BPGSITES_VERSION, // version
 			'all' // media
-
 		);
 
 	}
@@ -360,7 +375,7 @@ class BP_Group_Sites {
 
 
 	/**
-	 * Add our non-specific Javascripts
+	 * Add our front-end Javascripts
 	 *
 	 * @return void
 	 */
@@ -369,15 +384,43 @@ class BP_Group_Sites {
 		// only on root blog
 		if ( is_multisite() AND bp_is_root_blog() ) {
 
-			// enqueue common js
-			wp_enqueue_script(
+			// if on group admin screen
+			if ( bp_is_group_admin_screen( apply_filters( 'bpgsites_extension_slug', 'group-sites' ) ) ) {
 
-				'bpgsites_js',
-				BPGSITES_URL . 'assets/js/bpgsites.js',
-				array( 'jquery' ),
-				BPGSITES_VERSION
+				// register Select2
+				wp_register_script(
+					'bpgsites_select2_js',
+					set_url_scheme( 'http://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js' ),
+					array( 'jquery' )
+				);
 
-			);
+				// enqueue script
+				wp_enqueue_script( 'bpgsites_select2_js' );
+
+				// enqueue group admin js
+				wp_enqueue_script(
+					'bpgsites_select2_custom_js',
+					BPGSITES_URL . 'assets/js/bpgsites-group-admin.js',
+					array( 'bpgsites_select2_js' ),
+					BPGSITES_VERSION
+				);
+
+				// localisation array
+				$vars = array(
+					'localisation' => array(),
+					'data' => array(
+						'group_id' => bp_get_current_group_id(),
+					),
+				);
+
+				// localise with wp function
+				wp_localize_script(
+					'bpgsites_select2_custom_js',
+					'BuddypressGroupSitesSettings',
+					$vars
+				);
+
+			}
 
 		}
 
@@ -397,12 +440,10 @@ class BP_Group_Sites {
 
 			// enqueue common js
 			wp_enqueue_script(
-
 				'bpgsites_cp_js',
 				BPGSITES_URL . 'assets/js/bpgsites-commentpress.js',
 				array( 'cp_common_js' ),
 				BPGSITES_VERSION
-
 			);
 
 			// get vars

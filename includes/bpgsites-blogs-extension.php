@@ -634,7 +634,7 @@ function bpgsites_commentpress_site_image_avatar( $avatar, $blog_id, $r ) {
 	$existing = $bp_groupsites->admin->option_get( 'bpgsites_bloginfo' );
 
 	// do we have an entry?
-	if ( array_key_exists( $blog_id, $existing ) ) {
+	if ( is_array( $existing ) AND array_key_exists( $blog_id, $existing ) ) {
 
 		// get type to use
 		$type = apply_filters( 'bpgsites_bloginfo_avatar_type', 'thumb' );

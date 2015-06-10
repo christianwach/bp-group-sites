@@ -109,7 +109,7 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	 *
 	 * @return void
 	 */
-	public function edit_screen() {
+	public function edit_screen( $group_id = null ) {
 
 		// kick out if not on our edit screen
 		if ( ! bp_is_group_admin_screen( $this->slug ) ) { return false; }
@@ -117,8 +117,11 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 		// show name
 		echo '<h2>' . esc_html( $this->name ) . '</h2>';
 
+		// show pending received
+		bpgsites_group_linkages_pending_get_markup();
+
 		// hand off to function
-		echo bpgsites_get_extension_edit_screen();
+		bpgsites_get_extension_edit_screen();
 
 		// add nonce
 		wp_nonce_field( 'groups_edit_save_' . $this->slug );
@@ -132,7 +135,16 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	 *
 	 * @return void
 	 */
-	public function edit_screen_save() {
+	public function edit_screen_save( $group_id = null ) {
+
+		// validate form
+		check_admin_referer( 'groups_edit_save_' . $this->slug );
+
+		// kick out if current group ID is missing
+		if ( ! isset( $_POST['group-id'] ) ) { return false; }
+
+		// get current group ID
+		$primary_group_id = (int) $_POST['group-id'];
 
 		// parse input name for our values
 		$parsed = $this->_parse_input_name();
@@ -140,19 +152,25 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 		// get blog ID
 		$blog_id = $parsed['blog_id'];
 
-		// kick out if blog ID is somehow invalid
-		if ( ! $blog_id ) { return false; }
+		// if blog ID is invalid, it could be multi-value
+		if ( ! is_numeric( $blog_id ) ) {
 
-		// validate form
-		check_admin_referer( 'groups_edit_save_' . $this->slug );
+			// first, re-parse
+			$parsed = $this->_parse_input_name_multivalue();
 
-		// kick out if group ID is missing
-		if ( ! isset( $_POST['group-id'] ) ) { return false; }
+			// get blog ID
+			$blog_id = $parsed['blog_id'];
 
-		// set group ID
-		$group_id = (int) $_POST['group-id'];
+			// kick out if blog ID is still invalid
+			if ( ! is_numeric( $blog_id ) ) { return false; }
 
-		//print_r( $parsed ); die();
+			// get ID of the secondary group
+			$secondary_group_id = $parsed['group_id'];
+
+			// kick out if secondary group ID is somehow invalid
+			if ( ! is_numeric( $secondary_group_id ) ) { return false; }
+
+		}
 
 		// get name, but allow plugins to override
 		$name = apply_filters( 'bpgsites_extension_name', __( 'Group Site', 'bpgsites' ) );
@@ -160,33 +178,126 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 		// action to perform on the chosen blog
 		switch ( $parsed['action'] ) {
 
+			// top-level "Add" button
 			case 'add':
 
 				// link
-				bpgsites_link_blog_and_group( $blog_id, $group_id );
+				bpgsites_link_blog_and_group( $blog_id, $primary_group_id );
 
 				// feedback
 				bp_core_add_message( sprintf( __( '%s successfully added to Group', 'bpgsites' ), $name ) );
 
 				break;
 
+			// top-level "Remove" button
 			case 'remove':
 
 				// unlink
-				bpgsites_unlink_blog_and_group( $blog_id, $group_id );
+				bpgsites_unlink_blog_and_group( $blog_id, $primary_group_id );
 
 				// feedback
 				bp_core_add_message( sprintf( __( '%s successfully removed from Group', 'bpgsites' ), $name ) );
 
 				break;
 
-			case 'update':
+			// read with "Invite" button
+			case 'invite':
 
-				// manage group linkages
-				$this->_update_group_linkages( $blog_id, $group_id );
+				// get invited group ID from POST
+				$invited_group_id = isset( $_POST['bpgsites_group_linkages_invite_select_' . $blog_id] ) ?
+									$_POST['bpgsites_group_linkages_invite_select_' . $blog_id] :
+									0;
+
+				// if we get a valid one
+				if ( $invited_group_id !== 0 ) {
+
+					// debug method
+					error_log( print_r( array(
+						'class' => __CLASS__,
+						'method' => __METHOD__,
+						//'_POST' => $_POST,
+						//'parsed' => $parsed,
+						'blog_id' => $blog_id,
+						'inviting_group_id' => $primary_group_id,
+						'invited_group_id' => $invited_group_id,
+					), true ) );
+
+					// flag groups as linked, but pending
+					bpgsites_group_linkages_pending_create( $blog_id, $primary_group_id, $invited_group_id );
+
+					// send private message to group admins
+					$this->_send_invitation_message( $blog_id, $primary_group_id, $invited_group_id );
+
+					// feedback
+					bp_core_add_message( sprintf( __( 'Group successfully invited', 'bpgsites' ), $name ) );
+
+				} else {
+
+					// feedback
+					bp_core_add_message( sprintf( __( 'Something went wrong - group invitation not sent.', 'bpgsites' ), $name ) );
+
+				}
+
+				break;
+
+			// invitation "Accept" button
+			case 'accept':
+
+				// debug method
+				error_log( print_r( array(
+					'class' => __CLASS__,
+					'method' => __METHOD__,
+					'parsed' => $parsed,
+					'blog_id' => $blog_id,
+					'primary_group_id' => $primary_group_id,
+					'secondary_group_id' => $secondary_group_id,
+				), true ) );
+
+				// create linkages
+				bpgsites_group_linkages_pending_accept( $blog_id, $primary_group_id, $secondary_group_id );
 
 				// feedback
-				bp_core_add_message( sprintf( __( '%s successfully updated', 'bpgsites' ), $name ) );
+				bp_core_add_message( sprintf( __( 'The invitation has been accepted', 'bpgsites' ), $name ) );
+
+				break;
+
+			// invitation "Reject" button
+			case 'reject':
+
+				// debug method
+				error_log( print_r( array(
+					'class' => __CLASS__,
+					'method' => __METHOD__,
+					'parsed' => $parsed,
+					'blog_id' => $blog_id,
+					'primary_group_id' => $primary_group_id,
+					'secondary_group_id' => $secondary_group_id,
+					'primary_group pending' => groups_get_groupmeta( $primary_group_id, BPGSITES_PENDING ),
+					'secondary_group pending' => groups_get_groupmeta( $secondary_group_id, BPGSITES_PENDING ),
+				), true ) );
+
+				// reject
+				bpgsites_group_linkages_pending_delete( $blog_id, $primary_group_id, $secondary_group_id );
+
+				// feedback
+				bp_core_add_message( sprintf( __( 'The invitation has been declined', 'bpgsites' ), $name ) );
+
+				break;
+
+			// reading with "Stop" button
+			case 'unlink':
+
+				// unlink
+				bpgsites_group_linkages_delete( $blog_id, $primary_group_id, $secondary_group_id );
+
+				// get blog name
+				$blog_name = bp_blogs_get_blogmeta( $blog_id, 'name' );
+
+				// get group object
+				$group = groups_get_group( array( 'group_id' => $secondary_group_id ) );
+
+				// feedback
+				bp_core_add_message( sprintf( __( 'Your group is no longer reading "%1$s" with %2$s', 'bpgsites' ), $blog_name, $group->name ) );
 
 				break;
 
@@ -207,7 +318,7 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	 *
 	 * @return void
 	 */
-	public function display() {
+	public function display( $group_id = null ) {
 
 		// hand off to function
 		echo bpgsites_get_extension_display();
@@ -229,7 +340,7 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	 * @param int $group_id the numeric ID of the group being edited
 	 * @return void
 	 */
-	public function admin_screen( $group_id ) {
+	public function admin_screen( $group_id = null ) {
 
 		// hand off to function
 		echo bpgsites_get_extension_admin_screen();
@@ -244,7 +355,7 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	 * @param int $group_id the numeric ID of the group being edited
 	 * @return void
 	 */
-	public function admin_screen_save( $group_id ) {
+	public function admin_screen_save( $group_id = null ) {
 
 		// Grab your data out of the $_POST global and save as necessary
 
@@ -253,7 +364,7 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 
 
 	/**
-	 * Parse the name of the input to extract blog Id and action
+	 * Parse the name of an input to extract blog ID and action
 	 *
 	 * @return array Contains $blog_id and $action
 	 */
@@ -300,142 +411,146 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 
 
 	/**
-	 * Manages the linkages between "groups reading together"
+	 * Parse the name of an input to extract blog ID, group ID and action
 	 *
-	 * @param int $blog_id the numeric ID of the blog
-	 * @param int $group_id the numeric ID of the group
-	 * @return void
+	 * @return array Contains $blog_id and $action
 	 */
-	public function _update_group_linkages( $blog_id, $group_id ) {
+	protected function _parse_input_name_multivalue() {
 
-		// bail if the update button has not been pressed
-		if ( ! isset( $_POST['bpgsites_manage-' . $blog_id . '-update'] ) ) { return; }
-		if ( $_POST['bpgsites_manage-' . $blog_id . '-update'] == '' ) { return; }
+		// init return
+		$return = array(
+			'blog_id' => false,
+			'group_id' => false,
+			'action' => false
+		);
 
-		// get existing array
-		$linked = bpgsites_get_group_linkages( $group_id );
+		// get keys of POST array
+		$keys = array_keys( $_POST );
 
-		// init new groups array
-		$group_ids = array();
+		// did we get any?
+		if ( is_array( $keys ) AND count( $keys ) > 0 ) {
 
-		// do we have a post array for our checkboxes?
-		if ( isset( $_POST['bpgsites_linked_groups_' . $blog_id] ) ) {
+			// loop
+			foreach( $keys AS $key ) {
 
-			// YES - get values from post array
-			$group_ids = $_POST['bpgsites_linked_groups_' . $blog_id];
+				// look for our identifier
+				if ( strstr( $key, 'bpgsites_manage' ) ) {
 
-			// sanitise all the items
-			array_walk( $group_ids, create_function( '&$val', '$val = absint( $val );' ) );
+					// got it
+					$tmp = explode( '-', $key );
+
+					// get numeric part
+					$numeric = isset( $tmp[1] ) ? $tmp[1] : false;
+
+					// split on the _
+					$parts = explode( '_', $numeric );
+
+					// extract blog id
+					$return['blog_id'] = ( isset( $parts[0] ) AND is_numeric( $parts[0] ) ) ? (int) $parts[0] : false;
+
+					// extract group id
+					$return['group_id'] = ( isset( $parts[1] ) AND is_numeric( $parts[1] ) ) ? (int) $parts[1] : false;
+
+					// extract action
+					$return['action'] = isset( $tmp[2] ) ? $tmp[2] : false;
+
+				}
+
+			}
 
 		}
 
-		// get blog data, which could be empty
-		$blog_data = isset( $linked[$blog_id] ) ? $linked[$blog_id] : array();
-
-		// set reciprocal linkages
-		$this->_update_reciprocal_linkages( $blog_id, $group_id, $blog_data, $group_ids );
-
-		// if we have some group IDs to link
-		if ( count( $group_ids ) > 0 ) {
-
-			// overwrite the nested array for this blog ID
-			$linked[$blog_id] = $group_ids;
-
-		} else {
-
-			// empty the nested array for this blog ID
-			unset( $linked[$blog_id] );
-
-		}
-
-		// save updated option for this group
-		groups_update_groupmeta( $group_id, BPGSITES_LINKED, $linked );
+		// --<
+		return $return;
 
 	}
 
 
 
 	/**
-	 * Manages the linkages between "groups reading together"
+	 * Sends a private message to admins of the invited group
 	 *
-	 * @param int $blog_id the numeric ID of the blog
-	 * @param int $group_id the numeric ID of the group
-	 * @param array $existing_group_ids the numeric IDs of the groups that are already linked
-	 * @param array $new_group_ids the numeric IDs of the groups to link
+	 * @param int $blog_id The numeric ID of the blog to be "read together"
+	 * @param int $inviting_group_id The numeric ID of the inviting group
+	 * @param int $invited_group_id The numeric ID of the invited group
 	 * @return void
 	 */
-	public function _update_reciprocal_linkages( $blog_id, $group_id, $existing_group_ids, $new_group_ids ) {
+	public function _send_invitation_message( $blog_id, $inviting_group_id, $invited_group_id ) {
 
-		// bail if we didn't get any
-		//if ( count( $new_group_ids ) === 0 ) { return; }
+		// get sender ID
+		$sender_id = bp_loggedin_user_id();
 
-		// parse incoming arrays
-		$to_keep = array_intersect( $existing_group_ids, $new_group_ids );
-		$to_add = array_diff( $new_group_ids, $existing_group_ids );
-		$to_delete = array_diff( $existing_group_ids, $new_group_ids );
+		// get admins of target group
+		$group_admins = groups_get_group_admins( $invited_group_id );
 
-		// first add/keep
-		$keep_and_add = array_merge( $to_keep, $to_add );
-
-		// sanity check
-		if ( count( $keep_and_add ) > 0 ) {
-
-			// loop through them
-			foreach( $keep_and_add AS $linked_group_id ) {
-
-				// get their linkages
-				$linked = bpgsites_get_group_linkages( $linked_group_id );
-
-				// get the array for this blog ID
-				$remote_group_ids = isset( $linked[$blog_id] ) ? $linked[$blog_id] : array();
-
-				// is this one in the remote list?
-				if ( ! in_array( $group_id, $remote_group_ids ) ) {
-
-					// no, add it
-					$remote_group_ids[] = $group_id;
-
-					// overwrite in parent array
-					$linked[$blog_id] = $remote_group_ids;
-
-					// save updated option
-					groups_update_groupmeta( $linked_group_id, BPGSITES_LINKED, $linked );
-
-				}
-
+		// get group admin IDs
+		$group_admin_ids = array();
+		if ( ! empty( $group_admins ) ) {
+			foreach( $group_admins AS $group_admin ) {
+				$group_admin_ids[] = $group_admin->user_id;
 			}
-
 		}
 
-		// sanity check
-		if ( count( $to_delete ) > 0 ) {
+		// get inviting group object
+		$inviting_group = groups_get_group( array( 'group_id' => $inviting_group_id ) );
 
-			// loop through them
-			foreach( $to_delete AS $linked_group_id ) {
+		// get invited group object
+		$invited_group = groups_get_group( array( 'group_id' => $invited_group_id ) );
 
-				// get their linkages
-				$linked = bpgsites_get_group_linkages( $linked_group_id );
+		// get blog name
+		$blog_name = bp_blogs_get_blogmeta( $blog_id, 'name' );
 
-				// get the array for this blog ID
-				$remote_group_ids = isset( $linked[$blog_id] ) ? $linked[$blog_id] : array();
+		// get invited group permalink
+		$group_permalink = trailingslashit( bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $invited_group->slug );
 
-				// is this one in the remote list?
-				if ( in_array( $group_id, $remote_group_ids ) ) {
+		// construct links to Group Sites admin page
+		$admin_link = trailingslashit( $group_permalink . 'admin/' . $this->slug );
 
-					// yes - remove group and re-index
-					$updated = array_merge( array_diff( $remote_group_ids, array( $group_id ) ) );
+		// construct message body
+		$body = 'You are receiving this message because you are an administrator of the group "%1$s"' . "\n\n";
+		$body .= 'Your group has been invited to read the %2$s "%3$s" with the group "%4$s". ';
+		$body .= 'To accept or decline the invitation, click the link below to visit the %5$s admin page for your group.' . "\n\n";
+		$body .= '%6$s' . "\n\n";
 
-					// overwrite in parent array
-					$linked[$blog_id] = $updated;
+		// substitutions
+		$content = sprintf(
+			$body,
+			$invited_group->name,
+			apply_filters( 'bpgsites_extension_name', __( 'Group Site', 'bpgsites' ) ),
+			$blog_name,
+			$inviting_group->name,
+			apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bpgsites' ) ),
+			$admin_link
+		);
 
-					// save updated option
-					groups_update_groupmeta( $linked_group_id, BPGSITES_LINKED, $linked );
+		// construct subject
+		$subject =  sprintf(
+			__( 'An invitation to read "%1$s" with the group "%2$s"', 'bpgsites' ),
+			 $blog_name,
+			 $inviting_group->name
+		);
 
-				}
+		// set up message
+		$msg_args = array(
+			'sender_id'  => $sender_id,
+			'thread_id'  => false,
+			'recipients' => $group_admin_ids, // can be an array of usernames, user_ids or mixed.
+			'subject'    => $subject,
+			'content'    => $content,
+		);
 
-			}
+		// debug method
+		error_log( print_r( array(
+			'class' => __CLASS__,
+			'method' => __METHOD__,
+			'blog_id' => $blog_id,
+			'inviting_group_id' => $inviting_group_id,
+			'invited_group_id' => $invited_group_id,
+			'msg_args' => $msg_args,
+		), true ) );
 
-		}
+		// send message
+		messages_new_message( $msg_args );
 
 	}
 
@@ -568,10 +683,6 @@ function bpgsites_get_extension_display() {
  */
 function bpgsites_get_extension_edit_screen() {
 
-	?><p><?php _e( 'In order to "Read With" other groups, <em>all admins of this group</em> should be members of those groups.', 'bpgsites' ); ?></p>
-
-	<?php
-
 	do_action( 'bp_before_blogs_loop' );
 
 	// configure to get all possible group sites
@@ -616,14 +727,11 @@ function bpgsites_get_extension_edit_screen() {
 					<?php do_action( 'bp_directory_blogs_item' ); ?>
 					<?php
 
-					// init linkage
-					$has_linkage = false;
-
 					// if blog already in group
 					if ( $in_group ) {
 
-						// see if we have other groups (and echo while we're at it)
-						$has_linkage = bpgsites_get_group_linkage();
+						// show linkage management tools
+						bpgsites_group_linkages_get_markup();
 
 					}
 
@@ -631,9 +739,6 @@ function bpgsites_get_extension_edit_screen() {
 				</div>
 
 				<div class="action">
-					<?php if ( $in_group AND $has_linkage ) { ?>
-						<input type="submit" class="bpgsites_manage_button" name="bpgsites_manage-<?php bp_blog_id() ?>-update" value="<?php _e( 'Update', 'bpgsites' ); ?>" />
-					<? } ?>
 					<input type="submit" class="bpgsites_manage_button" name="bpgsites_manage-<?php bp_blog_id() ?>-<?php bpgsites_admin_button_action() ?>" value="<?php bpgsites_admin_button_value(); ?>" />
 				</div>
 
@@ -691,19 +796,475 @@ function bpgsites_get_extension_edit_screen() {
  */
 function bpgsites_get_extension_admin_screen() {
 
-	echo '<p>BP Group Sites Admin Screen</p>';
+	echo '<p>' . __( 'BP Group Sites Admin Screen', 'bpgsites' ) . '</p>';
 
 }
 
 
 
 /**
- * Adds checkboxes to groups loop for "reading with" other groups
+ * Get group ID on admin and creation screens
+ *
+ * @return int $group_id the current group ID
+ */
+function bpgsites_get_current_group_id() {
+
+	// access BP global
+	global $bp;
+
+	// init return
+	$group_id = null;
+
+	// test for new group ID
+	if ( isset( $bp->groups->new_group_id ) ) {
+		$group_id = $bp->groups->new_group_id;
+
+	// test for current group ID
+	} elseif ( isset( $bp->groups->current_group->id ) ) {
+		$group_id = $bp->groups->current_group->id;
+	}
+
+	// --<
+	return $group_id;
+
+}
+
+
+
+/**
+ * Adds "accept" and "reject" invitations for "reading with" other groups
+ *
+ * @param bool $echo Whether to echo or not
+ * @return void
+ */
+function bpgsites_group_linkages_pending_get_markup( $echo = true ) {
+
+	// get current group ID
+	$current_group_id = bp_get_current_group_id();
+
+	// bail if we have no pending invitations
+	if ( ! bpgsites_group_linkages_pending_received_exists( $current_group_id ) ) return;
+
+	// init HTML output
+	$html = '';
+
+	// open container div
+	$html .= '<div class="bpgsites_group_linkages_pending">' . "\n";
+
+	// construct heading
+	$html .= '<h5 class="bpgsites_group_linkages_pending_heading">' . __( 'Invitations to read with other groups', 'bpgsites' ) . '</h5>' . "\n";
+
+	// open reveal div
+	$html .= '<div class="bpgsites_group_linkages_pending_reveal">' . "\n";
+
+	// get pending invites
+	$pending = bpgsites_group_linkages_pending_received_get( $current_group_id );
+
+	// open list
+	$html .= '<ol class="bpgsites_group_linkages_pending_list">' . "\n";
+
+	// loop through blog IDs
+	foreach( $pending AS $blog_id => $inviting_group_ids ) {
+
+		// show invitations from each group
+		foreach( $inviting_group_ids AS $inviting_group_id ) {
+
+			// get blog name
+			$blog_name = bp_blogs_get_blogmeta( $blog_id, 'name' );
+
+			// get inviting group object
+			$inviting_group = groups_get_group( array( 'group_id' => $inviting_group_id ) );
+
+			// construct text
+			$text = sprintf(
+				__( 'Read "%1$s" with "%2$s"' ),
+				$blog_name,
+				esc_html( $inviting_group->name )
+			);
+
+			// add label
+			$html .= '<li>' .
+					 '<span class="bpgsites_invite_received">' . $text . '</span> ' .
+					 '<input type="submit" class="bpgsites_invite_received_button" name="bpgsites_manage-' . $blog_id . '_' . $inviting_group_id . '-accept" value="' . __( 'Accept', 'bpgsites' ) . '" /> ' .
+					 '<input type="submit" class="bpgsites_invite_received_button" name="bpgsites_manage-' . $blog_id . '_' . $inviting_group_id . '-reject" value="' . __( 'Decline', 'bpgsites' ) . '" /></li>' . "\n";
+
+		}
+
+	}
+
+	// close list
+	$html .= '</ol>' . "\n\n";
+
+	// close reveal div
+	$html .= '</div>' . "\n";
+
+	// close container div
+	$html .= '</div>' . "\n\n\n\n";
+
+	// output unless overridden
+	if ( $echo ) echo $html;
+
+}
+
+
+/**
+ * For a given group ID, get all invitation data.
+ *
+ * @param int $group_id The numeric ID of the group
+ * @return array $pending_groups Array containing "sent" and "received" arrays of numeric IDs of pending groups
+ */
+function bpgsites_group_linkages_pending_get( $group_id ) {
+
+	// get option if it exists
+	$pending_groups = groups_get_groupmeta( $group_id, BPGSITES_PENDING );
+
+	// sanity check master array
+	if ( ! is_array( $pending_groups ) OR empty( $pending_groups ) ) {
+		$pending_groups = array( 'sent' => array(), 'received' => array() );
+	}
+
+	// sanity check sub-arrays
+	if ( ! isset( $pending_groups['sent'] ) ) $pending_groups['sent'] = array();
+	if ( ! isset( $pending_groups['received'] ) ) $pending_groups['received'] = array();
+
+	// --<
+	return $pending_groups;
+
+}
+
+
+
+/**
+ * For a given group ID and blog ID, get the group IDs that have been invited.
+ *
+ * @param int $group_id The numeric ID of the group
+ * @param int $blog_id The numeric ID of the blog (optional)
+ * @return array $linked_groups Array of numeric IDs of linked groups
+ */
+function bpgsites_group_linkages_pending_sent_get( $group_id, $blog_id = 0 ) {
+
+	// get option if it exists
+	$pending_groups = bpgsites_group_linkages_pending_get( $group_id );
+
+	// did we request a particular blog?
+	if ( $blog_id !== 0 ) {
+
+		 // overwrite with just the nested array for that blog
+		 $pending_groups['sent'] = isset( $pending_groups['sent'][$blog_id] ) ? $pending_groups['sent'][$blog_id] : array();
+
+	}
+
+	// --<
+	return $pending_groups['sent'];
+
+}
+
+
+
+/**
+ * Create a sent invitation.
+ *
+ * @param int $blog_id The numeric ID of the blog to be "read together"
+ * @param int $inviting_group_id The numeric ID of the inviting group
+ * @param int $invited_group_id The numeric ID of the invited group
+ * @return void
+ */
+function bpgsites_group_linkages_pending_sent_create( $blog_id, $inviting_group_id, $invited_group_id ) {
+
+	// get all data for the inviting group
+	$pending_for_inviting_group = bpgsites_group_linkages_pending_get( $inviting_group_id );
+
+	// make sure we have the blog's array
+	if ( ! isset( $pending_for_inviting_group['sent'][$blog_id] ) ) {
+		$pending_for_inviting_group['sent'][$blog_id] = array();
+	}
+
+	// if the invited group isn't present...
+	if ( ! in_array( $invited_group_id, $pending_for_inviting_group['sent'][$blog_id] ) ) {
+
+		// add it
+		$pending_for_inviting_group['sent'][$blog_id][] = $invited_group_id;
+
+		// debug method
+		error_log( print_r( array(
+			'function' => __FUNCTION__,
+			'pending_for_inviting_group' => $pending_for_inviting_group,
+		), true ) );
+
+		// resave
+		groups_update_groupmeta( $inviting_group_id, BPGSITES_PENDING, $pending_for_inviting_group );
+
+	}
+
+}
+
+
+
+/**
+ * Delete a sent invitation.
+ *
+ * @param int $blog_id The numeric ID of the blog to be "read together"
+ * @param int $inviting_group_id The numeric ID of the inviting group
+ * @param int $invited_group_id The numeric ID of the invited group
+ * @return void
+ */
+function bpgsites_group_linkages_pending_sent_delete( $blog_id, $inviting_group_id, $invited_group_id ) {
+
+	// get all data for the inviting group
+	$pending_for_inviting_group = bpgsites_group_linkages_pending_get( $inviting_group_id );
+
+	// make sure we have the blog's array
+	if ( ! isset( $pending_for_inviting_group['sent'][$blog_id] ) ) {
+		$pending_for_inviting_group['sent'][$blog_id] = array();
+	}
+
+	// if the invited group is present...
+	if ( in_array( $invited_group_id, $pending_for_inviting_group['sent'][$blog_id] ) ) {
+
+		// remove group ID and re-index
+		$updated = array_merge( array_diff( $pending_for_inviting_group['sent'][$blog_id], array( $invited_group_id ) ) );
+
+		// debug method
+		error_log( print_r( array(
+			'function' => __FUNCTION__,
+			'pending_for_inviting_group' => $updated,
+		), true ) );
+
+		// resave
+		groups_update_groupmeta( $inviting_group_id, BPGSITES_PENDING, $updated );
+
+	}
+
+}
+
+
+
+/**
+ * Check if there are outstanding sent invitations for "reading with" other groups
+ *
+ * @param int $group_id The numeric ID of the group
+ * @return bool $has_pending Whether or not there are pending linkages
+ */
+function bpgsites_group_linkages_pending_sent_exists( $group_id ) {
+
+	// get all sent data
+	$pending_sent = bpgsites_group_linkages_pending_sent_get( $group_id );
+
+	// if we have any...
+	if ( count( $pending_sent ) > 0 ) return true;
+
+	// fallback
+	return false;
+
+}
+
+
+
+/**
+ * For a given group ID and blog ID, get the group IDs that have submitted invitations.
+ *
+ * @param int $group_id The numeric ID of the group
+ * @param int $blog_id The numeric ID of the blog (optional)
+ * @return array $linked_groups Array of numeric IDs of linked groups
+ */
+function bpgsites_group_linkages_pending_received_get( $group_id, $blog_id = 0 ) {
+
+	// get option if it exists
+	$pending_groups = bpgsites_group_linkages_pending_get( $group_id );
+
+	// did we request a particular blog?
+	if ( $blog_id !== 0 ) {
+
+		 // overwrite with just the nested array for that blog
+		 $pending_groups['received'] = isset( $pending_groups['received'][$blog_id] ) ? $pending_groups['received'][$blog_id] : array();
+
+	}
+
+	// --<
+	return $pending_groups['received'];
+
+}
+
+
+
+/**
+ * Create a received invitation.
+ *
+ * @param int $blog_id The numeric ID of the blog to be "read together"
+ * @param int $inviting_group_id The numeric ID of the inviting group
+ * @param int $invited_group_id The numeric ID of the invited group
+ * @return void
+ */
+function bpgsites_group_linkages_pending_received_create( $blog_id, $inviting_group_id, $invited_group_id ) {
+
+	// get all data for the invited group
+	$pending_for_invited_group = bpgsites_group_linkages_pending_get( $invited_group_id );
+
+	// make sure we have the blog's array
+	if ( ! isset( $pending_for_invited_group['received'][$blog_id] ) ) {
+		$pending_for_invited_group['received'][$blog_id] = array();
+	}
+
+	// if the inviting group isn't present...
+	if ( ! in_array( $inviting_group_id, $pending_for_invited_group['received'][$blog_id] ) ) {
+
+		// add it
+		$pending_for_invited_group['received'][$blog_id][] = $inviting_group_id;
+
+		// debug method
+		error_log( print_r( array(
+			'function' => __FUNCTION__,
+			'pending_for_invited_group' => $pending_for_invited_group,
+		), true ) );
+
+		// resave
+		groups_update_groupmeta( $invited_group_id, BPGSITES_PENDING, $pending_for_invited_group );
+
+	}
+
+}
+
+
+
+/**
+ * Delete a received invitation.
+ *
+ * @param int $blog_id The numeric ID of the blog to be "read together"
+ * @param int $invited_group_id The numeric ID of the invited group
+ * @param int $inviting_group_id The numeric ID of the inviting group
+ * @return void
+ */
+function bpgsites_group_linkages_pending_received_delete( $blog_id, $invited_group_id, $inviting_group_id ) {
+
+	// get all data for the invited group
+	$pending_for_invited_group = bpgsites_group_linkages_pending_get( $invited_group_id );
+
+	// make sure we have the blog's array
+	if ( ! isset( $pending_for_invited_group['received'][$blog_id] ) ) {
+		$pending_for_invited_group['received'][$blog_id] = array();
+	}
+
+	// if the inviting group is present...
+	if ( in_array( $inviting_group_id, $pending_for_invited_group['received'][$blog_id] ) ) {
+
+		// remove group ID and re-index
+		$updated = array_merge( array_diff( $pending_for_invited_group['received'][$blog_id], array( $inviting_group_id ) ) );
+
+		// debug method
+		error_log( print_r( array(
+			'function' => __FUNCTION__,
+			'pending_for_invited_group' => $updated,
+		), true ) );
+
+		// resave
+		groups_update_groupmeta( $invited_group_id, BPGSITES_PENDING, $updated );
+
+	}
+
+}
+
+
+
+/**
+ * Check if there are outstanding received invitations for "reading with" other groups
+ *
+ * @param int $group_id The numeric ID of the group
+ * @return bool $has_pending Whether or not there are pending linkages
+ */
+function bpgsites_group_linkages_pending_received_exists( $group_id ) {
+
+	// get all received data
+	$pending_received = bpgsites_group_linkages_pending_received_get( $group_id );
+
+	// if we have any...
+	if ( count( $pending_received ) > 0 ) return true;
+
+	// fallback
+	return false;
+
+}
+
+
+
+/**
+ * Creates a pending linkage to another group which - when accepted - means
+ * that the two groups are considered to be "reading together"
+ *
+ * @param int $blog_id The numeric ID of the blog to be "read together"
+ * @param int $inviting_group_id The numeric ID of the inviting group
+ * @param int $invited_group_id The numeric ID of the invited group
+ * @return void
+ */
+function bpgsites_group_linkages_pending_create( $blog_id, $inviting_group_id, $invited_group_id ) {
+
+	// create "sent" invitation
+	bpgsites_group_linkages_pending_sent_create( $blog_id, $inviting_group_id, $invited_group_id );
+
+	// create "received" invitation
+	bpgsites_group_linkages_pending_received_create( $blog_id, $inviting_group_id, $invited_group_id );
+
+}
+
+
+
+/**
+ * Converts a pending linkage to another group so that the two groups are now
+ * considered to be "reading together"
+ *
+ * First, remove "sent" and "received" items from the inviter and invited data
+ * arrays, then create the actual linkage data.
+ *
+ * @param int $blog_id The numeric ID of the blog to be "read together"
+ * @param int $invited_group_id The numeric ID of the invited group
+ * @param int $inviting_group_id The numeric ID of the inviting group
+ * @return void
+ */
+function bpgsites_group_linkages_pending_accept( $blog_id, $invited_group_id, $inviting_group_id ) {
+
+	// delete invitations
+	bpgsites_group_linkages_pending_delete( $blog_id, $invited_group_id, $inviting_group_id );
+
+	// create new inter-group linkage
+	bpgsites_group_linkages_create( $blog_id, $inviting_group_id, $invited_group_id );
+
+	// link blog with accepting group
+	bpgsites_link_blog_and_group( $blog_id, $invited_group_id );
+
+}
+
+
+
+/**
+ * Delete "sent" and "received" items from the inviter and invited data arrays
+ *
+ * @param int $blog_id The numeric ID of the blog to be "read together"
+ * @param int $invited_group_id The numeric ID of the invited group
+ * @param int $inviting_group_id The numeric ID of the inviting group
+ * @return void
+ */
+function bpgsites_group_linkages_pending_delete( $blog_id, $invited_group_id, $inviting_group_id ) {
+
+	// delete "sent" invitation
+	bpgsites_group_linkages_pending_sent_delete( $blog_id, $inviting_group_id, $invited_group_id );
+
+	// delete "received" invitation
+	bpgsites_group_linkages_pending_received_delete( $blog_id, $invited_group_id, $inviting_group_id );
+
+}
+
+
+
+// -----------------------------------------------------------------------------
+
+
+
+/**
+ * Adds UI to groups loop for "reading with" other groups
  *
  * @param bool $echo Whether to echo or not
  * @return bool $has_linkage Whether there is a linkage or not
  */
-function bpgsites_get_group_linkage( $echo = true ) {
+function bpgsites_group_linkages_get_markup( $echo = true ) {
 
 	// init return
 	$has_linkage = false;
@@ -711,8 +1272,14 @@ function bpgsites_get_group_linkage( $echo = true ) {
 	// init HTML output
 	$html = '';
 
-	// init user groups array
-	$user_group_ids = array();
+	// open container div
+	$html .= '<div class="bpgsites_group_linkage">' . "\n";
+
+	// construct heading
+	$html .= '<h5 class="bpgsites_group_linkage_heading">' . __( 'Read with other groups', 'bpgsites' ) . '</h5>' . "\n";
+
+	// open reveal div
+	$html .= '<div class="bpgsites_group_linkage_reveal">' . "\n";
 
 	// get current blog ID
 	$blog_id = bp_get_blog_id();
@@ -720,123 +1287,90 @@ function bpgsites_get_group_linkage( $echo = true ) {
 	// get this blog's group IDs
 	$group_ids = bpgsites_get_groups_by_blog_id( $blog_id );
 
-	// get user ID
-	$user_id = bp_loggedin_user_id();
-
 	// get current group ID
 	$current_group_id = bp_get_current_group_id();
 
-	// loop through the groups
-	foreach( $group_ids AS $group_id ) {
+	// get linkages for this blog
+	$linked_groups = bpgsites_group_linkages_get( $current_group_id, $blog_id );
 
-		// get the group
-		$group = groups_get_group( array(
-			'group_id'   => $group_id
-		) );
-
-		// either this admin user is a member or it's public
-		if (
-			groups_is_user_member( $user_id, $group_id ) OR
-			'public' == bp_get_group_status( $group )
-		) {
-
-			// exclude the current group
-			if ( $group_id != $current_group_id ) {
-
-				// add to our array
-				$user_group_ids[] = $group_id;
-
-			}
-
-		}
-
-	}
-
-	// kick out if empty
-	if ( count( $user_group_ids ) == 0 ) return $has_linkage;
+	// if empty, set to impossible value
+	if ( count( $linked_groups ) == 0 ) { $linked_groups = array( PHP_INT_MAX ); };
 
 	// define config array
 	$config_array = array(
 		//'user_id' => $user_id,
 		'type' => 'alphabetical',
-		'max' => 100,
-		'per_page' => 100,
+		'max' => 1000,
+		'per_page' => 1000,
 		'populate_extras' => 0,
-		'include' => $user_group_ids,
+		'include' => $linked_groups,
 		'page_arg' => 'bpgsites'
 	);
 
 	// new groups query
 	$groups_query = new BP_Groups_Template( $config_array );
 
-	// get groups
+	// get linked groups
 	if ( $groups_query->has_groups() ) {
 
 		// set flag
 		$has_linkage = true;
 
-		// get linkages
-		$linkages = bpgsites_get_group_linkages( $current_group_id );
+		// open existing linkages div
+		$html .= '<div class="bpgsites_group_linkages">' . "\n";
 
-		// get those for this blog
-		$linked_groups = isset( $linkages[$blog_id] ) ? $linkages[$blog_id] : array();
+		// construct heading
+		$html .= '<h6 class="bpgsites_group_linkages_heading">' . __( 'Reading with:', 'bpgsites' ) . '</h6>' . "\n";
 
-		// only show if user has more than one...
-		//if ( $groups_query->group_count > 1 ) {
+		// open list
+		$html .= '<ol class="bpgsites_group_linkages_list">' . "\n";
 
-			// open div
-			$html .= '<div class="bpgsites_group_linkage">' . "\n";
+		// do the loop
+		while ( $groups_query->groups() ) { $groups_query->the_group();
 
-			// construct heading
-			$html .= '<h5 class="bpgsites_group_linkage_heading">' . __( 'Read this with:', 'bpgsites' ) . '</h5>' . "\n";
+			// get group ID
+			$group_id = $groups_query->group->id;
 
-			// open div
-			$html .= '<div class="bpgsites_group_linkages">' . "\n";
+			// add label
+			$html .= '<li><span class="bpgsites_group_unlink">' . $groups_query->group->name . '</span> <input type="submit" class="bpgsites_unlink_button" name="bpgsites_manage-' . $blog_id . '_' . $group_id . '-unlink" value="' . __( 'Stop', 'bpgsites' ) . '" /></li>' . "\n";
 
-			// do the loop
-			while ( $groups_query->groups() ) { $groups_query->the_group();
+		}
 
-				// get group ID
-				$group_id = $groups_query->group->id;
+		// close list
+		$html .= '</ol>' . "\n\n";
 
-				// assume not linked
-				$checked = '';
-
-				// is this one in the array?
-				if ( in_array( $group_id, $linked_groups ) ) {
-
-					// check the box
-					$checked = ' checked="checked"';
-
-				}
-
-				// add arbitrary divider
-				$html .= '<span class="bpgsites_linked_group">' . "\n";
-
-				// add checkbox
-				$html .= '<input type="checkbox" class="bpgsites_group_checkbox" name="bpgsites_linked_groups_' . $blog_id . '[]" id="bpgsites_linked_group_' . $blog_id . '_' . $group_id . '" value="' . $group_id . '" ' . $checked . '/>' . "\n";
-
-				// add label
-				$html .= '<label class="bpgsites_linked_group_label" for="bpgsites_linked_group_' . $blog_id . '_' . $group_id . '">' . $groups_query->group->name . '</label>' . "\n";
-
-				// close arbitrary divider
-				$html .= '</span>' . "\n";
-
-			} // end while
-
-			// close tags
-			$html .= '</div>' . "\n";
-			$html .= '</div>' . "\n";
-
-		//}
+		// close existing linkages div
+		$html .= '</div>' . "\n";
 
 	}
+
+
+	// open invite div
+	$html .= '<div id="bpgsites_group_linkages_invite-' . $blog_id . '" class="bpgsites_group_linkages_invite">' . "\n";
+
+	// construct heading
+	$html .= '<h6 class="bpgsites_group_linkage_heading">' . __( 'Invite to read:', 'bpgsites' ) . '</h6>' . "\n";
+
+	// add select2
+	$html .= '<p><select class="bpgsites_group_linkages_invite_select" name="bpgsites_group_linkages_invite_select_' . $blog_id . '" style="width: 70%"><option value="0">' . __( 'Find a group to invite', 'bpgsites' ) . '</option></select></p>' . "\n";
+
+	// add "Send invitation" button
+	$html .= '<p class="bpgsites_invite_actions"><input type="submit" class="bpgsites_invite_button" name="bpgsites_manage-' . $blog_id . '-invite" value="' . __( 'Send invitation', 'bpgsites' ) . '" /></p>' . "\n";
+
+	// close invite div
+	$html .= '</div>' . "\n";
+
+	// close reveal div
+	$html .= '</div>' . "\n";
+
+	// close container div
+	$html .= '</div>' . "\n\n\n\n";
 
 	// clear it
 	unset( $groups_query );
 
-	// output
-	echo $html;
+	// output unless overridden
+	if ( $echo ) echo $html;
 
 	// --<
 	return $has_linkage;
@@ -846,12 +1380,17 @@ function bpgsites_get_group_linkage( $echo = true ) {
 
 
 /**
- * For a given group ID, get linked group IDs for all blogs
+ * For a given group ID, get linked group IDs.
  *
- * @param int $group_id the numeric ID of the group
+ * By default, this function will return a master array of linkages for all
+ * blogs with nested arrays of group IDs keyed by blog ID. Passing a blog ID as
+ * a parameter, however, will return the specific array for that blog.
+ *
+ * @param int $group_id The numeric ID of the group
+ * @param int $blog_id The numeric ID of the blog (optional)
  * @return array $linked_groups Array of numeric IDs of linked groups
  */
-function bpgsites_get_group_linkages( $group_id ) {
+function bpgsites_group_linkages_get( $group_id, $blog_id = 0 ) {
 
 	// get option if it exists
 	$linked_groups = groups_get_groupmeta( $group_id, BPGSITES_LINKED );
@@ -859,8 +1398,56 @@ function bpgsites_get_group_linkages( $group_id ) {
 	// sanity check
 	if ( ! is_array( $linked_groups ) ) { $linked_groups = array(); }
 
+	// did we request a particular blog?
+	if ( $blog_id !== 0 ) {
+
+		 // overwrite with just the nested array for that blog
+		 $linked_groups = isset( $linked_groups[$blog_id] ) ? $linked_groups[$blog_id] : array();
+
+	}
+
 	// --<
 	return $linked_groups;
+
+}
+
+
+
+/**
+ * Create linkages between two groups "reading together"
+ *
+ * @param int $blog_id The numeric ID of the blog to be "read together"
+ * @param int $inviting_group_id The numeric ID of the inviting group
+ * @param int $invited_group_id The numeric ID of the invited group
+ * @return void
+ */
+function bpgsites_group_linkages_create( $blog_id, $inviting_group_id, $invited_group_id ) {
+
+	// create sender linkages
+	bpgsites_group_linkage_create( $blog_id, $inviting_group_id, $invited_group_id );
+
+	// create recipient linkages
+	bpgsites_group_linkage_create( $blog_id, $invited_group_id, $inviting_group_id );
+
+}
+
+
+
+/**
+ * Delete linkages between two groups "reading together"
+ *
+ * @param int $blog_id The numeric ID of the blog being "read together"
+ * @param int $primary_group_id The numeric ID of the primary group
+ * @param int $secondary_group_id The numeric ID of the secondary group
+ * @return void
+ */
+function bpgsites_group_linkages_delete( $blog_id, $primary_group_id, $secondary_group_id ) {
+
+	// delete primary group linkages
+	bpgsites_group_linkage_delete( $blog_id, $primary_group_id, $secondary_group_id );
+
+	// delete secondary group linkages
+	bpgsites_group_linkage_delete( $blog_id, $secondary_group_id, $primary_group_id );
 
 }
 
@@ -873,10 +1460,10 @@ function bpgsites_get_group_linkages( $group_id ) {
  * @param int $blog_id the numeric ID of the blog
  * @return array $linked_groups Array of numeric IDs of linked groups
  */
-function bpgsites_get_linked_groups_by_blog_id( $group_id, $blog_id ) {
+function bpgsites_group_linkages_get_groups_by_blog_id( $group_id, $blog_id ) {
 
 	// get linked groups
-	$linked = bpgsites_get_group_linkages( $group_id );
+	$linked = bpgsites_group_linkages_get( $group_id );
 
 	// get those for this blog
 	$linked_groups = isset( $linked[$blog_id] ) ? $linked[$blog_id] : array();
@@ -889,48 +1476,186 @@ function bpgsites_get_linked_groups_by_blog_id( $group_id, $blog_id ) {
 
 
 /**
- * For a given group ID, get linked group IDs for a given blog ID
+ * For a given blog ID, check if two group IDs are linked.
  *
- * TODO: This function is not yet used - or finished.
- *
- * @param int $group_id the numeric ID of the group
- * @param int $blog_id the numeric ID of the blog
- * @return bool $return Whether or not the group is linked
+ * @param int $blog_id The numeric ID of the blog being "read together"
+ * @param int $primary_group_id The numeric ID of the primary group
+ * @param int $secondary_group_id The numeric ID of the secondary group
+ * @return bool Whether or not the groups are linked
  */
-function bpgsites_is_linked_group( $group_id, $blog_id ) {
+function bpgsites_group_linkages_link_exists( $blog_id, $primary_group_id, $secondary_group_id ) {
+
+	// get the existing linkages for the primary group
+	$linked = bpgsites_group_linkages_get( $primary_group_id );
+
+	// get the array for this blog ID
+	$linked_group_ids = isset( $linked[$blog_id] ) ? $linked[$blog_id] : array();
+
+	// if the secondary group is in the list, there must be a linkage
+	if ( in_array( $secondary_group_id, $linked_group_ids ) ) return true;
+
+	// fallback
+	return false;
+
+}
+
+
+
+/**
+ * AJAX handler for group linkage autocomplete using the Select2 JS library.
+ *
+ * @return void
+ */
+function bpgsites_group_linkages_get_ajax() {
+
+	global $groups_template;
+
+	/*
+	// debug
+	error_log( print_r( array(
+		'function' => __FUNCTION__,
+		'_POST' => $_POST,
+	), true ) );
+	*/
+
+	// get current group (or set impossible value if not present)
+	$current_group_id = isset( $_POST['group_id'] ) ? $_POST['group_id'] : PHP_INT_MAX;
+
+	// get current blog
+	$current_blog_id = isset( $_POST['blog_id'] ) ? $_POST['blog_id'] : PHP_INT_MAX;
+
+	// get already-linked groups for this blog
+	$linked = bpgsites_group_linkages_get( $current_group_id, $current_blog_id );
+
+	// construct exclude
+	$exclude = array_unique( array_merge( $linked, array( $current_group_id ) ) );
+
+	// get groups this user can see for this search
+	$groups = groups_get_groups( array(
+		'user_id' => is_super_admin() ? 0 : bp_loggedin_user_id(),
+		'search_terms' => $_POST['s'],
+		'show_hidden' => true,
+		'populate_extras' => false,
+		'exclude' => $exclude,
+	) );
 
 	// init return
-	$return = false;
+	$json = array();
 
-	// get linked groups
-	$linked = bpgsites_get_group_linkages( $group_id );
+	// fake a group template
+	$groups_template = new stdClass;
+	$groups_template->group = new stdClass;
 
-	// get those for this blog
-	$linked_groups = isset( $linked[$blog_id] ) ? $linked[$blog_id] : array();
+	// loop through our groups
+	foreach( $groups['groups'] AS $group ) {
 
-	///*
-	print_r( array(
-		'linked' => $linked,
-		'group_id' => $group_id,
-		'blog_id' => $blog_id,
-		'linked_groups' => $linked_groups
-	) ); //die();
-	//*/
+		// apply group object to template so API functions
+		$groups_template->group = $group;
 
-	// did we get any?
-	if ( count( $linked_groups ) > 0 ) {
-
-		//
+		// add item to output array
+		$json[] = array(
+			'id'          => $group->id,
+			'name'        => stripslashes( $group->name ),
+			'type'        => bp_get_group_type(),
+			'description' => bp_create_excerpt( strip_tags( stripslashes( $group->description ) ), 70, array(
+				'ending' => '&hellip;',
+				'filter_shortcodes' => false
+			) ),
+			'avatar' => bp_get_group_avatar_mini(),
+			'total_member_count' => $group->total_member_count,
+			'private' => $group->status !== 'public'
+		);
 
 	}
 
-	// if this one is in the array, it's linked
-	if ( in_array( $group_id, $linked_groups ) ) { $return = true; }
-
-	// --<
-	return $return;
+	// send data
+	echo json_encode( $json );
+	exit();
 
 }
+
+// ajax handler for group linkage autocomplete
+add_action( 'wp_ajax_bpgsites_get_groups', 'bpgsites_group_linkages_get_ajax' );
+
+
+
+/**
+ * Create a linkage from a primary group to a secondary group
+ *
+ * This must be called for both groups in order to establish a two-way linkage
+ *
+ * @see bpgsites_group_linkages_create()
+ *
+ * @param int $blog_id The numeric ID of the blog to be "read together"
+ * @param int $primary_group_id The numeric ID of the primary group
+ * @param int $secondary_group_id The numeric ID of the secondary group
+ * @return void
+ */
+function bpgsites_group_linkage_create( $blog_id, $primary_group_id, $secondary_group_id ) {
+
+	// get the existing linkages for the inviting group
+	$linked = bpgsites_group_linkages_get( $primary_group_id );
+
+	// get the array for this blog ID
+	$linked_group_ids = isset( $linked[$blog_id] ) ? $linked[$blog_id] : array();
+
+	// is the invited group in the list?
+	if ( ! in_array( $secondary_group_id, $linked_group_ids ) ) {
+
+		// no, add it
+		$linked_group_ids[] = $secondary_group_id;
+
+		// overwrite in parent array
+		$linked[$blog_id] = $linked_group_ids;
+
+		// save updated option
+		groups_update_groupmeta( $primary_group_id, BPGSITES_LINKED, $linked );
+
+	}
+
+}
+
+
+
+/**
+ * Delete the linkage from a primary group to a secondary group
+ *
+ * This must be called for both groups in order to destroy a two-way linkage
+ *
+ * @see bpgsites_group_linkages_delete()
+ *
+ * @param int $blog_id The numeric ID of the blog being "read together"
+ * @param int $primary_group_id The numeric ID of the primary group
+ * @param int $secondary_group_id The numeric ID of the secondary group
+ * @return void
+ */
+function bpgsites_group_linkage_delete( $blog_id, $primary_group_id, $secondary_group_id ) {
+
+	// get their linkages
+	$linked = bpgsites_group_linkages_get( $primary_group_id );
+
+	// get the array for this blog ID
+	$linked_group_ids = isset( $linked[$blog_id] ) ? $linked[$blog_id] : array();
+
+	// is this one in the list?
+	if ( in_array( $secondary_group_id, $linked_group_ids ) ) {
+
+		// yes - remove group and re-index
+		$updated = array_merge( array_diff( $linked_group_ids, array( $secondary_group_id ) ) );
+
+		// overwrite in parent array
+		$linked[$blog_id] = $updated;
+
+		// save updated option
+		groups_update_groupmeta( $primary_group_id, BPGSITES_LINKED, $linked );
+
+	}
+
+}
+
+
+
+// -----------------------------------------------------------------------------
 
 
 
@@ -967,7 +1692,7 @@ function bpgsites_authoritative_group_settings_form() {
 	}
 
 	?>
-	<h4><?php echo $name; ?></h4>
+	<h4><?php echo esc_html( $name ); ?></h4>
 
 	<p><?php _e( 'To make this group an authoritative group, make sure that it is set to "Private" above, then check the box below. The effect will be that the comments left by members of this group will always appear to readers. Only other members of this group will be able to reply to those comments.', 'bpgsites' ); ?></p>
 
@@ -985,35 +1710,6 @@ function bpgsites_authoritative_group_settings_form() {
 add_action ( 'bp_after_group_settings_admin' ,'bpgsites_authoritative_group_settings_form' );
 add_action ( 'bp_after_group_settings_creation_step' ,'bpgsites_authoritative_group_settings_form' );
 
-
-
-
-/**
- * Get group ID on admin and creation screens
- *
- * @return int $group_id the current group ID
- */
-function bpgsites_get_current_group_id() {
-
-	// access BP global
-	global $bp;
-
-	// init return
-	$group_id = null;
-
-	// test for new group ID
-	if ( isset( $bp->groups->new_group_id ) ) {
-		$group_id = $bp->groups->new_group_id;
-
-	// test for current group ID
-	} elseif ( isset( $bp->groups->current_group->id ) ) {
-		$group_id = $bp->groups->current_group->id;
-	}
-
-	// --<
-	return $group_id;
-
-}
 
 
 

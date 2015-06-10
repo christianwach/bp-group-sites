@@ -74,6 +74,42 @@ Default styles for filtering group linkages
 	margin: 0;
 }
 
+/* "Reading with" list */
+#blogs-list ol.bpgsites_group_linkages_list
+{
+	margin: 0;
+	border-top: 1px solid #eee;
+}
+
+#blogs-list ol.bpgsites_group_linkages_list li
+{
+	padding: 5px;
+	border-bottom: 1px solid #eee;
+}
+
+/* "Invitations" list */
+.bpgsites_group_linkages_pending
+{
+	clear: both;
+	border: 1px solid #eee;
+	padding: 1em;
+	margin: 0 0 1em 0;
+}
+
+ol.bpgsites_group_linkages_pending_list
+{
+	list-style: none;
+	list-style-image: none;
+	margin: 0;
+	border-top: 1px solid #eee;
+}
+
+ol.bpgsites_group_linkages_pending_list li
+{
+	padding: 5px;
+	border-bottom: 1px solid #eee;
+}
+
 
 
 /*
@@ -88,5 +124,19 @@ Default styles for comment amendments
 	font-family: sans-serif;
 	margin: 0.7em 0;
 }
+
+
+
+/*
+--------------------------------------------------------------------------------
+Overridden styles for Select2
+--------------------------------------------------------------------------------
+*/
+
+.select2-container
+{
+	width: 80%;
+}
+
 
 
