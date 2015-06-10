@@ -211,17 +211,6 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 				// if we get a valid one
 				if ( $invited_group_id !== 0 ) {
 
-					// debug method
-					error_log( print_r( array(
-						'class' => __CLASS__,
-						'method' => __METHOD__,
-						//'_POST' => $_POST,
-						//'parsed' => $parsed,
-						'blog_id' => $blog_id,
-						'inviting_group_id' => $primary_group_id,
-						'invited_group_id' => $invited_group_id,
-					), true ) );
-
 					// flag groups as linked, but pending
 					bpgsites_group_linkages_pending_create( $blog_id, $primary_group_id, $invited_group_id );
 
@@ -243,16 +232,6 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 			// invitation "Accept" button
 			case 'accept':
 
-				// debug method
-				error_log( print_r( array(
-					'class' => __CLASS__,
-					'method' => __METHOD__,
-					'parsed' => $parsed,
-					'blog_id' => $blog_id,
-					'primary_group_id' => $primary_group_id,
-					'secondary_group_id' => $secondary_group_id,
-				), true ) );
-
 				// create linkages
 				bpgsites_group_linkages_pending_accept( $blog_id, $primary_group_id, $secondary_group_id );
 
@@ -263,18 +242,6 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 
 			// invitation "Reject" button
 			case 'reject':
-
-				// debug method
-				error_log( print_r( array(
-					'class' => __CLASS__,
-					'method' => __METHOD__,
-					'parsed' => $parsed,
-					'blog_id' => $blog_id,
-					'primary_group_id' => $primary_group_id,
-					'secondary_group_id' => $secondary_group_id,
-					'primary_group pending' => groups_get_groupmeta( $primary_group_id, BPGSITES_PENDING ),
-					'secondary_group pending' => groups_get_groupmeta( $secondary_group_id, BPGSITES_PENDING ),
-				), true ) );
 
 				// reject
 				bpgsites_group_linkages_pending_delete( $blog_id, $primary_group_id, $secondary_group_id );
@@ -538,16 +505,6 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 			'subject'    => $subject,
 			'content'    => $content,
 		);
-
-		// debug method
-		error_log( print_r( array(
-			'class' => __CLASS__,
-			'method' => __METHOD__,
-			'blog_id' => $blog_id,
-			'inviting_group_id' => $inviting_group_id,
-			'invited_group_id' => $invited_group_id,
-			'msg_args' => $msg_args,
-		), true ) );
 
 		// send message
 		messages_new_message( $msg_args );
@@ -985,12 +942,6 @@ function bpgsites_group_linkages_pending_sent_create( $blog_id, $inviting_group_
 		// add it
 		$pending_for_inviting_group['sent'][$blog_id][] = $invited_group_id;
 
-		// debug method
-		error_log( print_r( array(
-			'function' => __FUNCTION__,
-			'pending_for_inviting_group' => $pending_for_inviting_group,
-		), true ) );
-
 		// resave
 		groups_update_groupmeta( $inviting_group_id, BPGSITES_PENDING, $pending_for_inviting_group );
 
@@ -1023,12 +974,6 @@ function bpgsites_group_linkages_pending_sent_delete( $blog_id, $inviting_group_
 
 		// remove group ID and re-index
 		$updated = array_merge( array_diff( $pending_for_inviting_group['sent'][$blog_id], array( $invited_group_id ) ) );
-
-		// debug method
-		error_log( print_r( array(
-			'function' => __FUNCTION__,
-			'pending_for_inviting_group' => $updated,
-		), true ) );
 
 		// resave
 		groups_update_groupmeta( $inviting_group_id, BPGSITES_PENDING, $updated );
@@ -1111,12 +1056,6 @@ function bpgsites_group_linkages_pending_received_create( $blog_id, $inviting_gr
 		// add it
 		$pending_for_invited_group['received'][$blog_id][] = $inviting_group_id;
 
-		// debug method
-		error_log( print_r( array(
-			'function' => __FUNCTION__,
-			'pending_for_invited_group' => $pending_for_invited_group,
-		), true ) );
-
 		// resave
 		groups_update_groupmeta( $invited_group_id, BPGSITES_PENDING, $pending_for_invited_group );
 
@@ -1149,12 +1088,6 @@ function bpgsites_group_linkages_pending_received_delete( $blog_id, $invited_gro
 
 		// remove group ID and re-index
 		$updated = array_merge( array_diff( $pending_for_invited_group['received'][$blog_id], array( $inviting_group_id ) ) );
-
-		// debug method
-		error_log( print_r( array(
-			'function' => __FUNCTION__,
-			'pending_for_invited_group' => $updated,
-		), true ) );
 
 		// resave
 		groups_update_groupmeta( $invited_group_id, BPGSITES_PENDING, $updated );
@@ -1510,14 +1443,6 @@ function bpgsites_group_linkages_get_ajax() {
 
 	global $groups_template;
 
-	/*
-	// debug
-	error_log( print_r( array(
-		'function' => __FUNCTION__,
-		'_POST' => $_POST,
-	), true ) );
-	*/
-
 	// get current group (or set impossible value if not present)
 	$current_group_id = isset( $_POST['group_id'] ) ? $_POST['group_id'] : PHP_INT_MAX;
 
@@ -1552,15 +1477,29 @@ function bpgsites_group_linkages_get_ajax() {
 		// apply group object to template so API functions
 		$groups_template->group = $group;
 
+		// gert description
+		$description = bp_create_excerpt(
+
+			// content
+			strip_tags( stripslashes( $group->description ) ),
+
+			// max length
+			70,
+
+			// options
+			array(
+				'ending' => '&hellip;',
+				'filter_shortcodes' => false,
+			)
+
+		);
+
 		// add item to output array
 		$json[] = array(
 			'id'          => $group->id,
 			'name'        => stripslashes( $group->name ),
 			'type'        => bp_get_group_type(),
-			'description' => bp_create_excerpt( strip_tags( stripslashes( $group->description ) ), 70, array(
-				'ending' => '&hellip;',
-				'filter_shortcodes' => false
-			) ),
+			'description' => $description,
 			'avatar' => bp_get_group_avatar_mini(),
 			'total_member_count' => $group->total_member_count,
 			'private' => $group->status !== 'public'

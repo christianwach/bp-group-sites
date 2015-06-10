@@ -158,12 +158,6 @@ function bpgsites_filter_groupsites( $has_blogs, $blogs_template, $params ) {
  */
 function bpgsites_pre_filter_groupsites( $args ) {
 
-	/*
-	print_r( array(
-		'args' => $args,
-	) ); die();
-	*/
-
 	// get groupsite IDs
 	$groupsites = bpgsites_get_groupsites();
 
@@ -238,14 +232,6 @@ function bpgsites_filter_total_blog_count() {
 
 	// add filter again
 	add_filter( 'bp_get_total_blog_count', 'bpgsites_filter_total_blog_count', 50 );
-
-	/*
-	print_r( array(
-		'actual_count' => $actual_count,
-		'groupsites' => $groupsites,
-		'filtered_count' => $filtered_count,
-	) ); die();
-	*/
 
 	// --<
 	return $filtered_count;

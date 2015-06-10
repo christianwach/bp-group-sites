@@ -182,8 +182,6 @@ class BpGroupSites_Activity {
 		// prepend to comment content
 		$comment_content = '<div class="bpgsites_comment_posted_in">' . $prefix . "</div>\n\n" . $comment_content;
 
-		//print_r( $comment_content ); die();
-
 		// --<
 		return $comment_content;
 
@@ -220,8 +218,6 @@ class BpGroupSites_Activity {
 
 		// access comment
 		global $comment;
-
-		//print_r( $comment ); die();
 
 		// comment ID
 		$comment_id = $comment->comment_ID;
@@ -321,8 +317,6 @@ class BpGroupSites_Activity {
 	 */
 	public function custom_comment_activity( $activity ) {
 
-		//print_r( array( 'a1' => $activity ) ); //die();
-
 		// only deal with comments
 		if ( ( $activity->type != 'new_blog_comment' ) ) return $activity;
 
@@ -337,7 +331,6 @@ class BpGroupSites_Activity {
 
 		// okay, let's get the group object
 		$group = groups_get_group( array( 'group_id' => $group_id ) );
-		//print_r( $group ); die();
 
 		// see if we already have the modified activity for this blog post
 		$id = bp_activity_get_activity_id( array(
@@ -370,11 +363,9 @@ class BpGroupSites_Activity {
 
 		// get the comment
 		$comment = get_comment( $activity->secondary_item_id );
-		//print_r( $comment ); //die();
 
 		// get the post
 		$post = get_post( $comment->comment_post_ID );
-		//print_r( $post ); die();
 
 		// was it a registered user?
 		if ($comment->user_id != '0') {
@@ -436,8 +427,6 @@ class BpGroupSites_Activity {
 
 		// prevent from firing again
 		remove_action( 'bp_activity_before_save', array( $this, 'custom_comment_activity' ) );
-
-		//print_r( array( 'a2' => $activity ) ); die();
 
 		// --<
 		return $activity;
@@ -521,7 +510,6 @@ class BpGroupSites_Activity {
 
 		// get the groups this user can see
 		$user_group_ids = $this->get_groups_for_user();
-		//print_r( $user_group_ids ); die();
 
 		// if we get some...
 		if (
@@ -1457,13 +1445,6 @@ class BpGroupSites_Activity {
 
 		}
 
-		/*
-		print_r( array(
-			$comment_id,
-			$reply_to_id,
-		) ); die();
-		*/
-
 		// get current blog ID
 		$blog_id = get_current_blog_id();
 
@@ -1763,8 +1744,6 @@ class BpGroupSites_Activity {
 
 		}
 
-		//print_r( array( $classes, $class, $comment_id, $post_id, $group_id ) ); die();
-
 		// --<
 		return $classes;
 
@@ -1795,49 +1774,12 @@ class BpGroupSites_Activity {
 
 		// get this blog's group IDs
 		$group_ids = bpgsites_get_groups_by_blog_id( $current_blog_id );
-		//print '<pre>';
-		//print_r( $group_ids ); die();
 
 		// get user ID
 		$user_id = bp_loggedin_user_id();
 
 		// loop through the groups
 		foreach( $group_ids AS $group_id ) {
-
-			//print_r( array ('testing group_id' => $group_id ) ); //die();
-
-			/*
-			// get the group
-			$group = groups_get_group( array(
-				'group_id'   => $group_id
-			) );
-			//print_r( $group ); //die();
-
-			// get status of group
-			$status = bp_get_group_status( $group );
-
-			// if public...
-			if ( $status == 'public' ) {
-
-				// access object
-				global $bp_groupsites;
-
-				// assume not allowed
-				$allowed = false;
-
-				// do we allow public comments?
-				if ( $bp_groupsites->admin->option_get( 'public' ) ) {
-
-					// override
-					$allowed = true;
-
-				}
-
-				// override for now
-				$allowed = true;
-
-			}
-			*/
 
 			// if this user is a member, add it
 			if ( groups_is_user_member( $user_id, $group_id ) ) {
@@ -1856,7 +1798,6 @@ class BpGroupSites_Activity {
 				$group = groups_get_group( array(
 					'group_id'   => $group_id
 				) );
-				//print_r( $group ); //die();
 
 				// get status of group
 				$status = bp_get_group_status( $group );
@@ -1894,7 +1835,6 @@ class BpGroupSites_Activity {
 
 								// add to our array
 								$this->user_group_ids['linked_groups'][] = $group_id;
-								//print_r( array ('adding group_id' => $group_id ) ); //die();
 
 								// don't need to check any further
 								break;
@@ -2156,8 +2096,6 @@ class BpGroupSites_Activity {
 	 */
 	public function custom_post_activity( $activity ) {
 
-		//print_r( array( 'activity BEFORE' => $activity ) ); //die();
-
 		// kick out until we figure out how to do this with multiple groups...
 		return $activity;
 
@@ -2242,7 +2180,6 @@ class BpGroupSites_Activity {
 
 			// get multiple authors
 			$authors = get_coauthors();
-			//print_r( $authors ); die();
 
 			// if we get some
 			if ( ! empty( $authors ) ) {
@@ -2337,8 +2274,6 @@ class BpGroupSites_Activity {
 
 		// set to relevant custom type
 		$activity->type = $type;
-
-		//print_r( array( 'activity AFTER' => $activity ) ); die();
 
 		// prevent from firing again
 		remove_action( 'bp_activity_before_save', array( $this, 'custom_post_activity' ) );

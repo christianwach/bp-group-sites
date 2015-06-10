@@ -249,9 +249,6 @@ class BP_Group_Sites {
 
 		// add our templates to the theme compatibility layer
 		add_action( 'bp_register_theme_packages', array( $this, 'theme_compat' ) );
-		//add_filter( 'pre_option__bp_theme_package_id', array( $this, 'package_id' ) );
-		//add_filter( 'bp_get_template_part', array( $this, 'template_part' ), 10, 3 );
-		//add_filter( 'bp_get_template_stack', array( $this, 'template_stack' ), 10, 1 );
 
 	}
 
@@ -264,77 +261,8 @@ class BP_Group_Sites {
 	 */
 	public function theme_compat() {
 
-		//print_r( 'theme_compat' ); die();
-
-		/*
-		bp_register_theme_package( array(
-			'id'      => 'bpgsites',
-			'name'    => __( 'BuddyPress Default', 'buddypress' ),
-			'version' => bp_get_version(),
-			'dir'     => trailingslashit( $this->themes_dir . '/bp-legacy' ),
-			'url'     => trailingslashit( $this->themes_url . '/bp-legacy' )
-		) );
-		*/
-
 		// add templates dir to BuddyPress
 		bp_register_template_stack( 'bpgsites_templates_dir',  16 );
-
-	}
-
-
-
-	/**
-	 * Returns the unique package ID for our plugin's templates
-	 *
-	 * @param str $package_id Unique package ID
-	 * @return str $package_id Modified unique package ID
-	 */
-	public function package_id( $package_id ) {
-
-		// return unique package ID
-		return 'bpgsites';
-
-	}
-
-
-
-	/**
-	 * Returns our template part
-	 *
-	 * @param array $templates Array of paths to templates
-	 * @param str $slug The template slug
-	 * @param str $name The name of the template
-	 * @return array $template Path to required template
-	 */
-	public function template_part( $templates, $slug, $name ) {
-
-		print_r( 'template_part' ); die();
-
-		// kick out if not our slug
-		if ( 'texts' != $slug ) { return $templates; }
-
-		// --<
-		return array( 'bpgsites/index.php' );
-
-	}
-
-
-
-	/**
-	 * Returns our template stack
-	 *
-	 * @param array $template_stack Array of paths to required templates
-	 * @return array $template path to required template
-	 */
-	public function template_stack( $template_stack ) {
-
-		print_r( array( 'template_stack' => $template_stack ) ); die();
-
-		// kick out if not our slug
-		if ( 'texts' != $slug ) { return $templates; }
-
-		// --<
-		return array( 'bpgsites/index.php' );
 
 	}
 
@@ -495,13 +423,6 @@ function bpgsites_templates_dir() {
 		'bpgsites_templates_dir', // hook
 		BPGSITES_PATH . 'assets/templates' // path
 	);
-
-	/*
-	print_r( array(
-		'method' => 'bpgsites_theme_dir',
-		'path' => $path,
-	) ); die();
-	*/
 
 	// --<
 	return $path;

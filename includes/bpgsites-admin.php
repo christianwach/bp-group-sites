@@ -422,30 +422,6 @@ class BP_Group_Sites_Admin {
 	 */
 	public function do_debug() {
 
-		return;
-		//print_r( $this->option_get( 'bpgsites_groupsites' ) ); die();
-
-		// get all blogs via BP_Blogs_Blog
-		$all = BP_Blogs_Blog::get_all();
-
-		// init ID array
-		$blog_ids = array();
-
-		// get existing groupsites
-		if ( is_array( $all['blogs'] ) AND count( $all['blogs'] ) > 0 ) {
-			foreach ( $all['blogs'] AS $blog ) {
-				if ( bpgsites_is_groupsite( $blog->blog_id ) ) {
-					$blog_ids[$blog->blog_id] = $blog->blog_id;
-				}
-			}
-		}
-
-		// set option
-		$this->option_set( 'bpgsites_groupsites', $blog_ids );
-
-		// save
-		$this->options_save();
-
 	}
 
 
@@ -811,7 +787,6 @@ function bpgsites_get_visit_site_button( $button ) {
 	[link_text] => Visit Site
 	[link_title] => Visit Site
 	*/
-	//print_r( $button ); die();
 
 	// switch by blogtype
 	if ( bpgsites_is_groupsite( bp_get_blog_id() ) ) {
