@@ -87,6 +87,11 @@ Default styles for filtering group linkages
 	border-bottom: 1px solid #eee;
 }
 
+.bpgsites_group_unlink
+{
+	margin-right: 1em;
+}
+
 /* "Invitations" list */
 .bpgsites_group_linkages_pending
 {
@@ -108,6 +113,11 @@ ol.bpgsites_group_linkages_pending_list li
 {
 	padding: 5px;
 	border-bottom: 1px solid #eee;
+}
+
+.bpgsites_invite_received
+{
+	margin-right: 1em;
 }
 
 

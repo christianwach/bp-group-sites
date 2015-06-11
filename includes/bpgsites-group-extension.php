@@ -1248,7 +1248,7 @@ function bpgsites_group_linkages_get_markup( $echo = true ) {
 		$html .= '<div class="bpgsites_group_linkages">' . "\n";
 
 		// construct heading
-		$html .= '<h6 class="bpgsites_group_linkages_heading">' . __( 'Reading with:', 'bpgsites' ) . '</h6>' . "\n";
+		$html .= '<h6 class="bpgsites_group_linkages_heading">' . __( 'Reading with', 'bpgsites' ) . '</h6>' . "\n";
 
 		// open list
 		$html .= '<ol class="bpgsites_group_linkages_list">' . "\n";
@@ -1277,7 +1277,7 @@ function bpgsites_group_linkages_get_markup( $echo = true ) {
 	$html .= '<div id="bpgsites_group_linkages_invite-' . $blog_id . '" class="bpgsites_group_linkages_invite">' . "\n";
 
 	// construct heading
-	$html .= '<h6 class="bpgsites_group_linkage_heading">' . __( 'Invite to read:', 'bpgsites' ) . '</h6>' . "\n";
+	$html .= '<h6 class="bpgsites_group_linkage_heading">' . __( 'Invite to read', 'bpgsites' ) . '</h6>' . "\n";
 
 	// add select2
 	$html .= '<p><select class="bpgsites_group_linkages_invite_select" name="bpgsites_group_linkages_invite_select_' . $blog_id . '" style="width: 70%"><option value="0">' . __( 'Find a group to invite', 'bpgsites' ) . '</option></select></p>' . "\n";

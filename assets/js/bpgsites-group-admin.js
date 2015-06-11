@@ -252,12 +252,12 @@ BuddypressGroupSites.readwith.select2 = new function() {
 
 		// construct basic group info
 		markup = '<div style="clear:both;">' +
-		'<div style="float:left;margin-right:8px;">' + data.avatar + '</div>' +
-		'<div><span style="font-weight:600;">' + data.name + '</span> <em>(' + data.type + ')</em></div>';
+		'<div class="select2_results_group_avatar" style="float:left;margin-right:8px;">' + data.avatar + '</div>' +
+		'<div class="select2_results_group_name"><span style="font-weight:600;">' + data.name + '</span> <em>(' + data.type + ')</em></div>';
 
 		// add group description, if available
 		if (data.description) {
-			markup += '<div style="font-size:.9em;line-height:1.9;">' + data.description + '</div>';
+			markup += '<div class="select2_results_group_description" style="font-size:.9em;line-height:1.4;">' + data.description + '</div>';
 		}
 
 		// close
