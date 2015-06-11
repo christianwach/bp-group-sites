@@ -114,9 +114,6 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 		// kick out if not on our edit screen
 		if ( ! bp_is_group_admin_screen( $this->slug ) ) { return false; }
 
-		// show name
-		echo '<h2>' . esc_html( $this->name ) . '</h2>';
-
 		// show pending received
 		bpgsites_group_linkages_pending_get_markup();
 
@@ -529,9 +526,6 @@ bp_register_group_extension( 'BPGSites_Group_Extension' );
  */
 function bpgsites_get_extension_display() {
 
-	// show something
-	echo '<h3>' . apply_filters( 'bpgsites_extension_title', __( 'Group Sites', 'bpgsites' ) ) . '</h3>';
-
 	do_action( 'bp_before_blogs_loop' );
 
 	// use current group
@@ -539,7 +533,8 @@ function bpgsites_get_extension_display() {
 		'group_id' => bp_get_current_group_id()
 	);
 
-	// search for them - TODO: add AJAX query string compatibility
+	// search for them
+	// TODO: add AJAX query string compatibility
 	if ( bpgsites_has_blogs( $defaults ) ) {
 
 		?>
