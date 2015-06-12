@@ -1682,7 +1682,7 @@ class BpGroupSites_Activity {
 			$group_ids = $_POST['bpgsites_comment_groups'];
 
 			// sanitise all the items
-			array_walk( $group_ids, create_function( '&$val', '$val = absint( $val );' ) );
+			$group_ids = array_map( 'intval', $group_ids );
 
 			// set cookie with delmited array
 			//setcookie( 'bpgsites_comment_groups', implode( '-', $group_ids ) );
