@@ -180,7 +180,7 @@ class BpGroupSites_Activity {
 		}
 
 		// prepend to comment content
-		$comment_content = '<div class="bpgsites_comment_posted_in">' . $prefix . "</div>\n\n" . $comment_content;
+		$comment_content = '<div class="bpgsites_comment_posted_in"><p>' . $prefix . "</p></div>\n\n" . $comment_content;
 
 		// --<
 		return $comment_content;
