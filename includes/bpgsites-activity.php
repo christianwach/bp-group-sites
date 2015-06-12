@@ -126,7 +126,7 @@ class BpGroupSites_Activity {
 			add_action( 'edit_comment', array( $this, 'save_comment_metadata' ) );
 
 			// show group at top of comment content
-			add_filter( 'get_comment_text', array( $this, 'show_comment_group' ), 10, 3 );
+			add_filter( 'get_comment_text', array( $this, 'show_comment_group' ), 20, 3 );
 
 		}
 
