@@ -230,23 +230,27 @@ class BpGroupSites_Activity {
 
 			// the group that comment replies have must be the same as its parent
 
-			// show message
-			echo '<p>' . __( 'This comment is a reply. It appears in the same group as the comment it is in reply to. If there is a deeper thread of replies, then the original comment determines the group in which it appears.', 'bpgsites' ) . '</p>';
-
 			// get group ID
 			$group_id = $this->get_comment_group_id( $comment_id );
 
-			// get group name
-			$name = bp_get_group_name( groups_get_group( array( 'group_id' => $group_id ) ) );
+			// sanity check
+			if ( is_numeric( $group_id ) ) {
 
-			// construct message
-			$message = sprintf(
-				__( 'This comment appears in the group %1$s.', 'bpgsites' ),
-				$name
-			);
+				// show message
+				echo '<p>' . __( 'This comment is a reply. It appears in the same group as the comment it is in reply to. If there is a deeper thread of replies, then the original comment determines the group in which it appears.', 'bpgsites' ) . '</p>';
 
-			echo '<p>' . $message . '</p>';
-			;
+				// get group name
+				$name = bp_get_group_name( groups_get_group( array( 'group_id' => $group_id ) ) );
+
+				// construct message
+				$message = sprintf(
+					__( 'This comment appears in the group %1$s.', 'bpgsites' ),
+					$name
+				);
+
+				echo '<p>' . $message . '</p>';
+
+			}
 
 		} else {
 
@@ -636,6 +640,14 @@ class BpGroupSites_Activity {
 		// get comment group
 		$group_id = $this->get_comment_group_id( $comment->comment_ID );
 
+		// sanity check
+		if ( ! is_numeric( $group_id ) ) {
+
+			// comments can pre-exist that are not group-linked
+			return $link;
+
+		}
+
 		// get user ID
 		$user_id = bp_loggedin_user_id();
 
@@ -731,11 +743,62 @@ class BpGroupSites_Activity {
 		// pass through if not group site
 		if ( ! bpgsites_is_groupsite( $blog_id ) ) return $show;
 
-		// is the current member in a relevant group?
+		// pass through if the current member is in a relevant group
 		if ( $this->is_user_in_group_reading_this_site() ) return $show;
+
+		// filter the comment form message
+		add_filter( 'commentpress_comment_form_hidden', array( $this, 'override_comment_form_hidden' ), 10, 1 );
 
 		// --<
 		return false;
+
+	}
+
+
+
+	/**
+	 * Show a message if we are hiding the comment form
+	 *
+	 * @param str $hidden The message shown when the comment form is hidden
+	 * @return str $link The overridden message shown when the comment form is hidden
+	 */
+	public function override_comment_form_hidden( $hidden_text ) {
+
+		// if not logged in...
+		if ( ! is_user_logged_in() ) {
+
+			// is registration allowed?
+			if ( bp_get_signup_allowed() ) {
+				$text = __( 'Create an account to leave a comment', 'bpgsites' );
+				$href = bp_get_signup_page();
+			} else {
+				$text = __( 'Login to leave a comment', 'bpgsites' );
+				$href = wp_login_url();
+			}
+
+			// construct link
+			$link = apply_filters(
+				'bpgsites_override_comment_form_hidden_denied',
+				sprintf( __( '<a href="%1$s">%2$s</a>', 'commentpress-core' ), $href, $text )
+			);
+
+			// show link
+			return $link;
+
+		}
+
+		// send to groups directory
+		$text = __( 'Join a group to leave a comment', 'bpgsites' );
+		$href = bp_get_groups_directory_permalink();
+
+		// construct link
+		$link = apply_filters(
+			'bpgsites_override_comment_form_hidden',
+			sprintf( __( '<a href="%1$s">%2$s</a>', 'commentpress-core' ), $href, $text )
+		);
+
+		// show link
+		return $link;
 
 	}
 
