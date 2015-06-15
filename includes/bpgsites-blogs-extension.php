@@ -631,8 +631,11 @@ function bpgsites_commentpress_site_image_avatar( $avatar, $blog_id, $r ) {
 			// get image by type
 			$image = $existing[$blog_id][$type];
 
+			// get blog name
+			$blog_name = bp_blogs_get_blogmeta( $blog_id, 'name' );
+
 			// override
-			$avatar = '<img src="' . $image[0] . '" class="avatar avatar-' . $image[1] . ' groupsite-avatar photo" width="' . $image[1] . '" height="' . $image[2] . '" alt="Site image" title="Site image" />';
+			$avatar = '<img src="' . $image[0] . '" class="avatar avatar-' . $image[1] . ' groupsite-avatar photo" width="' . $image[1] . '" height="' . $image[2] . '" alt="' . esc_attr( $blog_name ) . '" title="' . esc_attr( $blog_name ) . '" />';
 
 		}
 
