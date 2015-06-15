@@ -114,14 +114,24 @@ function bpgsites_update_select( comment_id ) {
 		// get reply-to classes as string
 		comment_classes = jQuery( '#li-comment-' + comment_id ).prop( 'class' );
 
-		// split at our class name and retain last bit
-		spliced = comment_classes.split( 'bpgsites-group-' )[1];
+		// does it contain the identifying string?
+		if ( comment_classes.match( 'bpgsites-group-' ) ) {
 
-		// split again (because our class may not be the last) and retain first bit
-		group_id = spliced.split( ' ' )[0];
+			// split at our class name and retain last bit
+			spliced = comment_classes.split( 'bpgsites-group-' )[1];
 
-		// set select option
-		jQuery( '#bpgsites-post-in' ).val( group_id );
+			// split again (because our class may not be the last) and retain first bit
+			group_id = spliced.split( ' ' )[0];
+
+			// set select option
+			jQuery( '#bpgsites-post-in' ).val( group_id );
+
+		} else {
+
+			// clear select option
+			jQuery( '#bpgsites-post-in' ).val( '' );
+
+		}
 
 		// hide enclosing div because the reply is in the same group as the comment
 		jQuery( '#bpgsites-post-in-box' ).hide();
@@ -226,9 +236,6 @@ function bpgsites_init_elements() {
 
 		} );
 
-		// --<
-		return false;
-
 	});
 
 
@@ -252,9 +259,6 @@ function bpgsites_init_elements() {
 		// update our dropdown and hide
 		bpgsites_update_select( comment_id );
 
-		// --<
-		return false;
-
 	});
 
 
@@ -271,9 +275,6 @@ function bpgsites_init_elements() {
 
 		// show enclosing div
 		jQuery( '#bpgsites-post-in-box' ).show();
-
-		// --<
-		return false;
 
 	});
 
