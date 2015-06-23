@@ -40,8 +40,16 @@ function bpgsites_has_blogs( $args = '' ) {
 
 	} else {
 
-		// get groupsite IDs
+		// get just groupsite IDs
 		$groupsites = bpgsites_get_groupsites();
+
+	}
+
+	// check for a passed group ID
+	if ( isset( $args['group_id'] ) AND ! empty( $args['group_id'] ) ) {
+
+		// get groupsite IDs for this group
+		$groupsites = bpgsites_get_blogs_by_group_id( $args['group_id'] );
 
 	}
 
@@ -79,69 +87,6 @@ function bpgsites_has_blogs( $args = '' ) {
 
 	// add exclusion filter back as default
 	add_filter( 'bp_after_has_blogs_parse_args', 'bpgsites_pre_filter_groupsites', 30, 1 );
-
-	// fallback
-	return $has_blogs;
-
-}
-
-
-
-/**
- * Intercept the bp_has_blogs() query and exclude groupsites
- *
- * @param bool $has_blogs Whether or not this query has found blogs
- * @param object $blogs_template BuddyPress blogs template object
- * @param array $params Array of arguments with which the query was configured
- * @return bool $has_blogs Whether or not this query has found blogs
- */
-function bpgsites_filter_groupsites( $has_blogs, $blogs_template, $params ) {
-
-	// get groupsite IDs
-	$groupsites = bpgsites_get_groupsites();
-
-	// get all blogs via BP_Blogs_Blog
-	$all = BP_Blogs_Blog::get_all();
-
-	// init ID array
-	$blog_ids = array();
-
-	if ( is_array( $all['blogs'] ) AND count( $all['blogs'] ) > 0 ) {
-		foreach ( $all['blogs'] AS $blog ) {
-			$blog_ids[] = $blog->blog_id;
-		}
-	}
-
-	// let's exclude
-	$groupsites_excluded = array_merge( array_diff( $blog_ids, $groupsites ) );
-
-	// do we have an array of blogs to include?
-	if ( isset( $params['include_blog_ids'] ) AND ! empty( $params['include_blog_ids'] ) ) {
-
-		// convert from comma-delimited if needed
-		$include_blog_ids = array_filter( wp_parse_id_list( $params['include_blog_ids'] ) );
-
-		// exclude groupsites
-		$params['include_blog_ids'] = array_merge( array_diff( $include_blog_ids, $groupsites ) );
-
-		// if we have none left, return false
-		if ( count( $params['include_blog_ids'] ) === 0 ) return false;
-
-	} else {
-
-		// exclude groupsites
-		$params['include_blog_ids'] = $groupsites_excluded;
-
-	}
-
-	// remove this filter to avoid recursion
-	remove_filter( 'bp_has_blogs', 'bpgsites_filter_groupsites', 20 );
-
-	// re-query with our params
-	$has_blogs = bp_has_blogs( $params );
-
-	// re-add filter
-	add_filter( 'bp_has_blogs', 'bpgsites_filter_groupsites', 20, 3 );
 
 	// fallback
 	return $has_blogs;
