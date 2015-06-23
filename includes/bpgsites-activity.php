@@ -95,9 +95,6 @@ class BpGroupSites_Activity {
 			// override CommentPress TinyMCE
 			add_filter( 'cp_override_tinymce', array( $this, 'disable_tinymce' ), 10, 1 );
 
-			// add filter for commenting capability
-			add_filter( 'commentpress_allowed_to_comment', array( $this, 'allow_anon_commenting' ), 10, 1 );
-
 			// add action to insert comments-by-group filter
 			add_action( 'commentpress_before_scrollable_comments', array( $this, 'get_group_comments_filter' ) );
 
@@ -907,27 +904,6 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * Check if anonymous commenting is allowed
-	 *
-	 * @param bool $allowed Whether commenting is is allowed or not
-	 * @return bool $allowed Modified value for whether commenting is is allowed or not
-	 */
-	public function allow_anon_commenting( $allowed ) {
-
-		// get current blog ID
-		$blog_id = get_current_blog_id();
-
-		// pass through if not group site
-		if ( ! bpgsites_is_groupsite( $blog_id ) ) { return $allowed; }
-
-		// not allowed
-		return false;
-
-	}
-
-
-
-	/**
 	 * For group sites, if the user is a member of the group, allow unmoderated comments
 	 *
 	 * @param int $approved The comment status
@@ -948,13 +924,26 @@ class BpGroupSites_Activity {
 		// get group that comment was posted into (comment meta is not saved yet)
 		$group_id = $this->get_group_id_from_comment_form();
 
+		// get the groups this user can see
+		$user_group_ids = $this->get_groups_for_user();
+
 		// did we get one?
 		if ( $group_id != '' AND is_numeric( $group_id ) ) {
 
 			// is this user a member?
-			if ( groups_is_user_member( $user_id, $group_id ) ) {
+			if ( in_array( $group_id, $user_group_ids['my_groups'] ) ) {
 
 				// allow un-moderated commenting
+				return 1;
+
+			}
+
+			// if commenting into a linked group
+			if ( in_array( $group_id, $user_group_ids['linked_groups'] ) ) {
+
+				// TODO: if linked group, hold and send BP notification?
+
+				// for now, allow un-moderated commenting
 				return 1;
 
 			}
@@ -1875,7 +1864,7 @@ class BpGroupSites_Activity {
 
 				// get the group
 				$group = groups_get_group( array(
-					'group_id'   => $group_id
+					'group_id' => $group_id
 				) );
 
 				// get status of group
