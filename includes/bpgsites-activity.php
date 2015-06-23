@@ -569,10 +569,10 @@ class BpGroupSites_Activity {
 		);
 
 		// add our meta query
-		$comments->query_vars['meta_query'] = $meta_query;
+		$comments->query_vars['meta_query'][] = $meta_query;
 
 		// we need an AND relation too
-		//$comments->query_vars['meta_query']['relation'] = 'AND';
+		$comments->query_vars['meta_query']['relation'] = 'AND';
 
 		// parse meta query again
 		$comments->meta_query = new WP_Meta_Query();
