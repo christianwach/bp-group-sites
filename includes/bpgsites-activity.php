@@ -157,13 +157,13 @@ class BpGroupSites_Activity {
 		// sanity check
 		if ( is_numeric( $group_id ) ) {
 
-			// get group name
-			$name = bp_get_group_name( groups_get_group( array( 'group_id' => $group_id ) ) );
-
 			// get the group
 			$group = groups_get_group( array(
 				'group_id'   => $group_id
 			) );
+
+			// get group name
+			$name = bp_get_group_name( $group );
 
 			// wrap name in anchor
 			$link = '<a href="' . bp_get_group_permalink( $group ) . '">' . $name . '</a>';
