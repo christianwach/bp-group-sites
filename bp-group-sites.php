@@ -194,10 +194,10 @@ class BP_Group_Sites {
 		$this->activity = new BpGroupSites_Activity;
 
 		// load our blogs extension
-		require( BPGSITES_PATH . 'includes/bpgsites-blogs-extension.php' );
+		require( BPGSITES_PATH . 'includes/bpgsites-blogs.php' );
 
 		// load our group extension
-		require( BPGSITES_PATH . 'includes/bpgsites-group-extension.php' );
+		require( BPGSITES_PATH . 'includes/bpgsites-groups.php' );
 
 		// load our component file
 		require( BPGSITES_PATH . 'includes/bp-bpgsites-component.php' );
