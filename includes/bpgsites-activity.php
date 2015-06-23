@@ -105,7 +105,7 @@ class BpGroupSites_Activity {
 			add_filter( 'comment_class', array( $this, 'add_group_to_comment_class' ), 10, 4 );
 
 			// filter comments by group membership
-			add_action( 'pre_get_comments', array( $this, 'filter_comments' ), 100, 1 );
+			add_action( 'parse_comment_query', array( $this, 'filter_comments' ), 100, 1 );
 
 			// override what is reported by get_comments_number
 			add_filter( 'get_comments_number', array( $this, 'get_comments_number' ), 20, 2 );
@@ -546,20 +546,36 @@ class BpGroupSites_Activity {
 
 		}
 
+		/**
+		 * At this point, we need both a meta query that queries for the group ID
+		 * in the comment meta as well as a meta query that queries for the absence
+		 * of a meta value so that any legacy comments that were not attached to
+		 * a group show up.
+		 */
+
 		// construct our meta query addition
 		$meta_query = array(
-			'key'   => BPGSITES_COMMENT_META_KEY,
-			'value' => $groups,
-			'compare' => 'IN'
+			'relation' => 'OR',
+			array(
+				'key'   => BPGSITES_COMMENT_META_KEY,
+				'value' => $groups,
+				'compare' => 'IN'
+			),
+			array(
+				'key'   => BPGSITES_COMMENT_META_KEY,
+				'value' => '',
+				'compare' => 'NOT EXISTS',
+			),
 		);
 
 		// add our meta query
-		$comments->query_vars['meta_query'][] = $meta_query;
+		$comments->query_vars['meta_query'] = $meta_query;
 
 		// we need an AND relation too
-		$comments->query_vars['meta_query']['relation'] = 'AND';
+		//$comments->query_vars['meta_query']['relation'] = 'AND';
 
 		// parse meta query again
+		$comments->meta_query = new WP_Meta_Query();
 		$comments->meta_query->parse_query_vars( $comments->query_vars );
 
 	}
