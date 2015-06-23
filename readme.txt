@@ -2,7 +2,7 @@
 Contributors: needle
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8MZNB9D3PF48S
 Tags: buddypress, groups, sites, reading groups
-Requires at least: 3.5
+Requires at least: 4.2.1
 Tested up to: 4.2
 Stable tag: 0.2
 License: GPLv2 or later
@@ -20,7 +20,7 @@ The plugin is specifically designed to work with *CommentPress* "documents" (whi
 
 ### Requirements
 
-This plugin requires a minimum of *BuddyPress 2.0*.
+This plugin requires a minimum of *WordPress 4.2.1* and *BuddyPress 2.0*.
 
 ### Plugin Development
 

@@ -7,7 +7,7 @@ The plugin is specifically designed to work with *CommentPress* "documents" (whi
 
 ### Requirements
 
-This plugin requires a minimum of *BuddyPress 2.0*.
+This plugin requires a minimum of *WordPress 4.2.1* and *BuddyPress 2.0*.
 
 ## Installation ##
 
