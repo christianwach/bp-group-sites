@@ -68,6 +68,9 @@ class BpGroupSites_Activity {
 		add_action( 'bp_group_activity_filter_options', array( $this, 'comments_filter_option' ) );
 		add_action( 'bp_member_activity_filter_options', array( $this, 'comments_filter_option' ) );
 
+		// filter the comment link so replies are done in CommentPress
+		add_filter( 'bp_get_activity_comment_link', array( $this, 'filter_comment_link' ) );
+
 		// if the current blog is a group site...
 		if ( bpgsites_is_groupsite( get_current_blog_id() ) ) {
 
@@ -460,6 +463,41 @@ class BpGroupSites_Activity {
 
 		// --<
 		return $activity;
+
+	}
+
+
+
+	/**
+	 * Filter the comment reply link on activity items. This is called during the
+	 * loop, so we can assume that the activity item API will work.
+	 *
+	 * @return string $link The overridden comment reply link
+	 */
+	public function filter_comment_link( $link ) {
+
+		// get type of activity
+		$type = bp_get_activity_action_name();
+
+		// our custom activity types
+		$types = array( 'new_groupsite_comment' );
+
+		// not one of ours?
+		if ( ! in_array( $type, $types ) ) return $link;
+
+		/*
+		if ( $type == 'new_groupsite_comment' ) {
+			$link_text = __( 'Reply', 'bpwpapers' );
+		}
+
+		// construct new link to actual comment
+		$link = '<a href="' . bp_get_activity_feed_item_link() . '" class="button acomment-reply bp-primary-action">' .
+					$link_text .
+				'</a>';
+		*/
+
+		// --<
+		return bp_get_activity_feed_item_link();
 
 	}
 

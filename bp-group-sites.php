@@ -312,6 +312,14 @@ class BP_Group_Sites {
 		// only on root blog
 		if ( is_multisite() AND bp_is_root_blog() ) {
 
+			// enqueue activity stream javascript
+			wp_enqueue_script(
+				'bpgsites_activity_js',
+				BPGSITES_URL . 'assets/js/bpgsites-activity.js',
+				array( 'jquery' ),
+				BPGSITES_VERSION
+			);
+
 			// if on group admin screen
 			if ( bp_is_group_admin_screen( apply_filters( 'bpgsites_extension_slug', 'group-sites' ) ) ) {
 
