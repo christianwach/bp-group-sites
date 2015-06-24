@@ -74,6 +74,9 @@ class BpGroupSites_Activity {
 			// add custom post activity (disabled until later)
 			//add_action( 'bp_activity_before_save', array( $this, 'custom_post_activity' ), 10, 1 );
 
+			// make sure "Allow activity stream commenting on blog and forum posts" is disabled for group sites
+			add_action( 'bp_disable_blogforum_comments', array( $this, 'disable_blogforum_comments' ), 100, 1 );
+
 			// add custom comment activity
 			add_action( 'bp_activity_before_save', array( $this, 'custom_comment_activity' ), 10, 1 );
 
@@ -304,6 +307,32 @@ class BpGroupSites_Activity {
 
 		// save data, ignoring comment status param
 		$this->save_comment_group_id( $comment_id, null );
+
+	}
+
+
+
+	/**
+	 * Disable comment sync because parent activity items may not be in the same
+	 * group as the comment. Content may also predate the site becoming a group
+	 * site, muddling the process of locating the parent item further.
+	 *
+	 * CommentPress also disables this because its comments should be read in
+	 * context rather than appearing as if globally attached to the post or page.
+	 *
+	 * @param bool $is_disabled The BP setting that determines blogforum sync
+	 * @return bool $is_disabled The modified value that determines blogforum sync
+	 */
+	public function disable_blogforum_comments( $is_disabled ) {
+
+		// get current blog ID
+		$blog_id = get_current_blog_id();
+
+		// if it's is a groupsite, disable
+		if ( bpgsites_is_groupsite( $blog_id ) ) return 1;
+
+		// pass through
+		return $is_disabled;
 
 	}
 
