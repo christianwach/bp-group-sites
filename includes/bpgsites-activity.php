@@ -71,6 +71,9 @@ class BpGroupSites_Activity {
 		// filter the comment link so replies are done in CommentPress
 		add_filter( 'bp_get_activity_comment_link', array( $this, 'filter_comment_link' ) );
 
+		// filter the activity item permalink to point to the comment
+		add_filter( 'bp_activity_get_permalink', array( $this, 'filter_comment_permalink' ), 20, 2 );
+
 		// if the current blog is a group site...
 		if ( bpgsites_is_groupsite( get_current_blog_id() ) ) {
 
@@ -463,6 +466,31 @@ class BpGroupSites_Activity {
 
 		// --<
 		return $activity;
+
+	}
+
+
+
+	/**
+	 * Filter the activity comment permalink on activity items to point to the
+	 * original comment in context.
+	 *
+	 * @param array $args Existing activity permalink data
+	 * @param object $activity The activity item
+	 * @return array $args The overridden activity permalink data
+	 */
+	public function filter_comment_permalink( $args, $activity ) {
+
+		//print_r( array( $args, $n ) ); die();
+
+		// our custom activity types
+		$types = array( 'new_groupsite_comment' );
+
+		// not one of ours?
+		if ( ! in_array( $activity->type, $types ) ) return $args;
+
+		// --<
+		return bp_get_activity_feed_item_link();
 
 	}
 
