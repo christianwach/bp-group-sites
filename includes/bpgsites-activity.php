@@ -777,11 +777,11 @@ class BpGroupSites_Activity {
 			'group_id'   => $group_id
 		) );
 
-		// get authoritative groups
-		$auth_groups = bpgsites_authoritative_groups_get();
+		// get showcase groups
+		$showcase_groups = bpgsites_showcase_groups_get();
 
-		// is it an authoritative group?
-		if ( in_array( $group_id, $auth_groups ) ) {
+		// is it a showcase group?
+		if ( in_array( $group_id, $showcase_groups ) ) {
 
 			// clear link
 			$link = '';
@@ -1899,10 +1899,10 @@ class BpGroupSites_Activity {
 
 		}
 
-		// is the group authoritative?
-		if ( bpgsites_is_authoritative_group( $group_id ) ) {
+		// is the group a showcase group?
+		if ( bpgsites_is_showcase_group( $group_id ) ) {
 
-			// add class so auth groups can be styled
+			// add class so showcase groups can be styled
 			$classes[] = 'bpgsites-auth-group';
 
 		}
@@ -1929,7 +1929,7 @@ class BpGroupSites_Activity {
 			'my_groups' => array(),
 			'linked_groups' => array(),
 			'public_groups' => array(),
-			'auth_groups' => bpgsites_authoritative_groups_get(),
+			'auth_groups' => bpgsites_showcase_groups_get(),
 		);
 
 		// get current blog

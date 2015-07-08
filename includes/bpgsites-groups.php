@@ -1594,11 +1594,11 @@ function bpgsites_group_linkage_delete( $blog_id, $primary_group_id, $secondary_
 
 
 /**
- * Show option to make a group an authoritative group
+ * Show option to make a group a showcase group
  *
  * @return void
  */
-function bpgsites_authoritative_group_settings_form() {
+function bpgsites_showcase_group_settings_form() {
 
 	// get name
 	$name = apply_filters( 'bpgsites_extension_title', __( 'Group Sites', 'bpgsites' ) );
@@ -1607,16 +1607,16 @@ function bpgsites_authoritative_group_settings_form() {
 	$checked = '';
 
 	// get existing option
-	$auth_groups = bpgsites_authoritative_groups_get();
+	$showcase_groups = bpgsites_showcase_groups_get();
 
 	// get current group ID
 	$group_id = bpgsites_get_current_group_id();
 
 	// sanity check list and group ID
-	if ( count( $auth_groups ) > 0 AND ! is_null( $group_id ) ) {
+	if ( count( $showcase_groups ) > 0 AND ! is_null( $group_id ) ) {
 
 		// is this group's ID in the list
-		if ( in_array( $group_id, $auth_groups ) ) {
+		if ( in_array( $group_id, $showcase_groups ) ) {
 
 			// override checked
 			$checked = ' checked="checked"';
@@ -1628,10 +1628,10 @@ function bpgsites_authoritative_group_settings_form() {
 	?>
 	<h4><?php echo esc_html( $name ); ?></h4>
 
-	<p><?php _e( 'To make this group an authoritative group, make sure that it is set to "Private" above, then check the box below. The effect will be that the comments left by members of this group will always appear to readers. Only other members of this group will be able to reply to those comments.', 'bpgsites' ); ?></p>
+	<p><?php _e( 'To make this group a showcase group, make sure that it is set to "Private" above, then check the box below. The effect will be that the comments left by members of this group will always appear to readers. Only other members of this group will be able to reply to those comments.', 'bpgsites' ); ?></p>
 
 	<div class="checkbox">
-		<label><input type="checkbox" id="bpgsites-authoritative-group" name="bpgsites-authoritative-group" value="1"<?php echo $checked ?> /> <?php _e( 'Make this group an authoritative group', 'bpgsites' ) ?></label>
+		<label><input type="checkbox" id="bpgsites-showcase-group" name="bpgsites-showcase-group" value="1"<?php echo $checked ?> /> <?php _e( 'Make this group a showcase group', 'bpgsites' ) ?></label>
 	</div>
 
 	<hr />
@@ -1641,8 +1641,8 @@ function bpgsites_authoritative_group_settings_form() {
 }
 
 // add actions for the above
-add_action ( 'bp_after_group_settings_admin' ,'bpgsites_authoritative_group_settings_form' );
-add_action ( 'bp_after_group_settings_creation_step' ,'bpgsites_authoritative_group_settings_form' );
+add_action ( 'bp_after_group_settings_admin' ,'bpgsites_showcase_group_settings_form' );
+add_action ( 'bp_after_group_settings_creation_step' ,'bpgsites_showcase_group_settings_form' );
 
 
 
@@ -1653,7 +1653,7 @@ add_action ( 'bp_after_group_settings_creation_step' ,'bpgsites_authoritative_gr
  * @param object $group the group object
  * @return void
  */
-function bpgsites_authoritative_group_save( $group ) {
+function bpgsites_showcase_group_save( $group ) {
 
 	/*
 	If the checkbox IS NOT checked, remove from option if it is there
@@ -1661,19 +1661,19 @@ function bpgsites_authoritative_group_save( $group ) {
 	*/
 
 	// get existing option
-	$auth_groups = bpgsites_authoritative_groups_get();
+	$showcase_groups = bpgsites_showcase_groups_get();
 
 	// if not checked
-	if ( ! isset( $_POST['bpgsites-authoritative-group'] ) ) {
+	if ( ! isset( $_POST['bpgsites-showcase-group'] ) ) {
 
 		// sanity check list
-		if ( count( $auth_groups ) > 0 ) {
+		if ( count( $showcase_groups ) > 0 ) {
 
 			// is this group's ID in the list?
-			if ( in_array( $group->id, $auth_groups ) ) {
+			if ( in_array( $group->id, $showcase_groups ) ) {
 
 				// yes, remove group ID and re-index
-				$updated = array_merge( array_diff( $auth_groups, array( $group->id ) ) );
+				$updated = array_merge( array_diff( $showcase_groups, array( $group->id ) ) );
 
 				// save option
 				bpgsites_site_option_set( 'bpgsites_auth_groups', $updated );
@@ -1685,16 +1685,16 @@ function bpgsites_authoritative_group_save( $group ) {
 	} else {
 
 		// kick out if value is not 1
-		if ( absint( $_POST['bpgsites-authoritative-group'] ) !== 1 ) { return; }
+		if ( absint( $_POST['bpgsites-showcase-group'] ) !== 1 ) { return; }
 
 		// is this group's ID missing from the list?
-		if ( ! in_array( $group->id, $auth_groups ) ) {
+		if ( ! in_array( $group->id, $showcase_groups ) ) {
 
 			// add it
-			$auth_groups[] = $group->id;
+			$showcase_groups[] = $group->id;
 
 			// save option
-			bpgsites_site_option_set( 'bpgsites_auth_groups', $auth_groups );
+			bpgsites_site_option_set( 'bpgsites_auth_groups', $showcase_groups );
 
 		}
 
@@ -1703,43 +1703,43 @@ function bpgsites_authoritative_group_save( $group ) {
 }
 
 // add action for the above
-add_action( 'groups_group_after_save', 'bpgsites_authoritative_group_save' );
+add_action( 'groups_group_after_save', 'bpgsites_showcase_group_save' );
 
 
 
 /**
- * Get all authoritative groups
+ * Get all showcase groups
  *
- * @return array $auth_groups the authoritative group IDs
+ * @return array $showcase_groups the showcase group IDs
  */
-function bpgsites_authoritative_groups_get() {
+function bpgsites_showcase_groups_get() {
 
 	// get existing option
-	$auth_groups = bpgsites_site_option_get( 'bpgsites_auth_groups', array() );
+	$showcase_groups = bpgsites_site_option_get( 'bpgsites_auth_groups', array() );
 
 	// --<
-	return $auth_groups;
+	return $showcase_groups;
 
 }
 
 
 
 /**
- * Get all authoritative groups
+ * Get all showcase groups
  *
  * @param int $group_id the group ID
- * @return bool $is_auth_group the group is or is not authoritative
+ * @return bool $is_showcase_group the group is or is not a showcase group
  */
-function bpgsites_is_authoritative_group( $group_id ) {
+function bpgsites_is_showcase_group( $group_id ) {
 
 	// get existing option
-	$auth_groups = bpgsites_authoritative_groups_get();
+	$showcase_groups = bpgsites_showcase_groups_get();
 
 	// sanity check list
-	if ( count( $auth_groups ) > 0 ) {
+	if ( count( $showcase_groups ) > 0 ) {
 
 		// is this group's ID in the list?
-		if ( in_array( $group_id, $auth_groups ) ) {
+		if ( in_array( $group_id, $showcase_groups ) ) {
 
 			// --<
 			return true;
@@ -1756,20 +1756,20 @@ function bpgsites_is_authoritative_group( $group_id ) {
 
 
 /**
- * Check if user is a member of an authoritative group for this blog
+ * Check if user is a member of a showcase group for this blog
  *
- * @return bool $passed user is a member of an authoritative group for this blog
+ * @return bool $passed user is a member of a showcase group for this blog
  */
-function bpgsites_is_authoritative_group_member() {
+function bpgsites_is_showcase_group_member() {
 
 	// false by default
 	$passed = false;
 
 	// get existing option
-	$auth_groups = bpgsites_authoritative_groups_get();
+	$showcase_groups = bpgsites_showcase_groups_get();
 
 	// sanity check list
-	if ( count( $auth_groups ) > 0 ) {
+	if ( count( $showcase_groups ) > 0 ) {
 
 		// get current blog
 		$current_blog_id = get_current_blog_id();
@@ -1778,12 +1778,12 @@ function bpgsites_is_authoritative_group_member() {
 		$user_id = bp_loggedin_user_id();
 
 		// loop
-		foreach( $auth_groups AS $group_id ) {
+		foreach( $showcase_groups AS $group_id ) {
 
 			// is this user a member?
 			if ( groups_is_user_member( $user_id, $group_id ) ) {
 
-				// if this auth group is an auth group for this blog
+				// if this showcase group is a showcase group for this blog
 				if ( bpgsites_check_group_by_blog_id( $current_blog_id, $group_id ) ) {
 
 					// no need to delve further
@@ -1805,18 +1805,18 @@ function bpgsites_is_authoritative_group_member() {
 
 
 /**
- * Filter media buttons by authoritative groups context
+ * Filter media buttons by showcase groups context
  *
  * @param bool $enabled if media buttons are enabled
  * @return bool $enabled if media buttons are enabled
  */
-function bpgsites_authoritative_group_media_buttons( $allowed ) {
+function bpgsites_showcase_group_media_buttons( $allowed ) {
 
 	// disallow by default
 	$allowed = false;
 
-	// is this user a member of an auth group on this blog?
-	if ( bpgsites_is_authoritative_group_member() ) {
+	// is this user a member of a showcase group on this blog?
+	if ( bpgsites_is_showcase_group_member() ) {
 
 		// allow
 		return true;
@@ -1829,23 +1829,23 @@ function bpgsites_authoritative_group_media_buttons( $allowed ) {
 }
 
 // add filter for the above
-add_filter( 'commentpress_rte_media_buttons', 'bpgsites_authoritative_group_media_buttons', 10, 1 );
+add_filter( 'commentpress_rte_media_buttons', 'bpgsites_showcase_group_media_buttons', 10, 1 );
 
 
 
 /**
- * Filter quicktags by authoritative groups context
+ * Filter quicktags by showcase groups context
  *
  * @param array $quicktags the quicktags
  * @return array/bool $quicktags false if quicktags are disabled, array of buttons otherwise
  */
-function bpgsites_authoritative_group_quicktags( $quicktags ) {
+function bpgsites_showcase_group_quicktags( $quicktags ) {
 
 	// disallow quicktags by default
 	$quicktags = false;
 
-	// is this user a member of an auth group on this blog?
-	if ( bpgsites_is_authoritative_group_member() ) {
+	// is this user a member of a showcase group on this blog?
+	if ( bpgsites_is_showcase_group_member() ) {
 
 		// allow quicktags
 		$quicktags = array(
@@ -1863,7 +1863,7 @@ function bpgsites_authoritative_group_quicktags( $quicktags ) {
 }
 
 // add filter for the above
-add_filter( 'commentpress_rte_quicktags', 'bpgsites_authoritative_group_quicktags', 10, 1 );
+add_filter( 'commentpress_rte_quicktags', 'bpgsites_showcase_group_quicktags', 10, 1 );
 
 
 
