@@ -265,7 +265,9 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 				$group = groups_get_group( array( 'group_id' => $secondary_group_id ) );
 
 				// feedback
-				bp_core_add_message( sprintf( __( 'Your group is no longer reading "%1$s" with %2$s', 'bpgsites' ), $blog_name, $group->name ) );
+				bp_core_add_message(
+					sprintf( __( 'Your group is no longer reading "%1$s" with %2$s', 'bpgsites' ), $blog_name, $group->name )
+				);
 
 				break;
 

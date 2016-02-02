@@ -276,12 +276,10 @@ class BpGroupSites_Activity {
 
 			// get select dropdown
 			echo $this->get_comment_group_select(
-
 				'', // no existing content
 				$comment_id,
 				$reply_to_id,
 				true // trigger edit mode
-
 			);
 
 			// close para
@@ -383,12 +381,10 @@ class BpGroupSites_Activity {
 
 		// see if we already have the modified activity for this blog post
 		$id = bp_activity_get_activity_id( array(
-
 			'user_id' => $activity->user_id,
 			'type' => $type,
 			'item_id' => $group_id,
 			'secondary_item_id' => $activity->secondary_item_id
-
 		) );
 
 		// if we don't find a modified item...
@@ -396,12 +392,10 @@ class BpGroupSites_Activity {
 
 			// see if we have an unmodified activity item
 			$id = bp_activity_get_activity_id( array(
-
 				'user_id' => $activity->user_id,
 				'type' => $activity->type,
 				'item_id' => $activity->item_id,
 				'secondary_item_id' => $activity->secondary_item_id
-
 			) );
 
 		}
@@ -446,15 +440,12 @@ class BpGroupSites_Activity {
 
 		// Replace the necessary values to display in group activity stream
 		$activity->action = sprintf(
-
 			__( '%s left a %s on a %s %s in the group %s:', 'bpgsites' ),
-
 			$user_link,
 			'<a href="' . $activity->primary_link . '">' . __( 'comment', 'bpgsites' ) . '</a>',
 			$activity_name,
 			$target_post_link,
 			'<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>'
-
 		);
 
 		// apply group id
@@ -495,8 +486,6 @@ class BpGroupSites_Activity {
 	 * @return array $args The overridden activity permalink data
 	 */
 	public function filter_comment_permalink( $args, $activity ) {
-
-		//print_r( array( $args, $n ) ); die();
 
 		// our custom activity types
 		$types = array( 'new_groupsite_comment' );
@@ -2318,8 +2307,11 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * Record the blog post activity for the group
+	 * Record the blog post activity for the group.
+	 *
 	 * @see: bp_groupblog_set_group_to_post_activity ( $activity )
+	 *
+	 * @since 0.1
 	 *
 	 * @param object $activity The existing activity
 	 * @return object $activity The modified activity
@@ -2465,28 +2457,22 @@ class BpGroupSites_Activity {
 
 			// replace the necessary values to display in group activity stream
 			$activity->action = sprintf(
-
 				__( '%s updated a %s %s in the group %s:', 'bpgsites' ),
-
 				$activity_author,
 				$activity_name,
 				'<a href="' . get_permalink( $post->ID ) . '">' . esc_attr( $post->post_title ) . '</a>',
 				'<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>'
-
 			);
 
 		} else {
 
 			// replace the necessary values to display in group activity stream
 			$activity->action = sprintf(
-
 				__( '%s wrote a new %s %s in the group %s:', 'bpgsites' ),
-
 				$activity_author,
 				$activity_name,
 				'<a href="' . get_permalink( $post->ID ) . '">' . esc_attr( $post->post_title ) . '</a>',
 				'<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>'
-
 			);
 
 		}

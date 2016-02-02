@@ -409,10 +409,8 @@ function bpgsites_is_blog_in_group() {
 
 	// sanity check
 	if (
-
 		is_array( $groups ) AND
 		count( $groups ) > 0
-
 	) {
 
 		// is the current group in the array?
