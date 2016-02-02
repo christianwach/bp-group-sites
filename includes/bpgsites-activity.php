@@ -14,41 +14,41 @@ Throw any functions which deal with BuddyPress activity in here.
 
 
 
-/*
-================================================================================
-Class Name
-================================================================================
-*/
-
+/**
+ * BP Group Sites Activity class.
+ *
+ * A class that encapsulates activity functionality.
+ *
+ * @since 0.1
+ */
 class BpGroupSites_Activity {
 
-	/*
-	============================================================================
-	Properties
-	============================================================================
-	*/
-
-	// groups
+	/**
+	 * Groups array.
+	 *
+	 * @since 0.1
+	 * @access public
+	 * @var object $groups The groups array
+	 */
 	public $groups = array();
 
 
 
 	/**
-	 * Initialises this object
+	 * Constructor.
 	 *
-	 * @return object
+	 * @since 0.1
 	 */
 	function __construct() {
-
-		// --<
-		return $this;
 
 	}
 
 
 
 	/**
-	 * Register hooks for this class
+	 * Register hooks for this class.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -145,7 +145,9 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * Show the group into which a comment has been posted
+	 * Show the group into which a comment has been posted.
+	 *
+	 * @since 0.1
 	 *
 	 * @param str $comment_content The content of the comment
 	 * @param object $comment The comment object
@@ -196,7 +198,9 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * Register a meta box for the comment edit screen
+	 * Register a meta box for the comment edit screen.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -216,7 +220,9 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * Add a meta box to the comment edit screen
+	 * Add a meta box to the comment edit screen.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -288,7 +294,9 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * Save data returned by our comment meta box
+	 * Save data returned by our comment meta box.
+	 *
+	 * @since 0.1
 	 *
 	 * @param int $comment_id The ID of the comment being saved
 	 * @return void
@@ -326,6 +334,8 @@ class BpGroupSites_Activity {
 	 * CommentPress also disables this because its comments should be read in
 	 * context rather than appearing as if globally attached to the post or page.
 	 *
+	 * @since 0.1
+	 *
 	 * @param bool $is_disabled The BP setting that determines blogforum sync
 	 * @return bool $is_disabled The modified value that determines blogforum sync
 	 */
@@ -345,7 +355,10 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * Record the blog activity for the group
+	 * Record the blog activity for the group.
+	 *
+	 * @since 0.1
+	 *
 	 * @see: bp_groupblog_set_group_to_post_activity()
 	 *
 	 * @param object $activity The BP activity object
@@ -475,6 +488,8 @@ class BpGroupSites_Activity {
 	 * Filter the activity comment permalink on activity items to point to the
 	 * original comment in context.
 	 *
+	 * @since 0.1
+	 *
 	 * @param array $args Existing activity permalink data
 	 * @param object $activity The activity item
 	 * @return array $args The overridden activity permalink data
@@ -499,6 +514,8 @@ class BpGroupSites_Activity {
 	/**
 	 * Filter the comment reply link on activity items. This is called during the
 	 * loop, so we can assume that the activity item API will work.
+	 *
+	 * @since 0.1
 	 *
 	 * @return string $link The overridden comment reply link
 	 */
@@ -532,7 +549,9 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * Add a filter option to the filter select box on group activity pages
+	 * Add a filter option to the filter select box on group activity pages.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -562,7 +581,9 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * Add a filter option to the filter select box on group activity pages
+	 * Add a filter option to the filter select box on group activity pages.
+	 *
+	 * @since 0.1
 	 *
 	 * @param int $count The current comment count
 	 * @param int $post_id The current post
@@ -591,7 +612,9 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * When get_comments is called, show only those from groups to which the user belongs
+	 * When get_comments is called, show only those from groups to which the user belongs.
+	 *
+	 * @since 0.1
 	 *
 	 * @param object $comments The current query
 	 * @return void
@@ -675,7 +698,9 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * When a comment is saved, this also saves the ID of the group it was submitted to
+	 * When a comment is saved, this also saves the ID of the group it was submitted to.
+	 *
+	 * @since 0.1
 	 *
 	 * @param integer $comment_id The ID of the comment
 	 * @param integer $comment_status The approval status of the comment
@@ -709,7 +734,9 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * Override CommentPress Reply To link
+	 * Override CommentPress "Reply To" link.
+	 *
+	 * @since 0.1
 	 *
 	 * @param string $link The existing link
 	 * @param array $args The setup array
@@ -801,7 +828,9 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * Override CommentPress TinyMCE setting
+	 * Override CommentPress TinyMCE setting.
+	 *
+	 * @since 0.1
 	 *
 	 * @param bool $tinymce Whether TinyMCE is enabled or not
 	 * @return bool $tinymce Modified value for whether TinyMCE is enabled or not
@@ -838,7 +867,9 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * Decides whether or not to show comment form
+	 * Decides whether or not to show comment form.
+	 *
+	 * @since 0.1
 	 *
 	 * @param bool $show Whether or not to show comment form
 	 * @return bool $show Show the comment form
@@ -865,7 +896,9 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * Show a message if we are hiding the comment form
+	 * Show a message if we are hiding the comment form.
+	 *
+	 * @since 0.1
 	 *
 	 * @param str $hidden The message shown when the comment form is hidden
 	 * @return str $link The overridden message shown when the comment form is hidden
@@ -913,7 +946,9 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * Override content of the reply to link
+	 * Override content of the reply to link.
+	 *
+	 * @since 0.1
 	 *
 	 * @param string $link_text The full text of the reply to link
 	 * @param string $paragraph_text Paragraph text
@@ -950,7 +985,9 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * Override content of the reply to link target
+	 * Override content of the reply to link target.
+	 *
+	 * @since 0.1
 	 *
 	 * @param string $href The existing target URL
 	 * @param string $text_sig The text signature of the paragraph
@@ -984,7 +1021,9 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * Override content of the reply to link
+	 * Override content of the reply to link.
+	 *
+	 * @since 0.1
 	 *
 	 * @param string $onclick The reply-to onclick attribute
 	 * @return string $onclick The modified reply-to onclick attribute
@@ -999,7 +1038,9 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * For group sites, if the user is a member of the group, allow unmoderated comments
+	 * For group sites, if the user is a member of the group, allow unmoderated comments.
+	 *
+	 * @since 0.1
 	 *
 	 * @param int $approved The comment status
 	 * @param array $commentdata The comment data
@@ -1053,7 +1094,9 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * For a given comment ID, get the ID of the group it is posted in
+	 * For a given comment ID, get the ID of the group it is posted in.
+	 *
+	 * @since 0.1
 	 *
 	 * @param int $comment_id The comment ID
 	 * @return int $group_id The group ID (empty string if none found)
@@ -1075,7 +1118,9 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * Adds links to the Special Pages menu in CommentPress themes
+	 * Adds links to the Special Pages menu in CommentPress themes.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -1329,7 +1374,9 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * Adds filtering above scrollable comments in CommentPress Responsive
+	 * Adds filtering above scrollable comments in CommentPress Responsive.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -1558,7 +1605,9 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * Inserts a dropdown (or hidden input) into the comment form
+	 * Inserts a dropdown (or hidden input) into the comment form.
+	 *
+	 * @since 0.1
 	 *
 	 * @param string $result Existing markup to be sent to browser
 	 * @param int $comment_id The comment ID
@@ -1575,7 +1624,9 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * Gets a dropdown (or hidden input) for a comment
+	 * Gets a dropdown (or hidden input) for a comment.
+	 *
+	 * @since 0.1
 	 *
 	 * @param string $result Existing markup to be sent to browser
 	 * @param int $comment_id The comment ID
@@ -1806,7 +1857,9 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * When a comment is saved, get the ID of the group it was submitted to
+	 * When a comment is saved, get the ID of the group it was submitted to.
+	 *
+	 * @since 0.1
 	 *
 	 * @return int $group_id the group ID of the input in the comment form
 	 */
@@ -1831,7 +1884,9 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * When our filtering form is is submitted, parse groups by selection
+	 * When our filtering form is is submitted, parse groups by selection.
+	 *
+	 * @since 0.1
 	 *
 	 * @param array $group_ids The group IDs
 	 * @return array $group_ids The filtered group IDs
@@ -1875,7 +1930,9 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * When our filtering form is is submitted, parse groups by selection
+	 * When our filtering form is is submitted, parse groups by selection.
+	 *
+	 * @since 0.1
 	 *
 	 * @param array $classes The classes to be appied to the comment
 	 * @param array $class The comment class
@@ -1915,7 +1972,9 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * Parse groups by user membership
+	 * Parse groups by user membership.
+	 *
+	 * @since 0.1
 	 *
 	 * @return array $user_group_ids Associative array of group IDs to which the user has access
 	 */
@@ -2022,7 +2081,9 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * Check if the user is a member of a group reading this site
+	 * Check if the user is a member of a group reading this site.
+	 *
+	 * @since 0.1
 	 *
 	 * @return boolean $this->user_in_group Whether the user is a member or not
 	 */
@@ -2067,7 +2128,9 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * Show group sites activity in sidebar
+	 * Show group sites activity in sidebar.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -2177,7 +2240,9 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * Show group sites activity in sidebar
+	 * Show group sites activity in sidebar.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -2225,7 +2290,9 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * Override the title of the Recent Posts section in the activity sidebar
+	 * Override the title of the Recent Posts section in the activity sidebar.
+	 *
+	 * @since 0.1
 	 *
 	 * @return str $title The overridden value of the Recent Posts section
 	 */
@@ -2449,7 +2516,9 @@ class BpGroupSites_Activity {
 
 
 	/**
-	 * Add a filter option to the filter select box on group activity pages
+	 * Add a filter option to the filter select box on group activity pages.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */

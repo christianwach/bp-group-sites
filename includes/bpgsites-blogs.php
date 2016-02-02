@@ -1,6 +1,6 @@
 <?php /*
 ================================================================================
-BP Group Sites Blogs Template
+BP Group Sites Blogs Functions
 ================================================================================
 AUTHOR: Christian Wach <needle@haystack.co.uk>
 --------------------------------------------------------------------------------
@@ -16,7 +16,9 @@ association, whilst retaining useful stuff like pagination.
 
 
 /**
- * Query only Group Site blogs
+ * Query only Group Site blogs.
+ *
+ * @since 0.1
  *
  * @param array $args Array of arguments with which the query was configured
  * @return bool $has_blogs Whether or not our modified query has found blogs
@@ -96,7 +98,9 @@ function bpgsites_has_blogs( $args = '' ) {
 
 
 /**
- * Intercept blogs query and manage display of blogs
+ * Intercept blogs query and manage display of blogs.
+ *
+ * @since 0.1
  *
  * @param array $args The existing arguments used for the query
  * @return array $args The modified arguments used for the query
@@ -157,7 +161,9 @@ if ( ! is_admin() OR ( defined( 'DOING_AJAX' ) AND DOING_AJAX ) ) {
 
 
 /**
- * Override the total number of sites, excluding groupsites
+ * Override the total number of sites, excluding groupsites.
+ *
+ * @since 0.1
  *
  * @return int $filtered_count The filtered total number of BuddyPress Groups
  */
@@ -194,7 +200,9 @@ if ( ! is_admin() OR ( defined( 'DOING_AJAX' ) AND DOING_AJAX ) ) {
 
 
 /**
- * Override the total number of sites for a user, excluding groupsites
+ * Override the total number of sites for a user, excluding groupsites.
+ *
+ * @since 0.1
  *
  * @param int $count The total number of sites for a user
  * @return int $filtered_count The filtered total number of blogs for a user
@@ -234,7 +242,9 @@ Functions which may only be used in the loop
 
 
 /**
- * Copied from bp_blogs_pagination_count() and amended
+ * Copied from bp_blogs_pagination_count() and amended.
+ *
+ * @since 0.1
  *
  * @return void
  */
@@ -268,7 +278,9 @@ function bpgsites_blogs_pagination_count() {
 
 /**
  * Get the total number of groupsites being tracked.
- * Copied from bp_total_blogs() and amended
+ * Copied from bp_total_blogs() and amended.
+ *
+ * @since 0.1
  *
  * @return int $count Total blog count.
  */
@@ -298,6 +310,8 @@ function bpgsites_total_blogs() {
 /**
  * Output the total number of groupsites on the site.
  *
+ * @since 0.1
+ *
  * @return void
  */
 function bpgsites_total_blog_count() {
@@ -320,7 +334,9 @@ function bpgsites_total_blog_count() {
 
 /**
  * Get the total number of groupsites for a user
- * Copied from bp_blogs_total_blogs_for_user() and amended
+ * Copied from bp_blogs_total_blogs_for_user() and amended.
+ *
+ * @since 0.1
  *
  * @return int $count Total blog count for a user
  */
@@ -352,7 +368,9 @@ function bpgsites_total_blogs_for_user( $user_id = 0 ) {
 
 
 /**
- * Output the total number of working blogs for a user
+ * Output the total number of working blogs for a user.
+ *
+ * @since 0.1
  *
  * @return void
  */
@@ -375,7 +393,9 @@ function bpgsites_total_blog_count_for_user( $user_id = 0 ) {
 
 
 /**
- * For a blog in the loop, check if it is associated with the current group
+ * For a blog in the loop, check if it is associated with the current group.
+ *
+ * @since 0.1
  *
  * @return bool Whether or not the blog is in the group
  */
@@ -410,7 +430,9 @@ function bpgsites_is_blog_in_group() {
 
 
 /**
- * Get the text value of a submit button
+ * Get the text value of a submit button.
+ *
+ * @since 0.1
  *
  * @return void
  */
@@ -428,7 +450,9 @@ function bpgsites_admin_button_value() {
 
 
 /**
- * Get the action of a submit button
+ * Get the action of a submit button.
+ *
+ * @since 0.1
  *
  * @return void
  */
@@ -447,6 +471,8 @@ function bpgsites_admin_button_action() {
 
 /**
  * Output the group sites component root slug.
+ *
+ * @since 0.1
  *
  * @uses bpgsites_get_root_slug()
  * @return void
@@ -475,7 +501,9 @@ Functions which enable loop compatibility with CommentPress "Site Image"
 
 
 /**
- * Capture "Site Image" uploads and store
+ * Capture "Site Image" uploads and store.
+ *
+ * @since 0.1
  *
  * @param mixed|array $old_value The previous value
  * @param mixed|array $new_value The new value
@@ -549,7 +577,9 @@ add_action( 'update_option_commentpress_theme_settings', 'bpgsites_commentpress_
 
 
 /**
- * Replace groupsite avatar with "Site Image"
+ * Replace groupsite avatar with "Site Image".
+ *
+ * @since 0.1
  *
  * @param string $avatar  Formatted HTML <img> element, or raw avatar
  *                        URL based on $html arg.

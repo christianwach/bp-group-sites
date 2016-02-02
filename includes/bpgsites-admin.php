@@ -14,44 +14,44 @@ The plugin's admin screen logic
 
 
 
-/*
-================================================================================
-Class Name
-================================================================================
-*/
-
+/**
+ * BP Group Sites Admin class.
+ *
+ * A class that encapsulates admin functionality.
+ *
+ * @since 0.1
+ */
 class BP_Group_Sites_Admin {
 
-	/*
-	============================================================================
-	Properties
-	============================================================================
-	*/
-
-	// plugin options
+	/**
+	 * Plugin options array.
+	 *
+	 * @since 0.1
+	 * @access public
+	 * @var object $bpgsites_options The plugin options array
+	 */
 	public $bpgsites_options = array();
 
 
 
 	/**
-	 * Initialises this object
+	 * Constructor.
 	 *
-	 * @return object
+	 * @since 0.1
 	 */
 	function __construct() {
 
 		// get options array, if it exists
 		$this->bpgsites_options = bpgsites_site_option_get( 'bpgsites_options', array() );
 
-		// --<
-		return $this;
-
 	}
 
 
 
 	/**
-	 * Register hooks on plugin init
+	 * Register hooks on plugin init.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -70,7 +70,9 @@ class BP_Group_Sites_Admin {
 
 
 	/**
-	 * Actions to perform on plugin activation
+	 * Actions to perform on plugin activation.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -117,7 +119,9 @@ class BP_Group_Sites_Admin {
 
 
 	/**
-	 * Actions to perform on plugin deactivation (NOT deletion)
+	 * Actions to perform on plugin deactivation (NOT deletion).
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -134,7 +138,9 @@ class BP_Group_Sites_Admin {
 
 
 	/**
-	 * Add an admin page for this plugin
+	 * Add an admin page for this plugin.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -143,23 +149,17 @@ class BP_Group_Sites_Admin {
 		// we must be network admin
 		if ( ! is_super_admin() ) { return false; }
 
-
-
 		// try and update options
 		$saved = $this->options_update();
 
-
-
 		// always add the admin page to the Settings menu
 		$page = add_submenu_page(
-
 			'settings.php',
 			__( 'BP Group Sites', 'bpgsites' ),
 			__( 'BP Group Sites', 'bpgsites' ),
 			'manage_options',
 			'bpgsites_admin_page',
 			array( $this, '_network_admin_form' )
-
 		);
 
 		// add styles only on our admin page, see:
@@ -171,7 +171,9 @@ class BP_Group_Sites_Admin {
 
 
 	/**
-	 * Enqueue any styles and scripts needed by our admin page
+	 * Enqueue any styles and scripts needed by our admin page.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -179,13 +181,11 @@ class BP_Group_Sites_Admin {
 
 		// add admin css
 		wp_enqueue_style(
-
 			'bpgsites-admin-style',
 			BPGSITES_URL . 'assets/css/bpgsites-admin.css',
 			null,
 			BPGSITES_VERSION,
 			'all' // media
-
 		);
 
 	}
@@ -193,7 +193,9 @@ class BP_Group_Sites_Admin {
 
 
 	/**
-	 * Update options based on content of form
+	 * Update options based on content of form.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -205,8 +207,6 @@ class BP_Group_Sites_Admin {
 		// check that we trust the source of the data
 		check_admin_referer( 'bpgsites_admin_action', 'bpgsites_nonce' );
 
-
-
 		// debugging switch for admins and network admins - if set, triggers do_debug() below
 		if ( is_super_admin() AND isset( $_POST['bpgsites_debug'] ) ) {
 			$settings_debug = absint( $_POST['bpgsites_debug'] );
@@ -214,8 +214,6 @@ class BP_Group_Sites_Admin {
 			if ( $debug ) { $this->do_debug(); }
 			return;
 		}
-
-
 
 		// init vars
 		$bpgsites_public = 0;
@@ -225,29 +223,19 @@ class BP_Group_Sites_Admin {
 		$bpgsites_overrides_plural = '';
 		$bpgsites_overrides_button = '';
 
-
-
 		// okay, we're through - get variables
 		extract( $_POST );
 
-
-
 		// get defaults
 		$defaults = $this->_get_defaults();
-
-
 
 		// set public comments visibility on/off option
 		$bpgsites_public = absint( $bpgsites_public );
 		$this->option_set( 'bpgsites_public', ( $bpgsites_public ? 1 : 0 ) );
 
-
-
 		// set name change on/off option
 		$bpgsites_overrides = absint( $bpgsites_overrides );
 		$this->option_set( 'bpgsites_overrides', ( $bpgsites_overrides ? 1 : 0 ) );
-
-
 
 		// get plugin title option
 		$bpgsites_overrides_title = esc_sql( $bpgsites_overrides_title );
@@ -260,8 +248,6 @@ class BP_Group_Sites_Admin {
 		// set title option
 		$this->option_set( 'bpgsites_overrides_title', $bpgsites_overrides_title );
 
-
-
 		// get name option
 		$bpgsites_overrides_name = esc_sql( $bpgsites_overrides_name );
 
@@ -272,8 +258,6 @@ class BP_Group_Sites_Admin {
 
 		// set name option
 		$this->option_set( 'bpgsites_overrides_name', $bpgsites_overrides_name );
-
-
 
 		// get plural option
 		$bpgsites_overrides_plural = esc_sql( $bpgsites_overrides_plural );
@@ -286,8 +270,6 @@ class BP_Group_Sites_Admin {
 		// set plural option
 		$this->option_set( 'bpgsites_overrides_plural', $bpgsites_overrides_plural );
 
-
-
 		// get button option
 		$bpgsites_overrides_button = esc_sql( $bpgsites_overrides_button );
 
@@ -299,13 +281,9 @@ class BP_Group_Sites_Admin {
 		// set button option
 		$this->option_set( 'bpgsites_overrides_button', $bpgsites_overrides_button );
 
-
-
 		// set slug option
 		$bpgsites_overrides_slug = sanitize_title( $bpgsites_overrides_plural );
 		$this->option_set( 'bpgsites_overrides_slug', $bpgsites_overrides_slug );
-
-
 
 		// save
 		$this->options_save();
@@ -315,7 +293,9 @@ class BP_Group_Sites_Admin {
 
 
 	/**
-	 * Save array as site option
+	 * Save array as site option.
+	 *
+	 * @since 0.1
 	 *
 	 * @return bool Success or failure
 	 */
@@ -329,7 +309,9 @@ class BP_Group_Sites_Admin {
 
 
 	/**
-	 * Return a value for a specified option
+	 * Return a value for a specified option.
+	 *
+	 * @since 0.1
 	 *
 	 * @param string $option_name The name of the option
 	 * @return bool Whether or not the option exists
@@ -349,7 +331,9 @@ class BP_Group_Sites_Admin {
 
 
 	/**
-	 * Return a value for a specified option
+	 * Return a value for a specified option.
+	 *
+	 * @since 0.1
 	 *
 	 * @param string $option_name The name of the option
 	 * @param mixed $default The default value if the option does not exist
@@ -370,7 +354,9 @@ class BP_Group_Sites_Admin {
 
 
 	/**
-	 * Sets a value for a specified option
+	 * Sets a value for a specified option.
+	 *
+	 * @since 0.1
 	 *
 	 * @param string $option_name The name of the option
 	 * @param mixed $value The value of the option
@@ -396,7 +382,9 @@ class BP_Group_Sites_Admin {
 
 
 	/**
-	 * Deletes a specified option
+	 * Deletes a specified option.
+	 *
+	 * @since 0.1
 	 *
 	 * @param string $option_name The name of the option
 	 * @return void
@@ -416,7 +404,9 @@ class BP_Group_Sites_Admin {
 
 
 	/**
-	 * General debugging utility
+	 * General debugging utility.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -427,7 +417,9 @@ class BP_Group_Sites_Admin {
 
 
 	/**
-	 * Show our admin page
+	 * Show our admin page.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -443,14 +435,10 @@ class BP_Group_Sites_Admin {
 			echo '<div id="message" class="updated"><p>' . __( 'Options saved.', 'bpgsites' ) . '</p></div>';
 		}
 
-
-
 		// sanitise admin page url
 		$url = $_SERVER['REQUEST_URI'];
 		$url_array = explode( '&', $url );
 		if ( is_array( $url_array ) ) { $url = $url_array[0]; }
-
-
 
 		// get defaults
 		$defaults = $this->_get_defaults();
@@ -600,7 +588,9 @@ class BP_Group_Sites_Admin {
 
 
 	/**
-	 * Get default values for this plugin
+	 * Get default values for this plugin.
+	 *
+	 * @since 0.1
 	 *
 	 * @return array The default values for this plugin
 	 */
@@ -653,7 +643,9 @@ Primary filters for overrides
 
 
 /**
- * Override group extension title
+ * Override group extension title.
+ *
+ * @since 0.1
  *
  * @param str $title The existing title
  * @return str $title The overridden title
@@ -682,7 +674,9 @@ add_filter( 'bpgsites_extension_title', 'bpgsites_override_extension_title', 10,
 
 
 /**
- * Override group extension singular name
+ * Override group extension singular name.
+ *
+ * @since 0.1
  *
  * @param str $name The existing name
  * @return str $name The overridden name
@@ -711,7 +705,9 @@ add_filter( 'bpgsites_extension_name', 'bpgsites_override_extension_name', 10, 1
 
 
 /**
- * Override group extension plural
+ * Override group extension plural.
+ *
+ * @since 0.1
  *
  * @param str $plural The existing plural name
  * @return str $plural The overridden plural name
@@ -740,7 +736,9 @@ add_filter( 'bpgsites_extension_plural', 'bpgsites_override_extension_plural', 1
 
 
 /**
- * Override group extension slug
+ * Override group extension slug.
+ *
+ * @since 0.1
  *
  * @param str $slug The existing slug
  * @return str $slug The overridden slug
@@ -769,7 +767,9 @@ add_filter( 'bpgsites_extension_slug', 'bpgsites_override_extension_slug', 10, 1
 
 
 /**
- * Override the name of the button on the BP Group Sites "sites" screen
+ * Override the name of the button on the BP Group Sites "sites" screen.
+ *
+ * @since 0.1
  *
  * @param array $button The existing button config array
  * @return array $button The modified button config array
@@ -825,7 +825,9 @@ Globally available utility functions
 
 
 /**
- * Test existence of a specified site option
+ * Test existence of a specified site option.
+ *
+ * @since 0.1
  *
  * @param str $option_name The name of the option
  * @return bool $exists Whether or not the option exists
@@ -849,7 +851,9 @@ function bpgsites_site_option_exists( $option_name = '' ) {
 
 
 /**
- * Return a value for a specified site option
+ * Return a value for a specified site option.
+ *
+ * @since 0.1
  *
  * @param str $option_name The name of the option
  * @param str $default The default value of the option if it has no value
@@ -870,7 +874,9 @@ function bpgsites_site_option_get( $option_name = '', $default = false ) {
 
 
 /**
- * Set a value for a specified site option
+ * Set a value for a specified site option.
+ *
+ * @since 0.1
  *
  * @param str $option_name The name of the option
  * @param mixed $value The value to set the option to

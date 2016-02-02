@@ -24,7 +24,9 @@ var BuddypressGroupSites = BuddypressGroupSites || {};
 
 
 /**
- * Create settings class
+ * Create settings class.
+ *
+ * @since 0.1
  *
  * Unused at present, but kept as a useful template.
  */
@@ -39,21 +41,21 @@ BuddypressGroupSites.settings = new function() {
 
 	// override if we have our localisation object
 	if ( 'undefined' !== typeof BuddypressGroupSitesSettings ) {
-		this.group_id = BuddypressGroupSitesSettings.data.group_id;
+		me.group_id = BuddypressGroupSitesSettings.data.group_id;
 	}
 
 	/**
 	 * Setter for group ID
 	 */
 	this.set_group_id = function( val ) {
-		this.group_id = val;
+		me.group_id = val;
 	};
 
 	/**
 	 * Getter for group ID
 	 */
 	this.get_group_id = function() {
-		return this.group_id;
+		return me.group_id;
 	};
 
 };
@@ -65,7 +67,9 @@ BuddypressGroupSites.settings = new function() {
 
 
 /**
- * Create "Read With" class
+ * Create "Read With" class.
+ *
+ * @since 0.1
  */
 BuddypressGroupSites.readwith = new function() {
 
@@ -78,6 +82,8 @@ BuddypressGroupSites.readwith = new function() {
 	 *
 	 * This method should only be called once.
 	 *
+	 * @since 0.1
+	 *
 	 * @return void
 	 */
 	this.init = function() {
@@ -88,7 +94,9 @@ BuddypressGroupSites.readwith = new function() {
 	};
 
 	/**
-	 * Write to <head> element
+	 * Write to <head> element.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -127,12 +135,16 @@ BuddypressGroupSites.readwith = new function() {
 	 *
 	 * This method should only be called once.
 	 *
+	 * @since 0.1
+	 *
 	 * @return void
 	 */
 	this.dom_ready = function() {
 
 		/**
-		 * Activity column headings click
+		 * Activity column headings click.
+		 *
+		 * @since 0.1
 		 *
 		 * @return false
 		 */
@@ -175,7 +187,9 @@ BuddypressGroupSites.readwith = new function() {
 
 
 /**
- * Create "Read With" Select2 class
+ * Create "Read With" Select2 class.
+ *
+ * @since 0.1
  */
 BuddypressGroupSites.readwith.select2 = new function() {
 
@@ -184,7 +198,9 @@ BuddypressGroupSites.readwith.select2 = new function() {
 		$ = jQuery.noConflict();
 
 	/**
-	 * Select2 init
+	 * Select2 init.
+	 *
+	 * @since 0.1
 	 */
 	this.init = function( target ) {
 
@@ -240,7 +256,9 @@ BuddypressGroupSites.readwith.select2 = new function() {
 	};
 
 	/**
-	 * Select2 format results for display in dropdown
+	 * Select2 format results for display in dropdown.
+	 *
+	 * @since 0.1
 	 */
 	this.format_result = function(data) {
 
@@ -269,14 +287,18 @@ BuddypressGroupSites.readwith.select2 = new function() {
 	}
 
 	/**
-	 * Select2 format response
+	 * Select2 format response.
+	 *
+	 * @since 0.1
 	 */
 	this.format_response = function( data ) {
 		return data.name || data.text;
 	}
 
 	/**
-	 * Select2 events
+	 * Select2 events.
+	 *
+	 * @since 0.1
 	 */
 	this.events_bind = function( target ) {
 
@@ -295,7 +317,9 @@ BuddypressGroupSites.readwith.select2 = new function() {
 	}
 
 	/**
-	 * Clear Select2 listeners
+	 * Clear Select2 listeners.
+	 *
+	 * @since 0.1
 	 */
 	this.events_unbind = function() {
 		$('.bpgsites_group_linkages_invite_select').unbind( 'select2:select' );
@@ -319,7 +343,9 @@ BuddypressGroupSites.readwith.init();
 
 
 /**
- * Define what happens when the page is ready
+ * Define what happens when the page is ready.
+ *
+ * @since 0.1
  *
  * @return void
  */

@@ -28,7 +28,9 @@ if ( 'undefined' !== typeof BpgsitesSettings ) {
 
 
 /**
- * Set up our elements
+ * Set up our elements.
+ *
+ * @since 0.1
  *
  * @return void
  */
@@ -68,7 +70,9 @@ bpgsites_setup();
 
 
 /**
- * Check page load
+ * Check page load.
+ *
+ * @since 0.1
  *
  * @return void
  */
@@ -96,7 +100,9 @@ function bpgsites_page_load() {
 
 
 /**
- * Update dropdown and hide it
+ * Update dropdown and hide it.
+ *
+ * @since 0.1
  *
  * @return void
  */
@@ -143,7 +149,9 @@ function bpgsites_update_select( comment_id ) {
 
 
 /**
- * Initialise elements
+ * Initialise elements.
+ *
+ * @since 0.1
  *
  * @return void
  */
@@ -154,6 +162,8 @@ function bpgsites_init_elements() {
 
 		/**
 		 * Hide comments for initially unchecked boxes - HACK!!!
+		 *
+		 * @since 0.1
 		 */
 		jQuery( 'input.bpgsites_group_checkbox_public' ).each( function(i) {
 
@@ -181,7 +191,11 @@ function bpgsites_init_elements() {
 
 			}
 
-			// recalculate headings and para icons
+			/**
+			 * Recalculate headings and para icons.
+			 *
+			 * @since 0.1
+			 */
 			jQuery( 'a.comment_block_permalink' ).each( function( i ) {
 
 				var wrapper, shown, text_sig;
@@ -210,7 +224,9 @@ function bpgsites_init_elements() {
 
 
 	/**
-	 * Activity column headings click
+	 * Activity column headings click.
+	 *
+	 * @since 0.1
 	 *
 	 * @return false
 	 */
@@ -241,7 +257,9 @@ function bpgsites_init_elements() {
 
 
 	/**
-	 * Activity column headings click
+	 * Activity column headings click.
+	 *
+	 * @since 0.1
 	 *
 	 * @return false
 	 */
@@ -264,7 +282,9 @@ function bpgsites_init_elements() {
 
 
 	/**
-	 * Activity column headings click
+	 * Activity column headings click.
+	 *
+	 * @since 0.1
 	 *
 	 * @return false
 	 */
@@ -281,7 +301,9 @@ function bpgsites_init_elements() {
 
 
 	/**
-	 * Activity column headings click
+	 * Activity column headings click.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -342,7 +364,9 @@ function bpgsites_init_elements() {
 
 
 /**
- * Define what happens when the page is ready
+ * Define what happens when the page is ready.
+ *
+ * @since 0.1
  *
  * @return void
  */

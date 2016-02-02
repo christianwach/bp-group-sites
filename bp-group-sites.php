@@ -47,32 +47,39 @@ define( 'BPGSITES_COMMENT_META_KEY', 'bpgsites_group_id' );
 
 
 
-/*
-================================================================================
-Class Name
-================================================================================
-*/
-
+/**
+ * BP Group Sites class.
+ *
+ * A class that encapsulates plugin functionality.
+ *
+ * @since 0.1
+ */
 class BP_Group_Sites {
 
-	/*
-	============================================================================
-	Properties
-	============================================================================
-	*/
-
-	// admin object
+	/**
+	 * Admin object.
+	 *
+	 * @since 0.1
+	 * @access public
+	 * @var object $admin The admin object
+	 */
 	public $admin;
 
-	// activity object
+	/**
+	 * Activity object.
+	 *
+	 * @since 0.1
+	 * @access public
+	 * @var object $activity The activity object
+	 */
 	public $activity;
 
 
 
 	/**
-	 * Initialises this object
+	 * Constructor.
 	 *
-	 * @return object
+	 * @since 0.1
 	 */
 	function __construct() {
 
@@ -87,9 +94,6 @@ class BP_Group_Sites {
 		add_action( 'bp_loaded', array( $this, 'register_hooks' ) );
 		add_action( 'bp_include', array( $this, 'register_theme_hooks' ) );
 
-		// --<
-		return $this;
-
 	}
 
 
@@ -99,7 +103,9 @@ class BP_Group_Sites {
 
 
 	/**
-	 * Actions to perform on plugin activation
+	 * Actions to perform on plugin activation.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -113,7 +119,9 @@ class BP_Group_Sites {
 
 
 	/**
-	 * Actions to perform on plugin deactivation (NOT deletion)
+	 * Actions to perform on plugin deactivation (NOT deletion).
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -131,9 +139,12 @@ class BP_Group_Sites {
 
 
 	/**
-	 * Load translation files
+	 * Load translation files.
+	 *
 	 * A good reference on how to implement translation in WordPress:
 	 * http://ottopress.com/2012/internationalization-youre-probably-doing-it-wrong/
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -158,7 +169,9 @@ class BP_Group_Sites {
 
 
 	/**
-	 * Initialise the admin object
+	 * Initialise the admin object.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -175,7 +188,9 @@ class BP_Group_Sites {
 
 
 	/**
-	 * Do stuff on plugin init
+	 * Do stuff on plugin init.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -207,7 +222,9 @@ class BP_Group_Sites {
 
 
 	/**
-	 * Register hooks on plugin init
+	 * Register hooks on plugin init.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -241,7 +258,9 @@ class BP_Group_Sites {
 
 
 	/**
-	 * Register theme hooks on bp include
+	 * Register theme hooks on bp include.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -255,7 +274,9 @@ class BP_Group_Sites {
 
 
 	/**
-	 * Add our templates to the theme stack
+	 * Add our templates to the theme stack.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -269,7 +290,9 @@ class BP_Group_Sites {
 
 
 	/**
-	 * Add our front-end stylesheets
+	 * Add our front-end stylesheets.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -303,7 +326,9 @@ class BP_Group_Sites {
 
 
 	/**
-	 * Add our front-end Javascripts
+	 * Add our front-end Javascripts.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -365,7 +390,9 @@ class BP_Group_Sites {
 
 
 	/**
-	 * Add our CommentPress-specific scripts
+	 * Add our CommentPress-specific scripts.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -420,7 +447,9 @@ register_deactivation_hook( __FILE__, array( $bp_groupsites, 'deactivate' ) );
 
 
 /**
- * Returns the path to our templates directory
+ * Returns the path to our templates directory.
+ *
+ * @since 0.1
  *
  * @return str $path path to this plugin's templates directory
  */

@@ -1,10 +1,10 @@
 <?php
 
 /**
- * BP Group Sites - Group Sites Directory
+ * BP Group Sites - Group Sites Directory.
  *
  * @package BuddyPress
- * @subpackage bp-default
+ * @subpackage BP_Group_Sites
  */
 
 get_header( 'buddypress' );

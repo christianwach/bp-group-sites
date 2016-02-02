@@ -15,7 +15,9 @@ Logic functions which don't need to be in the loop.
 
 
 /**
- * For a given blog ID, get the array of group IDs
+ * For a given blog ID, get the array of group IDs.
+ *
+ * @since 0.1
  *
  * @param int $blog_id the numeric ID of the blog
  * @return array $group_ids Array of numeric IDs of groups
@@ -33,7 +35,9 @@ function bpgsites_get_groups_by_blog_id( $blog_id ) {
 
 
 /**
- * For a given group ID, add a given group ID
+ * For a given group ID, add a given group ID.
+ *
+ * @since 0.1
  *
  * @param int $group_id the numeric ID of the group
  * @return array $blog_ids Array of numeric IDs of blogs
@@ -54,7 +58,9 @@ function bpgsites_get_blogs_by_group_id( $group_id ) {
 
 
 /**
- * For a given blog ID, check if it is associated with a given group ID
+ * For a given blog ID, check if it is associated with a given group ID.
+ *
+ * @since 0.1
  *
  * @param int $blog_id the numeric ID of the blog
  * @param int $group_id the numeric ID of the group
@@ -86,7 +92,9 @@ function bpgsites_check_group_by_blog_id( $blog_id, $group_id ) {
 
 
 /**
- * For a given group ID, check if it is associated with a given blog ID
+ * For a given group ID, check if it is associated with a given blog ID.
+ *
+ * @since 0.1
  *
  * @param int $blog_id the numeric ID of the blog
  * @param int $group_id the numeric ID of the group
@@ -113,7 +121,9 @@ function bpgsites_check_blog_by_group_id( $group_id, $blog_id ) {
 
 
 /**
- * Reciprocal addition of IDs
+ * Reciprocal addition of IDs.
+ *
+ * @since 0.1
  *
  * @param int $group_id the numeric ID of the group
  * @param int $blog_id the numeric ID of the blog
@@ -135,7 +145,9 @@ function bpgsites_link_blog_and_group( $blog_id, $group_id ) {
 
 
 /**
- * Reciprocal deletion of IDs
+ * Reciprocal deletion of IDs.
+ *
+ * @since 0.1
  *
  * @param int $group_id the numeric ID of the group
  * @param int $blog_id the numeric ID of the blog
@@ -157,7 +169,9 @@ function bpgsites_unlink_blog_and_group( $blog_id, $group_id ) {
 
 
 /**
- * Set blog options
+ * Set blog options.
+ *
+ * @since 0.1
  *
  * @param int $blog_id the numeric ID of the blog
  * @return void
@@ -196,7 +210,9 @@ function bpgsites_configure_blog_options( $blog_id ) {
 
 
 /**
- * Unset blog options
+ * Unset blog options.
+ *
+ * @since 0.1
  *
  * @param int $blog_id the numeric ID of the blog
  * @return void
@@ -229,7 +245,9 @@ function bpgsites_reset_blog_options( $blog_id ) {
 
 
 /**
- * For a given blog ID, add a given group ID
+ * For a given blog ID, add a given group ID.
+ *
+ * @since 0.1
  *
  * @param int $blog_id the numeric ID of the blog
  * @param int $group_id the numeric ID of the group
@@ -251,7 +269,9 @@ function bpgsites_add_group_to_blog( $blog_id, $group_id ) {
 
 
 /**
- * For a given group ID, add a given blog ID
+ * For a given group ID, add a given blog ID.
+ *
+ * @since 0.1
  *
  * @param int $group_id the numeric ID of the group
  * @param int $blog_id the numeric ID of the blog
@@ -278,7 +298,9 @@ function bpgsites_add_blog_to_group( $group_id, $blog_id ) {
 
 
 /**
- * For a given blog ID, remove a given group ID
+ * For a given blog ID, remove a given group ID.
+ *
+ * @since 0.1
  *
  * @param int $blog_id the numeric ID of the blog
  * @param int $group_id the numeric ID of the group
@@ -305,7 +327,9 @@ function bpgsites_remove_group_from_blog( $blog_id, $group_id ) {
 
 
 /**
- * For a given group ID, remove a given blog ID
+ * For a given group ID, remove a given blog ID.
+ *
+ * @since 0.1
  *
  * @param int $group_id the numeric ID of the group
  * @param int $blog_id the numeric ID of the blog
@@ -332,7 +356,9 @@ function bpgsites_remove_blog_from_group( $group_id, $blog_id ) {
 
 
 /**
- * Sever link when a site gets deleted
+ * Sever link when a site gets deleted.
+ *
+ * @since 0.1
  *
  * @param int $blog_id the numeric ID of the blog
  * @return void
@@ -366,7 +392,9 @@ add_action( 'delete_blog', 'bpgsites_remove_blog_from_groups', 10, 1 );
 
 
 /**
- * Sever link before a group gets deleted so we can still access meta
+ * Sever link before a group gets deleted so we can still access meta.
+ *
+ * @since 0.1
  *
  * @param int $group_id the numeric ID of the group
  * @return void
@@ -399,7 +427,9 @@ add_action( 'groups_before_delete_group', 'bpgsites_remove_group_from_blogs', 10
 
 
 /**
- * Check if blog is a groupblog
+ * Check if blog is a groupblog.
+ *
+ * @since 0.1
  *
  * @param int $blog_id the numeric ID of the blog
  * @return bool $return Whether the blog is a groupblog or not
@@ -428,7 +458,9 @@ function bpgsites_is_groupblog( $blog_id ) {
 
 
 /**
- * Check if blog is a groupsite
+ * Check if blog is a groupsite.
+ *
+ * @since 0.1
  *
  * @param int $blog_id the numeric ID of the blog
  * @return bool $return Whether the blog is a groupsite
@@ -454,7 +486,9 @@ function bpgsites_is_groupsite( $blog_id ) {
 
 
 /**
- * Get array of all groupsite blog IDs
+ * Get array of all groupsite blog IDs.
+ *
+ * @since 0.1
  *
  * @return array $blog_ids Array of numeric IDs of the group site blogs
  */
@@ -480,10 +514,12 @@ function bpgsites_get_groupsites() {
 
 
 /**
- * Get all blogs that are (or can be) group sites
+ * Get all blogs that are (or can be) group sites.
  *
  * At present, this means excluding the root blog and group blogs, but additional
- * blogs (such as "working papers") can be excluded using the provided filter
+ * blogs (such as "working papers") can be excluded using the provided filter.
+ *
+ * @since 0.1
  *
  * @return array $filtered_blogs An array of all possible group sites
  */
@@ -519,7 +555,9 @@ function bpgsites_get_all_possible_groupsites() {
 
 
 /**
- * Store blog ID in plugin data
+ * Store blog ID in plugin data.
+ *
+ * @since 0.1
  *
  * @param int $blog_id the numeric ID of the blog
  * @return void
@@ -554,7 +592,9 @@ function bpgsites_register_groupsite( $blog_id ) {
 
 
 /**
- * Clear blog ID from plugin data
+ * Clear blog ID from plugin data.
+ *
+ * @since 0.1
  *
  * @param int $blog_id the numeric ID of the blog
  * @return void

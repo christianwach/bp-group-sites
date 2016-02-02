@@ -7,8 +7,6 @@ AUTHOR: Christian Wach <needle@haystack.co.uk>
 NOTES
 =====
 
-This class extends BP_Group_Extension to create the screens our plugin requires.
-See: http://codex.buddypress.org/developer/plugin-development/group-extension-api/
 
 --------------------------------------------------------------------------------
 */
@@ -20,21 +18,23 @@ if ( ! class_exists( 'BP_Group_Extension' ) ) { return; }
 
 
 
-/*
-================================================================================
-Class Name
-================================================================================
-*/
-
+/**
+ * BP Group Sites Group Extension class.
+ *
+ * This class extends BP_Group_Extension to create the screens our plugin requires.
+ * @see http://codex.buddypress.org/developer/plugin-development/group-extension-api/
+ *
+ * @since 0.1
+ */
 class BPGSites_Group_Extension extends BP_Group_Extension {
 
 
 
-	/*
-	============================================================================
-	Properties
-	============================================================================
-	*/
+	/**
+	 * Properties.
+	 *
+	 * Many of the following a unused but retained to show possibilities.
+	 */
 
 	/*
 	// 'public' will show our extension to non-group members
@@ -63,9 +63,9 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 
 
 	/**
-	 * Initialises this object
+	 * Constructor.
 	 *
-	 * @return void
+	 * @since 0.1
 	 */
 	function __construct() {
 
@@ -105,7 +105,9 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 
 
 	/**
-	 * The content of the extension tab in the group admin
+	 * The content of the extension tab in the group admin.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -128,7 +130,9 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 
 
 	/**
-	 * Runs after the user clicks a submit button on the edit screen
+	 * Runs after the user clicks a submit button on the edit screen.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -278,7 +282,9 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 
 
 	/**
-	 * Display our content when the nav item is selected
+	 * Display our content when the nav item is selected.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -293,13 +299,15 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 
 	/**
 	 * If your group extension requires a meta box in the Dashboard group admin,
-	 * use this method to display the content of the metabox
+	 * use this method to display the content of the metabox.
 	 *
 	 * As in the case of create_screen() and edit_screen(), it may be helpful
 	 * to abstract shared markup into a separate method.
 	 *
 	 * This is an optional method. If you don't need/want a metabox on the group
 	 * admin panel, don't define this method in your class.
+	 *
+	 * @since 0.1
 	 *
 	 * @param int $group_id the numeric ID of the group being edited
 	 * @return void
@@ -314,7 +322,9 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 
 
 	/**
-	 * The routine run after the group is saved on the Dashboard group admin screen
+	 * The routine run after the group is saved on the Dashboard group admin screen.
+	 *
+	 * @since 0.1
 	 *
 	 * @param int $group_id the numeric ID of the group being edited
 	 * @return void
@@ -328,7 +338,9 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 
 
 	/**
-	 * Parse the name of an input to extract blog ID and action
+	 * Parse the name of an input to extract blog ID and action.
+	 *
+	 * @since 0.1
 	 *
 	 * @return array Contains $blog_id and $action
 	 */
@@ -375,7 +387,9 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 
 
 	/**
-	 * Parse the name of an input to extract blog ID, group ID and action
+	 * Parse the name of an input to extract blog ID, group ID and action.
+	 *
+	 * @since 0.1
 	 *
 	 * @return array Contains $blog_id and $action
 	 */
@@ -432,7 +446,9 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 
 
 	/**
-	 * Sends a private message to admins of the invited group
+	 * Sends a private message to admins of the invited group.
+	 *
+	 * @since 0.1
 	 *
 	 * @param int $blog_id The numeric ID of the blog to be "read together"
 	 * @param int $inviting_group_id The numeric ID of the inviting group
@@ -520,7 +536,9 @@ bp_register_group_extension( 'BPGSites_Group_Extension' );
 
 
 /**
- * The content of the public extension page
+ * The content of the public extension page.
+ *
+ * @since 0.1
  *
  * @return void
  */
@@ -629,7 +647,9 @@ function bpgsites_get_extension_display() {
 
 
 /**
- * The content of the extension group admin page
+ * The content of the extension group admin page.
+ *
+ * @since 0.1
  *
  * @return void
  */
@@ -742,7 +762,9 @@ function bpgsites_get_extension_edit_screen() {
 
 
 /**
- * The content of the extension admin screen
+ * The content of the extension admin screen.
+ *
+ * @since 0.1
  *
  * @return void
  */
@@ -755,7 +777,9 @@ function bpgsites_get_extension_admin_screen() {
 
 
 /**
- * Get group ID on admin and creation screens
+ * Get group ID on admin and creation screens.
+ *
+ * @since 0.1
  *
  * @return int $group_id the current group ID
  */
@@ -784,7 +808,9 @@ function bpgsites_get_current_group_id() {
 
 
 /**
- * Adds "accept" and "reject" invitations for "reading with" other groups
+ * Adds "accept" and "reject" invitations for "reading with" other groups.
+ *
+ * @since 0.1
  *
  * @param bool $echo Whether to echo or not
  * @return void
@@ -862,6 +888,8 @@ function bpgsites_group_linkages_pending_get_markup( $echo = true ) {
 /**
  * For a given group ID, get all invitation data.
  *
+ * @since 0.1
+ *
  * @param int $group_id The numeric ID of the group
  * @return array $pending_groups Array containing "sent" and "received" arrays of numeric IDs of pending groups
  */
@@ -889,6 +917,8 @@ function bpgsites_group_linkages_pending_get( $group_id ) {
 /**
  * For a given group ID and blog ID, get the group IDs that have been invited.
  *
+ * @since 0.1
+ *
  * @param int $group_id The numeric ID of the group
  * @param int $blog_id The numeric ID of the blog (optional)
  * @return array $linked_groups Array of numeric IDs of linked groups
@@ -915,6 +945,8 @@ function bpgsites_group_linkages_pending_sent_get( $group_id, $blog_id = 0 ) {
 
 /**
  * Create a sent invitation.
+ *
+ * @since 0.1
  *
  * @param int $blog_id The numeric ID of the blog to be "read together"
  * @param int $inviting_group_id The numeric ID of the inviting group
@@ -949,6 +981,8 @@ function bpgsites_group_linkages_pending_sent_create( $blog_id, $inviting_group_
 /**
  * Delete a sent invitation.
  *
+ * @since 0.1
+ *
  * @param int $blog_id The numeric ID of the blog to be "read together"
  * @param int $inviting_group_id The numeric ID of the inviting group
  * @param int $invited_group_id The numeric ID of the invited group
@@ -980,7 +1014,9 @@ function bpgsites_group_linkages_pending_sent_delete( $blog_id, $inviting_group_
 
 
 /**
- * Check if there are outstanding sent invitations for "reading with" other groups
+ * Check if there are outstanding sent invitations for "reading with" other groups.
+ *
+ * @since 0.1
  *
  * @param int $group_id The numeric ID of the group
  * @return bool $has_pending Whether or not there are pending linkages
@@ -1002,6 +1038,8 @@ function bpgsites_group_linkages_pending_sent_exists( $group_id ) {
 
 /**
  * For a given group ID and blog ID, get the group IDs that have submitted invitations.
+ *
+ * @since 0.1
  *
  * @param int $group_id The numeric ID of the group
  * @param int $blog_id The numeric ID of the blog (optional)
@@ -1029,6 +1067,8 @@ function bpgsites_group_linkages_pending_received_get( $group_id, $blog_id = 0 )
 
 /**
  * Create a received invitation.
+ *
+ * @since 0.1
  *
  * @param int $blog_id The numeric ID of the blog to be "read together"
  * @param int $inviting_group_id The numeric ID of the inviting group
@@ -1063,6 +1103,8 @@ function bpgsites_group_linkages_pending_received_create( $blog_id, $inviting_gr
 /**
  * Delete a received invitation.
  *
+ * @since 0.1
+ *
  * @param int $blog_id The numeric ID of the blog to be "read together"
  * @param int $invited_group_id The numeric ID of the invited group
  * @param int $inviting_group_id The numeric ID of the inviting group
@@ -1094,7 +1136,9 @@ function bpgsites_group_linkages_pending_received_delete( $blog_id, $invited_gro
 
 
 /**
- * Check if there are outstanding received invitations for "reading with" other groups
+ * Check if there are outstanding received invitations for "reading with" other groups.
+ *
+ * @since 0.1
  *
  * @param int $group_id The numeric ID of the group
  * @return bool $has_pending Whether or not there are pending linkages
@@ -1116,7 +1160,9 @@ function bpgsites_group_linkages_pending_received_exists( $group_id ) {
 
 /**
  * Creates a pending linkage to another group which - when accepted - means
- * that the two groups are considered to be "reading together"
+ * that the two groups are considered to be "reading together".
+ *
+ * @since 0.1
  *
  * @param int $blog_id The numeric ID of the blog to be "read together"
  * @param int $inviting_group_id The numeric ID of the inviting group
@@ -1137,10 +1183,12 @@ function bpgsites_group_linkages_pending_create( $blog_id, $inviting_group_id, $
 
 /**
  * Converts a pending linkage to another group so that the two groups are now
- * considered to be "reading together"
+ * considered to be "reading together".
  *
  * First, remove "sent" and "received" items from the inviter and invited data
  * arrays, then create the actual linkage data.
+ *
+ * @since 0.1
  *
  * @param int $blog_id The numeric ID of the blog to be "read together"
  * @param int $invited_group_id The numeric ID of the invited group
@@ -1163,7 +1211,9 @@ function bpgsites_group_linkages_pending_accept( $blog_id, $invited_group_id, $i
 
 
 /**
- * Delete "sent" and "received" items from the inviter and invited data arrays
+ * Delete "sent" and "received" items from the inviter and invited data arrays.
+ *
+ * @since 0.1
  *
  * @param int $blog_id The numeric ID of the blog to be "read together"
  * @param int $invited_group_id The numeric ID of the invited group
@@ -1187,7 +1237,9 @@ function bpgsites_group_linkages_pending_delete( $blog_id, $invited_group_id, $i
 
 
 /**
- * Adds UI to groups loop for "reading with" other groups
+ * Adds UI to groups loop for "reading with" other groups.
+ *
+ * @since 0.1
  *
  * @param bool $echo Whether to echo or not
  * @return bool $has_linkage Whether there is a linkage or not
@@ -1314,6 +1366,8 @@ function bpgsites_group_linkages_get_markup( $echo = true ) {
  * blogs with nested arrays of group IDs keyed by blog ID. Passing a blog ID as
  * a parameter, however, will return the specific array for that blog.
  *
+ * @since 0.1
+ *
  * @param int $group_id The numeric ID of the group
  * @param int $blog_id The numeric ID of the blog (optional)
  * @return array $linked_groups Array of numeric IDs of linked groups
@@ -1342,7 +1396,9 @@ function bpgsites_group_linkages_get( $group_id, $blog_id = 0 ) {
 
 
 /**
- * Create linkages between two groups "reading together"
+ * Create linkages between two groups "reading together".
+ *
+ * @since 0.1
  *
  * @param int $blog_id The numeric ID of the blog to be "read together"
  * @param int $inviting_group_id The numeric ID of the inviting group
@@ -1362,7 +1418,9 @@ function bpgsites_group_linkages_create( $blog_id, $inviting_group_id, $invited_
 
 
 /**
- * Delete linkages between two groups "reading together"
+ * Delete linkages between two groups "reading together".
+ *
+ * @since 0.1
  *
  * @param int $blog_id The numeric ID of the blog being "read together"
  * @param int $primary_group_id The numeric ID of the primary group
@@ -1382,7 +1440,9 @@ function bpgsites_group_linkages_delete( $blog_id, $primary_group_id, $secondary
 
 
 /**
- * For a given group ID, get linked group IDs for a specific blog
+ * For a given group ID, get linked group IDs for a specific blog.
+ *
+ * @since 0.1
  *
  * @param int $group_id the numeric ID of the group
  * @param int $blog_id the numeric ID of the blog
@@ -1405,6 +1465,8 @@ function bpgsites_group_linkages_get_groups_by_blog_id( $group_id, $blog_id ) {
 
 /**
  * For a given blog ID, check if two group IDs are linked.
+ *
+ * @since 0.1
  *
  * @param int $blog_id The numeric ID of the blog being "read together"
  * @param int $primary_group_id The numeric ID of the primary group
@@ -1431,6 +1493,8 @@ function bpgsites_group_linkages_link_exists( $blog_id, $primary_group_id, $seco
 
 /**
  * AJAX handler for group linkage autocomplete using the Select2 JS library.
+ *
+ * @since 0.1
  *
  * @return void
  */
@@ -1514,11 +1578,13 @@ add_action( 'wp_ajax_bpgsites_get_groups', 'bpgsites_group_linkages_get_ajax' );
 
 
 /**
- * Create a linkage from a primary group to a secondary group
+ * Create a linkage from a primary group to a secondary group.
  *
- * This must be called for both groups in order to establish a two-way linkage
+ * This must be called for both groups in order to establish a two-way linkage.
  *
  * @see bpgsites_group_linkages_create()
+ *
+ * @since 0.1
  *
  * @param int $blog_id The numeric ID of the blog to be "read together"
  * @param int $primary_group_id The numeric ID of the primary group
@@ -1552,11 +1618,13 @@ function bpgsites_group_linkage_create( $blog_id, $primary_group_id, $secondary_
 
 
 /**
- * Delete the linkage from a primary group to a secondary group
+ * Delete the linkage from a primary group to a secondary group.
  *
- * This must be called for both groups in order to destroy a two-way linkage
+ * This must be called for both groups in order to destroy a two-way linkage.
  *
  * @see bpgsites_group_linkages_delete()
+ *
+ * @since 0.1
  *
  * @param int $blog_id The numeric ID of the blog being "read together"
  * @param int $primary_group_id The numeric ID of the primary group
@@ -1594,7 +1662,9 @@ function bpgsites_group_linkage_delete( $blog_id, $primary_group_id, $secondary_
 
 
 /**
- * Show option to make a group a showcase group
+ * Show option to make a group a showcase group.
+ *
+ * @since 0.1
  *
  * @return void
  */
@@ -1648,7 +1718,9 @@ add_action ( 'bp_after_group_settings_creation_step' ,'bpgsites_showcase_group_s
 
 
 /**
- * Intercept group settings save process
+ * Intercept group settings save process.
+ *
+ * @since 0.1
  *
  * @param object $group the group object
  * @return void
@@ -1708,7 +1780,9 @@ add_action( 'groups_group_after_save', 'bpgsites_showcase_group_save' );
 
 
 /**
- * Get all showcase groups
+ * Get all showcase groups.
+ *
+ * @since 0.1
  *
  * @return array $showcase_groups the showcase group IDs
  */
@@ -1725,7 +1799,9 @@ function bpgsites_showcase_groups_get() {
 
 
 /**
- * Get all showcase groups
+ * Test if a group is a showcase group.
+ *
+ * @since 0.1
  *
  * @param int $group_id the group ID
  * @return bool $is_showcase_group the group is or is not a showcase group
@@ -1756,7 +1832,9 @@ function bpgsites_is_showcase_group( $group_id ) {
 
 
 /**
- * Check if user is a member of a showcase group for this blog
+ * Check if user is a member of a showcase group for this blog.
+ *
+ * @since 0.1
  *
  * @return bool $passed user is a member of a showcase group for this blog
  */
@@ -1805,7 +1883,9 @@ function bpgsites_is_showcase_group_member() {
 
 
 /**
- * Filter media buttons by showcase groups context
+ * Filter media buttons by showcase groups context.
+ *
+ * @since 0.1
  *
  * @param bool $enabled if media buttons are enabled
  * @return bool $enabled if media buttons are enabled
@@ -1834,7 +1914,9 @@ add_filter( 'commentpress_rte_media_buttons', 'bpgsites_showcase_group_media_but
 
 
 /**
- * Filter quicktags by showcase groups context
+ * Filter quicktags by showcase groups context.
+ *
+ * @since 0.1
  *
  * @param array $quicktags the quicktags
  * @return array/bool $quicktags false if quicktags are disabled, array of buttons otherwise

@@ -4,6 +4,8 @@
  * BP Group Sites Component
  *
  * The group sites component, for listing group sites.
+ *
+ * @since 0.1
  */
 
 // exit if accessed directly
@@ -13,13 +15,17 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Class definition
+ *
+ * @since 0.1
  */
 class BP_Group_Sites_Component extends BP_Component {
 
 
 
 	/**
-	 * Start the group_sites component creation process
+	 * Start the group_sites component creation process.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -57,7 +63,9 @@ class BP_Group_Sites_Component extends BP_Component {
 
 
 	/**
-	 * Include our component's files
+	 * Include our component's files.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -73,7 +81,10 @@ class BP_Group_Sites_Component extends BP_Component {
 	/**
 	 * Set up global settings for the group_sites component.
 	 *
+	 * @since 0.1
+	 *
 	 * @see BP_Component::setup_globals() for description of parameters.
+	 *
 	 * @param array $args See {@link BP_Component::setup_globals()}.
 	 * @return void
 	 */
@@ -115,6 +126,8 @@ buddypress()->bpgsites = new BP_Group_Sites_Component();
 /**
  * Check whether the current page is part of the BP Group Sites component.
  *
+ * @since 0.1
+ *
  * @return bool True if the current page is part of the BP Group Sites component.
  */
 function bp_is_bpgsites_component() {
@@ -135,10 +148,12 @@ function bp_is_bpgsites_component() {
 
 
 /**
- * A custom load template filter for this component
+ * A custom load template filter for this component.
  *
- * @return str $found_template The existing path to the template
- * @return array $templates The array of template paths
+ * @since 0.1
+ *
+ * @param str $found_template The existing path to the template
+ * @param array $templates The array of template paths
  * @return str $found_template The modified path to the template
  */
 function bpgsites_load_template_filter( $found_template, $templates ) {
@@ -179,7 +194,9 @@ add_filter( 'bp_located_template', 'bpgsites_load_template_filter', 10, 2 );
 
 
 /**
- * Load our loop when requested
+ * Load our loop when requested.
+ *
+ * @since 0.1
  *
  * @return void
  */

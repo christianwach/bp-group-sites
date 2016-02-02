@@ -1,7 +1,9 @@
 <?php
 
 /**
- * BP Group Sites Screens
+ * BP Group Sites Screens.
+ *
+ * @since 0.1
  */
 
 
@@ -14,10 +16,12 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 /** Theme Compatability *******************************************************/
 
 /**
- * The main theme compat class for BP Group Sites
+ * The main theme compat class for BP Group Sites.
  *
  * This class sets up the necessary theme compatability actions to safely output
  * group template parts to the_title and the_content areas of a theme.
+ *
+ * @since 0.1
  */
 class BP_Group_Sites_Theme_Compat {
 
@@ -25,6 +29,8 @@ class BP_Group_Sites_Theme_Compat {
 
 	/**
 	 * Set up theme compatibility for the BP Group Sites component.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -39,6 +45,8 @@ class BP_Group_Sites_Theme_Compat {
 
 	/**
 	 * Are we looking at something that needs BP Group Sites theme compatability?
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -70,6 +78,8 @@ class BP_Group_Sites_Theme_Compat {
 	/**
 	 * Add template hierarchy to theme compat for the BP Group Sites directory page.
 	 *
+	 * @since 0.1
+	 *
 	 * @param array $templates The templates from bp_get_theme_compat_templates().
 	 * @return array $templates Array of custom templates to look for.
 	 */
@@ -95,6 +105,8 @@ class BP_Group_Sites_Theme_Compat {
 
 	/**
 	 * Update the global $post with directory data.
+	 *
+	 * @since 0.1
 	 *
 	 * @return void
 	 */
@@ -123,6 +135,8 @@ class BP_Group_Sites_Theme_Compat {
 	/**
 	 * Filter the_content with the BP Group Sites index template part.
 	 *
+	 * @since 0.1
+	 *
 	 * @return str $buffer The buffered template part
 	 */
 	public function directory_content() {
@@ -149,6 +163,8 @@ new BP_Group_Sites_Theme_Compat();
 
 /**
  * Load the top-level BP Group Sites directory.
+ *
+ * @since 0.1
  *
  * @return void
  */
