@@ -257,14 +257,14 @@ function bpgsites_blogs_pagination_count() {
 	$total     = bp_core_number_format( $blogs_template->total_blog_count );
 
 	// get singular name
-	$singular = strtolower( apply_filters( 'bpgsites_extension_name', __( 'site', 'bpgsites' ) ) );
+	$singular = strtolower( apply_filters( 'bpgsites_extension_name', __( 'site', 'bp-group-sites' ) ) );
 
 	// get plural name
-	$plural = strtolower( apply_filters( 'bpgsites_extension_plural', __( 'sites', 'bpgsites' ) ) );
+	$plural = strtolower( apply_filters( 'bpgsites_extension_plural', __( 'sites', 'bp-group-sites' ) ) );
 
 	// we need to override the singular name
 	echo sprintf(
-		__( 'Viewing %1$s %2$s to %3$s (of %4$s %5$s)', 'bpgsites' ),
+		__( 'Viewing %1$s %2$s to %3$s (of %4$s %5$s)', 'bp-group-sites' ),
 		$singular,
 		$from_num,
 		$to_num,
@@ -438,9 +438,9 @@ function bpgsites_admin_button_value() {
 
 	// is this blog already associated?
 	if ( bpgsites_is_blog_in_group() ) {
-		echo __( 'Remove', 'bpgsites' );
+		echo __( 'Remove', 'bp-group-sites' );
 	} else {
-		echo __( 'Add', 'bpgsites' );
+		echo __( 'Add', 'bp-group-sites' );
 	}
 
 }

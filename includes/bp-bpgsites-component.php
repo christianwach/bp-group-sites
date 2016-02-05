@@ -39,7 +39,7 @@ class BP_Group_Sites_Component extends BP_Component {
 
 		// store component name
 		// NOTE: ideally we'll use BP theme compatibility - see bpgsites_load_template_filter() below
-		$this->name = apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bpgsites' ) );
+		$this->name = apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) );
 
 		// add this component to active components
 		$bp->active_components[$this->id] = '1';
@@ -95,8 +95,8 @@ class BP_Group_Sites_Component extends BP_Component {
 
 		// construct search string
 		$search_string = sprintf(
-			__( 'Search %s...', 'bpgsites' ),
-			apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bpgsites' ) )
+			__( 'Search %s...', 'bp-group-sites' ),
+			apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) )
 		);
 
 		// construct args

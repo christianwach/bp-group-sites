@@ -155,8 +155,8 @@ class BP_Group_Sites_Admin {
 		// always add the admin page to the Settings menu
 		$page = add_submenu_page(
 			'settings.php',
-			__( 'BP Group Sites', 'bpgsites' ),
-			__( 'BP Group Sites', 'bpgsites' ),
+			__( 'BP Group Sites', 'bp-group-sites' ),
+			__( 'BP Group Sites', 'bp-group-sites' ),
 			'manage_options',
 			'bpgsites_admin_page',
 			array( $this, '_network_admin_form' )
@@ -320,7 +320,7 @@ class BP_Group_Sites_Admin {
 
 		// test for null
 		if ( $option_name == '' ) {
-			die( __( 'You must supply an option to option_exists()', 'bpgsites' ) );
+			die( __( 'You must supply an option to option_exists()', 'bp-group-sites' ) );
 		}
 
 		// get existence of option in array
@@ -343,7 +343,7 @@ class BP_Group_Sites_Admin {
 
 		// test for null
 		if ( $option_name == '' ) {
-			die( __( 'You must supply an option to option_get()', 'bpgsites' ) );
+			die( __( 'You must supply an option to option_get()', 'bp-group-sites' ) );
 		}
 
 		// get option
@@ -366,12 +366,12 @@ class BP_Group_Sites_Admin {
 
 		// test for null
 		if ( $option_name == '' ) {
-			die( __( 'You must supply an option to option_set()', 'bpgsites' ) );
+			die( __( 'You must supply an option to option_set()', 'bp-group-sites' ) );
 		}
 
 		// test for other than string
 		if ( ! is_string( $option_name ) ) {
-			die( __( 'You must supply the option as a string to option_set()', 'bpgsites' ) );
+			die( __( 'You must supply the option as a string to option_set()', 'bp-group-sites' ) );
 		}
 
 		// set option
@@ -393,7 +393,7 @@ class BP_Group_Sites_Admin {
 
 		// test for null
 		if ( $option_name == '' ) {
-			die( __( 'You must supply an option to option_delete()', 'bpgsites' ) );
+			die( __( 'You must supply an option to option_delete()', 'bp-group-sites' ) );
 		}
 
 		// unset option
@@ -427,12 +427,12 @@ class BP_Group_Sites_Admin {
 
 		// only allow network admins through
 		if( is_super_admin() == false ) {
-			wp_die( __( 'You do not have permission to access this page.', 'bpgsites' ) );
+			wp_die( __( 'You do not have permission to access this page.', 'bp-group-sites' ) );
 		}
 
 		// show message
 		if ( isset( $_GET['updated'] ) ) {
-			echo '<div id="message" class="updated"><p>' . __( 'Options saved.', 'bpgsites' ) . '</p></div>';
+			echo '<div id="message" class="updated"><p>' . __( 'Options saved.', 'bp-group-sites' ) . '</p></div>';
 		}
 
 		// sanitise admin page url
@@ -475,7 +475,7 @@ class BP_Group_Sites_Admin {
 
 		<div class="icon32" id="icon-options-general"><br/></div>
 
-		<h2>' . __( 'BP Group Sites Settings', 'bpgsites' ) . '</h2>
+		<h2>' . __( 'BP Group Sites Settings', 'bp-group-sites' ) . '</h2>
 
 		<form method="post" action="' . htmlentities( $url . '&updated=true' ) . '">
 
@@ -488,20 +488,20 @@ class BP_Group_Sites_Admin {
 		echo '
 		<div id="bpgsites_admin_options">
 
-		<h3>' . __( 'BP Group Sites Settings', 'bpgsites' ) . '</h3>
+		<h3>' . __( 'BP Group Sites Settings', 'bp-group-sites' ) . '</h3>
 
-		<p>' . __( 'Configure how BP Group Sites behaves.', 'bpgsites' ) . '</p>' . "\n\n";
+		<p>' . __( 'Configure how BP Group Sites behaves.', 'bp-group-sites' ) . '</p>' . "\n\n";
 
 
 
 		// add global options
 		echo '
-		<h4>' . __( 'Global Options', 'bpgsites' ) . '</h4>
+		<h4>' . __( 'Global Options', 'bp-group-sites' ) . '</h4>
 
 		<table class="form-table">
 
 			<tr valign="top">
-				<th scope="row"><label for="bpgsites_public">' . __( 'Should comments in public groups be visible to readers who are not members of those groups?', 'bpgsites' ) . '</label></th>
+				<th scope="row"><label for="bpgsites_public">' . __( 'Should comments in public groups be visible to readers who are not members of those groups?', 'bp-group-sites' ) . '</label></th>
 				<td><input id="bpgsites_public" name="bpgsites_public" value="1" type="checkbox"' . $bpgsites_public . ' /></td>
 			</tr>
 
@@ -511,32 +511,32 @@ class BP_Group_Sites_Admin {
 
 		// add global options
 		echo '
-		<h4>' . __( 'Naming Options', 'bpgsites' ) . '</h4>
+		<h4>' . __( 'Naming Options', 'bp-group-sites' ) . '</h4>
 
 		<table class="form-table">
 
 			<tr valign="top">
-				<th scope="row"><label for="bpgsites_overrides">' . __( 'Enable name changes?', 'bpgsites' ) . '</label></th>
+				<th scope="row"><label for="bpgsites_overrides">' . __( 'Enable name changes?', 'bp-group-sites' ) . '</label></th>
 				<td><input id="bpgsites_overrides" name="bpgsites_overrides" value="1" type="checkbox"' . $bpgsites_overrides . ' /></td>
 			</tr>
 
 			<tr valign="top">
-				<th scope="row"><label for="bpgsites_overrides_title">' . __( 'Component Title', 'bpgsites' ) . '</label></th>
+				<th scope="row"><label for="bpgsites_overrides_title">' . __( 'Component Title', 'bp-group-sites' ) . '</label></th>
 				<td><input id="bpgsites_overrides_title" name="bpgsites_overrides_title" value="' . $bpgsites_overrides_title . '" type="text" /></td>
 			</tr>
 
 			<tr valign="top">
-				<th scope="row"><label for="bpgsites_overrides_name">' . __( 'Singular name for a Group Site', 'bpgsites' ) . '</label></th>
+				<th scope="row"><label for="bpgsites_overrides_name">' . __( 'Singular name for a Group Site', 'bp-group-sites' ) . '</label></th>
 				<td><input id="bpgsites_overrides_name" name="bpgsites_overrides_name" value="' . $bpgsites_overrides_name . '" type="text" /></td>
 			</tr>
 
 			<tr valign="top">
-				<th scope="row"><label for="bpgsites_overrides_plural">' . __( 'Plural name for Group Sites', 'bpgsites' ) . '</label></th>
+				<th scope="row"><label for="bpgsites_overrides_plural">' . __( 'Plural name for Group Sites', 'bp-group-sites' ) . '</label></th>
 				<td><input id="bpgsites_overrides_plural" name="bpgsites_overrides_plural" value="' . $bpgsites_overrides_plural . '" type="text" /></td>
 			</tr>
 
 			<tr valign="top">
-				<th scope="row"><label for="bpgsites_overrides_button">' . __( 'Visit Group Site button text', 'bpgsites' ) . '</label></th>
+				<th scope="row"><label for="bpgsites_overrides_button">' . __( 'Visit Group Site button text', 'bp-group-sites' ) . '</label></th>
 				<td><input id="bpgsites_overrides_button" name="bpgsites_overrides_button" value="' . $bpgsites_overrides_button . '" type="text" /></td>
 			</tr>
 
@@ -549,15 +549,15 @@ class BP_Group_Sites_Admin {
 			// show debugger
 			echo '
 			<hr>
-			<h3>' . __( 'Developer Testing', 'bpgsites' ) . '</h3>
+			<h3>' . __( 'Developer Testing', 'bp-group-sites' ) . '</h3>
 
 			<table class="form-table">
 
 				<tr>
-					<th scope="row">' . __( 'Debug', 'bpgsites' ) . '</th>
+					<th scope="row">' . __( 'Debug', 'bp-group-sites' ) . '</th>
 					<td>
 						<input type="checkbox" class="settings-checkbox" name="bpgsites_debug" id="bpgsites_debug" value="1" />
-						<label class="bpgsites_settings_label" for="bpgsites_debug">' . __( 'Check this to trigger do_debug() . ', 'bpgsites' ) . '</label>
+						<label class="bpgsites_settings_label" for="bpgsites_debug">' . __( 'Check this to trigger do_debug() . ', 'bp-group-sites' ) . '</label>
 					</td>
 				</tr>
 
@@ -575,7 +575,7 @@ class BP_Group_Sites_Admin {
 		// close admin form
 		echo '
 		<p class="submit">
-			<input type="submit" name="bpgsites_submit" value="' . __( 'Save Changes', 'bpgsites' ) . '" class="button-primary" />
+			<input type="submit" name="bpgsites_submit" value="' . __( 'Save Changes', 'bp-group-sites' ) . '" class="button-primary" />
 		</p>
 
 		</form>
@@ -606,16 +606,16 @@ class BP_Group_Sites_Admin {
 		$defaults['overrides'] = 0;
 
 		// default plugin title to "Group Sites"
-		$defaults['title'] = __( 'Group Sites', 'bpgsites' );
+		$defaults['title'] = __( 'Group Sites', 'bp-group-sites' );
 
 		// default singular to "Group Site"
-		$defaults['name'] = __( 'Group Site', 'bpgsites' );
+		$defaults['name'] = __( 'Group Site', 'bp-group-sites' );
 
 		// default plural to "Group Sites"
-		$defaults['plural'] = __( 'Group Sites', 'bpgsites' );
+		$defaults['plural'] = __( 'Group Sites', 'bp-group-sites' );
 
 		// default button to "Visit Group Site"
-		$defaults['button'] = __( 'Visit Group Site', 'bpgsites' );
+		$defaults['button'] = __( 'Visit Group Site', 'bp-group-sites' );
 
 		// default slug to "group-sites"
 		$defaults['slug'] = 'group-sites';
@@ -836,7 +836,7 @@ function bpgsites_site_option_exists( $option_name = '' ) {
 
 	// test for null
 	if ( $option_name == '' ) {
-		die( __( 'You must supply an option to bpgsites_option_wpms_exists()', 'bpgsites' ) );
+		die( __( 'You must supply an option to bpgsites_option_wpms_exists()', 'bp-group-sites' ) );
 	}
 
 	// test by getting option with unlikely default
@@ -863,7 +863,7 @@ function bpgsites_site_option_get( $option_name = '', $default = false ) {
 
 	// test for null
 	if ( $option_name == '' ) {
-		die( __( 'You must supply an option to bpgsites_site_option_get()', 'bpgsites' ) );
+		die( __( 'You must supply an option to bpgsites_site_option_get()', 'bp-group-sites' ) );
 	}
 
 	// get option
@@ -886,7 +886,7 @@ function bpgsites_site_option_set( $option_name = '', $value = '' ) {
 
 	// test for null
 	if ( $option_name == '' ) {
-		die( __( 'You must supply an option to bpgsites_site_option_set()', 'bpgsites' ) );
+		die( __( 'You must supply an option to bpgsites_site_option_set()', 'bp-group-sites' ) );
 	}
 
 	// set option

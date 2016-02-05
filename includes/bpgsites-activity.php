@@ -179,7 +179,7 @@ class BpGroupSites_Activity {
 			// construct prefix
 			$prefix = apply_filters(
 				'bpgsites_comment_prefix',
-				sprintf( __( 'Posted in: %s', 'bpgsites' ), $link ),
+				sprintf( __( 'Posted in: %s', 'bp-group-sites' ), $link ),
 				$name,
 				$comment,
 				$group_id
@@ -209,7 +209,7 @@ class BpGroupSites_Activity {
 		// add meta box
 		add_meta_box(
 			'bpgsites_comment_options_meta_box',
-			__( 'BuddyPress Comment Group', 'bpgsites' ),
+			__( 'BuddyPress Comment Group', 'bp-group-sites' ),
 			array( $this, 'comment_meta_box' ),
 			'comment',
 			'normal'
@@ -249,14 +249,14 @@ class BpGroupSites_Activity {
 			if ( is_numeric( $group_id ) ) {
 
 				// show message
-				echo '<p>' . __( 'This comment is a reply. It appears in the same group as the comment it is in reply to. If there is a deeper thread of replies, then the original comment determines the group in which it appears.', 'bpgsites' ) . '</p>';
+				echo '<p>' . __( 'This comment is a reply. It appears in the same group as the comment it is in reply to. If there is a deeper thread of replies, then the original comment determines the group in which it appears.', 'bp-group-sites' ) . '</p>';
 
 				// get group name
 				$name = bp_get_group_name( groups_get_group( array( 'group_id' => $group_id ) ) );
 
 				// construct message
 				$message = sprintf(
-					__( 'This comment appears in the group %1$s.', 'bpgsites' ),
+					__( 'This comment appears in the group %1$s.', 'bp-group-sites' ),
 					$name
 				);
 
@@ -312,7 +312,7 @@ class BpGroupSites_Activity {
 
 			// cheating!
 			comment_footer_die(
-				__( 'You are not allowed to edit comments on this post.', 'bpgsites' )
+				__( 'You are not allowed to edit comments on this post.', 'bp-group-sites' )
 			);
 
 		}
@@ -422,14 +422,14 @@ class BpGroupSites_Activity {
 		} else {
 
 			// show anonymous user
-			$user_link = '<span class="anon-commenter">' . __( 'Anonymous', 'bpgsites' ) . '</span>';
+			$user_link = '<span class="anon-commenter">' . __( 'Anonymous', 'bp-group-sites' ) . '</span>';
 
 		}
 
 		// allow plugins to override the name of the activity item
 		$activity_name = apply_filters(
 			'bpgsites_activity_post_name',
-			__( 'post', 'bpgsites' ),
+			__( 'post', 'bp-group-sites' ),
 			$post
 		);
 
@@ -440,9 +440,9 @@ class BpGroupSites_Activity {
 
 		// Replace the necessary values to display in group activity stream
 		$activity->action = sprintf(
-			__( '%s left a %s on a %s %s in the group %s:', 'bpgsites' ),
+			__( '%s left a %s on a %s %s in the group %s:', 'bp-group-sites' ),
 			$user_link,
-			'<a href="' . $activity->primary_link . '">' . __( 'comment', 'bpgsites' ) . '</a>',
+			'<a href="' . $activity->primary_link . '">' . __( 'comment', 'bp-group-sites' ) . '</a>',
 			$activity_name,
 			$target_post_link,
 			'<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>'
@@ -550,8 +550,8 @@ class BpGroupSites_Activity {
 		$comment_name = apply_filters(
 			'bpgsites_comment_name',
 			sprintf(
-				__( 'Comments in %s', 'bpgsites' ),
-				apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bpgsites' ) )
+				__( 'Comments in %s', 'bp-group-sites' ),
+				apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) )
 			)
 		);
 
@@ -562,7 +562,7 @@ class BpGroupSites_Activity {
 		echo $option;
 
 		/*
-		__( 'Group Site Comments', 'bpgsites' )
+		__( 'Group Site Comments', 'bp-group-sites' )
 		*/
 
 	}
@@ -740,10 +740,10 @@ class BpGroupSites_Activity {
 
 			// is registration allowed?
 			if ( bp_get_signup_allowed() ) {
-				$link_text = __( 'Create an account to reply', 'bpgsites' );
+				$link_text = __( 'Create an account to reply', 'bp-group-sites' );
 				$href = bp_get_signup_page();
 			} else {
-				$link_text = __( 'Login to reply', 'bpgsites' );
+				$link_text = __( 'Login to reply', 'bp-group-sites' );
 				$href = wp_login_url();
 			}
 
@@ -805,7 +805,7 @@ class BpGroupSites_Activity {
 		} else {
 
 			// construct link
-			$link = '<a rel="nofollow" href="' . bp_get_group_permalink( $group ) . '">' . __( 'Join group to reply', 'bpgsites' ) . '</a>';
+			$link = '<a rel="nofollow" href="' . bp_get_group_permalink( $group ) . '">' . __( 'Join group to reply', 'bp-group-sites' ) . '</a>';
 
 		}
 
@@ -899,10 +899,10 @@ class BpGroupSites_Activity {
 
 			// is registration allowed?
 			if ( bp_get_signup_allowed() ) {
-				$text = __( 'Create an account to leave a comment', 'bpgsites' );
+				$text = __( 'Create an account to leave a comment', 'bp-group-sites' );
 				$href = bp_get_signup_page();
 			} else {
-				$text = __( 'Login to leave a comment', 'bpgsites' );
+				$text = __( 'Login to leave a comment', 'bp-group-sites' );
 				$href = wp_login_url();
 			}
 
@@ -918,7 +918,7 @@ class BpGroupSites_Activity {
 		}
 
 		// send to groups directory
-		$text = __( 'Join a group to leave a comment', 'bpgsites' );
+		$text = __( 'Join a group to leave a comment', 'bp-group-sites' );
 		$href = bp_get_groups_directory_permalink();
 
 		// construct link
@@ -950,9 +950,9 @@ class BpGroupSites_Activity {
 
 			// is registration allowed?
 			if ( bp_get_signup_allowed() ) {
-				$link_text = __( 'Create an account to leave a comment', 'bpgsites' );
+				$link_text = __( 'Create an account to leave a comment', 'bp-group-sites' );
 			} else {
-				$link_text = __( 'Login to leave a comment', 'bpgsites' );
+				$link_text = __( 'Login to leave a comment', 'bp-group-sites' );
 			}
 
 			// show helpful message
@@ -962,7 +962,7 @@ class BpGroupSites_Activity {
 
 		// construct link content
 		$link_text = sprintf(
-			__( 'Join a group to leave a comment on %s', 'bpgsites' ),
+			__( 'Join a group to leave a comment on %s', 'bp-group-sites' ),
 			$paragraph_text
 		);
 
@@ -1173,8 +1173,8 @@ class BpGroupSites_Activity {
 					$title = apply_filters(
 						'bpgsites_groupsites_menu_item_title',
 						sprintf(
-							__( 'Groups reading this %s', 'bpgsites' ),
-							apply_filters( 'bpgsites_extension_name', __( 'site', 'bpgsites' ) )
+							__( 'Groups reading this %s', 'bp-group-sites' ),
+							apply_filters( 'bpgsites_extension_name', __( 'site', 'bp-group-sites' ) )
 						)
 					);
 
@@ -1231,7 +1231,7 @@ class BpGroupSites_Activity {
 						if ( count( $linked ) > 0 OR count( $public ) > 0 ) {
 
 							// construct title
-							$title = __( 'My Groups', 'bpgsites' );
+							$title = __( 'My Groups', 'bp-group-sites' );
 
 							// construct item
 							$sublist = '<li><a href="#groupsites-list-mine" id="btn_groupsites_mine" class="css_btn" title="' . $title . '">' . $title . '</a>';
@@ -1266,7 +1266,7 @@ class BpGroupSites_Activity {
 						if ( count( $mine ) > 0 OR count( $public ) > 0 ) {
 
 							// construct title
-							$title = __( 'Linked Groups', 'bpgsites' );
+							$title = __( 'Linked Groups', 'bp-group-sites' );
 
 							// construct item
 							$sublist = '<li><a href="#groupsites-list-linked" id="btn_groupsites_linked" class="css_btn" title="' . $title . '">' . $title . '</a>';
@@ -1301,7 +1301,7 @@ class BpGroupSites_Activity {
 						if ( count( $mine ) > 0 OR count( $linked ) > 0 ) {
 
 							// construct title
-							$title = __( 'Public Groups', 'bpgsites' );
+							$title = __( 'Public Groups', 'bp-group-sites' );
 
 							// construct item
 							$sublist = '<li><a href="#groupsites-list-public" id="btn_groupsites_public" class="css_btn" title="' . $title . '">' . $title . '</a>';
@@ -1333,7 +1333,7 @@ class BpGroupSites_Activity {
 				} else {
 
 					// set title
-					$title = __( 'Group Home Page', 'bpgsites' );
+					$title = __( 'Group Home Page', 'bp-group-sites' );
 
 					// do we want to use bp_get_group_name()
 
@@ -1430,7 +1430,7 @@ class BpGroupSites_Activity {
 
 				// construct heading (the no_comments class prevents this from printing)
 				$html .= '<h3 class="bpgsites_group_filter_heading no_comments">' .
-							'<a href="#bpgsites_group_filter">' . __( 'Filter comments by group', 'bpgsites' ) . '</a>' .
+							'<a href="#bpgsites_group_filter">' . __( 'Filter comments by group', 'bp-group-sites' ) . '</a>' .
 						 '</h3>' . "\n";
 
 				// open div
@@ -1560,7 +1560,7 @@ class BpGroupSites_Activity {
 				$html .= '<input type="checkbox" name="bpgsites_comment_group_toggle" id="bpgsites_comment_group_toggle" class="bpgsites_group_checkbox_toggle" value="" checked="checked" />' . "\n";
 
 				// add label
-				$html .= '<label class="bpgsites_comment_group_label" for="bpgsites_comment_group_toggle">' . __( 'Show all groups', 'bpgsites' ) .
+				$html .= '<label class="bpgsites_comment_group_label" for="bpgsites_comment_group_toggle">' . __( 'Show all groups', 'bp-group-sites' ) .
 						 '</label>' . "\n";
 
 				// close arbitrary divider
@@ -1573,7 +1573,7 @@ class BpGroupSites_Activity {
 					if ( count( $mine ) > 0 OR  count( $public ) > 0 OR count( $linked ) > 0 ) {
 
 						// add heading
-						$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_header bpgsites_comment_group_auth">' . __( 'Showcase Groups', 'bpgsites' ) . '</span>' . "\n";
+						$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_header bpgsites_comment_group_auth">' . __( 'Showcase Groups', 'bp-group-sites' ) . '</span>' . "\n";
 
 					}
 
@@ -1589,7 +1589,7 @@ class BpGroupSites_Activity {
 					if ( count( $auth ) > 0 OR count( $public ) > 0 OR count( $linked ) > 0 ) {
 
 						// add heading
-						$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_header bpgsites_comment_group_mine">' . __( 'My Groups', 'bpgsites' ) . '</span>' . "\n";
+						$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_header bpgsites_comment_group_mine">' . __( 'My Groups', 'bp-group-sites' ) . '</span>' . "\n";
 
 					}
 
@@ -1605,7 +1605,7 @@ class BpGroupSites_Activity {
 					if ( count( $auth ) > 0 OR count( $mine ) > 0 OR count( $linked ) > 0 ) {
 
 						// add heading
-						$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_header bpgsites_comment_group_linked">' . __( 'Linked Groups', 'bpgsites' ) . '</span>' . "\n";
+						$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_header bpgsites_comment_group_linked">' . __( 'Linked Groups', 'bp-group-sites' ) . '</span>' . "\n";
 
 					}
 
@@ -1621,7 +1621,7 @@ class BpGroupSites_Activity {
 					if (  count( $auth ) > 0 OR count( $mine ) > 0 OR count( $linked ) > 0 ) {
 
 						// add heading
-						$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_header bpgsites_comment_group_public">' . __( 'Public Groups', 'bpgsites' ) . '</span>' . "\n";
+						$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_header bpgsites_comment_group_public">' . __( 'Public Groups', 'bp-group-sites' ) . '</span>' . "\n";
 
 					}
 
@@ -1631,7 +1631,7 @@ class BpGroupSites_Activity {
 				}
 
 				// add submit button
-				$html .= '<input type="submit" id="bpgsites_comment_group_submit" value="' . __( 'Filter', 'bpgsites' ) . '" />' . "\n";
+				$html .= '<input type="submit" id="bpgsites_comment_group_submit" value="' . __( 'Filter', 'bp-group-sites' ) . '" />' . "\n";
 
 				// close tags
 				$html .= '</form>' . "\n";
@@ -1810,7 +1810,7 @@ class BpGroupSites_Activity {
 
 				// construct dropdown
 				$result .= '<span id="bpgsites-post-in-box">' . "\n";
-				$result .= '<span>' . __( 'Post in', 'bpgsites' ) . ':</span>' . "\n";
+				$result .= '<span>' . __( 'Post in', 'bp-group-sites' ) . ':</span>' . "\n";
 				$result .= '<select id="bpgsites-post-in" name="bpgsites-post-in">' . "\n";
 
 				// did we get any that are mine?
@@ -1823,7 +1823,7 @@ class BpGroupSites_Activity {
 					if ( count( $linked ) > 0 ) {
 
 						// construct title
-						$title = __( 'My Groups', 'bpgsites' );
+						$title = __( 'My Groups', 'bp-group-sites' );
 
 						// construct item
 						$sublist = '<optgroup label="' . $title . '">' . "\n";
@@ -1854,7 +1854,7 @@ class BpGroupSites_Activity {
 					if ( count( $mine ) > 0 ) {
 
 						// construct title
-						$title = __( 'Linked Groups', 'bpgsites' );
+						$title = __( 'Linked Groups', 'bp-group-sites' );
 
 						// construct item
 						$sublist = '<optgroup label="' . $title . '">' . "\n";
@@ -2197,8 +2197,8 @@ class BpGroupSites_Activity {
 				$section_header_text = apply_filters(
 					'bpgsites_activity_tab_recent_title_all_yours',
 					sprintf(
-						__( 'All Recent Activity in your %s', 'bpgsites' ),
-						apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bpgsites' ) )
+						__( 'All Recent Activity in your %s', 'bp-group-sites' ),
+						apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) )
 					)
 				);
 
@@ -2208,8 +2208,8 @@ class BpGroupSites_Activity {
 				$section_header_text = apply_filters(
 					'bpgsites_activity_tab_recent_title_all_public',
 					sprintf(
-						__( 'Recent Activity in Public %s', 'bpgsites' ),
-						apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bpgsites' ) )
+						__( 'Recent Activity in Public %s', 'bp-group-sites' ),
+						apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) )
 					)
 				);
 
@@ -2253,8 +2253,8 @@ class BpGroupSites_Activity {
 				$section_header_text = apply_filters(
 					'bpgsites_activity_tab_recent_title_all_yours',
 					sprintf(
-						__( 'Friends Activity in your %s', 'bpgsites' ),
-						apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bpgsites' ) )
+						__( 'Friends Activity in your %s', 'bp-group-sites' ),
+						apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) )
 					)
 				);
 
@@ -2344,8 +2344,8 @@ class BpGroupSites_Activity {
 
 		// set title, but allow plugins to override
 		$title = sprintf(
-			__( 'Recent Comments in this %s', 'bpgsites' ),
-			apply_filters( 'bpgsites_extension_name', __( 'Group Site', 'bpgsites' ) )
+			__( 'Recent Comments in this %s', 'bp-group-sites' ),
+			apply_filters( 'bpgsites_extension_name', __( 'Group Site', 'bp-group-sites' ) )
 		);
 
 		// --<
@@ -2446,7 +2446,7 @@ class BpGroupSites_Activity {
 		// allow plugins to override the name of the activity item
 		$activity_name = apply_filters(
 			'bpgsites_activity_post_name',
-			__( 'post', 'bpgsites' )
+			__( 'post', 'bp-group-sites' )
 		);
 
 		// default to standard BP author
@@ -2483,7 +2483,7 @@ class BpGroupSites_Activity {
 						if ( $n == ($author_count - 1) ) {
 
 							// use ampersand
-							$sep = __( ' &amp; ', 'bpgsites' );
+							$sep = __( ' &amp; ', 'bp-group-sites' );
 
 						}
 
@@ -2512,7 +2512,7 @@ class BpGroupSites_Activity {
 
 			// replace the necessary values to display in group activity stream
 			$activity->action = sprintf(
-				__( '%s updated a %s %s in the group %s:', 'bpgsites' ),
+				__( '%s updated a %s %s in the group %s:', 'bp-group-sites' ),
 				$activity_author,
 				$activity_name,
 				'<a href="' . get_permalink( $post->ID ) . '">' . esc_attr( $post->post_title ) . '</a>',
@@ -2523,7 +2523,7 @@ class BpGroupSites_Activity {
 
 			// replace the necessary values to display in group activity stream
 			$activity->action = sprintf(
-				__( '%s wrote a new %s %s in the group %s:', 'bpgsites' ),
+				__( '%s wrote a new %s %s in the group %s:', 'bp-group-sites' ),
 				$activity_author,
 				$activity_name,
 				'<a href="' . get_permalink( $post->ID ) . '">' . esc_attr( $post->post_title ) . '</a>',
@@ -2566,7 +2566,7 @@ class BpGroupSites_Activity {
 	public function posts_filter_option() {
 
 		// default name
-		$post_name = __( 'Group Site Posts', 'bpgsites' );
+		$post_name = __( 'Group Site Posts', 'bp-group-sites' );
 
 		// allow plugins to override the name of the option
 		$post_name = apply_filters( 'bpgsites_post_name', $post_name );

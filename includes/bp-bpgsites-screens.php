@@ -113,7 +113,7 @@ class BP_Group_Sites_Theme_Compat {
 	public function directory_dummy_post() {
 
 		// set title
-		$title = apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bpgsites' ) );
+		$title = apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) );
 
 		// create dummy post
 		bp_theme_compat_reset_post( array(

@@ -7,6 +7,8 @@ Version: 0.2.1
 Author: Christian Wach
 Author URI: http://haystack.co.uk
 Plugin URI: https://github.com/christianwach/bp-group-sites
+Text Domain: bp-group-sites
+Domain Path: /languages
 Network: true
 --------------------------------------------------------------------------------
 */
@@ -154,7 +156,7 @@ class BP_Group_Sites {
 		load_plugin_textdomain(
 
 			// unique name
-			'bpgsites',
+			'bp-group-sites',
 
 			// deprecated argument
 			false,

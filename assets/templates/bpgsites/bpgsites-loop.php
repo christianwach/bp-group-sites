@@ -94,7 +94,7 @@ if ( bpgsites_has_blogs( bp_ajax_querystring( 'bpgsites' ) ) ) {
 	?>
 
 	<div id="message" class="info">
-		<p><?php _e( 'Sorry, there were no sites found.', 'bpgsites' ); ?></p>
+		<p><?php _e( 'Sorry, there were no sites found.', 'bp-group-sites' ); ?></p>
 	</div>
 
 	<?php
