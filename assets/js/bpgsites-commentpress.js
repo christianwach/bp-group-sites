@@ -161,7 +161,9 @@ function bpgsites_init_elements() {
 	if ( bpgsites_show_public == '0' ) {
 
 		/**
-		 * Hide comments for initially unchecked boxes - HACK!!!
+		 * Hide comments for initially unchecked boxes.
+		 *
+		 * This is apparently something of a hack (though I didn't note down why)
 		 *
 		 * @since 0.1
 		 */
@@ -224,11 +226,11 @@ function bpgsites_init_elements() {
 
 
 	/**
-	 * Activity column headings click.
+	 * Toggle the appearance of "Filter Comments by Group" panel.
 	 *
 	 * @since 0.1
 	 *
-	 * @return false
+	 * @return void
 	 */
 	jQuery( 'h3.bpgsites_group_filter_heading' ).click( function( event ) {
 
@@ -257,11 +259,11 @@ function bpgsites_init_elements() {
 
 
 	/**
-	 * Activity column headings click.
+	 * Intercept clicks on "Reply to Comment" links and update group selector.
 	 *
 	 * @since 0.1
 	 *
-	 * @return false
+	 * @return void
 	 */
 	jQuery( 'a.comment-reply-link' ).click( function( event ) {
 
@@ -282,7 +284,7 @@ function bpgsites_init_elements() {
 
 
 	/**
-	 * Activity column headings click.
+	 * Intercept clicks on "Cancel" reply link in the comment form.
 	 *
 	 * @since 0.1
 	 *
@@ -301,7 +303,7 @@ function bpgsites_init_elements() {
 
 
 	/**
-	 * Activity column headings click.
+	 * Listen to clicks on group-filtering checkboxes.
 	 *
 	 * @since 0.1
 	 *
@@ -318,46 +320,94 @@ function bpgsites_init_elements() {
 		// get checked/unchecked
 		checked = jQuery(this).prop( 'checked' );
 
-		// if checked...
-		if ( checked ) {
+		// do the action for this checkbox
+		bpgsites_do_checkbox_action( checked, group_id );
 
-			// show group comments
-			jQuery( 'li.bpgsites-group-' + group_id ).addClass( 'bpgsites-shown' );
-			jQuery( 'li.bpgsites-group-' + group_id ).show();
+	});
 
-		} else {
 
-			// hide group comments
-			jQuery( 'li.bpgsites-group-' + group_id ).removeClass( 'bpgsites-shown' );
-			jQuery( 'li.bpgsites-group-' + group_id ).hide();
 
-		}
+	/**
+	 * Listen to clicks on toggle checkbox for the "Filter Comments by Group" panel.
+	 *
+	 * @since 0.1
+	 *
+	 * @return void
+	 */
+	jQuery( 'input.bpgsites_group_checkbox_toggle' ).click( function( event ) {
 
-		// recalculate headings and para icons
-		jQuery( 'a.comment_block_permalink' ).each( function( i ) {
+		// get checked/unchecked
+		var checked = jQuery(this).prop( 'checked' );
 
-			var wrapper, shown, text_sig;
+		// check all when this element is checked - and vice versa
+		jQuery( 'input.bpgsites_group_checkbox' ).each( function( i ) {
 
-			// get wrapper
-			wrapper = jQuery(this).parent().next( 'div.paragraph_wrapper' );
+			// set element check state
+			jQuery(this).prop( 'checked', checked );
 
-			// get list items that are not hidden
-			shown = wrapper.find( 'li.bpgsites-shown' );
+			// get group ID
+			group_id = jQuery(this).val();
 
-			// update heading
-			jQuery(this).children( 'span.cp_comment_num' ).text( shown.length );
-
-			// get text signature
-			text_sig = jQuery(this).parent().prop( 'id' ).split( 'para_heading-' )[1];
-
-			// set comment icon text
-			jQuery( '#textblock-' + text_sig + ' .commenticonbox small' ).text( shown.length );
+			// do the action for this checkbox
+			bpgsites_do_checkbox_action( checked, group_id );
 
 		});
 
 	});
 
 
+
+}
+
+
+
+/**
+ * Perform the action for a filter checkbox.
+ *
+ * @since 0.2.1
+ *
+ * @param {String} checked The current checked value of the input
+ * @param {Integer} group_id The numerical group ID
+ * @return void
+ */
+function bpgsites_do_checkbox_action( checked, group_id ) {
+
+	// if checked...
+	if ( checked ) {
+
+		// show group comments
+		jQuery( 'li.bpgsites-group-' + group_id ).addClass( 'bpgsites-shown' );
+		jQuery( 'li.bpgsites-group-' + group_id ).show();
+
+	} else {
+
+		// hide group comments
+		jQuery( 'li.bpgsites-group-' + group_id ).removeClass( 'bpgsites-shown' );
+		jQuery( 'li.bpgsites-group-' + group_id ).hide();
+
+	}
+
+	// recalculate headings and para icons
+	jQuery( 'a.comment_block_permalink' ).each( function( i ) {
+
+		var wrapper, shown, text_sig;
+
+		// get wrapper
+		wrapper = jQuery(this).parent().next( 'div.paragraph_wrapper' );
+
+		// get list items that are not hidden
+		shown = wrapper.find( 'li.bpgsites-shown' );
+
+		// update heading
+		jQuery(this).children( 'span.cp_comment_num' ).text( shown.length );
+
+		// get text signature
+		text_sig = jQuery(this).parent().prop( 'id' ).split( 'para_heading-' )[1];
+
+		// set comment icon text
+		jQuery( '#textblock-' + text_sig + ' .commenticonbox small' ).text( shown.length );
+
+	});
 
 }
 

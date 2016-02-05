@@ -1553,6 +1553,19 @@ class BpGroupSites_Activity {
 
 				} // end while
 
+				// add arbitrary divider for toggle
+				$html .= '<span class="bpgsites_comment_group">' . "\n";
+
+				// add checkbox, toggled on
+				$html .= '<input type="checkbox" name="bpgsites_comment_group_toggle" id="bpgsites_comment_group_toggle" class="bpgsites_group_checkbox_toggle" value="" checked="checked" />' . "\n";
+
+				// add label
+				$html .= '<label class="bpgsites_comment_group_label" for="bpgsites_comment_group_toggle">' . __( 'Show all groups', 'bpgsites' ) .
+						 '</label>' . "\n";
+
+				// close arbitrary divider
+				$html .= '</span>' . "\n";
+
 				// did we get any showcase groups?
 				if ( count( $auth ) > 0 ) {
 
