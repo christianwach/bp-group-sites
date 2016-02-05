@@ -1379,6 +1379,7 @@ class BpGroupSites_Activity {
 
 		// kick out if all are empty
 		if (
+			count( $user_group_ids['auth_groups'] ) == 0 AND
 			count( $user_group_ids['my_groups'] ) == 0 AND
 			count( $user_group_ids['linked_groups'] ) == 0 AND
 			count( $user_group_ids['public_groups'] ) == 0
@@ -1392,6 +1393,7 @@ class BpGroupSites_Activity {
 
 		// if any has entries
 		if (
+			count( $user_group_ids['auth_groups'] ) > 0 OR
 			count( $user_group_ids['my_groups'] ) > 0 OR
 			count( $user_group_ids['linked_groups'] ) > 0 OR
 			count( $user_group_ids['public_groups'] ) > 0
@@ -1399,6 +1401,7 @@ class BpGroupSites_Activity {
 
 			// merge the arrays
 			$groups = array_unique( array_merge(
+				$user_group_ids['auth_groups'],
 				$user_group_ids['my_groups'],
 				$user_group_ids['linked_groups'],
 				$user_group_ids['public_groups']
@@ -1437,6 +1440,7 @@ class BpGroupSites_Activity {
 				$html .= '<form id="bpgsites_comment_group_filter" name="bpgsites_comment_group_filter" action="' . get_permalink( $post->ID ) . '" method="post">' . "\n";
 
 				// init lists
+				$auth = array();
 				$mine = array();
 				$linked = array();
 				$public = array();
@@ -1461,6 +1465,28 @@ class BpGroupSites_Activity {
 
 					// get group ID
 					$group_id = bp_get_group_id();
+
+					// showcase?
+					if ( in_array( $group_id, $user_group_ids['auth_groups'] ) ) {
+
+						// add checkbox
+						$item .= '<input type="checkbox" class="bpgsites_group_checkbox bpgsites_group_checkbox_auth" name="bpgsites_comment_groups[]" id="bpgsites_comment_group_' . $group_id . '" value="' . $group_id . '" checked="checked" />' . "\n";
+
+						// add label
+						$item .= '<label class="bpgsites_comment_group_label" for="bpgsites_comment_group_' . $group_id . '">' .
+									bp_get_group_name() .
+								 '</label>' . "\n";
+
+						// close arbitrary divider
+						$item .= '</span>' . "\n";
+
+						// public
+						$auth[] = $item;
+
+						// next
+						continue;
+
+					}
 
 					// mine?
 					if ( in_array( $group_id, $user_group_ids['my_groups'] ) ) {
@@ -1527,14 +1553,30 @@ class BpGroupSites_Activity {
 
 				} // end while
 
+				// did we get any showcase groups?
+				if ( count( $auth ) > 0 ) {
+
+					// only show if we one of the other lists is populated
+					if ( count( $mine ) > 0 OR  count( $public ) > 0 OR count( $linked ) > 0 ) {
+
+						// add heading
+						$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_header bpgsites_comment_group_auth">' . __( 'Showcase Groups', 'bpgsites' ) . '</span>' . "\n";
+
+					}
+
+					// add items
+					$html .= implode( "\n", $auth );
+
+				}
+
 				// did we get any that are mine?
 				if ( count( $mine ) > 0 ) {
 
 					// only show if we one of the other lists is populated
-					if ( count( $public ) > 0 OR count( $linked ) > 0 ) {
+					if ( count( $auth ) > 0 OR count( $public ) > 0 OR count( $linked ) > 0 ) {
 
 						// add heading
-						$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_mine">' . __( 'My Groups', 'bpgsites' ) . '</span>' . "\n";
+						$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_header bpgsites_comment_group_mine">' . __( 'My Groups', 'bpgsites' ) . '</span>' . "\n";
 
 					}
 
@@ -1547,10 +1589,10 @@ class BpGroupSites_Activity {
 				if ( count( $linked ) > 0 ) {
 
 					// only show if we one of the other lists is populated
-					if ( count( $mine ) > 0 OR count( $public ) > 0 ) {
+					if ( count( $auth ) > 0 OR count( $mine ) > 0 OR count( $linked ) > 0 ) {
 
 						// add heading
-						$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_linked">' . __( 'Linked Groups', 'bpgsites' ) . '</span>' . "\n";
+						$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_header bpgsites_comment_group_linked">' . __( 'Linked Groups', 'bpgsites' ) . '</span>' . "\n";
 
 					}
 
@@ -1563,10 +1605,10 @@ class BpGroupSites_Activity {
 				if ( count( $public ) > 0 ) {
 
 					// only show if we one of the other lists is populated
-					if ( count( $mine ) > 0 OR count( $linked ) > 0 ) {
+					if (  count( $auth ) > 0 OR count( $mine ) > 0 OR count( $linked ) > 0 ) {
 
 						// add heading
-						$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_public">' . __( 'Public Groups', 'bpgsites' ) . '</span>' . "\n";
+						$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_header bpgsites_comment_group_public">' . __( 'Public Groups', 'bpgsites' ) . '</span>' . "\n";
 
 					}
 
