@@ -95,6 +95,9 @@ class BP_Group_Sites_Activity {
 			// add action for checking comment moderation
 			add_filter( 'pre_comment_approved', array( $this, 'check_comment_approval' ), 100, 2 );
 
+			// allow comment authors to edit their own comments
+			add_filter( 'map_meta_cap', array( $this, 'enable_comment_editing' ), 10, 4 );
+
 			// add navigation items for groups
 			add_filter( 'cp_nav_after_network_home_title', array( $this, 'get_group_navigation_links' ) );
 
@@ -1077,6 +1080,40 @@ class BP_Group_Sites_Activity {
 
 		// pass through
 		return $approved;
+
+	}
+
+
+
+	/**
+	 * For group sites, add capability to edit own comments.
+	 *
+	 * @param array $caps The existing capabilities array for the WordPress user
+	 * @param str $cap The capability in question
+	 * @param int $user_id The numerical ID of the WordPress user
+	 * @param array $args The additional arguments
+	 * @return array $caps The modified capabilities array for the WordPress user
+	 */
+	public function enable_comment_editing( $caps, $cap, $user_id, $args ) {
+
+		// only apply this to queries for edit_comment cap
+		if ( 'edit_comment' == $cap ) {
+
+			// get comment
+			$comment = get_comment( $args[0] );
+
+			// is the user the same as the comment author?
+			if ( $comment->user_id == $user_id ) {
+
+				// allow
+				$caps = array( 'exist' );
+
+			}
+
+		}
+
+		// --<
+		return $caps;
 
 	}
 
