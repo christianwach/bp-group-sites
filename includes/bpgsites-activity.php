@@ -21,7 +21,7 @@ Throw any functions which deal with BuddyPress activity in here.
  *
  * @since 0.1
  */
-class BpGroupSites_Activity {
+class BP_Group_Sites_Activity {
 
 	/**
 	 * Groups array.
@@ -2581,7 +2581,7 @@ class BpGroupSites_Activity {
 
 
 
-} // end class BpGroupSites_Activity
+} // end class BP_Group_Sites_Activity
 
 
 

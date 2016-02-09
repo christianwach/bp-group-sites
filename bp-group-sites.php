@@ -208,7 +208,7 @@ class BP_Group_Sites {
 		require( BPGSITES_PATH . 'includes/bpgsites-activity.php' );
 
 		// init object
-		$this->activity = new BpGroupSites_Activity;
+		$this->activity = new BP_Group_Sites_Activity;
 
 		// load our blogs extension
 		require( BPGSITES_PATH . 'includes/bpgsites-blogs.php' );
