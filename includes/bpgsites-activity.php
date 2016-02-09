@@ -305,7 +305,7 @@ class BP_Group_Sites_Activity {
 	public function save_comment_metadata( $comment_id ) {
 
 		// if there's no nonce then there's no comment meta data
-		if ( isset( $_POST['bpgsites_comments_nonce'] ) ) { return; }
+		if ( ! isset( $_POST['bpgsites_comments_nonce'] ) ) { return; }
 
 		// authenticate submission
 		if ( ! wp_verify_nonce( $_POST['bpgsites_comments_nonce'], 'bpgsites_comments_metabox' ) ) { return; }
