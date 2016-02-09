@@ -311,12 +311,10 @@ class BP_Group_Sites_Activity {
 		if ( ! wp_verify_nonce( $_POST['bpgsites_comments_nonce'], 'bpgsites_comments_metabox' ) ) { return; }
 
 		// check capabilities
-		if ( ! current_user_can( 'moderate_comments', $comment_id ) ) {
+		if ( ! current_user_can( 'edit_comment', $comment_id ) ) {
 
 			// cheating!
-			comment_footer_die(
-				__( 'You are not allowed to edit comments on this post.', 'bp-group-sites' )
-			);
+			wp_die( __( 'You are not allowed to edit comments on this post.', 'bp-group-sites' ) );
 
 		}
 
