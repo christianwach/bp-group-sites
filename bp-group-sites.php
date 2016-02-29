@@ -242,6 +242,9 @@ class BP_Group_Sites {
 		// register any public scripts
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 20 );
 
+		// add widgets
+		add_action( 'widgets_init', array( $this, 'register_widgets' ) );
+
 		// if the current blog is a group site...
 		if ( bpgsites_is_groupsite( get_current_blog_id() ) ) {
 
@@ -420,6 +423,21 @@ class BP_Group_Sites {
 			wp_localize_script( 'bpgsites_cp_js', 'BpgsitesSettings', $vars );
 
 		}
+
+	}
+
+
+
+	/**
+	 * Register widgets for this plugin
+	 *
+	 * @since 0.1
+	 * @return void
+	 */
+	public function register_widgets() {
+
+		// include widgets
+		require_once( BPGSITES_PATH . 'includes/bpgsites-widgets.php' );
 
 	}
 
