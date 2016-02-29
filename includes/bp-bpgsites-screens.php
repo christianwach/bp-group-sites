@@ -89,7 +89,7 @@ class BP_Group_Sites_Theme_Compat {
 
 		// set up our templates based on priority
 		$new_templates = apply_filters( 'bp_template_hierarchy_bpgsites_directory', array(
-			'bpgsites/index-directory.php'
+			'bpgsites/index.php'
 		) );
 
 		// merge new templates with existing stack
