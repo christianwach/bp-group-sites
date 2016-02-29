@@ -66,10 +66,26 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 	 */
 	public function widget( $args, $instance ) {
 
-		// get group sites
-		if ( bpgsites_has_blogs( $args ) ) { ?>
+		// get filtered title
+		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? '' : $instance['title'], $instance, $this->id_base );
 
-			<ul id="blogs-list" class="item-list">
+		// show widget prefix
+		echo ( isset( $args['before_widget'] ) ? $args['before_widget'] : '' );
+
+		// show title if there is one
+		if ( !empty( $title ) ) {
+			echo ( isset( $args['before_title'] ) ? $args['before_title'] : '' );
+			echo $title;
+			echo ( isset( $args['after_title'] ) ? $args['after_title'] : '' );
+		}
+
+		// set up params
+		$params = array();
+
+		// get group sites
+		if ( bpgsites_has_blogs( $params ) ) { ?>
+
+			<ul class="item-list bpgsites-list">
 
 			<?php while ( bp_blogs() ) : bp_the_blog(); ?>
 
@@ -80,6 +96,7 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 
 					<div class="item">
 						<div class="item-title"><a href="<?php bp_blog_permalink(); ?>"><?php bp_blog_name(); ?></a></div>
+						<div class="item-meta"><span class="activity"><?php bp_blog_last_active(); ?></span></div>
 					</div>
 
 					<div class="clear"></div>
@@ -92,6 +109,9 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 			<?php
 
 		}
+
+		// show widget suffix
+		echo ( isset( $args['after_widget'] ) ? $args['after_widget'] : '' );
 
 	}
 
