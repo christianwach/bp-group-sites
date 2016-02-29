@@ -1,5 +1,4 @@
 <?php
-
 /**
  * BP Group Sites - Group Sites Directory.
  *
@@ -15,7 +14,7 @@ get_header( 'buddypress' );
 	<?php do_action( 'bp_before_directory_groupsites_page' ); ?>
 
 	<div id="content" role="main" class="<?php do_action( 'content_class' ); ?>">
-		<div class="padder">
+		<div id="buddypress">
 
 		<?php do_action( 'bp_before_directory_groupsites' ); ?>
 
@@ -111,7 +110,7 @@ get_header( 'buddypress' );
 
 		<?php do_action( 'bp_after_directory_groupsites' ); ?>
 
-		</div><!-- .padder -->
+		</div><!-- .buddypress -->
 	</div><!-- #content -->
 
 	<?php do_action( 'bp_after_directory_groupsites_page' ); ?>

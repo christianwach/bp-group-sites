@@ -1,16 +1,18 @@
 <?php
-
 /**
  * BP Group Sites - Group Sites Loop.
  *
- * Querystring is set via AJAX in _inc/ajax.php - bp_dtheme_object_filter()
+ * Querystring is set via AJAX in _inc/ajax.php - bp_legacy_theme_object_filter().
  *
  * @package BuddyPress
  * @subpackage BP_Group_Sites
  */
 
-
-
+/**
+ * Fires before the start of the blogs loop.
+ *
+ * @since 1.2.0
+ */
 do_action( 'bp_before_blogs_loop' );
 
 // search for them - TODO: add AJAX query string compatibility
@@ -30,9 +32,16 @@ if ( bpgsites_has_blogs( bp_ajax_querystring( 'bpgsites' ) ) ) {
 
 	</div>
 
-	<?php do_action( 'bp_before_directory_blogs_list' ); ?>
+	<?php
 
-	<ul id="blogs-list" class="item-list" role="main">
+	/**
+	 * Fires before the blogs directory list.
+	 *
+	 * @since 1.1.0
+	 */
+	do_action( 'bp_before_directory_blogs_list' ); ?>
+
+	<ul id="blogs-list" class="item-list">
 
 	<?php while ( bp_blogs() ) : bp_the_blog(); ?>
 
@@ -45,12 +54,26 @@ if ( bpgsites_has_blogs( bp_ajax_querystring( 'bpgsites' ) ) ) {
 				<div class="item-title"><a href="<?php bp_blog_permalink(); ?>"><?php bp_blog_name(); ?></a></div>
 				<div class="item-meta"><span class="activity"><?php bp_blog_last_active(); ?></span></div>
 
-				<?php do_action( 'bp_directory_blogs_item' ); ?>
+				<?php
+
+				/**
+				 * Fires after the listing of a blog item in the blogs loop.
+				 *
+				 * @since 1.2.0
+				 */
+				do_action( 'bp_directory_blogs_item' ); ?>
 			</div>
 
 			<div class="action">
 
-				<?php do_action( 'bp_directory_blogs_actions' ); ?>
+				<?php
+
+				/**
+				 * Fires inside the blogs action listing area.
+				 *
+				 * @since 1.1.0
+				 */
+				do_action( 'bp_directory_blogs_actions' ); ?>
 
 				<div class="meta">
 
@@ -67,7 +90,14 @@ if ( bpgsites_has_blogs( bp_ajax_querystring( 'bpgsites' ) ) ) {
 
 	</ul>
 
-	<?php do_action( 'bp_after_directory_blogs_list' ); ?>
+	<?php
+
+	/**
+	 * Fires after the blogs directory list.
+	 *
+	 * @since 1.1.0
+	 */
+	do_action( 'bp_after_directory_blogs_list' ); ?>
 
 	<?php bp_blog_hidden_fields(); ?>
 
@@ -101,6 +131,9 @@ if ( bpgsites_has_blogs( bp_ajax_querystring( 'bpgsites' ) ) ) {
 
 }
 
-do_action( 'bp_after_blogs_loop' );
-
-?>
+/**
+ * Fires after the display of the blogs loop.
+ *
+ * @since 1.2.0
+ */
+do_action( 'bp_after_blogs_loop' ); ?>
