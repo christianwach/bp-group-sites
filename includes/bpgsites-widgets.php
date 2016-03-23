@@ -73,14 +73,22 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 		echo ( isset( $args['before_widget'] ) ? $args['before_widget'] : '' );
 
 		// show title if there is one
-		if ( !empty( $title ) ) {
+		if ( ! empty( $title ) ) {
 			echo ( isset( $args['before_title'] ) ? $args['before_title'] : '' );
 			echo $title;
 			echo ( isset( $args['after_title'] ) ? $args['after_title'] : '' );
 		}
 
+		// set default max blogs if absent
+		if ( empty( $instance['max_blogs'] ) OR ! is_numeric( $instance['max_blogs'] ) ) {
+			$instance['max_blogs'] = 5;
+		}
+
 		// set up params
-		$params = array();
+		$params = array(
+			'max' => $instance['max_blogs'],
+			'per_page' => $instance['max_posts'],
+		);
 
 		// get group sites
 		if ( bpgsites_has_blogs( $params ) ) { ?>
@@ -128,11 +136,9 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 	 */
 	public function form( $instance ) {
 
-		//print_r( $instance ); die();
-
 		// get title
 		if ( isset( $instance['title'] ) ) {
-			$title = $instance['title'];
+			$title = strip_tags( $instance['title'] );
 		} else {
 			$title = sprintf(
 				__( 'List of %s', 'bp-group-sites' ),
@@ -140,11 +146,21 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 			);
 		}
 
+		// get max blogs
+		if ( isset( $instance['max_blogs'] ) ) {
+			$max_blogs = strip_tags( $instance['max_blogs'] );
+		} else {
+			$max_blogs = 5;
+		}
+
 		?>
 
 		<p>
-		<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', 'bp-group-sites' ); ?></label>
-		<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
+		<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', 'bp-group-sites' ); ?> <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>"></label>
+		</p>
+
+		<p>
+		<label for="<?php echo $this->get_field_id( 'max_blogs' ); ?>"><?php _e( 'Max number to show:', 'bp-group-sites' ); ?> <input class="widefat" id="<?php echo $this->get_field_id( 'max_blogs' ); ?>" name="<?php echo $this->get_field_name( 'max_blogs' ); ?>" type="text" value="<?php echo esc_attr( $max_blogs ); ?>" style="width: 30%" /></label>
 		</p>
 
 		<?php
