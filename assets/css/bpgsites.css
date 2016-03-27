@@ -135,13 +135,16 @@ Default styles for comment amendments
 	margin: 0.7em 0;
 }
 
-.bpgsites_comment_posted_in a:focus
+.bpgsites_comment_posted_in a:focus,
+div#sidebar .comments_container .comment-content .bpgsites_comment_posted_in a:focus
 {
 	text-decoration: underline;
 }
 
 .bpgsites_comment_posted_in a,
-.bpgsites_comment_posted_in a:active
+.bpgsites_comment_posted_in a:active,
+div#sidebar .comments_container .comment-content .bpgsites_comment_posted_in a,
+div#sidebar .comments_container .comment-content .bpgsites_comment_posted_in a:active
 {
 	text-decoration: none;
 }
