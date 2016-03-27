@@ -1842,6 +1842,9 @@ function bpgsites_is_showcase_group( $group_id ) {
  */
 function bpgsites_is_showcase_group_member() {
 
+	// super admins can post anywhere, so allow
+	if ( is_super_admin() ) return true;
+
 	// false by default
 	$passed = false;
 
