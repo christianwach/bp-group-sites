@@ -491,8 +491,6 @@ function bpgsites_recall_state() {
  * Define what happens when the page is ready.
  *
  * @since 0.1
- *
- * @return void
  */
 jQuery(document).ready( function($) {
 
