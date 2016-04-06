@@ -38,6 +38,15 @@ This plugin is in active development. For feature requests and bug reports (or i
 
 == Changelog ==
 
+= 0.1.2 =
+
+* Use cookie to store state of comment filters in CommentPress
+
+= 0.1.1 =
+
+* Comment authors can edit own comments
+* Introduce widget listing group sites
+
 = 0.1 =
 
 Initial commit
