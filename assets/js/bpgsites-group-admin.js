@@ -83,8 +83,6 @@ BuddypressGroupSites.readwith = new function() {
 	 * This method should only be called once.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	this.init = function() {
 
@@ -97,8 +95,6 @@ BuddypressGroupSites.readwith = new function() {
 	 * Write to <head> element.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	this.head = function() {
 
@@ -136,8 +132,6 @@ BuddypressGroupSites.readwith = new function() {
 	 * This method should only be called once.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	this.dom_ready = function() {
 
@@ -346,8 +340,6 @@ BuddypressGroupSites.readwith.init();
  * Define what happens when the page is ready.
  *
  * @since 0.1
- *
- * @return void
  */
 jQuery(document).ready( function($) {
 

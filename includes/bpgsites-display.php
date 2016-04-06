@@ -18,8 +18,6 @@ Throw any functions which build markup in here.
  * Adds icon to menu in CBOX theme
  *
  * @since 0.1
- *
- * @return void
  */
 function bpgsites_cbox_theme_compatibility() {
 

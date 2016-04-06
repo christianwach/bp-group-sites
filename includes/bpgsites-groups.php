@@ -108,8 +108,6 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	 * The content of the extension tab in the group admin.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function edit_screen( $group_id = null ) {
 
@@ -133,8 +131,6 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	 * Runs after the user clicks a submit button on the edit screen.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function edit_screen_save( $group_id = null ) {
 
@@ -287,8 +283,6 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	 * Display our content when the nav item is selected.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function display( $group_id = null ) {
 
@@ -312,7 +306,6 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	 * @since 0.1
 	 *
 	 * @param int $group_id the numeric ID of the group being edited
-	 * @return void
 	 */
 	public function admin_screen( $group_id = null ) {
 
@@ -329,7 +322,6 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	 * @since 0.1
 	 *
 	 * @param int $group_id the numeric ID of the group being edited
-	 * @return void
 	 */
 	public function admin_screen_save( $group_id = null ) {
 
@@ -455,7 +447,6 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	 * @param int $blog_id The numeric ID of the blog to be "read together"
 	 * @param int $inviting_group_id The numeric ID of the inviting group
 	 * @param int $invited_group_id The numeric ID of the invited group
-	 * @return void
 	 */
 	public function _send_invitation_message( $blog_id, $inviting_group_id, $invited_group_id ) {
 
@@ -541,8 +532,6 @@ bp_register_group_extension( 'BPGSites_Group_Extension' );
  * The content of the public extension page.
  *
  * @since 0.1
- *
- * @return void
  */
 function bpgsites_get_extension_display() {
 
@@ -652,8 +641,6 @@ function bpgsites_get_extension_display() {
  * The content of the extension group admin page.
  *
  * @since 0.1
- *
- * @return void
  */
 function bpgsites_get_extension_edit_screen() {
 
@@ -767,8 +754,6 @@ function bpgsites_get_extension_edit_screen() {
  * The content of the extension admin screen.
  *
  * @since 0.1
- *
- * @return void
  */
 function bpgsites_get_extension_admin_screen() {
 
@@ -815,7 +800,6 @@ function bpgsites_get_current_group_id() {
  * @since 0.1
  *
  * @param bool $echo Whether to echo or not
- * @return void
  */
 function bpgsites_group_linkages_pending_get_markup( $echo = true ) {
 
@@ -953,7 +937,6 @@ function bpgsites_group_linkages_pending_sent_get( $group_id, $blog_id = 0 ) {
  * @param int $blog_id The numeric ID of the blog to be "read together"
  * @param int $inviting_group_id The numeric ID of the inviting group
  * @param int $invited_group_id The numeric ID of the invited group
- * @return void
  */
 function bpgsites_group_linkages_pending_sent_create( $blog_id, $inviting_group_id, $invited_group_id ) {
 
@@ -988,7 +971,6 @@ function bpgsites_group_linkages_pending_sent_create( $blog_id, $inviting_group_
  * @param int $blog_id The numeric ID of the blog to be "read together"
  * @param int $inviting_group_id The numeric ID of the inviting group
  * @param int $invited_group_id The numeric ID of the invited group
- * @return void
  */
 function bpgsites_group_linkages_pending_sent_delete( $blog_id, $inviting_group_id, $invited_group_id ) {
 
@@ -1075,7 +1057,6 @@ function bpgsites_group_linkages_pending_received_get( $group_id, $blog_id = 0 )
  * @param int $blog_id The numeric ID of the blog to be "read together"
  * @param int $inviting_group_id The numeric ID of the inviting group
  * @param int $invited_group_id The numeric ID of the invited group
- * @return void
  */
 function bpgsites_group_linkages_pending_received_create( $blog_id, $inviting_group_id, $invited_group_id ) {
 
@@ -1110,7 +1091,6 @@ function bpgsites_group_linkages_pending_received_create( $blog_id, $inviting_gr
  * @param int $blog_id The numeric ID of the blog to be "read together"
  * @param int $invited_group_id The numeric ID of the invited group
  * @param int $inviting_group_id The numeric ID of the inviting group
- * @return void
  */
 function bpgsites_group_linkages_pending_received_delete( $blog_id, $invited_group_id, $inviting_group_id ) {
 
@@ -1169,7 +1149,6 @@ function bpgsites_group_linkages_pending_received_exists( $group_id ) {
  * @param int $blog_id The numeric ID of the blog to be "read together"
  * @param int $inviting_group_id The numeric ID of the inviting group
  * @param int $invited_group_id The numeric ID of the invited group
- * @return void
  */
 function bpgsites_group_linkages_pending_create( $blog_id, $inviting_group_id, $invited_group_id ) {
 
@@ -1195,7 +1174,6 @@ function bpgsites_group_linkages_pending_create( $blog_id, $inviting_group_id, $
  * @param int $blog_id The numeric ID of the blog to be "read together"
  * @param int $invited_group_id The numeric ID of the invited group
  * @param int $inviting_group_id The numeric ID of the inviting group
- * @return void
  */
 function bpgsites_group_linkages_pending_accept( $blog_id, $invited_group_id, $inviting_group_id ) {
 
@@ -1220,7 +1198,6 @@ function bpgsites_group_linkages_pending_accept( $blog_id, $invited_group_id, $i
  * @param int $blog_id The numeric ID of the blog to be "read together"
  * @param int $invited_group_id The numeric ID of the invited group
  * @param int $inviting_group_id The numeric ID of the inviting group
- * @return void
  */
 function bpgsites_group_linkages_pending_delete( $blog_id, $invited_group_id, $inviting_group_id ) {
 
@@ -1405,7 +1382,6 @@ function bpgsites_group_linkages_get( $group_id, $blog_id = 0 ) {
  * @param int $blog_id The numeric ID of the blog to be "read together"
  * @param int $inviting_group_id The numeric ID of the inviting group
  * @param int $invited_group_id The numeric ID of the invited group
- * @return void
  */
 function bpgsites_group_linkages_create( $blog_id, $inviting_group_id, $invited_group_id ) {
 
@@ -1427,7 +1403,6 @@ function bpgsites_group_linkages_create( $blog_id, $inviting_group_id, $invited_
  * @param int $blog_id The numeric ID of the blog being "read together"
  * @param int $primary_group_id The numeric ID of the primary group
  * @param int $secondary_group_id The numeric ID of the secondary group
- * @return void
  */
 function bpgsites_group_linkages_delete( $blog_id, $primary_group_id, $secondary_group_id ) {
 
@@ -1497,8 +1472,6 @@ function bpgsites_group_linkages_link_exists( $blog_id, $primary_group_id, $seco
  * AJAX handler for group linkage autocomplete using the Select2 JS library.
  *
  * @since 0.1
- *
- * @return void
  */
 function bpgsites_group_linkages_get_ajax() {
 
@@ -1591,7 +1564,6 @@ add_action( 'wp_ajax_bpgsites_get_groups', 'bpgsites_group_linkages_get_ajax' );
  * @param int $blog_id The numeric ID of the blog to be "read together"
  * @param int $primary_group_id The numeric ID of the primary group
  * @param int $secondary_group_id The numeric ID of the secondary group
- * @return void
  */
 function bpgsites_group_linkage_create( $blog_id, $primary_group_id, $secondary_group_id ) {
 
@@ -1631,7 +1603,6 @@ function bpgsites_group_linkage_create( $blog_id, $primary_group_id, $secondary_
  * @param int $blog_id The numeric ID of the blog being "read together"
  * @param int $primary_group_id The numeric ID of the primary group
  * @param int $secondary_group_id The numeric ID of the secondary group
- * @return void
  */
 function bpgsites_group_linkage_delete( $blog_id, $primary_group_id, $secondary_group_id ) {
 
@@ -1667,8 +1638,6 @@ function bpgsites_group_linkage_delete( $blog_id, $primary_group_id, $secondary_
  * Show option to make a group a showcase group.
  *
  * @since 0.1
- *
- * @return void
  */
 function bpgsites_showcase_group_settings_form() {
 
@@ -1725,7 +1694,6 @@ add_action ( 'bp_after_group_settings_creation_step' ,'bpgsites_showcase_group_s
  * @since 0.1
  *
  * @param object $group the group object
- * @return void
  */
 function bpgsites_showcase_group_save( $group ) {
 

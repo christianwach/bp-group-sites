@@ -49,8 +49,6 @@ class BP_Group_Sites_Activity {
 	 * Register hooks for this class.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function register_hooks() {
 
@@ -204,8 +202,6 @@ class BP_Group_Sites_Activity {
 	 * Register a meta box for the comment edit screen.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function add_meta_box() {
 
@@ -226,8 +222,6 @@ class BP_Group_Sites_Activity {
 	 * Add a meta box to the comment edit screen.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function comment_meta_box() {
 
@@ -300,7 +294,6 @@ class BP_Group_Sites_Activity {
 	 * @since 0.1
 	 *
 	 * @param int $comment_id The ID of the comment being saved
-	 * @return void
 	 */
 	public function save_comment_metadata( $comment_id ) {
 
@@ -542,8 +535,6 @@ class BP_Group_Sites_Activity {
 	 * Add a filter option to the filter select box on group activity pages.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function comments_filter_option() {
 
@@ -577,7 +568,6 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @param int $count The current comment count
 	 * @param int $post_id The current post
-	 * @return void
 	 */
 	public function get_comments_number( $count, $post_id ) {
 
@@ -607,7 +597,6 @@ class BP_Group_Sites_Activity {
 	 * @since 0.1
 	 *
 	 * @param object $comments The current query
-	 * @return void
 	 */
 	public function filter_comments( $comments ) {
 
@@ -694,7 +683,6 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @param integer $comment_id The ID of the comment
 	 * @param integer $comment_status The approval status of the comment
-	 * @return void
 	 */
 	public function save_comment_group_id( $comment_id, $comment_status ) {
 
@@ -1145,8 +1133,6 @@ class BP_Group_Sites_Activity {
 	 * Adds links to the Special Pages menu in CommentPress themes.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function get_group_navigation_links() {
 
@@ -1401,8 +1387,6 @@ class BP_Group_Sites_Activity {
 	 * Adds filtering above scrollable comments in CommentPress Responsive.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function get_group_comments_filter() {
 
@@ -2210,8 +2194,6 @@ class BP_Group_Sites_Activity {
 	 * Show group sites activity in sidebar.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function get_activity_sidebar_section() {
 
@@ -2322,8 +2304,6 @@ class BP_Group_Sites_Activity {
 	 * Show group sites activity in sidebar.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function get_activity_item() {
 
@@ -2595,8 +2575,6 @@ class BP_Group_Sites_Activity {
 	 * Add a filter option to the filter select box on group activity pages.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function posts_filter_option() {
 

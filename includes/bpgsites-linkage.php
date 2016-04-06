@@ -127,7 +127,6 @@ function bpgsites_check_blog_by_group_id( $group_id, $blog_id ) {
  *
  * @param int $group_id the numeric ID of the group
  * @param int $blog_id the numeric ID of the blog
- * @return void
  */
 function bpgsites_link_blog_and_group( $blog_id, $group_id ) {
 
@@ -151,7 +150,6 @@ function bpgsites_link_blog_and_group( $blog_id, $group_id ) {
  *
  * @param int $group_id the numeric ID of the group
  * @param int $blog_id the numeric ID of the blog
- * @return void
  */
 function bpgsites_unlink_blog_and_group( $blog_id, $group_id ) {
 
@@ -174,7 +172,6 @@ function bpgsites_unlink_blog_and_group( $blog_id, $group_id ) {
  * @since 0.1
  *
  * @param int $blog_id the numeric ID of the blog
- * @return void
  */
 function bpgsites_configure_blog_options( $blog_id ) {
 
@@ -215,7 +212,6 @@ function bpgsites_configure_blog_options( $blog_id ) {
  * @since 0.1
  *
  * @param int $blog_id the numeric ID of the blog
- * @return void
  */
 function bpgsites_reset_blog_options( $blog_id ) {
 
@@ -251,7 +247,6 @@ function bpgsites_reset_blog_options( $blog_id ) {
  *
  * @param int $blog_id the numeric ID of the blog
  * @param int $group_id the numeric ID of the group
- * @return void
  */
 function bpgsites_add_group_to_blog( $blog_id, $group_id ) {
 
@@ -275,7 +270,6 @@ function bpgsites_add_group_to_blog( $blog_id, $group_id ) {
  *
  * @param int $group_id the numeric ID of the group
  * @param int $blog_id the numeric ID of the blog
- * @return void
  */
 function bpgsites_add_blog_to_group( $group_id, $blog_id ) {
 
@@ -304,7 +298,6 @@ function bpgsites_add_blog_to_group( $group_id, $blog_id ) {
  *
  * @param int $blog_id the numeric ID of the blog
  * @param int $group_id the numeric ID of the group
- * @return void
  */
 function bpgsites_remove_group_from_blog( $blog_id, $group_id ) {
 
@@ -333,7 +326,6 @@ function bpgsites_remove_group_from_blog( $blog_id, $group_id ) {
  *
  * @param int $group_id the numeric ID of the group
  * @param int $blog_id the numeric ID of the blog
- * @return void
  */
 function bpgsites_remove_blog_from_group( $group_id, $blog_id ) {
 
@@ -361,7 +353,6 @@ function bpgsites_remove_blog_from_group( $group_id, $blog_id ) {
  * @since 0.1
  *
  * @param int $blog_id the numeric ID of the blog
- * @return void
  */
 function bpgsites_remove_blog_from_groups( $blog_id, $drop = false ) {
 
@@ -397,7 +388,6 @@ add_action( 'delete_blog', 'bpgsites_remove_blog_from_groups', 10, 1 );
  * @since 0.1
  *
  * @param int $group_id the numeric ID of the group
- * @return void
  */
 function bpgsites_remove_group_from_blogs( $group_id ) {
 
@@ -560,7 +550,6 @@ function bpgsites_get_all_possible_groupsites() {
  * @since 0.1
  *
  * @param int $blog_id the numeric ID of the blog
- * @return void
  */
 function bpgsites_register_groupsite( $blog_id ) {
 
@@ -597,7 +586,6 @@ function bpgsites_register_groupsite( $blog_id ) {
  * @since 0.1
  *
  * @param int $blog_id the numeric ID of the blog
- * @return void
  */
 function bpgsites_deregister_groupsite( $blog_id ) {
 

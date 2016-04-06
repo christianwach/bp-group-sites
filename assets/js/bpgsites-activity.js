@@ -17,7 +17,7 @@ This provides compatibility with BuddyPress Activity Streams
 /**
  * Define what happens when the page is ready
  *
- * @return void
+ * @since 0.1
  */
 jQuery(document).ready( function($) {
 

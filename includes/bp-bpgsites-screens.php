@@ -31,8 +31,6 @@ class BP_Group_Sites_Theme_Compat {
 	 * Set up theme compatibility for the BP Group Sites component.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function __construct() {
 
@@ -47,8 +45,6 @@ class BP_Group_Sites_Theme_Compat {
 	 * Are we looking at something that needs BP Group Sites theme compatability?
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function is_bpgsites() {
 
@@ -107,8 +103,6 @@ class BP_Group_Sites_Theme_Compat {
 	 * Update the global $post with directory data.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function directory_dummy_post() {
 
@@ -165,8 +159,6 @@ new BP_Group_Sites_Theme_Compat();
  * Load the top-level BP Group Sites directory.
  *
  * @since 0.1
- *
- * @return void
  */
 function bpgsites_screen_index() {
 

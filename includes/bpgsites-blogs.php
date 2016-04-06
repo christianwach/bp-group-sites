@@ -245,8 +245,6 @@ Functions which may only be used in the loop
  * Copied from bp_blogs_pagination_count() and amended.
  *
  * @since 0.1
- *
- * @return void
  */
 function bpgsites_blogs_pagination_count() {
 	global $blogs_template;
@@ -311,8 +309,6 @@ function bpgsites_total_blogs() {
  * Output the total number of groupsites on the site.
  *
  * @since 0.1
- *
- * @return void
  */
 function bpgsites_total_blog_count() {
 	echo bpgsites_get_total_blog_count();
@@ -371,8 +367,6 @@ function bpgsites_total_blogs_for_user( $user_id = 0 ) {
  * Output the total number of working blogs for a user.
  *
  * @since 0.1
- *
- * @return void
  */
 function bpgsites_total_blog_count_for_user( $user_id = 0 ) {
 	echo bpgsites_get_total_blog_count_for_user( $user_id );
@@ -431,8 +425,6 @@ function bpgsites_is_blog_in_group() {
  * Get the text value of a submit button.
  *
  * @since 0.1
- *
- * @return void
  */
 function bpgsites_admin_button_value() {
 
@@ -451,8 +443,6 @@ function bpgsites_admin_button_value() {
  * Get the action of a submit button.
  *
  * @since 0.1
- *
- * @return void
  */
 function bpgsites_admin_button_action() {
 
@@ -473,7 +463,6 @@ function bpgsites_admin_button_action() {
  * @since 0.1
  *
  * @uses bpgsites_get_root_slug()
- * @return void
  */
 function bpgsites_root_slug() {
 	echo bpgsites_get_root_slug();
@@ -505,7 +494,6 @@ Functions which enable loop compatibility with CommentPress "Site Image"
  *
  * @param mixed|array $old_value The previous value
  * @param mixed|array $new_value The new value
- * @return void
  */
 function bpgsites_commentpress_site_image( $old_value, $new_value ) {
 

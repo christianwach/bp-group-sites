@@ -52,8 +52,6 @@ class BP_Group_Sites_Admin {
 	 * Register hooks on plugin init.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function register_hooks() {
 
@@ -73,8 +71,6 @@ class BP_Group_Sites_Admin {
 	 * Actions to perform on plugin activation.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function activate() {
 
@@ -122,8 +118,6 @@ class BP_Group_Sites_Admin {
 	 * Actions to perform on plugin deactivation (NOT deletion).
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function deactivate() {
 
@@ -141,8 +135,6 @@ class BP_Group_Sites_Admin {
 	 * Add an admin page for this plugin.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function add_admin_menu() {
 
@@ -174,8 +166,6 @@ class BP_Group_Sites_Admin {
 	 * Enqueue any styles and scripts needed by our admin page.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function add_admin_styles() {
 
@@ -196,8 +186,6 @@ class BP_Group_Sites_Admin {
 	 * Update options based on content of form.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function options_update() {
 
@@ -360,7 +348,6 @@ class BP_Group_Sites_Admin {
 	 *
 	 * @param string $option_name The name of the option
 	 * @param mixed $value The value of the option
-	 * @return void
 	 */
 	public function option_set( $option_name = '', $value = '' ) {
 
@@ -387,7 +374,6 @@ class BP_Group_Sites_Admin {
 	 * @since 0.1
 	 *
 	 * @param string $option_name The name of the option
-	 * @return void
 	 */
 	public function option_delete( $option_name = '' ) {
 
@@ -407,8 +393,6 @@ class BP_Group_Sites_Admin {
 	 * General debugging utility.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function do_debug() {
 
@@ -420,8 +404,6 @@ class BP_Group_Sites_Admin {
 	 * Show our admin page.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function _network_admin_form() {
 

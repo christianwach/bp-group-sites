@@ -31,8 +31,6 @@ if ( 'undefined' !== typeof BpgsitesSettings ) {
  * Set up our elements.
  *
  * @since 0.1
- *
- * @return void
  */
 function bpgsites_setup() {
 
@@ -73,8 +71,6 @@ bpgsites_setup();
  * Check page load.
  *
  * @since 0.1
- *
- * @return void
  */
 function bpgsites_page_load() {
 
@@ -103,8 +99,6 @@ function bpgsites_page_load() {
  * Update dropdown and hide it.
  *
  * @since 0.1
- *
- * @return void
  */
 function bpgsites_update_select( comment_id ) {
 
@@ -152,8 +146,6 @@ function bpgsites_update_select( comment_id ) {
  * Initialise elements.
  *
  * @since 0.1
- *
- * @return void
  */
 function bpgsites_init_elements() {
 
@@ -229,8 +221,6 @@ function bpgsites_init_elements() {
 	 * Toggle the appearance of "Filter Comments by Group" panel.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	jQuery( 'h3.bpgsites_group_filter_heading' ).click( function( event ) {
 
@@ -262,8 +252,6 @@ function bpgsites_init_elements() {
 	 * Intercept clicks on "Reply to Comment" links and update group selector.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	jQuery( 'a.comment-reply-link' ).click( function( event ) {
 
@@ -306,8 +294,6 @@ function bpgsites_init_elements() {
 	 * Listen to clicks on group-filtering checkboxes.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	jQuery( 'input.bpgsites_group_checkbox' ).click( function( event ) {
 
@@ -331,8 +317,6 @@ function bpgsites_init_elements() {
 	 * Listen to clicks on toggle checkbox for the "Filter Comments by Group" panel.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	jQuery( 'input.bpgsites_group_checkbox_toggle' ).click( function( event ) {
 
@@ -368,7 +352,6 @@ function bpgsites_init_elements() {
  *
  * @param {String} checked The current checked value of the input
  * @param {Integer} group_id The numerical group ID
- * @return void
  */
 function bpgsites_do_checkbox_action( checked, group_id ) {
 

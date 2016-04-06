@@ -62,7 +62,6 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 	 * @since 0.2.1
 	 * @param array $args An array of standard parameters for widgets in this theme
 	 * @param array $instance An array of settings for this widget instance
-	 * @return void Echoes its output
 	 */
 	public function widget( $args, $instance ) {
 
@@ -132,7 +131,6 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 	 * @since 0.2.1
 	 *
 	 * @param array $instance Previously saved values from database.
-	 * @return void Echoes its output
 	 */
 	public function form( $instance ) {
 

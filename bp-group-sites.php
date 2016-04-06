@@ -108,8 +108,6 @@ class BP_Group_Sites {
 	 * Actions to perform on plugin activation.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function activate() {
 
@@ -124,8 +122,6 @@ class BP_Group_Sites {
 	 * Actions to perform on plugin deactivation (NOT deletion).
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function deactivate() {
 
@@ -147,8 +143,6 @@ class BP_Group_Sites {
 	 * http://ottopress.com/2012/internationalization-youre-probably-doing-it-wrong/
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function enable_translation() {
 
@@ -174,8 +168,6 @@ class BP_Group_Sites {
 	 * Initialise the admin object.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function initialise_admin() {
 
@@ -193,8 +185,6 @@ class BP_Group_Sites {
 	 * Do stuff on plugin init.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function initialise() {
 
@@ -227,8 +217,6 @@ class BP_Group_Sites {
 	 * Register hooks on plugin init.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function register_hooks() {
 
@@ -266,8 +254,6 @@ class BP_Group_Sites {
 	 * Register theme hooks on bp include.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function register_theme_hooks() {
 
@@ -282,8 +268,6 @@ class BP_Group_Sites {
 	 * Add our templates to the theme stack.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function theme_compat() {
 
@@ -298,8 +282,6 @@ class BP_Group_Sites {
 	 * Add our front-end stylesheets.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function enqueue_styles() {
 
@@ -334,8 +316,6 @@ class BP_Group_Sites {
 	 * Add our front-end Javascripts.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function enqueue_scripts() {
 
@@ -398,8 +378,6 @@ class BP_Group_Sites {
 	 * Add our CommentPress-specific scripts.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function enqueue_commentpress_scripts() {
 
@@ -432,7 +410,6 @@ class BP_Group_Sites {
 	 * Register widgets for this plugin
 	 *
 	 * @since 0.1
-	 * @return void
 	 */
 	public function register_widgets() {
 

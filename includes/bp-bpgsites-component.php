@@ -26,8 +26,6 @@ class BP_Group_Sites_Component extends BP_Component {
 	 * Start the group_sites component creation process.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	function __construct() {
 
@@ -66,8 +64,6 @@ class BP_Group_Sites_Component extends BP_Component {
 	 * Include our component's files.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function includes( $includes = array() ) {
 
@@ -86,7 +82,6 @@ class BP_Group_Sites_Component extends BP_Component {
 	 * @see BP_Component::setup_globals() for description of parameters.
 	 *
 	 * @param array $args See {@link BP_Component::setup_globals()}.
-	 * @return void
 	 */
 	public function setup_globals( $args = array() ) {
 
@@ -197,8 +192,6 @@ add_filter( 'bp_located_template', 'bpgsites_load_template_filter', 10, 2 );
  * Load our loop when requested.
  *
  * @since 0.1
- *
- * @return void
  */
 function bpgsites_object_template_loader() {
 
