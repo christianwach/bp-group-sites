@@ -309,6 +309,9 @@ function bpgsites_init_elements() {
 		// do the action for this checkbox
 		bpgsites_do_checkbox_action( checked, group_id );
 
+		// save state
+		bpgsites_save_state();
+
 	});
 
 
@@ -336,6 +339,9 @@ function bpgsites_init_elements() {
 			bpgsites_do_checkbox_action( checked, group_id );
 
 		});
+
+		// save state
+		bpgsites_save_state();
 
 	});
 
@@ -397,6 +403,91 @@ function bpgsites_do_checkbox_action( checked, group_id ) {
 
 
 /**
+ * Save the state of the filter checkboxes in a cookie.
+ *
+ * @since 0.2.2
+ */
+function bpgsites_save_state() {
+
+	// declare vars
+	var state = [], states = '';
+
+	// get the state of all checkboxes
+	jQuery( 'input.bpgsites_group_checkbox' ).each( function( i ) {
+
+		// get checked/unchecked state
+		checked = jQuery(this).prop( 'checked' );
+
+		// get group ID
+		group_id = jQuery(this).val();
+
+		// add to the array if checked
+		if ( checked ) {
+			state.push( group_id );
+		}
+
+	});
+
+	// convert to string
+	states = state.join( ',' );
+
+	// set cookie
+	jQuery.cookie(
+		'bpgsites_checkboxes',
+		states,
+		{ expires: 28, path: cp_cookie_path }
+	);
+
+}
+
+
+
+/**
+ * Recall the state of the filter checkboxes from a cookie.
+ *
+ * @since 0.2.2
+ */
+function bpgsites_recall_state() {
+
+	// get cookie
+	var states = jQuery.cookie( 'bpgsites_checkboxes' ),
+		state = [],
+		group_id;
+
+	// bail if we don't have one
+	if ( 'undefined' === typeof states || states === null ) {
+		return;
+	}
+
+	// create array
+	state = states.split( ',' );
+
+	// get the state of all checkboxes
+	jQuery( 'input.bpgsites_group_checkbox' ).each( function( i ) {
+
+		// get group ID
+		group_id = jQuery(this).val();
+
+		// check or uncheck depending on presence in array
+		if ( jQuery.inArray( group_id, state ) !== -1 ) {
+			checked = true;
+		} else {
+			checked = false;
+		}
+
+		// do action for this checkbox
+		bpgsites_do_checkbox_action( checked, group_id )
+
+		// set element check state
+		jQuery(this).prop( 'checked', checked );
+
+	});
+
+}
+
+
+
+/**
  * Define what happens when the page is ready.
  *
  * @since 0.1
@@ -404,6 +495,9 @@ function bpgsites_do_checkbox_action( checked, group_id ) {
  * @return void
  */
 jQuery(document).ready( function($) {
+
+	// recall state if set
+	bpgsites_recall_state();
 
 	// init elements
 	bpgsites_init_elements();
