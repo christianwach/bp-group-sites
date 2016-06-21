@@ -40,6 +40,10 @@ This plugin is in active development. For feature requests and bug reports (or i
 
 == Changelog ==
 
+= 0.2.3 =
+
+* Refine appearance on WordPress plugin repo
+
 = 0.2.2 =
 
 * Use cookie to store state of comment filters in CommentPress Core
