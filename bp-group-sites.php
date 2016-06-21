@@ -1,7 +1,7 @@
 <?php /*
 --------------------------------------------------------------------------------
 Plugin Name: BP Group Sites
-Description: In WordPress Multisite, create a many-to-many replationship between BuddyPress Groups and WordPress Sites.
+Description: Creates many-to-many relationships between BuddyPress Groups and WordPress Sites.
 Version: 0.2.4
 Author: Christian Wach
 Author URI: http://haystack.co.uk
