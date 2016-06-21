@@ -1,4 +1,4 @@
-=== BuddyPress Group Sites ===
+=== BP Group Sites ===
 Contributors: needle
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8MZNB9D3PF48S
 Tags: buddypress, groups, sites, reading groups
@@ -14,7 +14,7 @@ Enables the creation of a many-to-many relationship between BuddyPress Groups an
 
 == Description ==
 
-The *BuddyPress Group Sites* plugin enables the creation of a many-to-many relationship between *BuddyPress* Groups and *WordPress* Sites. This is useful when you have a *BuddyPress* network in which you want, for example, many groups to comment simultaneously on sites which they share access to.
+The *BP Group Sites* plugin enables the creation of a many-to-many relationship between *BuddyPress* Groups and *WordPress* Sites. This is useful when you have a *BuddyPress* network in which you want, for example, many groups to comment simultaneously on sites which they share access to.
 
 The plugin is designed to work with [*CommentPress Core*](https://wordpress.org/plugins/commentpress-core/) "documents" (which are themselves complete sub-sites) so that there can be many reading groups for each document and many documents for each reading group.
 
