@@ -2,7 +2,7 @@
 --------------------------------------------------------------------------------
 Plugin Name: BP Group Sites
 Description: In WordPress Multisite, create a many-to-many replationship between BuddyPress Groups and WordPress Sites.
-Version: 0.2.2
+Version: 0.2.3
 Author: Christian Wach
 Author URI: http://haystack.co.uk
 Plugin URI: https://github.com/christianwach/bp-group-sites
