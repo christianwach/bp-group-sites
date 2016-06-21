@@ -1,5 +1,5 @@
-BuddyPress Group Sites
-======================
+BP Group Sites
+==============
 
 The *BuddyPress Group Sites* plugin enables the creation of a many-to-many relationship between BuddyPress Groups and WordPress Sites. This is useful when you have a BuddyPress network in which you want, say, many groups to comment simultaneously on sites which they share access to.
 
