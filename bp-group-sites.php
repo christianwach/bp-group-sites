@@ -1,5 +1,4 @@
-<?php
-/*
+<?php /*
 --------------------------------------------------------------------------------
 Plugin Name: BP Group Sites
 Description: In WordPress Multisite, create a many-to-many replationship between BuddyPress Groups and WordPress Sites.
