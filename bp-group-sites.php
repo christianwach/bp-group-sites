@@ -15,7 +15,7 @@ Network: true
 
 
 // set our version here
-define( 'BPGSITES_VERSION', '0.2.2' );
+define( 'BPGSITES_VERSION', '0.2.3' );
 
 // store reference to this file
 if ( ! defined( 'BPGSITES_FILE' ) ) {
