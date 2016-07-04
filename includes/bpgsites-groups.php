@@ -1865,6 +1865,12 @@ function bpgsites_is_showcase_group_member() {
  */
 function bpgsites_showcase_group_media_buttons( $allowed ) {
 
+	// get current blog
+	$current_blog_id = get_current_blog_id();
+
+	// if this isn't a group site, pass through
+	if ( ! bpgsites_is_groupsite( $current_blog_id ) ) return $allowed;
+
 	// disallow by default
 	$allowed = false;
 
@@ -1895,6 +1901,12 @@ add_filter( 'commentpress_rte_media_buttons', 'bpgsites_showcase_group_media_but
  * @return array/bool $quicktags false if quicktags are disabled, array of buttons otherwise
  */
 function bpgsites_showcase_group_quicktags( $quicktags ) {
+
+	// get current blog
+	$current_blog_id = get_current_blog_id();
+
+	// if this isn't a group site, pass through
+	if ( ! bpgsites_is_groupsite( $current_blog_id ) ) return $quicktags;
 
 	// disallow quicktags by default
 	$quicktags = false;
