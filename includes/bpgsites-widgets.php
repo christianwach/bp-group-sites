@@ -86,7 +86,7 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 		// set up params
 		$params = array(
 			'max' => $instance['max_blogs'],
-			'per_page' => $instance['max_posts'],
+			'per_page' => $instance['max_blogs'],
 		);
 
 		// get group sites
