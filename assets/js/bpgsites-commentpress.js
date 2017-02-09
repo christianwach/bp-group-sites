@@ -14,8 +14,8 @@ This provides compatibility with CommentPress
 
 
 
-// init var
-var bpgsites_show_public = '0';
+// init vars
+var bpgsites_show_public = '0', bpgsites_settings;
 
 // test for our localisation object
 if ( 'undefined' !== typeof BpgsitesSettings ) {
@@ -24,6 +24,41 @@ if ( 'undefined' !== typeof BpgsitesSettings ) {
 	bpgsites_show_public = BpgsitesSettings.show_public;
 
 }
+
+
+
+/**
+ * Set up our state-retaining object.
+ *
+ * @since 0.2.4
+ */
+function BP_Group_Sites_Settings() {
+
+   // selected group ID
+   this.group_id = '';
+
+   /**
+    * Group ID getter.
+    *
+    * @return {Integer} group_id The stored group ID
+    */
+   this.get_group_id = function() {
+       return this.group_id;
+   }
+
+   /**
+    * Group ID setter.
+    *
+    * @param {Integer} group_id The group ID to store
+    */
+   this.set_group_id = function( group_id ) {
+       this.group_id = group_id;
+   }
+
+}
+
+// let's have an instance
+bpgsites_settings = new BP_Group_Sites_Settings();
 
 
 
@@ -125,7 +160,12 @@ function bpgsites_update_select( comment_id ) {
 
 		} else {
 
-			// clear select option
+			// store existing if not empty
+			if ( jQuery( '#bpgsites-post-in' ).val() ) {
+				bpgsites_settings.set_group_id( jQuery( '#bpgsites-post-in' ).val() );
+			}
+
+			// clear option
 			jQuery( '#bpgsites-post-in' ).val( '' );
 
 		}
@@ -277,7 +317,7 @@ function bpgsites_init_elements() {
 	 */
 	jQuery( 'a#cancel-comment-reply-link' ).click( function( event ) {
 
-		var groups = [];
+		var groups = [], previous;
 
 		// override event
 		event.preventDefault();
@@ -289,17 +329,17 @@ function bpgsites_init_elements() {
 
 		} else {
 
-			// set to first item in select
+			// store existing if not empty
+			if ( jQuery( '#bpgsites-post-in' ).val() ) {
+				bpgsites_update_select.set_group_id( jQuery( '#bpgsites-post-in' ).val() );
+			}
 
-			// grab all items
-			jQuery('#bpgsites-post-in option').each( function() {
-				groups.push( jQuery(this).val() );
-			});
+			// get prior value
+			previous = bpgsites_settings.get_group_id();
 
-
-			// set selected if we have any
-			if ( groups.length > 0 ) {
-				jQuery( '#bpgsites-post-in' ).val( groups[0] );
+			// reset to prior value if we have one
+			if ( previous ) {
+				jQuery( '#bpgsites-post-in' ).val( previous );
 			}
 
 		}
