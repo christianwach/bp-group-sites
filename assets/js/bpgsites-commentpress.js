@@ -277,8 +277,32 @@ function bpgsites_init_elements() {
 	 */
 	jQuery( 'a#cancel-comment-reply-link' ).click( function( event ) {
 
+		var groups = [];
+
 		// override event
 		event.preventDefault();
+
+		// if not empty, we can skip setting a value
+		if ( jQuery( '#bpgsites-post-in' ).val() ) {
+
+			// skip
+
+		} else {
+
+			// set to first item in select
+
+			// grab all items
+			jQuery('#bpgsites-post-in option').each( function() {
+				groups.push( jQuery(this).val() );
+			});
+
+
+			// set selected if we have any
+			if ( groups.length > 0 ) {
+				jQuery( '#bpgsites-post-in' ).val( groups[0] );
+			}
+
+		}
 
 		// show enclosing div
 		jQuery( '#bpgsites-post-in-box' ).show();
