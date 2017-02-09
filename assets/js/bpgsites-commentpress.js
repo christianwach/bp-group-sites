@@ -35,10 +35,7 @@ if ( 'undefined' !== typeof BpgsitesSettings ) {
 function bpgsites_setup() {
 
 	// define vars
-	var styles;
-
-	// init styles
-	styles = '';
+	var styles = '';
 
 	// wrap with js test
 	if ( document.getElementById ) {
@@ -256,7 +253,7 @@ function bpgsites_init_elements() {
 	jQuery( 'a.comment-reply-link' ).click( function( event ) {
 
 		// define vars
-		var reply_to_classes, spliced, group_id, comment_id, comment_form;
+		var comment_id;
 
 		// override event
 		event.preventDefault();
@@ -328,6 +325,8 @@ function bpgsites_init_elements() {
 
 		// check all when this element is checked - and vice versa
 		jQuery( 'input.bpgsites_group_checkbox' ).each( function( i ) {
+
+			var group_id;
 
 			// set element check state
 			jQuery(this).prop( 'checked', checked );
@@ -415,6 +414,8 @@ function bpgsites_save_state() {
 	// get the state of all checkboxes
 	jQuery( 'input.bpgsites_group_checkbox' ).each( function( i ) {
 
+		var group_id, checked;
+
 		// get checked/unchecked state
 		checked = jQuery(this).prop( 'checked' );
 
@@ -452,7 +453,8 @@ function bpgsites_recall_state() {
 	// get cookie
 	var states = jQuery.cookie( 'bpgsites_checkboxes' ),
 		state = [],
-		group_id;
+		group_id,
+		checked;
 
 	// bail if we don't have one
 	if ( 'undefined' === typeof states || states === null ) {
