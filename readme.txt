@@ -40,6 +40,10 @@ This plugin is in active development. For feature requests and bug reports (or i
 
 == Changelog ==
 
+= 0.2.4 =
+
+* Fix inconsistency in group selection when comment form is moved
+
 = 0.2.3 =
 
 * Refine appearance on WordPress plugin repo
