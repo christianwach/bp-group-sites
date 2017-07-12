@@ -40,6 +40,10 @@ This plugin is in active development. For feature requests and bug reports (or i
 
 == Changelog ==
 
+= 0.2.5 =
+
+* Restore BuddyPress activity stream filtering
+
 = 0.2.4 =
 
 * Fix inconsistency in group selection when comment form is moved
