@@ -66,6 +66,9 @@ class BP_Group_Sites_Activity {
 		add_action( 'bp_group_activity_filter_options', array( $this, 'comments_filter_option' ) );
 		add_action( 'bp_member_activity_filter_options', array( $this, 'comments_filter_option' ) );
 
+		// filter the AJAX query string to add the "action" variable
+		add_filter( 'bp_ajax_querystring', array( $this, 'comments_ajax_querystring' ), 20, 2 );
+
 		// filter the comment link so replies are done in CommentPress
 		add_filter( 'bp_get_activity_comment_link', array( $this, 'filter_comment_link' ) );
 
@@ -556,6 +559,45 @@ class BP_Group_Sites_Activity {
 		/*
 		__( 'Group Site Comments', 'bp-group-sites' )
 		*/
+
+	}
+
+
+
+	/**
+	 * Modify the AJAX query string.
+	 *
+	 * @since 0.2.5
+	 *
+	 * @param string $qs The query string for the BP loop
+	 * @param string $object The current object for the query string
+	 * @return string Modified query string
+	 */
+	public function comments_ajax_querystring( $qs, $object ) {
+
+		// bail if not an activity object
+		if ( $object != 'activity' ) return $qs;
+
+		// parse query string into an array
+		$r = wp_parse_args( $qs );
+
+		// bail if no type is set
+		if ( empty( $r['type'] ) ) return $qs;
+
+		// bail if not a type that we're looking for
+		if ( 'new_groupsite_comment' !== $r['type'] ) return $qs;
+
+		// add the 'new_groupsite_comment' type if it doesn't exist
+		if ( ! isset( $r['action'] ) OR false === strpos( $r['action'], 'new_groupsite_comment' ) ) {
+			// 'action' filters activity items by the 'type' column
+			$r['action'] = 'new_groupsite_comment';
+		}
+
+		// 'type' isn't used anywhere internally
+		unset( $r['type'] );
+
+		// return a querystring
+		return build_query( $r );
 
 	}
 
