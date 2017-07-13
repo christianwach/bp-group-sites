@@ -840,7 +840,7 @@ function bpgsites_group_linkages_pending_get_markup( $echo = true ) {
 
 			// construct text
 			$text = sprintf(
-				__( 'Read "%1$s" with "%2$s"' ),
+				__( 'Read "%1$s" with "%2$s"', 'bp-group-sites' ),
 				$blog_name,
 				esc_html( $inviting_group->name )
 			);

@@ -437,7 +437,7 @@ class BP_Group_Sites_Activity {
 
 		// Replace the necessary values to display in group activity stream
 		$activity->action = sprintf(
-			__( '%s left a %s on a %s %s in the group %s:', 'bp-group-sites' ),
+			__( '%1$s left a %2$s on a %3$s %4$s in the group %5$s:', 'bp-group-sites' ),
 			$user_link,
 			'<a href="' . $activity->primary_link . '">' . __( 'comment', 'bp-group-sites' ) . '</a>',
 			$activity_name,
@@ -2569,7 +2569,7 @@ class BP_Group_Sites_Activity {
 
 			// replace the necessary values to display in group activity stream
 			$activity->action = sprintf(
-				__( '%s updated a %s %s in the group %s:', 'bp-group-sites' ),
+				__( '%1$s updated a %2$s %3$s in the group %4$s:', 'bp-group-sites' ),
 				$activity_author,
 				$activity_name,
 				'<a href="' . get_permalink( $post->ID ) . '">' . esc_attr( $post->post_title ) . '</a>',
@@ -2580,7 +2580,7 @@ class BP_Group_Sites_Activity {
 
 			// replace the necessary values to display in group activity stream
 			$activity->action = sprintf(
-				__( '%s wrote a new %s %s in the group %s:', 'bp-group-sites' ),
+				__( '%1$s wrote a new %2$s %3$s in the group %4$s:', 'bp-group-sites' ),
 				$activity_author,
 				$activity_name,
 				'<a href="' . get_permalink( $post->ID ) . '">' . esc_attr( $post->post_title ) . '</a>',
