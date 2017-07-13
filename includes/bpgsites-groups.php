@@ -480,9 +480,8 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 		$admin_link = trailingslashit( $group_permalink . 'admin/' . $this->slug );
 
 		// construct message body
-		$body = 'You are receiving this message because you are an administrator of the group "%1$s"' . "\n\n";
-		$body .= 'Your group has been invited to read the %2$s "%3$s" with the group "%4$s". ';
-		$body .= 'To accept or decline the invitation, click the link below to visit the %5$s admin page for your group.' . "\n\n";
+		$body = __( 'You are receiving this message because you are an administrator of the group "%1$s"', 'bp-group-sites' ) . "\n\n";
+		$body .= __( 'Your group has been invited to read the %2$s "%3$s" with the group "%4$s". To accept or decline the invitation, click the link below to visit the %5$s admin page for your group.', 'bp-group-sites' ) . "\n\n";
 		$body .= '%6$s' . "\n\n";
 
 		// substitutions
