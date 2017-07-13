@@ -2471,12 +2471,10 @@ class BP_Group_Sites_Activity {
 
 		// see if we already have the modified activity for this blog post
 		$id = bp_activity_get_activity_id( array(
-
 			'user_id' => $activity->user_id,
 			'type' => $type,
 			'item_id' => $group_id,
 			'secondary_item_id' => $activity->secondary_item_id
-
 		) );
 
 		// if we don't find a modified item...
@@ -2484,12 +2482,10 @@ class BP_Group_Sites_Activity {
 
 			// see if we have an unmodified activity item
 			$id = bp_activity_get_activity_id( array(
-
 				'user_id' => $activity->user_id,
 				'type' => $activity->type,
 				'item_id' => $activity->item_id,
 				'secondary_item_id' => $activity->secondary_item_id
-
 			) );
 
 		}
