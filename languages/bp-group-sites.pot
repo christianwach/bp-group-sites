@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BP Group Sites 0.2.5\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/bp-group-sites\n"
-"POT-Creation-Date: 2017-07-12 12:37:10+00:00\n"
+"POT-Creation-Date: 2017-07-13 13:19:26+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
 #: assets/templates/bpgsites/bpgsites-loop.php:127
-#: includes/bpgsites-groups.php:627 includes/bpgsites-groups.php:740
+#: includes/bpgsites-groups.php:626 includes/bpgsites-groups.php:739
 msgid "Sorry, there were no sites found."
 msgstr ""
 
@@ -27,8 +27,8 @@ msgstr ""
 #: includes/bpgsites-activity.php:549 includes/bpgsites-activity.php:2260
 #: includes/bpgsites-activity.php:2271 includes/bpgsites-activity.php:2316
 #: includes/bpgsites-admin.php:591 includes/bpgsites-admin.php:597
-#: includes/bpgsites-groups.php:73 includes/bpgsites-groups.php:495
-#: includes/bpgsites-groups.php:1645 includes/bpgsites-widgets.php:42
+#: includes/bpgsites-groups.php:73 includes/bpgsites-groups.php:494
+#: includes/bpgsites-groups.php:1644 includes/bpgsites-widgets.php:42
 #: includes/bpgsites-widgets.php:49 includes/bpgsites-widgets.php:143
 msgid "Group Sites"
 msgstr ""
@@ -192,7 +192,7 @@ msgid "Recent Comments in this %s"
 msgstr ""
 
 #: includes/bpgsites-activity.php:2405 includes/bpgsites-admin.php:594
-#: includes/bpgsites-groups.php:173 includes/bpgsites-groups.php:492
+#: includes/bpgsites-groups.php:173 includes/bpgsites-groups.php:491
 msgid "Group Site"
 msgstr ""
 
@@ -360,59 +360,67 @@ msgstr ""
 msgid "Your group is no longer reading \"%1$s\" with %2$s"
 msgstr ""
 
-#: includes/bpgsites-groups.php:501
+#: includes/bpgsites-groups.php:483
+msgid "You are receiving this message because you are an administrator of the group \"%1$s\""
+msgstr ""
+
+#: includes/bpgsites-groups.php:484
+msgid "Your group has been invited to read the %2$s \"%3$s\" with the group \"%4$s\". To accept or decline the invitation, click the link below to visit the %5$s admin page for your group."
+msgstr ""
+
+#: includes/bpgsites-groups.php:500
 msgid "An invitation to read \"%1$s\" with the group \"%2$s\""
 msgstr ""
 
-#: includes/bpgsites-groups.php:760
+#: includes/bpgsites-groups.php:759
 msgid "BP Group Sites Admin Screen"
 msgstr ""
 
-#: includes/bpgsites-groups.php:819
+#: includes/bpgsites-groups.php:818
 msgid "Invitations to read with other groups"
 msgstr ""
 
-#: includes/bpgsites-groups.php:844
+#: includes/bpgsites-groups.php:843
 msgid "Read \"%1$s\" with \"%2$s\""
 msgstr ""
 
-#: includes/bpgsites-groups.php:852
+#: includes/bpgsites-groups.php:851
 msgid "Accept"
 msgstr ""
 
-#: includes/bpgsites-groups.php:853
+#: includes/bpgsites-groups.php:852
 msgid "Decline"
 msgstr ""
 
-#: includes/bpgsites-groups.php:1238
+#: includes/bpgsites-groups.php:1237
 msgid "Read with other groups"
 msgstr ""
 
-#: includes/bpgsites-groups.php:1282
+#: includes/bpgsites-groups.php:1281
 msgid "Reading with"
 msgstr ""
 
-#: includes/bpgsites-groups.php:1294
+#: includes/bpgsites-groups.php:1293
 msgid "Stop"
 msgstr ""
 
-#: includes/bpgsites-groups.php:1311
+#: includes/bpgsites-groups.php:1310
 msgid "Invite to read"
 msgstr ""
 
-#: includes/bpgsites-groups.php:1314
+#: includes/bpgsites-groups.php:1313
 msgid "Find a group to invite"
 msgstr ""
 
-#: includes/bpgsites-groups.php:1317
+#: includes/bpgsites-groups.php:1316
 msgid "Send invitation"
 msgstr ""
 
-#: includes/bpgsites-groups.php:1672
+#: includes/bpgsites-groups.php:1671
 msgid "To make this group a showcase group, make sure that it is set to \"Private\" above, then check the box below. The effect will be that the comments left by members of this group will always appear to readers. Only other members of this group will be able to reply to those comments."
 msgstr ""
 
-#: includes/bpgsites-groups.php:1675
+#: includes/bpgsites-groups.php:1674
 msgid "Make this group a showcase group"
 msgstr ""
 
