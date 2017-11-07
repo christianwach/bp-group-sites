@@ -7,7 +7,7 @@ AUTHOR: Christian Wach <needle@haystack.co.uk>
 NOTES
 =====
 
-This provides compatibility with BuddyPress Activity Streams
+This provides compatibility with BuddyPress Activity Streams.
 
 --------------------------------------------------------------------------------
 */
@@ -15,14 +15,14 @@ This provides compatibility with BuddyPress Activity Streams
 
 
 /**
- * Define what happens when the page is ready
+ * Define what happens when the page is ready.
  *
  * @since 0.1
  */
 jQuery(document).ready( function($) {
 
 	/**
-	 * Remove activity class on 'new_groupsite_comment' items
+	 * Remove activity class on 'new_groupsite_comment' items.
 	 *
 	 * This is done because BuddyPress attaches a listener to this class which
 	 * shows the activity comment form when clicked. We want links to actually

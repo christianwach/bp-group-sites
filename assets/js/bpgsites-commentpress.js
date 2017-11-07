@@ -7,7 +7,7 @@ AUTHOR: Christian Wach <needle@haystack.co.uk>
 NOTES
 =====
 
-This provides compatibility with CommentPress
+This provides compatibility with CommentPress.
 
 --------------------------------------------------------------------------------
 */
@@ -40,7 +40,7 @@ function BP_Group_Sites_Settings() {
    /**
     * Group ID getter.
     *
-    * @return {Integer} group_id The stored group ID
+    * @return {Integer} group_id The stored group ID.
     */
    this.get_group_id = function() {
        return this.group_id;
@@ -49,7 +49,7 @@ function BP_Group_Sites_Settings() {
    /**
     * Group ID setter.
     *
-    * @param {Integer} group_id The group ID to store
+    * @param {Integer} group_id The group ID to store.
     */
    this.set_group_id = function( group_id ) {
        this.group_id = group_id;
@@ -192,11 +192,11 @@ function bpgsites_init_elements() {
 		/**
 		 * Hide comments for initially unchecked boxes.
 		 *
-		 * This is apparently something of a hack (though I didn't note down why)
+		 * This is apparently something of a hack - though I didn't note down why.
 		 *
 		 * @since 0.1
 		 */
-		jQuery( 'input.bpgsites_group_checkbox_public' ).each( function(i) {
+		jQuery( 'input.bpgsites_group_checkbox_public' ).each( function( i ) {
 
 			// define vars
 			var group_id, checked;
@@ -419,8 +419,8 @@ function bpgsites_init_elements() {
  *
  * @since 0.2.1
  *
- * @param {String} checked The current checked value of the input
- * @param {Integer} group_id The numerical group ID
+ * @param {String} checked The current checked value of the input.
+ * @param {Integer} group_id The numerical group ID.
  */
 function bpgsites_do_checkbox_action( checked, group_id ) {
 

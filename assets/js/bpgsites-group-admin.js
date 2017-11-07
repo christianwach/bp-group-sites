@@ -13,7 +13,7 @@ NOTES
 
 
 /**
- * Create global namespace
+ * Create global namespace.
  */
 var BuddypressGroupSites = BuddypressGroupSites || {};
 
@@ -206,7 +206,7 @@ BuddypressGroupSites.readwith.select2 = new function() {
 						  .prop( 'id' ).split( '-' )[1];
 
 		/**
-		 * Select2 init
+		 * Select2 init.
 		 */
 		target.select2({
 
@@ -253,11 +253,13 @@ BuddypressGroupSites.readwith.select2 = new function() {
 	 * Select2 format results for display in dropdown.
 	 *
 	 * @since 0.1
+	 *
+	 * @param {Object} data The results data.
 	 */
-	this.format_result = function(data) {
+	this.format_result = function( data ) {
 
 		// bail if still loading
-		if (data.loading) return data.name;
+		if ( data.loading ) return data.name;
 
 		// declare vars
 		var markup;
@@ -297,13 +299,13 @@ BuddypressGroupSites.readwith.select2 = new function() {
 	this.events_bind = function( target ) {
 
 		/**
-		 * Set up Select2 listener
+		 * Set up Select2 listener.
 		 */
 		target.on( 'select2:select', function( event ) {
 
 			// find corresponding submit button and show
 			$(this).closest( '.bpgsites_group_linkages_invite' )
-				.find('.bpgsites_invite_actions')
+				.find( '.bpgsites_invite_actions' )
 				.show();
 
 		});
