@@ -62,7 +62,7 @@ class BP_Group_Sites {
 	 *
 	 * @since 0.1
 	 * @access public
-	 * @var object $admin The admin object
+	 * @var object $admin The admin object.
 	 */
 	public $admin;
 
@@ -71,7 +71,7 @@ class BP_Group_Sites {
 	 *
 	 * @since 0.1
 	 * @access public
-	 * @var object $activity The activity object
+	 * @var object $activity The activity object.
 	 */
 	public $activity;
 
@@ -145,18 +145,11 @@ class BP_Group_Sites {
 	 */
 	public function enable_translation() {
 
-		// not used, as there are no translations as yet
+		// enable translation
 		load_plugin_textdomain(
-
-			// unique name
-			'bp-group-sites',
-
-			// deprecated argument
-			false,
-
-			// relative path to directory containing translation files
-			dirname( plugin_basename( __FILE__ ) ) . '/languages/'
-
+			'bp-group-sites', // unique name
+			false, // deprecated argument
+			dirname( plugin_basename( __FILE__ ) ) . '/languages/' // relative path to translation files
 		);
 
 	}
@@ -447,7 +440,7 @@ register_deactivation_hook( __FILE__, array( $bp_groupsites, 'deactivate' ) );
  *
  * @since 0.1
  *
- * @return str $path path to this plugin's templates directory
+ * @return str $path path to this plugin's templates directory.
  */
 function bpgsites_templates_dir() {
 

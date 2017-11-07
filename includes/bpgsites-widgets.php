@@ -60,8 +60,8 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 	 * Outputs the HTML for this widget.
 	 *
 	 * @since 0.2.1
-	 * @param array $args An array of standard parameters for widgets in this theme
-	 * @param array $instance An array of settings for this widget instance
+	 * @param array $args An array of standard parameters for widgets in this theme.
+	 * @param array $instance An array of settings for this widget instance.
 	 */
 	public function widget( $args, $instance ) {
 

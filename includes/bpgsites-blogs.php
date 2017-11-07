@@ -20,8 +20,8 @@ association, whilst retaining useful stuff like pagination.
  *
  * @since 0.1
  *
- * @param array $args Array of arguments with which the query was configured
- * @return bool $has_blogs Whether or not our modified query has found blogs
+ * @param array $args Array of arguments with which the query was configured.
+ * @return bool $has_blogs Whether or not our modified query has found blogs.
  */
 function bpgsites_has_blogs( $args = '' ) {
 
@@ -102,8 +102,8 @@ function bpgsites_has_blogs( $args = '' ) {
  *
  * @since 0.1
  *
- * @param array $args The existing arguments used for the query
- * @return array $args The modified arguments used for the query
+ * @param array $args The existing arguments used for the query.
+ * @return array $args The modified arguments used for the query.
  */
 function bpgsites_pre_filter_groupsites( $args ) {
 
@@ -165,7 +165,7 @@ if ( ! is_admin() OR ( defined( 'DOING_AJAX' ) AND DOING_AJAX ) ) {
  *
  * @since 0.1
  *
- * @return int $filtered_count The filtered total number of BuddyPress Groups
+ * @return int $filtered_count The filtered total number of BuddyPress Groups.
  */
 function bpgsites_filter_total_blog_count() {
 
@@ -204,8 +204,8 @@ if ( ! is_admin() OR ( defined( 'DOING_AJAX' ) AND DOING_AJAX ) ) {
  *
  * @since 0.1
  *
- * @param int $count The total number of sites for a user
- * @return int $filtered_count The filtered total number of blogs for a user
+ * @param int $count The total number of sites for a user.
+ * @return int $filtered_count The filtered total number of blogs for a user.
  */
 function bpgsites_filter_total_blog_count_for_user( $count ) {
 
@@ -315,7 +315,9 @@ function bpgsites_total_blog_count() {
 }
 
 	/**
-	 * Return the total number of groupsites on the site
+	 * Return the total number of groupsites on the site.
+	 *
+	 * @since 0.1
 	 *
 	 * @return int Total number of groupsites.
 	 */
@@ -334,7 +336,7 @@ function bpgsites_total_blog_count() {
  *
  * @since 0.1
  *
- * @return int $count Total blog count for a user
+ * @return int $count Total blog count for a user.
  */
 function bpgsites_total_blogs_for_user( $user_id = 0 ) {
 
@@ -373,9 +375,11 @@ function bpgsites_total_blog_count_for_user( $user_id = 0 ) {
 }
 
 	/**
-	 * Return the total number of working blogs for this user
+	 * Return the total number of working blogs for this user.
 	 *
-	 * @return int Total number of working blogs for this user
+	 * @since 0.1
+	 *
+	 * @return int Total number of working blogs for this user.
 	 */
 	function bpgsites_get_total_blog_count_for_user( $user_id = 0 ) {
 		return apply_filters( 'bpgsites_get_total_blog_count_for_user', bpgsites_total_blogs_for_user( $user_id ) );
@@ -391,7 +395,7 @@ function bpgsites_total_blog_count_for_user( $user_id = 0 ) {
  *
  * @since 0.1
  *
- * @return bool Whether or not the blog is in the group
+ * @return bool Whether or not the blog is in the group.
  */
 function bpgsites_is_blog_in_group() {
 
@@ -469,7 +473,9 @@ function bpgsites_root_slug() {
 }
 
 	/**
-	 * Return the group sites component root slug
+	 * Return the group sites component root slug.
+	 *
+	 * @since 0.1
 	 *
 	 * @return string The 'blogs' root slug.
 	 */
@@ -492,8 +498,8 @@ Functions which enable loop compatibility with CommentPress "Site Image"
  *
  * @since 0.1
  *
- * @param mixed|array $old_value The previous value
- * @param mixed|array $new_value The new value
+ * @param mixed|array $old_value The previous value.
+ * @param mixed|array $new_value The new value.
  */
 function bpgsites_commentpress_site_image( $old_value, $new_value ) {
 

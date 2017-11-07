@@ -15,7 +15,7 @@ Throw any functions which build markup in here.
 
 
 /**
- * Adds icon to menu in CBOX theme
+ * Adds icon to menu in CBOX theme.
  *
  * @since 0.1
  */

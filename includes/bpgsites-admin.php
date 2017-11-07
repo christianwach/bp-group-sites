@@ -28,7 +28,7 @@ class BP_Group_Sites_Admin {
 	 *
 	 * @since 0.1
 	 * @access public
-	 * @var array $bpgsites_options The plugin options array
+	 * @var array $bpgsites_options The plugin options array.
 	 */
 	public $bpgsites_options = array();
 
@@ -285,7 +285,7 @@ class BP_Group_Sites_Admin {
 	 *
 	 * @since 0.1
 	 *
-	 * @return bool Success or failure
+	 * @return bool Success or failure.
 	 */
 	public function options_save() {
 
@@ -301,8 +301,8 @@ class BP_Group_Sites_Admin {
 	 *
 	 * @since 0.1
 	 *
-	 * @param string $option_name The name of the option
-	 * @return bool Whether or not the option exists
+	 * @param string $option_name The name of the option.
+	 * @return bool Whether or not the option exists.
 	 */
 	public function option_exists( $option_name = '' ) {
 
@@ -323,9 +323,9 @@ class BP_Group_Sites_Admin {
 	 *
 	 * @since 0.1
 	 *
-	 * @param string $option_name The name of the option
-	 * @param mixed $default The default value if the option does not exist
-	 * @return mixed The option or the default
+	 * @param string $option_name The name of the option.
+	 * @param mixed $default The default value if the option does not exist.
+	 * @return mixed The option or the default.
 	 */
 	public function option_get( $option_name = '', $default = false ) {
 
@@ -346,8 +346,8 @@ class BP_Group_Sites_Admin {
 	 *
 	 * @since 0.1
 	 *
-	 * @param string $option_name The name of the option
-	 * @param mixed $value The value of the option
+	 * @param string $option_name The name of the option.
+	 * @param mixed $value The value of the option.
 	 */
 	public function option_set( $option_name = '', $value = '' ) {
 
@@ -373,7 +373,7 @@ class BP_Group_Sites_Admin {
 	 *
 	 * @since 0.1
 	 *
-	 * @param string $option_name The name of the option
+	 * @param string $option_name The name of the option.
 	 */
 	public function option_delete( $option_name = '' ) {
 
@@ -574,7 +574,7 @@ class BP_Group_Sites_Admin {
 	 *
 	 * @since 0.1
 	 *
-	 * @return array The default values for this plugin
+	 * @return array The default values for this plugin.
 	 */
 	public function _get_defaults() {
 
@@ -629,8 +629,8 @@ Primary filters for overrides
  *
  * @since 0.1
  *
- * @param str $title The existing title
- * @return str $title The overridden title
+ * @param str $title The existing title.
+ * @return str $title The overridden title.
  */
 function bpgsites_override_extension_title( $title ) {
 
@@ -660,8 +660,8 @@ add_filter( 'bpgsites_extension_title', 'bpgsites_override_extension_title', 10,
  *
  * @since 0.1
  *
- * @param str $name The existing name
- * @return str $name The overridden name
+ * @param str $name The existing name.
+ * @return str $name The overridden name.
  */
 function bpgsites_override_extension_name( $name ) {
 
@@ -691,8 +691,8 @@ add_filter( 'bpgsites_extension_name', 'bpgsites_override_extension_name', 10, 1
  *
  * @since 0.1
  *
- * @param str $plural The existing plural name
- * @return str $plural The overridden plural name
+ * @param str $plural The existing plural name.
+ * @return str $plural The overridden plural name.
  */
 function bpgsites_override_extension_plural( $plural ) {
 
@@ -722,8 +722,8 @@ add_filter( 'bpgsites_extension_plural', 'bpgsites_override_extension_plural', 1
  *
  * @since 0.1
  *
- * @param str $slug The existing slug
- * @return str $slug The overridden slug
+ * @param str $slug The existing slug.
+ * @return str $slug The overridden slug.
  */
 function bpgsites_override_extension_slug( $slug ) {
 
@@ -753,8 +753,8 @@ add_filter( 'bpgsites_extension_slug', 'bpgsites_override_extension_slug', 10, 1
  *
  * @since 0.1
  *
- * @param array $button The existing button config array
- * @return array $button The modified button config array
+ * @param array $button The existing button config array.
+ * @return array $button The modified button config array.
  */
 function bpgsites_get_visit_site_button( $button ) {
 
@@ -811,8 +811,8 @@ Globally available utility functions
  *
  * @since 0.1
  *
- * @param str $option_name The name of the option
- * @return bool $exists Whether or not the option exists
+ * @param str $option_name The name of the option.
+ * @return bool $exists Whether or not the option exists.
  */
 function bpgsites_site_option_exists( $option_name = '' ) {
 
@@ -837,9 +837,9 @@ function bpgsites_site_option_exists( $option_name = '' ) {
  *
  * @since 0.1
  *
- * @param str $option_name The name of the option
- * @param str $default The default value of the option if it has no value
- * @return mixed $value the value of the option
+ * @param str $option_name The name of the option.
+ * @param str $default The default value of the option if it has no value.
+ * @return mixed $value The value of the option.
  */
 function bpgsites_site_option_get( $option_name = '', $default = false ) {
 
@@ -860,9 +860,9 @@ function bpgsites_site_option_get( $option_name = '', $default = false ) {
  *
  * @since 0.1
  *
- * @param str $option_name The name of the option
- * @param mixed $value The value to set the option to
- * @return bool $success If the value of the option was successfully saved
+ * @param str $option_name The name of the option.
+ * @param mixed $value The value to set the option to.
+ * @return bool $success If the value of the option was successfully saved.
  */
 function bpgsites_site_option_set( $option_name = '', $value = '' ) {
 

@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 
 /**
- * Class definition
+ * Class definition.
  *
  * @since 0.1
  */
@@ -147,9 +147,9 @@ function bp_is_bpgsites_component() {
  *
  * @since 0.1
  *
- * @param str $found_template The existing path to the template
- * @param array $templates The array of template paths
- * @return str $found_template The modified path to the template
+ * @param str $found_template The existing path to the template.
+ * @param array $templates The array of template paths.
+ * @return str $found_template The modified path to the template.
  */
 function bpgsites_load_template_filter( $found_template, $templates ) {
 

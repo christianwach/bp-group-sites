@@ -131,7 +131,7 @@ class BP_Group_Sites_Theme_Compat {
 	 *
 	 * @since 0.1
 	 *
-	 * @return str $buffer The buffered template part
+	 * @return str $buffer The buffered template part.
 	 */
 	public function directory_content() {
 

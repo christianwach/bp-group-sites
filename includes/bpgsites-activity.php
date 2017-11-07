@@ -28,7 +28,7 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 * @access public
-	 * @var object $groups The groups array
+	 * @var object $groups The groups array.
 	 */
 	public $groups = array();
 
@@ -153,10 +153,10 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 *
-	 * @param str $comment_content The content of the comment
-	 * @param object $comment The comment object
-	 * @param array $args The arguments
-	 * @return str $comment_content The content of the comment
+	 * @param str $comment_content The content of the comment.
+	 * @param object $comment The comment object.
+	 * @param array $args The arguments.
+	 * @return str $comment_content The content of the comment.
 	 */
 	public function show_comment_group( $comment_content, $comment, $args ) {
 
@@ -296,7 +296,7 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 *
-	 * @param int $comment_id The ID of the comment being saved
+	 * @param int $comment_id The ID of the comment being saved.
 	 */
 	public function save_comment_metadata( $comment_id ) {
 
@@ -331,8 +331,8 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 *
-	 * @param bool $is_disabled The BP setting that determines blogforum sync
-	 * @return bool $is_disabled The modified value that determines blogforum sync
+	 * @param bool $is_disabled The BP setting that determines blogforum sync.
+	 * @return bool $is_disabled The modified value that determines blogforum sync.
 	 */
 	public function disable_blogforum_comments( $is_disabled ) {
 
@@ -356,8 +356,8 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @see: bp_groupblog_set_group_to_post_activity()
 	 *
-	 * @param object $activity The BP activity object
-	 * @return object $activity The modified BP activity object
+	 * @param object $activity The BP activity object.
+	 * @return object $activity The modified BP activity object.
 	 */
 	public function custom_comment_activity( $activity ) {
 
@@ -478,9 +478,9 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 *
-	 * @param array $args Existing activity permalink data
-	 * @param object $activity The activity item
-	 * @return array $args The overridden activity permalink data
+	 * @param array $args Existing activity permalink data.
+	 * @param object $activity The activity item.
+	 * @return array $args The overridden activity permalink data.
 	 */
 	public function filter_comment_permalink( $args, $activity ) {
 
@@ -503,7 +503,7 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 *
-	 * @return string $link The overridden comment reply link
+	 * @return string $link The overridden comment reply link.
 	 */
 	public function filter_comment_link( $link ) {
 
@@ -569,9 +569,9 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.2.5
 	 *
-	 * @param string $qs The query string for the BP loop
-	 * @param string $object The current object for the query string
-	 * @return string Modified query string
+	 * @param string $qs The query string for the BP loop.
+	 * @param string $object The current object for the query string.
+	 * @return string Modified query string.
 	 */
 	public function comments_ajax_querystring( $qs, $object ) {
 
@@ -608,8 +608,8 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 *
-	 * @param int $count The current comment count
-	 * @param int $post_id The current post
+	 * @param int $count The current comment count.
+	 * @param int $post_id The current post.
 	 */
 	public function get_comments_number( $count, $post_id ) {
 
@@ -638,7 +638,7 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 *
-	 * @param object $comments The current query
+	 * @param object $comments The current query.
 	 */
 	public function filter_comments( $comments ) {
 
@@ -682,7 +682,7 @@ class BP_Group_Sites_Activity {
 
 		}
 
-		/**
+		/*
 		 * At this point, we need both a meta query that queries for the group ID
 		 * in the comment meta as well as a meta query that queries for the absence
 		 * of a meta value so that any legacy comments that were not attached to
@@ -723,8 +723,8 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 *
-	 * @param integer $comment_id The ID of the comment
-	 * @param integer $comment_status The approval status of the comment
+	 * @param integer $comment_id The ID of the comment.
+	 * @param integer $comment_status The approval status of the comment.
 	 */
 	public function save_comment_group_id( $comment_id, $comment_status ) {
 
@@ -758,11 +758,11 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 *
-	 * @param string $link The existing link
-	 * @param array $args The setup array
-	 * @param object $comment The comment
-	 * @param object $post The post
-	 * @return string $link The modified link
+	 * @param string $link The existing link.
+	 * @param array $args The setup array.
+	 * @param object $comment The comment.
+	 * @param object $post The post.
+	 * @return string $link The modified link.
 	 */
 	public function override_reply_to_link( $link, $args, $comment, $post ) {
 
@@ -852,8 +852,8 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 *
-	 * @param bool $tinymce Whether TinyMCE is enabled or not
-	 * @return bool $tinymce Modified value for whether TinyMCE is enabled or not
+	 * @param bool $tinymce Whether TinyMCE is enabled or not.
+	 * @return bool $tinymce Modified value for whether TinyMCE is enabled or not.
 	 */
 	public function disable_tinymce( $tinymce ) {
 
@@ -891,8 +891,8 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 *
-	 * @param bool $show Whether or not to show comment form
-	 * @return bool $show Show the comment form
+	 * @param bool $show Whether or not to show comment form.
+	 * @return bool $show Show the comment form.
 	 */
 	public function show_comment_form( $show ) {
 
@@ -920,8 +920,8 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 *
-	 * @param str $hidden The message shown when the comment form is hidden
-	 * @return str $link The overridden message shown when the comment form is hidden
+	 * @param str $hidden The message shown when the comment form is hidden.
+	 * @return str $link The overridden message shown when the comment form is hidden.
 	 */
 	public function override_comment_form_hidden( $hidden_text ) {
 
@@ -970,9 +970,9 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 *
-	 * @param string $link_text The full text of the reply to link
-	 * @param string $paragraph_text Paragraph text
-	 * @return string $link_text Updated content of the reply to link
+	 * @param string $link_text The full text of the reply to link.
+	 * @param string $paragraph_text Paragraph text.
+	 * @return string $link_text Updated content of the reply to link.
 	 */
 	public function override_reply_to_text( $link_text, $paragraph_text ) {
 
@@ -1009,9 +1009,9 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 *
-	 * @param string $href The existing target URL
-	 * @param string $text_sig The text signature of the paragraph
-	 * @return string $href Overridden target URL
+	 * @param string $href The existing target URL.
+	 * @param string $text_sig The text signature of the paragraph.
+	 * @return string $href Overridden target URL.
 	 */
 	public function override_reply_to_href( $href, $text_sig ) {
 
@@ -1045,8 +1045,8 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 *
-	 * @param string $onclick The reply-to onclick attribute
-	 * @return string $onclick The modified reply-to onclick attribute
+	 * @param string $onclick The reply-to onclick attribute.
+	 * @return string $onclick The modified reply-to onclick attribute.
 	 */
 	public function override_reply_to_onclick( $onclick ) {
 
@@ -1062,9 +1062,9 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 *
-	 * @param int $approved The comment status
-	 * @param array $commentdata The comment data
-	 * @return int $approved The modified comment status
+	 * @param int $approved The comment status.
+	 * @param array $commentdata The comment data.
+	 * @return int $approved The modified comment status.
 	 */
 	public function check_comment_approval( $approved, $commentdata ) {
 
@@ -1116,11 +1116,11 @@ class BP_Group_Sites_Activity {
 	/**
 	 * For group sites, add capability to edit own comments.
 	 *
-	 * @param array $caps The existing capabilities array for the WordPress user
-	 * @param str $cap The capability in question
-	 * @param int $user_id The numerical ID of the WordPress user
-	 * @param array $args The additional arguments
-	 * @return array $caps The modified capabilities array for the WordPress user
+	 * @param array $caps The existing capabilities array for the WordPress user.
+	 * @param str $cap The capability in question.
+	 * @param int $user_id The numerical ID of the WordPress user.
+	 * @param array $args The additional arguments.
+	 * @return array $caps The modified capabilities array for the WordPress user.
 	 */
 	public function enable_comment_editing( $caps, $cap, $user_id, $args ) {
 
@@ -1152,8 +1152,8 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 *
-	 * @param int $comment_id The comment ID
-	 * @return int $group_id The group ID (empty string if none found)
+	 * @param int $comment_id The comment ID.
+	 * @return int $group_id The group ID or empty string if none found.
 	 */
 	public function get_comment_group_id( $comment_id ) {
 
@@ -1714,10 +1714,10 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 *
-	 * @param string $result Existing markup to be sent to browser
-	 * @param int $comment_id The comment ID
-	 * @param int $reply_to_id The comment ID to which this comment is a reply
-	 * @return string $result The modified markup sent to the browser
+	 * @param string $result Existing markup to be sent to browser.
+	 * @param int $comment_id The comment ID.
+	 * @param int $reply_to_id The comment ID to which this comment is a reply.
+	 * @return string $result The modified markup sent to the browser.
 	 */
 	public function get_comment_group_selector( $result, $comment_id, $reply_to_id ) {
 
@@ -1733,11 +1733,11 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 *
-	 * @param string $result Existing markup to be sent to browser
-	 * @param int $comment_id The comment ID
-	 * @param int $reply_to_id The comment ID to which this comment is a reply
-	 * @param bool $edit Triggers edit mode to return an option selected
-	 * @return string $result The modified markup sent to the browser
+	 * @param string $result Existing markup to be sent to browser.
+	 * @param int $comment_id The comment ID.
+	 * @param int $reply_to_id The comment ID to which this comment is a reply.
+	 * @param bool $edit Triggers edit mode to return an option selected.
+	 * @return string $result The modified markup sent to the browser.
 	 */
 	public function get_comment_group_select( $result, $comment_id, $reply_to_id, $edit = false ) {
 
@@ -1966,7 +1966,7 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 *
-	 * @return int $group_id the group ID of the input in the comment form
+	 * @return int $group_id The group ID of the input in the comment form.
 	 */
 	public function get_group_id_from_comment_form() {
 
@@ -1993,8 +1993,8 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 *
-	 * @param array $group_ids The group IDs
-	 * @return array $group_ids The filtered group IDs
+	 * @param array $group_ids The group IDs.
+	 * @return array $group_ids The filtered group IDs.
 	 */
 	public function filter_groups_by_checkboxes( $group_ids ) {
 
@@ -2039,11 +2039,11 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 *
-	 * @param array $classes The classes to be appied to the comment
-	 * @param array $class The comment class
-	 * @param array $comment_id The numerical ID of the comment
-	 * @param array $post_id The numerical ID of the post
-	 * @return array $filtered the filtered group IDs
+	 * @param array $classes The classes to be appied to the comment.
+	 * @param array $class The comment class.
+	 * @param array $comment_id The numerical ID of the comment.
+	 * @param array $post_id The numerical ID of the post.
+	 * @return array $filtered the filtered group IDs.
 	 */
 	public function add_group_to_comment_class( $classes, $class, $comment_id, $post_id ) {
 
@@ -2081,7 +2081,7 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 *
-	 * @return array $user_group_ids Associative array of group IDs to which the user has access
+	 * @return array $user_group_ids Associative array of group IDs to which the user has access.
 	 */
 	public function get_groups_for_user() {
 
@@ -2190,7 +2190,7 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 *
-	 * @return boolean $this->user_in_group Whether the user is a member or not
+	 * @return boolean $this->user_in_group Whether the user is a member or not.
 	 */
 	public function is_user_in_group_reading_this_site() {
 
@@ -2395,7 +2395,7 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 *
-	 * @return str $title The overridden value of the Recent Posts section
+	 * @return str $title The overridden value of the Recent Posts section.
 	 */
 	public function get_activity_sidebar_recent_title() {
 
@@ -2425,8 +2425,8 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 *
-	 * @param object $activity The existing activity
-	 * @return object $activity The modified activity
+	 * @param object $activity The existing activity.
+	 * @return object $activity The modified activity.
 	 */
 	public function custom_post_activity( $activity ) {
 
