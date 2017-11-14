@@ -36,6 +36,8 @@ This plugin is in active development. For feature requests and bug reports (or i
 1. Upload plugin files to your `/wp-content/plugins/` directory
 1. Network activate the plugin through the 'Plugins' menu in WordPress Multisite Network Admin
 
+By default, this plugin will use internal templates for the BuddyPress pages that it creates. The default can be found in the "assets/templates/bpgsites" directory. If you want to override these templates, copy the enclosing directory to your theme's root directory so that your template files live in "your-theme-dir/bpgsites". An alternative set of templates is provided in "assets/templates"" for the Twenty Sixteen theme, so if you are using that theme, copy these files to "your-theme-dir/bpgsites" instead.
+
 
 
 == Changelog ==
