@@ -18,6 +18,8 @@ This provides compatibility with BuddyPress Activity Streams.
  * Define what happens when the page is ready.
  *
  * @since 0.1
+ *
+ * @param {Object} $ The jQuery reference.
  */
 jQuery(document).ready( function($) {
 

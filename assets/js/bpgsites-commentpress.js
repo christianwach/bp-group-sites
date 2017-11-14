@@ -131,6 +131,8 @@ function bpgsites_page_load() {
  * Update dropdown and hide it.
  *
  * @since 0.1
+ *
+ * @param {Integer} comment_id The comment ID.
  */
 function bpgsites_update_select( comment_id ) {
 
@@ -195,6 +197,8 @@ function bpgsites_init_elements() {
 		 * This is apparently something of a hack - though I didn't note down why.
 		 *
 		 * @since 0.1
+		 *
+		 * @param {Integer} i The number of the element iterated on.
 		 */
 		jQuery( 'input.bpgsites_group_checkbox_public' ).each( function( i ) {
 
@@ -226,6 +230,8 @@ function bpgsites_init_elements() {
 			 * Recalculate headings and para icons.
 			 *
 			 * @since 0.1
+			 *
+			 * @param {Integer} i The number of the element iterated on.
 			 */
 			jQuery( 'a.comment_block_permalink' ).each( function( i ) {
 
@@ -258,6 +264,8 @@ function bpgsites_init_elements() {
 	 * Toggle the appearance of "Filter Comments by Group" panel.
 	 *
 	 * @since 0.1
+	 *
+	 * @param {Object} event The jQuery event.
 	 */
 	jQuery( 'h3.bpgsites_group_filter_heading' ).click( function( event ) {
 
@@ -289,6 +297,8 @@ function bpgsites_init_elements() {
 	 * Intercept clicks on "Reply to Comment" links and update group selector.
 	 *
 	 * @since 0.1
+	 *
+	 * @param {Object} event The jQuery event.
 	 */
 	jQuery( 'a.comment-reply-link' ).click( function( event ) {
 
@@ -313,6 +323,7 @@ function bpgsites_init_elements() {
 	 *
 	 * @since 0.1
 	 *
+	 * @param {Object} event The jQuery event.
 	 * @return false
 	 */
 	jQuery( 'a#cancel-comment-reply-link' ).click( function( event ) {
@@ -355,6 +366,8 @@ function bpgsites_init_elements() {
 	 * Listen to clicks on group-filtering checkboxes.
 	 *
 	 * @since 0.1
+	 *
+	 * @param {Object} event The jQuery event.
 	 */
 	jQuery( 'input.bpgsites_group_checkbox' ).click( function( event ) {
 
@@ -381,6 +394,8 @@ function bpgsites_init_elements() {
 	 * Listen to clicks on toggle checkbox for the "Filter Comments by Group" panel.
 	 *
 	 * @since 0.1
+	 *
+	 * @param {Object} event The jQuery event.
 	 */
 	jQuery( 'input.bpgsites_group_checkbox_toggle' ).click( function( event ) {
 
@@ -557,6 +572,8 @@ function bpgsites_recall_state() {
  * Define what happens when the page is ready.
  *
  * @since 0.1
+ *
+ * @param {Object} $ The jQuery reference.
  */
 jQuery(document).ready( function($) {
 

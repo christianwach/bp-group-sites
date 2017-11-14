@@ -14,6 +14,8 @@ NOTES
 
 /**
  * Create global namespace.
+ *
+ * @since 0.1
  */
 var BuddypressGroupSites = BuddypressGroupSites || {};
 
@@ -140,6 +142,7 @@ BuddypressGroupSites.readwith = new function() {
 		 *
 		 * @since 0.1
 		 *
+		 * @param {Object} event The jQuery event.
 		 * @return false
 		 */
 		$('h5.bpgsites_group_linkage_heading').click( function( event ) {
@@ -195,6 +198,8 @@ BuddypressGroupSites.readwith.select2 = new function() {
 	 * Select2 init.
 	 *
 	 * @since 0.1
+	 *
+	 * @param {Object} target The targeted element.
 	 */
 	this.init = function( target ) {
 
@@ -207,6 +212,8 @@ BuddypressGroupSites.readwith.select2 = new function() {
 
 		/**
 		 * Select2 init.
+		 *
+		 * @since 0.1
 		 */
 		target.select2({
 
@@ -255,6 +262,7 @@ BuddypressGroupSites.readwith.select2 = new function() {
 	 * @since 0.1
 	 *
 	 * @param {Object} data The results data.
+	 * @return {String} markup The results markup.
 	 */
 	this.format_result = function( data ) {
 
@@ -286,6 +294,9 @@ BuddypressGroupSites.readwith.select2 = new function() {
 	 * Select2 format response.
 	 *
 	 * @since 0.1
+	 *
+	 * @param {Object} data The results data.
+	 * @return {String} The expected response.
 	 */
 	this.format_response = function( data ) {
 		return data.name || data.text;
@@ -295,6 +306,8 @@ BuddypressGroupSites.readwith.select2 = new function() {
 	 * Select2 events.
 	 *
 	 * @since 0.1
+	 *
+	 * @param {Object} target The targeted element.
 	 */
 	this.events_bind = function( target ) {
 
@@ -342,6 +355,8 @@ BuddypressGroupSites.readwith.init();
  * Define what happens when the page is ready.
  *
  * @since 0.1
+ *
+ * @param {Object} $ The jQuery reference.
  */
 jQuery(document).ready( function($) {
 
