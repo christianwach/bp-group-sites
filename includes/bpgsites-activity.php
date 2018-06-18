@@ -167,7 +167,7 @@ class BP_Group_Sites_Activity {
 		$group_id = $this->get_comment_group_id( $comment->comment_ID );
 
 		// sanity check
-		if ( is_numeric( $group_id ) ) {
+		if ( is_numeric( $group_id ) AND $group_id > 0 ) {
 
 			// get the group
 			$group = groups_get_group( array(
@@ -246,7 +246,7 @@ class BP_Group_Sites_Activity {
 			$group_id = $this->get_comment_group_id( $comment_id );
 
 			// sanity check
-			if ( is_numeric( $group_id ) ) {
+			if ( is_numeric( $group_id ) AND $group_id > 0 ) {
 
 				// show message
 				echo '<p>' . __( 'This comment is a reply. It appears in the same group as the comment it is in reply to. If there is a deeper thread of replies, then the original comment determines the group in which it appears.', 'bp-group-sites' ) . '</p>';
@@ -796,7 +796,7 @@ class BP_Group_Sites_Activity {
 		$group_id = $this->get_comment_group_id( $comment->comment_ID );
 
 		// sanity check
-		if ( ! is_numeric( $group_id ) ) {
+		if ( ! is_numeric( $group_id ) OR $group_id == 0 ) {
 
 			// comments can pre-exist that are not group-linked
 			return $link;
@@ -1084,7 +1084,7 @@ class BP_Group_Sites_Activity {
 		$user_group_ids = $this->get_groups_for_user();
 
 		// did we get one?
-		if ( $group_id != '' AND is_numeric( $group_id ) ) {
+		if ( $group_id != '' AND is_numeric( $group_id ) AND $group_id > 0 ) {
 
 			// is this user a member?
 			if ( in_array( $group_id, $user_group_ids['my_groups'] ) ) {
@@ -1752,7 +1752,7 @@ class BP_Group_Sites_Activity {
 			$group_id = $this->get_comment_group_id( $reply_to_id );
 
 			// did we get one?
-			if ( $group_id != '' AND is_numeric( $group_id ) ) {
+			if ( $group_id != '' AND is_numeric( $group_id ) AND $group_id > 0 ) {
 
 				// show a hidden input so that this comment is also posted in that group
 				$result .= '<input type="hidden" id="bpgsites-post-in" name="bpgsites-post-in" value="' . $group_id . '" />' . "\n";
@@ -2054,7 +2054,7 @@ class BP_Group_Sites_Activity {
 		$group_id = $this->get_comment_group_id( $comment_id );
 
 		// did we get one?
-		if ( $group_id != '' AND is_numeric( $group_id ) ) {
+		if ( $group_id != '' AND is_numeric( $group_id ) AND $group_id > 0 ) {
 
 			// add group identifier
 			$classes[] = 'bpgsites-group-' . $group_id;

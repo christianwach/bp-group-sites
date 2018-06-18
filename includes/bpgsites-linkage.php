@@ -436,7 +436,7 @@ function bpgsites_is_groupblog( $blog_id ) {
 		$group_id = get_groupblog_group_id( $blog_id );
 
 		// is this blog a groupblog?
-		if ( is_numeric( $group_id ) ) { $return = true; }
+		if ( is_numeric( $group_id ) AND $group_id > 0 ) { $return = true; }
 
 	}
 
