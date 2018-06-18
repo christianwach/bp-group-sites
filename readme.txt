@@ -42,6 +42,10 @@ By default, this plugin will use internal templates for the BuddyPress pages tha
 
 == Changelog ==
 
+= 0.2.7 =
+
+* Fix listing of possible Group Sites in Group admin
+
 = 0.2.6 =
 
 * Provide templates for the Twenty Sixteen theme
