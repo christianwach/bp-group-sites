@@ -704,6 +704,11 @@ class BP_Group_Sites_Activity {
 			),
 		);
 
+		// make sure meta query is an array
+		if ( ! is_array( $comments->query_vars['meta_query'] ) ) {
+			$comments->query_vars['meta_query'] = array();
+		}
+
 		// add our meta query
 		$comments->query_vars['meta_query'][] = $meta_query;
 
