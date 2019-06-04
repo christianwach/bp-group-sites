@@ -15,7 +15,7 @@
  */
 do_action( 'bp_before_blogs_loop' );
 
-// search for them - TODO: add AJAX query string compatibility
+// Search for them - TODO: add AJAX query string compatibility.
 if ( bpgsites_has_blogs( bp_ajax_querystring( 'bpgsites' ) ) ) {
 
 	?>

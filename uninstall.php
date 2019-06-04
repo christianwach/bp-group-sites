@@ -13,12 +13,12 @@ NOTES
 
 
 
-// kick out if uninstall not called from WordPress
+// Kick out if uninstall not called from WordPress.
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) { exit(); }
 
 
 
-// delete plugin options
+// Delete plugin options.
 delete_site_option( 'bpgsites_options' );
 delete_site_option( 'bpgsites_installed' );
 delete_site_option( 'bpgsites_auth_groups' );

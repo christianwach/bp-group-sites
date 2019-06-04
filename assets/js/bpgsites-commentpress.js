@@ -14,13 +14,13 @@ This provides compatibility with CommentPress.
 
 
 
-// init vars
+// Init vars.
 var bpgsites_show_public = '0', bpgsites_settings;
 
-// test for our localisation object
+// Test for our localisation object.
 if ( 'undefined' !== typeof BpgsitesSettings ) {
 
-	// get our var
+	// Get our var.
 	bpgsites_show_public = BpgsitesSettings.show_public;
 
 }
@@ -34,7 +34,7 @@ if ( 'undefined' !== typeof BpgsitesSettings ) {
  */
 function BP_Group_Sites_Settings() {
 
-   // selected group ID
+   // Selected group ID.
    this.group_id = '';
 
    /**
@@ -57,7 +57,7 @@ function BP_Group_Sites_Settings() {
 
 }
 
-// let's have an instance
+// Let's have an instance.
 bpgsites_settings = new BP_Group_Sites_Settings();
 
 
@@ -69,32 +69,32 @@ bpgsites_settings = new BP_Group_Sites_Settings();
  */
 function bpgsites_setup() {
 
-	// define vars
+	// Define vars.
 	var styles = '';
 
-	// wrap with js test
+	// Wrap with js test.
 	if ( document.getElementById ) {
 
-		// open style declaration
+		// Open style declaration.
 		styles += '<style type="text/css" media="screen">';
 
-		// avoid flash of hidden elements
+		// Avoid flash of hidden elements.
 		styles += 'div.bpgsites_group_filter { display: none; } ';
 
-		// don't show the filter button
+		// Don't show the filter button.
 		styles += '#bpgsites_comment_group_submit { display: none; } ';
 
-		// close style declaration
+		// Close style declaration.
 		styles += '</style>';
 
 	}
 
-	// write to page now
+	// Write to page now.
 	document.write( styles );
 
 }
 
-// call setup function
+// Call setup function.
 bpgsites_setup();
 
 
@@ -106,19 +106,19 @@ bpgsites_setup();
  */
 function bpgsites_page_load() {
 
-	// define vars
+	// Define vars.
 	var url, comment_id;
 
-	// if there is an anchor in the URL...
+	// If there is an anchor in the URL.
 	url = document.location.toString();
 
-	// do we have a comment permalink?
+	// Do we have a comment permalink?
 	if ( url.match( '#comment-' ) ) {
 
-		// get comment ID
+		// Get comment ID.
 		comment_id = url.split( '#comment-' )[1];
 
-		// update our dropdown and hide
+		// Update our dropdown and hide.
 		bpgsites_update_select( comment_id );
 
 	}
@@ -136,43 +136,43 @@ function bpgsites_page_load() {
  */
 function bpgsites_update_select( comment_id ) {
 
-	// define vars
+	// Define vars.
 	var comment_id, comment_classes, spliced, group_id;
 
-	// get comment in DOM
+	// Get comment in DOM.
 	comment = jQuery( '#comment-' + comment_id );
 
-	// did we get one?
+	// Did we get one?
 	if ( comment ) {
 
-		// get reply-to classes as string
+		// Get reply-to classes as string.
 		comment_classes = jQuery( '#li-comment-' + comment_id ).prop( 'class' );
 
-		// does it contain the identifying string?
+		// Does it contain the identifying string?
 		if ( comment_classes.match( 'bpgsites-group-' ) ) {
 
-			// split at our class name and retain last bit
+			// Split at our class name and retain last bit.
 			spliced = comment_classes.split( 'bpgsites-group-' )[1];
 
-			// split again (because our class may not be the last) and retain first bit
+			// Split again (because our class may not be the last) and retain first bit.
 			group_id = spliced.split( ' ' )[0];
 
-			// set select option
+			// Set select option.
 			jQuery( '#bpgsites-post-in' ).val( group_id );
 
 		} else {
 
-			// store existing if not empty
+			// Store existing if not empty.
 			if ( jQuery( '#bpgsites-post-in' ).val() ) {
 				bpgsites_settings.set_group_id( jQuery( '#bpgsites-post-in' ).val() );
 			}
 
-			// clear option
+			// Clear option.
 			jQuery( '#bpgsites-post-in' ).val( '' );
 
 		}
 
-		// hide enclosing div because the reply is in the same group as the comment
+		// Hide enclosing div because the reply is in the same group as the comment.
 		jQuery( '#bpgsites-post-in-box' ).hide();
 
 	}
@@ -188,7 +188,7 @@ function bpgsites_update_select( comment_id ) {
  */
 function bpgsites_init_elements() {
 
-	// if we mustn't show public comments...
+	// If we mustn't show public comments.
 	if ( bpgsites_show_public == '0' ) {
 
 		/**
@@ -202,25 +202,25 @@ function bpgsites_init_elements() {
 		 */
 		jQuery( 'input.bpgsites_group_checkbox_public' ).each( function( i ) {
 
-			// define vars
+			// Define vars.
 			var group_id, checked;
 
-			// get group ID
+			// Get group ID.
 			group_id = jQuery(this).val();
 
-			// get checked/unchecked
+			// Get checked/unchecked.
 			checked = jQuery(this).prop( 'checked' );
 
-			// if checked...
+			// If checked.
 			if ( checked ) {
 
-				// show group comments
+				// Show group comments.
 				jQuery( 'li.bpgsites-group-' + group_id ).addClass( 'bpgsites-shown' );
 				jQuery( 'li.bpgsites-group-' + group_id ).show();
 
 			} else {
 
-				// hide group comments
+				// Hide group comments.
 				jQuery( 'li.bpgsites-group-' + group_id ).removeClass( 'bpgsites-shown' );
 				jQuery( 'li.bpgsites-group-' + group_id ).hide();
 
@@ -237,19 +237,19 @@ function bpgsites_init_elements() {
 
 				var wrapper, shown, text_sig;
 
-				// get wrapper
+				// Get wrapper.
 				wrapper = jQuery(this).parent().next( 'div.paragraph_wrapper' );
 
-				// get list items that are not hidden
+				// Get list items that are not hidden.
 				shown = wrapper.find( 'li.bpgsites-shown' );
 
-				// update heading
+				// Update heading.
 				jQuery(this).children( 'span.cp_comment_num' ).text( shown.length );
 
-				// get text signature
+				// Get text signature.
 				text_sig = jQuery(this).parent().prop( 'id' ).split( 'para_heading-' )[1];
 
-				// set comment icon text
+				// Set comment icon text.
 				jQuery( '#textblock-' + text_sig + ' .commenticonbox small' ).text( shown.length );
 
 			});
@@ -269,22 +269,22 @@ function bpgsites_init_elements() {
 	 */
 	jQuery( 'h3.bpgsites_group_filter_heading' ).click( function( event ) {
 
-		// define vars
+		// Define vars.
 		var form_wrapper;
 
-		// override event
+		// Override event.
 		event.preventDefault();
 
-		// get form wrapper
+		// Get form wrapper.
 		form_wrapper = jQuery(this).next( 'div.bpgsites_group_filter' );
 
-		// set width to prevent rendering error
+		// Set width to prevent rendering error.
 		form_wrapper.css( 'width', jQuery(this).parent().css( 'width' ) );
 
-		// toggle next paragraph_wrapper
+		// Toggle next paragraph_wrapper.
 		form_wrapper.slideToggle( 'slow', function() {
 
-			// when finished, reset width to auto
+			// When finished, reset width to auto.
 			form_wrapper.css( 'width', 'auto' );
 
 		} );
@@ -302,16 +302,16 @@ function bpgsites_init_elements() {
 	 */
 	jQuery( 'a.comment-reply-link' ).click( function( event ) {
 
-		// define vars
+		// Define vars.
 		var comment_id;
 
-		// override event
+		// Override event.
 		event.preventDefault();
 
-		// get comment ID
+		// Get comment ID.
 		comment_id = jQuery(this).parent().parent().prop( 'id' ).split( 'comment-' )[1];
 
-		// update our dropdown and hide
+		// Update our dropdown and hide.
 		bpgsites_update_select( comment_id );
 
 	});
@@ -330,32 +330,32 @@ function bpgsites_init_elements() {
 
 		var groups = [], previous;
 
-		// override event
+		// Override event.
 		event.preventDefault();
 
-		// if not empty, we can skip setting a value
+		// If not empty, we can skip setting a value.
 		if ( jQuery( '#bpgsites-post-in' ).val() ) {
 
-			// skip
+			// Skip.
 
 		} else {
 
-			// store existing if not empty
+			// Store existing if not empty.
 			if ( jQuery( '#bpgsites-post-in' ).val() ) {
 				bpgsites_update_select.set_group_id( jQuery( '#bpgsites-post-in' ).val() );
 			}
 
-			// get prior value
+			// Get prior value.
 			previous = bpgsites_settings.get_group_id();
 
-			// reset to prior value if we have one
+			// Reset to prior value if we have one.
 			if ( previous ) {
 				jQuery( '#bpgsites-post-in' ).val( previous );
 			}
 
 		}
 
-		// show enclosing div
+		// Show enclosing div.
 		jQuery( '#bpgsites-post-in-box' ).show();
 
 	});
@@ -371,19 +371,19 @@ function bpgsites_init_elements() {
 	 */
 	jQuery( 'input.bpgsites_group_checkbox' ).click( function( event ) {
 
-		// define vars
+		// Define vars.
 		var group_id, checked;
 
-		// get group ID
+		// Get group ID.
 		group_id = jQuery(this).val();
 
-		// get checked/unchecked
+		// Get checked/unchecked.
 		checked = jQuery(this).prop( 'checked' );
 
-		// do the action for this checkbox
+		// Do the action for this checkbox.
 		bpgsites_do_checkbox_action( checked, group_id );
 
-		// save state
+		// Save state.
 		bpgsites_save_state();
 
 	});
@@ -399,26 +399,26 @@ function bpgsites_init_elements() {
 	 */
 	jQuery( 'input.bpgsites_group_checkbox_toggle' ).click( function( event ) {
 
-		// get checked/unchecked
+		// Get checked/unchecked.
 		var checked = jQuery(this).prop( 'checked' );
 
-		// check all when this element is checked - and vice versa
+		// Check all when this element is checked - and vice versa.
 		jQuery( 'input.bpgsites_group_checkbox' ).each( function( i ) {
 
 			var group_id;
 
-			// set element check state
+			// Set element check state.
 			jQuery(this).prop( 'checked', checked );
 
-			// get group ID
+			// Get group ID.
 			group_id = jQuery(this).val();
 
-			// do the action for this checkbox
+			// Do the action for this checkbox.
 			bpgsites_do_checkbox_action( checked, group_id );
 
 		});
 
-		// save state
+		// Save state.
 		bpgsites_save_state();
 
 	});
@@ -439,39 +439,39 @@ function bpgsites_init_elements() {
  */
 function bpgsites_do_checkbox_action( checked, group_id ) {
 
-	// if checked...
+	// If checked.
 	if ( checked ) {
 
-		// show group comments
+		// Show group comments.
 		jQuery( 'li.bpgsites-group-' + group_id ).addClass( 'bpgsites-shown' );
 		jQuery( 'li.bpgsites-group-' + group_id ).show();
 
 	} else {
 
-		// hide group comments
+		// Hide group comments.
 		jQuery( 'li.bpgsites-group-' + group_id ).removeClass( 'bpgsites-shown' );
 		jQuery( 'li.bpgsites-group-' + group_id ).hide();
 
 	}
 
-	// recalculate headings and para icons
+	// Recalculate headings and para icons.
 	jQuery( 'a.comment_block_permalink' ).each( function( i ) {
 
 		var wrapper, shown, text_sig;
 
-		// get wrapper
+		// Get wrapper.
 		wrapper = jQuery(this).parent().next( 'div.paragraph_wrapper' );
 
-		// get list items that are not hidden
+		// Get list items that are not hidden.
 		shown = wrapper.find( 'li.bpgsites-shown' );
 
-		// update heading
+		// Update heading.
 		jQuery(this).children( 'span.cp_comment_num' ).text( shown.length );
 
-		// get text signature
+		// Get text signature.
 		text_sig = jQuery(this).parent().prop( 'id' ).split( 'para_heading-' )[1];
 
-		// set comment icon text
+		// Set comment icon text.
 		jQuery( '#textblock-' + text_sig + ' .commenticonbox small' ).text( shown.length );
 
 	});
@@ -487,31 +487,31 @@ function bpgsites_do_checkbox_action( checked, group_id ) {
  */
 function bpgsites_save_state() {
 
-	// declare vars
+	// Declare vars.
 	var state = [], states = '';
 
-	// get the state of all checkboxes
+	// Get the state of all checkboxes.
 	jQuery( 'input.bpgsites_group_checkbox' ).each( function( i ) {
 
 		var group_id, checked;
 
-		// get checked/unchecked state
+		// Get checked/unchecked state.
 		checked = jQuery(this).prop( 'checked' );
 
-		// get group ID
+		// Get group ID.
 		group_id = jQuery(this).val();
 
-		// add to the array if checked
+		// Add to the array if checked.
 		if ( checked ) {
 			state.push( group_id );
 		}
 
 	});
 
-	// convert to string
+	// Convert to string.
 	states = state.join( ',' );
 
-	// set cookie
+	// Set cookie.
 	jQuery.cookie(
 		'bpgsites_checkboxes',
 		states,
@@ -529,37 +529,37 @@ function bpgsites_save_state() {
  */
 function bpgsites_recall_state() {
 
-	// get cookie
+	// Get cookie.
 	var states = jQuery.cookie( 'bpgsites_checkboxes' ),
 		state = [],
 		group_id,
 		checked;
 
-	// bail if we don't have one
+	// Bail if we don't have one.
 	if ( 'undefined' === typeof states || states === null ) {
 		return;
 	}
 
-	// create array
+	// Create array.
 	state = states.split( ',' );
 
-	// get the state of all checkboxes
+	// Get the state of all checkboxes.
 	jQuery( 'input.bpgsites_group_checkbox' ).each( function( i ) {
 
-		// get group ID
+		// Get group ID.
 		group_id = jQuery(this).val();
 
-		// check or uncheck depending on presence in array
+		// Check or uncheck depending on presence in array.
 		if ( jQuery.inArray( group_id, state ) !== -1 ) {
 			checked = true;
 		} else {
 			checked = false;
 		}
 
-		// do action for this checkbox
+		// Do action for this checkbox.
 		bpgsites_do_checkbox_action( checked, group_id )
 
-		// set element check state
+		// Set element check state.
 		jQuery(this).prop( 'checked', checked );
 
 	});
@@ -577,13 +577,13 @@ function bpgsites_recall_state() {
  */
 jQuery(document).ready( function($) {
 
-	// recall state if set
+	// Recall state if set.
 	bpgsites_recall_state();
 
-	// init elements
+	// Init elements.
 	bpgsites_init_elements();
 
-	// check page load
+	// Check page load.
 	bpgsites_page_load();
 
 });

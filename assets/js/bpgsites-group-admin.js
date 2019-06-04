@@ -34,27 +34,27 @@ var BuddypressGroupSites = BuddypressGroupSites || {};
  */
 BuddypressGroupSites.settings = new function() {
 
-	// store object refs
+	// Store object refs.
 	var me = this,
 		$ = jQuery.noConflict();
 
-	// init group ID
+	// Init group ID.
 	this.group_id = false;
 
-	// override if we have our localisation object
+	// Override if we have our localisation object.
 	if ( 'undefined' !== typeof BuddypressGroupSitesSettings ) {
 		me.group_id = BuddypressGroupSitesSettings.data.group_id;
 	}
 
 	/**
-	 * Setter for group ID
+	 * Setter for group ID.
 	 */
 	this.set_group_id = function( val ) {
 		me.group_id = val;
 	};
 
 	/**
-	 * Getter for group ID
+	 * Getter for group ID.
 	 */
 	this.get_group_id = function() {
 		return me.group_id;
@@ -75,7 +75,7 @@ BuddypressGroupSites.settings = new function() {
  */
 BuddypressGroupSites.readwith = new function() {
 
-	// store object refs
+	// Store object refs.
 	var me = this,
 		$ = jQuery.noConflict();
 
@@ -88,7 +88,7 @@ BuddypressGroupSites.readwith = new function() {
 	 */
 	this.init = function() {
 
-		// write to head
+		// Write to head.
 		me.head();
 
 	};
@@ -100,30 +100,30 @@ BuddypressGroupSites.readwith = new function() {
 	 */
 	this.head = function() {
 
-		// define vars
+		// Define vars.
 		var styles;
 
-		// init styles
+		// Init styles.
 		styles = '';
 
-		// wrap with js test
+		// Wrap with js test.
 		if ( document.getElementById ) {
 
-			// open style declaration
+			// Open style declaration.
 			styles += '<style type="text/css" media="screen">';
 
-			// avoid flash of hidden elements
+			// Avoid flash of hidden elements.
 			styles += 'div.bpgsites_group_linkage_reveal { display: none; } ';
 
-			// set pointer on headings
+			// Set pointer on headings.
 			styles += 'h5.bpgsites_group_linkage_heading { cursor: pointer; } ';
 
-			// close style declaration
+			// Close style declaration.
 			styles += '</style>';
 
 		}
 
-		// write to page now
+		// Write to page now.
 		document.write( styles );
 
 	};
@@ -147,28 +147,28 @@ BuddypressGroupSites.readwith = new function() {
 		 */
 		$('h5.bpgsites_group_linkage_heading').click( function( event ) {
 
-			// define vars
+			// Define vars.
 			var wrapper, target, button;
 
-			// override event
+			// Override event.
 			event.preventDefault();
 
-			// get form wrapper
+			// Get form wrapper.
 			wrapper = $(this).next( 'div.bpgsites_group_linkage_reveal' );
 
-			// find select2 target in wrapper
+			// Find select2 target in wrapper.
 			target = wrapper.find( '.bpgsites_group_linkages_invite_select' );
 
-			// init select2
+			// Init select2.
 			me.select2.init( target );
 
-			// find submit button in wrapper
+			// Find submit button in wrapper.
 			button = wrapper.find( '.bpgsites_invite_actions' );
 
-			// hide it
+			// Hide it.
 			button.hide();
 
-			// toggle next paragraph_wrapper
+			// Toggle next paragraph_wrapper.
 			wrapper.slideToggle( 'fast' );
 
 		});
@@ -190,7 +190,7 @@ BuddypressGroupSites.readwith = new function() {
  */
 BuddypressGroupSites.readwith.select2 = new function() {
 
-	// store object refs
+	// Store object refs.
 	var me = this,
 		$ = jQuery.noConflict();
 
@@ -203,10 +203,10 @@ BuddypressGroupSites.readwith.select2 = new function() {
 	 */
 	this.init = function( target ) {
 
-		// declare vars
+		// Declare vars.
 		var current_blog_id;
 
-		// get blog ID
+		// Get blog ID.
 		current_blog_id = target.closest( '.bpgsites_group_linkages_invite' )
 						  .prop( 'id' ).split( '-' )[1];
 
@@ -217,7 +217,7 @@ BuddypressGroupSites.readwith.select2 = new function() {
 		 */
 		target.select2({
 
-			// action
+			// Action.
 			ajax: {
 				method: 'POST',
 				url: ajaxurl,
@@ -225,7 +225,7 @@ BuddypressGroupSites.readwith.select2 = new function() {
 				delay: 250,
 				data: function( params ) {
 					return {
-						s: params.term, // search term
+						s: params.term, // Search term.
 						action: 'bpgsites_get_groups',
 						page: params.page,
 						group_id: BuddypressGroupSites.settings.get_group_id(),
@@ -233,9 +233,9 @@ BuddypressGroupSites.readwith.select2 = new function() {
 					};
 				},
 				processResults: function( data, page ) {
-					// parse the results into the format expected by Select2.
-					// since we are using custom formatting functions we do not need to
-					// alter the remote JSON data
+					// Parse the results into the format expected by Select2.
+					// Since we are using custom formatting functions we do not need to
+					// alter the remote JSON data.
 					return {
 						results: data
 					};
@@ -243,15 +243,15 @@ BuddypressGroupSites.readwith.select2 = new function() {
 				cache: true
 			},
 
-			// settings
-			escapeMarkup: function( markup ) { return markup; }, // let our custom formatter work
+			// Settings.
+			escapeMarkup: function( markup ) { return markup; }, // Let our custom formatter work.
 			minimumInputLength: 3,
 			templateResult: me.format_result,
 			templateSelection: me.format_response
 
 		});
 
-		// bind event listeners
+		// Bind event listeners.
 		me.events_bind( target );
 
 	};
@@ -266,23 +266,23 @@ BuddypressGroupSites.readwith.select2 = new function() {
 	 */
 	this.format_result = function( data ) {
 
-		// bail if still loading
+		// Bail if still loading.
 		if ( data.loading ) return data.name;
 
-		// declare vars
+		// Declare vars.
 		var markup;
 
-		// construct basic group info
+		// Construct basic group info.
 		markup = '<div style="clear:both;">' +
 		'<div class="select2_results_group_avatar" style="float:left;margin-right:8px;">' + data.avatar + '</div>' +
 		'<div class="select2_results_group_name"><span style="font-weight:600;">' + data.name + '</span> <em>(' + data.type + ')</em></div>';
 
-		// add group description, if available
+		// Add group description, if available.
 		if (data.description) {
 			markup += '<div class="select2_results_group_description" style="font-size:.9em;line-height:1.4;">' + data.description + '</div>';
 		}
 
-		// close
+		// Close.
 		markup += '</div>';
 
 		// --<
@@ -316,7 +316,7 @@ BuddypressGroupSites.readwith.select2 = new function() {
 		 */
 		target.on( 'select2:select', function( event ) {
 
-			// find corresponding submit button and show
+			// Find corresponding submit button and show.
 			$(this).closest( '.bpgsites_group_linkages_invite' )
 				.find( '.bpgsites_invite_actions' )
 				.show();
@@ -342,7 +342,7 @@ BuddypressGroupSites.readwith.select2 = new function() {
 
 
 
-// do immediate actions
+// Do immediate actions
 BuddypressGroupSites.readwith.init();
 
 
@@ -360,10 +360,10 @@ BuddypressGroupSites.readwith.init();
  */
 jQuery(document).ready( function($) {
 
-	// document ready!
+	// Document ready!
 	BuddypressGroupSites.readwith.dom_ready();
 
-}); // end document.ready
+}); // End document.ready.
 
 
 

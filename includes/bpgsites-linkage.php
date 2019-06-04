@@ -24,10 +24,10 @@ Logic functions which don't need to be in the loop.
  */
 function bpgsites_get_groups_by_blog_id( $blog_id ) {
 
-	// construct option name
+	// Construct option name.
 	$option_name = BPGSITES_PREFIX . $blog_id;
 
-	// return option if it exists
+	// Return option if it exists.
 	return get_site_option( $option_name, array() );
 
 }
@@ -44,10 +44,10 @@ function bpgsites_get_groups_by_blog_id( $blog_id ) {
  */
 function bpgsites_get_blogs_by_group_id( $group_id ) {
 
-	// get option if it exists
+	// Get option if it exists.
 	$blog_ids = groups_get_groupmeta( $group_id, BPGSITES_OPTION );
 
-	// sanity check
+	// Sanity check.
 	if ( ! is_array( $blog_ids ) ) { $blog_ids = array(); }
 
 	// --<
@@ -68,23 +68,23 @@ function bpgsites_get_blogs_by_group_id( $group_id ) {
  */
 function bpgsites_check_group_by_blog_id( $blog_id, $group_id ) {
 
-	// init return
+	// Init return.
 	$return = false;
 
-	// get array of group IDs
+	// Get array of group IDs.
 	$group_ids = bpgsites_get_groups_by_blog_id( $blog_id );
 
-	// sanity check
+	// Sanity check.
 	if ( is_array( $group_ids ) AND count( $group_ids ) > 0 ) {
 
-		// is the group ID in the array?
+		// Is the group ID in the array?
 		if ( in_array( $group_id, $group_ids ) ) {
 			$return = true;
 		}
 
 	}
 
-	// allow for now
+	// Allow for now.
 	return $return;
 
 }
@@ -102,13 +102,13 @@ function bpgsites_check_group_by_blog_id( $blog_id, $group_id ) {
  */
 function bpgsites_check_blog_by_group_id( $group_id, $blog_id ) {
 
-	// init return
+	// Init return.
 	$return = false;
 
-	// get array of blog IDs
+	// Get array of blog IDs.
 	$blog_ids = bpgsites_get_blogs_by_group_id( $group_id );
 
-	// is the blog ID present?
+	// Is the blog ID present?
 	if ( in_array( $blog_id, $blog_ids ) ) {
 		$return = true;
 	}
@@ -130,13 +130,13 @@ function bpgsites_check_blog_by_group_id( $group_id, $blog_id ) {
  */
 function bpgsites_link_blog_and_group( $blog_id, $group_id ) {
 
-	// set blog options
+	// Set blog options.
 	bpgsites_configure_blog_options( $blog_id );
 
-	// add to blog's option
+	// Add to blog's option.
 	bpgsites_add_group_to_blog( $blog_id, $group_id );
 
-	// add to group's option
+	// Add to group's option.
 	bpgsites_add_blog_to_group( $group_id, $blog_id );
 
 }
@@ -153,13 +153,13 @@ function bpgsites_link_blog_and_group( $blog_id, $group_id ) {
  */
 function bpgsites_unlink_blog_and_group( $blog_id, $group_id ) {
 
-	// remove from blog's option
+	// Remove from blog's option.
 	bpgsites_remove_group_from_blog( $blog_id, $group_id );
 
-	// remove from group's option
+	// Remove from group's option.
 	bpgsites_remove_blog_from_group( $group_id, $blog_id );
 
-	// unset blog options
+	// Unset blog options.
 	bpgsites_reset_blog_options( $blog_id );
 
 }
@@ -175,31 +175,31 @@ function bpgsites_unlink_blog_and_group( $blog_id, $group_id ) {
  */
 function bpgsites_configure_blog_options( $blog_id ) {
 
-	// kick out if already a group site
+	// Kick out if already a group site.
 	if ( bpgsites_is_groupsite( $blog_id ) ) return;
 
-	// go there
+	// Go there.
 	switch_to_blog( $blog_id );
 
-	// get existing comment_registration option
+	// Get existing comment_registration option.
 	$existing_option = get_option( 'comment_registration', 0 );
 
-	// store it for later
+	// Store it for later.
 	add_option( 'bpgsites_saved_comment_registration', $existing_option );
 
-	// anonymous commenting - off by default
+	// Anonymous commenting - off by default.
 	$anon_comments = apply_filters(
 		'bpgsites_require_comment_registration',
-		0 // disallow
+		0 // Disallow.
 	);
 
-	// update option
+	// Update option.
 	update_option( 'comment_registration', $anon_comments );
 
-	// switch back
+	// Switch back.
 	restore_current_blog();
 
-	// add blog ID to globally stored option
+	// Add blog ID to globally stored option.
 	bpgsites_register_groupsite( $blog_id );
 
 }
@@ -215,25 +215,25 @@ function bpgsites_configure_blog_options( $blog_id ) {
  */
 function bpgsites_reset_blog_options( $blog_id ) {
 
-	// kick out if still a group site
+	// Kick out if still a group site.
 	if ( bpgsites_is_groupsite( $blog_id ) ) return;
 
-	// go there
+	// Go there.
 	switch_to_blog( $blog_id );
 
-	// get saved comment_registration option
+	// Get saved comment_registration option.
 	$previous_option = get_option( 'bpgsites_saved_comment_registration', 0 );
 
-	// remove our saved one
+	// Remove our saved one.
 	delete_option( 'bpgsites_saved_comment_registration' );
 
-	// update option
+	// Update option.
 	update_option( 'comment_registration', $previous_option );
 
-	// switch back
+	// Switch back.
 	restore_current_blog();
 
-	// remove blog ID from globally stored option
+	// Remove blog ID from globally stored option.
 	bpgsites_deregister_groupsite( $blog_id );
 
 }
@@ -250,13 +250,13 @@ function bpgsites_reset_blog_options( $blog_id ) {
  */
 function bpgsites_add_group_to_blog( $blog_id, $group_id ) {
 
-	// get array of group IDs
+	// Get array of group IDs.
 	$group_ids = bpgsites_get_groups_by_blog_id( $blog_id );
 
-	// add group ID
+	// Add group ID.
 	$group_ids[] = $group_id;
 
-	// save updated option
+	// Save updated option.
 	update_site_option( BPGSITES_PREFIX . $blog_id, $group_ids );
 
 }
@@ -273,16 +273,16 @@ function bpgsites_add_group_to_blog( $blog_id, $group_id ) {
  */
 function bpgsites_add_blog_to_group( $group_id, $blog_id ) {
 
-	// get array of blog IDs
+	// Get array of blog IDs.
 	$blog_ids = bpgsites_get_blogs_by_group_id( $group_id );
 
-	// is the blog ID present?
+	// Is the blog ID present?
 	if ( ! in_array( $blog_id, $blog_ids ) ) {
 
-		// no, add blog ID
+		// No, add blog ID.
 		$blog_ids[] = $blog_id;
 
-		// save updated option
+		// Save updated option.
 		groups_update_groupmeta( $group_id, BPGSITES_OPTION, $blog_ids );
 
 	}
@@ -301,16 +301,16 @@ function bpgsites_add_blog_to_group( $group_id, $blog_id ) {
  */
 function bpgsites_remove_group_from_blog( $blog_id, $group_id ) {
 
-	// get array of group IDs
+	// Get array of group IDs.
 	$group_ids = bpgsites_get_groups_by_blog_id( $blog_id );
 
-	// is the group ID present?
+	// Is the group ID present?
 	if ( in_array( $group_id, $group_ids ) ) {
 
-		// remove group ID and re-index
+		// Remove group ID and re-index.
 		$updated = array_merge( array_diff( $group_ids, array( $group_id ) ) );
 
-		// save updated option
+		// Save updated option.
 		update_site_option( BPGSITES_PREFIX . $blog_id, $updated );
 
 	}
@@ -329,16 +329,16 @@ function bpgsites_remove_group_from_blog( $blog_id, $group_id ) {
  */
 function bpgsites_remove_blog_from_group( $group_id, $blog_id ) {
 
-	// get array of blog IDs
+	// Get array of blog IDs.
 	$blog_ids = bpgsites_get_blogs_by_group_id( $group_id );
 
-	// is the blog ID present?
+	// Is the blog ID present?
 	if ( in_array( $blog_id, $blog_ids ) ) {
 
-		// yes, remove blog ID and re-index
+		// Yes, remove blog ID and re-index.
 		$updated = array_merge( array_diff( $blog_ids, array( $blog_id ) ) );
 
-		// save updated option
+		// Save updated option.
 		groups_update_groupmeta( $group_id, BPGSITES_OPTION, $updated );
 
 	}
@@ -356,28 +356,28 @@ function bpgsites_remove_blog_from_group( $group_id, $blog_id ) {
  */
 function bpgsites_remove_blog_from_groups( $blog_id, $drop = false ) {
 
-	// get array of group IDs
+	// Get array of group IDs.
 	$group_ids = bpgsites_get_groups_by_blog_id( $blog_id );
 
-	// sanity check
+	// Sanity check.
 	if ( is_array( $group_ids ) AND count( $group_ids ) > 0 ) {
 
-		// loop through them
+		// Loop through them.
 		foreach( $group_ids AS $group_id ) {
 
-			// unlink
+			// Unlink.
 			bpgsites_remove_blog_from_group( $group_id, $blog_id );
 
 		}
 
 	}
 
-	// delete the site option
+	// Delete the site option.
 	delete_site_option( BPGSITES_PREFIX . $blog_id );
 
 }
 
-// sever links when site deleted
+// Sever links when site deleted.
 add_action( 'delete_blog', 'bpgsites_remove_blog_from_groups', 10, 1 );
 
 
@@ -391,27 +391,27 @@ add_action( 'delete_blog', 'bpgsites_remove_blog_from_groups', 10, 1 );
  */
 function bpgsites_remove_group_from_blogs( $group_id ) {
 
-	// get array of blog IDs
+	// Get array of blog IDs.
 	$blog_ids = bpgsites_get_blogs_by_group_id( $group_id );
 
-	// sanity check
+	// Sanity check.
 	if ( count( $blog_ids ) > 0 ) {
 
-		// loop through them
+		// Loop through them.
 		foreach( $blog_ids AS $blog_id ) {
 
-			// unlink
+			// Unlink.
 			bpgsites_remove_group_from_blog( $blog_id, $group_id );
 
 		}
 
 	}
 
-	// our option will be deleted by groups_delete_group()
+	// Our option will be deleted by groups_delete_group()
 
 }
 
-// sever links just before group is deleted, while meta still exists
+// Sever links just before group is deleted, while meta still exists.
 add_action( 'groups_before_delete_group', 'bpgsites_remove_group_from_blogs', 10, 1 );
 
 
@@ -426,16 +426,16 @@ add_action( 'groups_before_delete_group', 'bpgsites_remove_group_from_blogs', 10
  */
 function bpgsites_is_groupblog( $blog_id ) {
 
-	// init return
+	// Init return.
 	$return = false;
 
-	// do we have groupblogs enabled?
+	// Do we have groupblogs enabled?
 	if ( function_exists( 'get_groupblog_group_id' ) ) {
 
-		// yes, get group id
+		// Yes, get group id.
 		$group_id = get_groupblog_group_id( $blog_id );
 
-		// is this blog a groupblog?
+		// Is this blog a groupblog?
 		if ( is_numeric( $group_id ) AND $group_id > 0 ) { $return = true; }
 
 	}
@@ -457,13 +457,13 @@ function bpgsites_is_groupblog( $blog_id ) {
  */
 function bpgsites_is_groupsite( $blog_id ) {
 
-	// init return
+	// Init return.
 	$return = false;
 
-	// get groups this site belongs to
+	// Get groups this site belongs to.
 	$group_ids = bpgsites_get_groups_by_blog_id( $blog_id );
 
-	// if we have any group IDs, then it is
+	// If we have any group IDs, then it is.
 	if ( count( $group_ids ) > 0 ) {
 		$return = true;
 	}
@@ -484,16 +484,16 @@ function bpgsites_is_groupsite( $blog_id ) {
  */
 function bpgsites_get_groupsites() {
 
-	// access object
+	// Access object.
 	global $bp_groupsites;
 
-	// create option if it doesn't exist
+	// Create option if it doesn't exist.
 	if ( ! $bp_groupsites->admin->option_exists( 'bpgsites_groupsites' ) ) {
 		$bp_groupsites->admin->option_set( 'bpgsites_groupsites', array() );
 		$bp_groupsites->admin->options_save();
 	}
 
-	// get existing option
+	// Get existing option.
 	$existing = $bp_groupsites->admin->option_get( 'bpgsites_groupsites' );
 
 	// --<
@@ -515,29 +515,29 @@ function bpgsites_get_groupsites() {
  */
 function bpgsites_get_all_possible_groupsites() {
 
-	// get all blogs via BP_Blogs_Blog
+	// Get all blogs via BP_Blogs_Blog.
 	$all = BP_Blogs_Blog::get_all();
 
-	// init return
+	// Init return.
 	$filtered_blogs = array();
 
-	// get array of blog IDs
+	// Get array of blog IDs.
 	if ( is_array( $all['blogs'] ) AND count( $all['blogs'] ) > 0 ) {
 		foreach ( $all['blogs'] AS $blog ) {
 
-			// is it the BP root blog?
+			// Is it the BP root blog?
 			if ( $blog->blog_id == bp_get_root_blog_id() ) continue;
 
-			// is it a groupblog?
+			// Is it a groupblog?
 			if ( bpgsites_is_groupblog( $blog->blog_id ) ) continue;
 
-			// okay, none of those - add it
+			// Okay, none of those - add it.
 			$filtered_blogs[] = $blog->blog_id;
 
 		}
 	}
 
-	// allow other plugins to exclude further blogs
+	// Allow other plugins to exclude further blogs.
 	return apply_filters( 'bpgsites_get_all_possible_groupsites', $filtered_blogs );
 
 }
@@ -553,27 +553,27 @@ function bpgsites_get_all_possible_groupsites() {
  */
 function bpgsites_register_groupsite( $blog_id ) {
 
-	// access object
+	// Access object.
 	global $bp_groupsites;
 
-	// create option if it doesn't exist
+	// Create option if it doesn't exist.
 	if ( ! $bp_groupsites->admin->option_exists( 'bpgsites_groupsites' ) ) {
 		$bp_groupsites->admin->option_set( 'bpgsites_groupsites', array() );
 	}
 
-	// get existing option
+	// Get existing option.
 	$existing = $bp_groupsites->admin->option_get( 'bpgsites_groupsites' );
 
-	// bail if the blog already present
+	// Bail if the blog already present.
 	if ( in_array( $blog_id, $existing ) ) return;
 
-	// add to the array (key is the same for easier removal)
+	// Add to the array (key is the same for easier removal)
 	$existing[$blog_id] = $blog_id;
 
-	// overwrite
+	// Overwrite.
 	$bp_groupsites->admin->option_set( 'bpgsites_groupsites', $existing );
 
-	// save
+	// Save.
 	$bp_groupsites->admin->options_save();
 
 }
@@ -589,22 +589,22 @@ function bpgsites_register_groupsite( $blog_id ) {
  */
 function bpgsites_deregister_groupsite( $blog_id ) {
 
-	// get existing option
+	// Get existing option.
 	$existing = $bp_groupsites->admin->option_get( 'bpgsites_groupsites' );
 
-	// sanity check
+	// Sanity check.
 	if ( $existing === false ) return;
 
-	// bail if the blog is not present
+	// Bail if the blog is not present.
 	if ( ! in_array( $blog_id, $existing ) ) return;
 
-	// add to the array (key is the same as the value)
+	// Add to the array (key is the same as the value)
 	unset( $existing[$blog_id] );
 
-	// overwrite
+	// Overwrite.
 	$bp_groupsites->admin->option_set( 'bpgsites_groupsites', $existing );
 
-	// save
+	// Save.
 	$bp_groupsites->admin->options_save();
 
 }

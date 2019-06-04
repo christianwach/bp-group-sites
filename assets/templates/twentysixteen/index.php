@@ -21,7 +21,7 @@ get_header( 'buddypress' );
 				<header class="entry-header">
 					<h1 class="entry-title"><?php
 
-					// show title
+					// Show title.
 					echo sprintf(
 						__( '%s Directory', 'bp-group-sites' ),
 						apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) )
@@ -50,7 +50,7 @@ get_header( 'buddypress' );
 								<ul>
 									<li class="selected" id="bpgsites-all"><a href="<?php bp_root_domain(); ?>/<?php bpgsites_root_slug(); ?>"><?php
 
-										// filter subnav title
+										// Filter subnav title.
 										printf(
 											__( 'All %1$s <span>%2$s</span>', 'bp-group-sites' ),
 											apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) ),

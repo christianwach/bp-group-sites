@@ -21,10 +21,10 @@ Throw any functions which build markup in here.
  */
 function bpgsites_cbox_theme_compatibility() {
 
-	// is CBOX theme active?
+	// Is CBOX theme active?
 	if ( function_exists( 'cbox_theme_register_widgets' ) ) {
 
-		// output style in head
+		// Output style in head.
 		?>
 
 		<style type="text/css">
@@ -42,7 +42,7 @@ function bpgsites_cbox_theme_compatibility() {
 
 }
 
-// add action for the above
+// Add action for the above.
 add_action( 'wp_head', 'bpgsites_cbox_theme_compatibility' );
 
 

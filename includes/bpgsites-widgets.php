@@ -30,19 +30,19 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 	 */
 	function __construct() {
 
-		// init parent
+		// Init parent.
 		parent::__construct(
 
-			// base ID
+			// Base ID.
 			'bpgsites_list_widget',
 
-			// name
+			// Name.
 			sprintf(
 				__( 'List of %s', 'bp-group-sites' ),
 				apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) )
 			),
 
-			// args
+			// Args.
 			array(
 				'description' => sprintf(
 					__( 'Use this widget to show a list of %s.', 'bp-group-sites' ),
@@ -65,31 +65,31 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 	 */
 	public function widget( $args, $instance ) {
 
-		// get filtered title
+		// Get filtered title.
 		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? '' : $instance['title'], $instance, $this->id_base );
 
-		// show widget prefix
+		// Show widget prefix.
 		echo ( isset( $args['before_widget'] ) ? $args['before_widget'] : '' );
 
-		// show title if there is one
+		// Show title if there is one.
 		if ( ! empty( $title ) ) {
 			echo ( isset( $args['before_title'] ) ? $args['before_title'] : '' );
 			echo $title;
 			echo ( isset( $args['after_title'] ) ? $args['after_title'] : '' );
 		}
 
-		// set default max blogs if absent
+		// Set default max blogs if absent.
 		if ( empty( $instance['max_blogs'] ) OR ! is_numeric( $instance['max_blogs'] ) ) {
 			$instance['max_blogs'] = 5;
 		}
 
-		// set up params
+		// Set up params.
 		$params = array(
 			'max' => $instance['max_blogs'],
 			'per_page' => $instance['max_blogs'],
 		);
 
-		// get group sites
+		// Get group sites.
 		if ( bpgsites_has_blogs( $params ) ) { ?>
 
 			<ul class="item-list bpgsites-list">
@@ -117,7 +117,7 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 
 		}
 
-		// show widget suffix
+		// Show widget suffix.
 		echo ( isset( $args['after_widget'] ) ? $args['after_widget'] : '' );
 
 	}
@@ -134,7 +134,7 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 	 */
 	public function form( $instance ) {
 
-		// get title
+		// Get title.
 		if ( isset( $instance['title'] ) ) {
 			$title = strip_tags( $instance['title'] );
 		} else {
@@ -144,7 +144,7 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 			);
 		}
 
-		// get max blogs
+		// Get max blogs.
 		if ( isset( $instance['max_blogs'] ) ) {
 			$max_blogs = strip_tags( $instance['max_blogs'] );
 		} else {
@@ -179,7 +179,7 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 	 */
 	public function update( $new_instance, $old_instance ) {
 
-		// never lose a value
+		// Never lose a value.
 		$instance = wp_parse_args( $new_instance, $old_instance );
 
 		// --<
@@ -189,11 +189,11 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 
 
 
-} // ends class BP_Group_Sites_List_Widget
+} // Ends class BP_Group_Sites_List_Widget.
 
 
 
-// register this widget
+// Register this widget.
 register_widget( 'BP_Group_Sites_List_Widget' );
 
 

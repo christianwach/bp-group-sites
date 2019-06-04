@@ -8,7 +8,7 @@
 
 
 
-// Exit if accessed directly
+// Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 
@@ -34,7 +34,7 @@ class BP_Group_Sites_Theme_Compat {
 	 */
 	public function __construct() {
 
-		// add theme comaptibility action
+		// Add theme comaptibility action.
 		add_action( 'bp_setup_theme_compat', array( $this, 'is_bpgsites' ) );
 
 	}
@@ -48,19 +48,19 @@ class BP_Group_Sites_Theme_Compat {
 	 */
 	public function is_bpgsites() {
 
-		// Bail if not looking at a group site component page
+		// Bail if not looking at a group site component page.
 		if ( ! bp_is_bpgsites_component() ) { return; }
 
-		// BP Group Sites Directory
+		// BP Group Sites Directory.
 		if ( is_multisite() && ! bp_current_action() ) {
 
-			// set is_directory flag
+			// Set is_directory flag.
 			bp_update_is_directory( true, 'bpgsites' );
 
-			// inform plugins
+			// Inform plugins.
 			do_action( 'bp_blogs_screen_index' );
 
-			// add hooks
+			// Add hooks.
 			add_filter( 'bp_get_buddypress_template',                array( $this, 'directory_template_hierarchy' ) );
 			add_action( 'bp_template_include_reset_dummy_post_data', array( $this, 'directory_dummy_post' ) );
 			add_filter( 'bp_replace_the_content',                    array( $this, 'directory_content'    ) );
@@ -81,14 +81,12 @@ class BP_Group_Sites_Theme_Compat {
 	 */
 	public function directory_template_hierarchy( $templates ) {
 
-		//die('here');
-
-		// set up our templates based on priority
+		// Set up our templates based on priority.
 		$new_templates = apply_filters( 'bp_template_hierarchy_bpgsites_directory', array(
 			'bpgsites/index.php'
 		) );
 
-		// merge new templates with existing stack
+		// Merge new templates with existing stack.
 		// @see bp_get_theme_compat_templates()
 		$templates = array_merge( (array) $new_templates, $templates );
 
@@ -106,10 +104,10 @@ class BP_Group_Sites_Theme_Compat {
 	 */
 	public function directory_dummy_post() {
 
-		// set title
+		// Set title.
 		$title = apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) );
 
-		// create dummy post
+		// Create dummy post.
 		bp_theme_compat_reset_post( array(
 			'ID'             => 0,
 			'post_title'     => $title,
@@ -142,11 +140,11 @@ class BP_Group_Sites_Theme_Compat {
 
 
 
-} // class ends
+} // Class ends
 
 
 
-// init
+// Init
 new BP_Group_Sites_Theme_Compat();
 
 
@@ -162,23 +160,23 @@ new BP_Group_Sites_Theme_Compat();
  */
 function bpgsites_screen_index() {
 
-	// is this our component page?
+	// Is this our component page?
 	if ( is_multisite() && bp_is_bpgsites_component() && ! bp_current_action() ) {
 
-		// make sure BP knows that it's our directory
+		// Make sure BP knows that it's our directory.
 		bp_update_is_directory( true, 'bpgsites' );
 
-		// allow plugins to handle this
+		// Allow plugins to handle this.
 		do_action( 'bpgsites_screen_index' );
 
-		// load our directory template
+		// Load our directory template.
 		bp_core_load_template( apply_filters( 'bpgsites_screen_index', 'bpgsites/index' ) );
 
 	}
 
 }
 
-// add action for the above
+// Add action for the above.
 add_action( 'bp_screens', 'bpgsites_screen_index', 20 );
 
 

@@ -7,7 +7,7 @@ AUTHOR: Christian Wach <needle@haystack.co.uk>
 NOTES
 =====
 
-Provide basic styles for plugin elements
+Provide basic styles for plugin elements.
 
 --------------------------------------------------------------------------------
 */
@@ -16,7 +16,7 @@ Provide basic styles for plugin elements
 
 /*
 --------------------------------------------------------------------------------
-Default styles for filtering comments
+Default styles for filtering comments.
 --------------------------------------------------------------------------------
 */
 #bpgsites-post-in-box
@@ -47,7 +47,7 @@ div.bpgsites_group_filter form
 
 /*
 --------------------------------------------------------------------------------
-Default styles for filtering group linkages
+Default styles for filtering group linkages.
 --------------------------------------------------------------------------------
 */
 .bpgsites_group_linkage
@@ -124,7 +124,7 @@ ol.bpgsites_group_linkages_pending_list li
 
 /*
 --------------------------------------------------------------------------------
-Default styles for comment amendments
+Default styles for comment amendments.
 --------------------------------------------------------------------------------
 */
 .bpgsites_comment_posted_in
@@ -153,7 +153,7 @@ div#sidebar .comments_container .comment-content .bpgsites_comment_posted_in a:a
 
 /*
 --------------------------------------------------------------------------------
-Overridden styles for Select2
+Overridden styles for Select2.
 --------------------------------------------------------------------------------
 */
 
