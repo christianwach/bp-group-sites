@@ -377,8 +377,41 @@ function bpgsites_remove_blog_from_groups( $blog_id, $drop = false ) {
 
 }
 
-// Sever links when site deleted.
-add_action( 'delete_blog', 'bpgsites_remove_blog_from_groups', 10, 1 );
+/*
+ * Sever links when blog deleted.
+ *
+ * This action has been deprecated since WordPress 5.1.
+ *
+ * @see wp_delete_site()
+ */
+if ( ! function_exists( 'wp_delete_site' ) ) {
+	add_action( 'delete_blog', 'bpgsites_remove_blog_from_groups', 10, 1 );
+}
+
+
+
+/**
+ * Sever link when a site gets deleted.
+ *
+ * @since 0.2.8
+ *
+ * @param WP_Site $old_site Deleted site object.
+ */
+function bpgsites_remove_site_from_groups( $old_site ) {
+
+	// Sever the link.
+	bpgsites_remove_blog_from_groups( $old_site->blog_id );
+
+}
+
+/*
+ * Sever links when a site is about to be deleted.
+ *
+ * This action replaces 'delete_blog' since WordPress 5.1.
+ *
+ * @see bpgsites_remove_blog_from_groups()
+ */
+add_action( 'wp_uninitialize_site', 'bpgsites_remove_site_from_groups', 10, 1 );
 
 
 
