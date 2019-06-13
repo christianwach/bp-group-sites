@@ -42,6 +42,11 @@ By default, this plugin will use internal templates for the BuddyPress pages tha
 
 == Changelog ==
 
+= 0.2.8 =
+
+* Fix notice regarding empty query.
+* Enable alternative method for deprecated "delete_blog" action.
+
 = 0.2.7 =
 
 * Fix listing of possible Group Sites in Group admin.
