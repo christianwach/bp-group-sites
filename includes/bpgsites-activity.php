@@ -138,6 +138,9 @@ class BP_Group_Sites_Activity {
 			// Show group at top of comment content.
 			add_filter( 'get_comment_text', array( $this, 'show_comment_group' ), 20, 3 );
 
+			// Show group at top of comment content.
+			add_filter( 'commentpress_ajax_get_comment', array( $this, 'filter_ajax_get_comment' ), 10, 1 );
+
 		}
 
 	}
@@ -1990,6 +1993,32 @@ class BP_Group_Sites_Activity {
 
 		// --<
 		return $group_id;
+
+	}
+
+
+
+	/**
+	 * Filter the comment data returned via AJAX when editing a comment.
+	 *
+	 * @since 0.2.8
+	 *
+	 * @param array $data The existing array of comment data.
+	 * @return array $data The modified array of comment data.
+	 */
+	public function filter_ajax_get_comment( $data ) {
+
+		// Sanity check.
+		if ( ! isset( $data['id'] ) ) return $data;
+
+		// Get the group ID of the comment.
+		$group_id = $this->get_comment_group_id( $data['id'] );
+
+		// Add to array.
+		$data['bpgsites_group_id'] = $group_id;
+
+		// --<
+		return $data;
 
 	}
 

@@ -425,6 +425,24 @@ function bpgsites_init_elements() {
 
 
 
+	/**
+	 * Hook into CommentPress comment edit trigger.
+	 *
+	 * @since 0.2.8
+	 *
+	 * @param {Array} data The array of comment data.
+	 */
+	$( document ).on( 'commentpress-ajax-comment-callback', function( event, data ) {
+
+		// Set select option.
+		if ( data.bpgsites_group_id ) {
+			jQuery( '#bpgsites-post-in' ).val( data.bpgsites_group_id );
+		}
+
+	});
+
+
+
 }
 
 
