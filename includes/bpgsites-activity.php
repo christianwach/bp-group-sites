@@ -1827,12 +1827,9 @@ class BP_Group_Sites_Activity {
 			// If more than one.
 			if ( $groups_template->group_count > 1 ) {
 
-				// Is this edit?
+				// Get the group of the comment ID in edit mode.
 				if ( $edit ) {
-
-					// Get the group of the comment ID.
 					$comment_group_id = $this->get_comment_group_id( $comment_id );
-
 				}
 
 				// Init lists.
@@ -1840,7 +1837,7 @@ class BP_Group_Sites_Activity {
 				$linked = array();
 
 				// Do the loop.
-				while ( bp_groups() ) {  bp_the_group();
+				while ( bp_groups() ) { bp_the_group();
 
 					// Get group ID.
 					$group_id = bp_get_group_id();
@@ -1851,30 +1848,21 @@ class BP_Group_Sites_Activity {
 					// Is this edit?
 					if ( $edit ) {
 
-						// Is this the relevant group?
+						// Insert selected if this is the relevant group.
 						if ( $comment_group_id == $group_id ) {
-
-							// Yes, insert selected.
 							$selected = ' selected="selected"';
-
 						}
 
 					}
 
-					// Mine?
+					// Add option if one of my groups.
 					if ( in_array( $group_id, $user_group_ids['my_groups'] ) ) {
-
-						// Add option.
 						$mine[] = '<option value="' . $group_id . '"' . $selected . '>' . bp_get_group_name() . '</option>';
-
 					}
 
-					// Linked?
+					// Add option if one of my linked groups.
 					if ( in_array( $group_id, $user_group_ids['linked_groups'] ) ) {
-
-						// Add option.
 						$linked[] = '<option value="' . $group_id . '"' . $selected . '>' . bp_get_group_name() . '</option>' . "\n";
-
 					}
 
 				} // End while.
