@@ -1783,6 +1783,12 @@ class BP_Group_Sites_Activity {
 		// Get the groups this user can see.
 		$user_group_ids = $this->get_groups_for_user();
 
+		// Super admins can see all groups.
+		if ( is_super_admin() ) {
+			$user_group_ids['my_groups'] = bpgsites_get_groups_by_blog_id( $blog_id );
+			$user_group_ids['linked_groups'] = array();
+		}
+
 		// Kick out if the ones the user can post into are empty.
 		if (
 			count( $user_group_ids['my_groups'] ) == 0 AND
