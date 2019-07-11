@@ -432,11 +432,18 @@ function bpgsites_init_elements() {
 	 *
 	 * @param {Array} data The array of comment data.
 	 */
-	$( document ).on( 'commentpress-ajax-comment-callback', function( event, data ) {
+	jQuery( document ).on( 'commentpress-ajax-comment-callback', function( event, data ) {
 
 		// Set select option.
 		if ( data.bpgsites_group_id ) {
 			jQuery( '#bpgsites-post-in' ).val( data.bpgsites_group_id );
+		}
+
+		// Hide dropdown if comment is a reply or show if not.
+		if ( parseInt( data.parent ) == 0 ) {
+			jQuery( '#bpgsites-post-in-box' ).show();
+		} else {
+			jQuery( '#bpgsites-post-in-box' ).hide();
 		}
 
 	});
