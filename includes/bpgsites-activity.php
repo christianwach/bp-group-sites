@@ -138,7 +138,7 @@ class BP_Group_Sites_Activity {
 			// Show group at top of comment content.
 			add_filter( 'get_comment_text', array( $this, 'show_comment_group' ), 20, 3 );
 
-			// Show group at top of comment content.
+			// Add group ID to AJAX edit comment data.
 			add_filter( 'commentpress_ajax_get_comment', array( $this, 'filter_ajax_get_comment' ), 10, 1 );
 
 		}
