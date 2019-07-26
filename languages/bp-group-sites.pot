@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the BP Group Sites package.
 msgid ""
 msgstr ""
-"Project-Id-Version: BP Group Sites 0.2.8\n"
+"Project-Id-Version: BP Group Sites 0.2.9\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/bp-group-sites\n"
-"POT-Creation-Date: 2019-06-13 12:18:06+00:00\n"
+"POT-Creation-Date: 2019-07-26 13:16:49+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -28,9 +28,9 @@ msgstr ""
 #: assets/templates/twentysixteen/index.php:27
 #: assets/templates/twentysixteen/index.php:56
 #: includes/bp-bpgsites-component.php:40 includes/bp-bpgsites-component.php:94
-#: includes/bp-bpgsites-screens.php:108 includes/bpgsites-activity.php:549
-#: includes/bpgsites-activity.php:2267 includes/bpgsites-activity.php:2278
-#: includes/bpgsites-activity.php:2323 includes/bpgsites-admin.php:593
+#: includes/bp-bpgsites-screens.php:108 includes/bpgsites-activity.php:601
+#: includes/bpgsites-activity.php:2371 includes/bpgsites-activity.php:2382
+#: includes/bpgsites-activity.php:2427 includes/bpgsites-admin.php:593
 #: includes/bpgsites-admin.php:599 includes/bpgsites-groups.php:73
 #: includes/bpgsites-groups.php:494 includes/bpgsites-groups.php:1644
 #: includes/bpgsites-widgets.php:42 includes/bpgsites-widgets.php:49
@@ -67,158 +67,158 @@ msgstr ""
 msgid "Search %s..."
 msgstr ""
 
-#: includes/bpgsites-activity.php:186
+#: includes/bpgsites-activity.php:205
 msgid "Posted in: %s"
 msgstr ""
 
-#: includes/bpgsites-activity.php:214
+#: includes/bpgsites-activity.php:236
 msgid "BuddyPress Comment Group"
 msgstr ""
 
-#: includes/bpgsites-activity.php:252
+#: includes/bpgsites-activity.php:274
 msgid "This comment is a reply. It appears in the same group as the comment it is in reply to. If there is a deeper thread of replies, then the original comment determines the group in which it appears."
 msgstr ""
 
-#: includes/bpgsites-activity.php:259
+#: includes/bpgsites-activity.php:281
 msgid "This comment appears in the group %1$s."
 msgstr ""
 
-#: includes/bpgsites-activity.php:313
+#: includes/bpgsites-activity.php:335 includes/bpgsites-activity.php:365
 msgid "You are not allowed to edit comments on this post."
 msgstr ""
 
-#: includes/bpgsites-activity.php:422
+#: includes/bpgsites-activity.php:474
 msgid "Anonymous"
 msgstr ""
 
-#: includes/bpgsites-activity.php:429 includes/bpgsites-activity.php:2509
+#: includes/bpgsites-activity.php:481 includes/bpgsites-activity.php:2613
 msgid "post"
 msgstr ""
 
-#: includes/bpgsites-activity.php:440
+#: includes/bpgsites-activity.php:492
 msgid "%1$s left a %2$s on a %3$s %4$s in the group %5$s:"
 msgstr ""
 
-#: includes/bpgsites-activity.php:442
+#: includes/bpgsites-activity.php:494
 msgid "comment"
 msgstr ""
 
-#: includes/bpgsites-activity.php:548
+#: includes/bpgsites-activity.php:600
 msgid "Comments in %s"
 msgstr ""
 
-#: includes/bpgsites-activity.php:779
+#: includes/bpgsites-activity.php:831
 msgid "Create an account to reply"
 msgstr ""
 
-#: includes/bpgsites-activity.php:782
+#: includes/bpgsites-activity.php:834
 msgid "Login to reply"
 msgstr ""
 
-#: includes/bpgsites-activity.php:844
+#: includes/bpgsites-activity.php:896
 msgid "Join group to reply"
 msgstr ""
 
-#: includes/bpgsites-activity.php:938 includes/bpgsites-activity.php:989
+#: includes/bpgsites-activity.php:990 includes/bpgsites-activity.php:1041
 msgid "Create an account to leave a comment"
 msgstr ""
 
-#: includes/bpgsites-activity.php:941 includes/bpgsites-activity.php:991
+#: includes/bpgsites-activity.php:993 includes/bpgsites-activity.php:1043
 msgid "Login to leave a comment"
 msgstr ""
 
-#: includes/bpgsites-activity.php:948 includes/bpgsites-activity.php:963
+#: includes/bpgsites-activity.php:1000 includes/bpgsites-activity.php:1015
 msgid "<a href=\"%1$s\">%2$s</a>"
 msgstr ""
 
-#: includes/bpgsites-activity.php:957
+#: includes/bpgsites-activity.php:1009
 msgid "Join a group to leave a comment"
 msgstr ""
 
-#: includes/bpgsites-activity.php:1001
+#: includes/bpgsites-activity.php:1053
 msgid "Join a group to leave a comment on %s"
 msgstr ""
 
-#: includes/bpgsites-activity.php:1244
+#: includes/bpgsites-activity.php:1296
 msgid "Groups reading this %s"
 msgstr ""
 
-#: includes/bpgsites-activity.php:1245 includes/bpgsites-blogs.php:258
+#: includes/bpgsites-activity.php:1297 includes/bpgsites-blogs.php:258
 msgid "site"
 msgstr ""
 
-#: includes/bpgsites-activity.php:1302 includes/bpgsites-activity.php:1658
-#: includes/bpgsites-activity.php:1894
+#: includes/bpgsites-activity.php:1354 includes/bpgsites-activity.php:1710
+#: includes/bpgsites-activity.php:1940
 msgid "My Groups"
 msgstr ""
 
-#: includes/bpgsites-activity.php:1337 includes/bpgsites-activity.php:1674
-#: includes/bpgsites-activity.php:1925
+#: includes/bpgsites-activity.php:1389 includes/bpgsites-activity.php:1726
+#: includes/bpgsites-activity.php:1971
 msgid "Linked Groups"
 msgstr ""
 
-#: includes/bpgsites-activity.php:1372 includes/bpgsites-activity.php:1690
+#: includes/bpgsites-activity.php:1424 includes/bpgsites-activity.php:1742
 msgid "Public Groups"
 msgstr ""
 
-#: includes/bpgsites-activity.php:1404
+#: includes/bpgsites-activity.php:1456
 msgid "Group Home Page"
 msgstr ""
 
-#: includes/bpgsites-activity.php:1499
+#: includes/bpgsites-activity.php:1551
 msgid "Filter comments by group"
 msgstr ""
 
-#: includes/bpgsites-activity.php:1629
+#: includes/bpgsites-activity.php:1681
 msgid "Show all groups"
 msgstr ""
 
-#: includes/bpgsites-activity.php:1642
+#: includes/bpgsites-activity.php:1694
 msgid "Showcase Groups"
 msgstr ""
 
-#: includes/bpgsites-activity.php:1700
+#: includes/bpgsites-activity.php:1752
 msgid "Filter"
 msgstr ""
 
-#: includes/bpgsites-activity.php:1881
+#: includes/bpgsites-activity.php:1927
 msgid "Post in"
 msgstr ""
 
-#: includes/bpgsites-activity.php:2266
+#: includes/bpgsites-activity.php:2370
 msgid "All Recent Activity in your %s"
 msgstr ""
 
-#: includes/bpgsites-activity.php:2277
+#: includes/bpgsites-activity.php:2381
 msgid "Recent Activity in Public %s"
 msgstr ""
 
-#: includes/bpgsites-activity.php:2322
+#: includes/bpgsites-activity.php:2426
 msgid "Friends Activity in your %s"
 msgstr ""
 
-#: includes/bpgsites-activity.php:2411
+#: includes/bpgsites-activity.php:2515
 msgid "Recent Comments in this %s"
 msgstr ""
 
-#: includes/bpgsites-activity.php:2412 includes/bpgsites-admin.php:596
+#: includes/bpgsites-activity.php:2516 includes/bpgsites-admin.php:596
 #: includes/bpgsites-groups.php:173 includes/bpgsites-groups.php:491
 msgid "Group Site"
 msgstr ""
 
-#: includes/bpgsites-activity.php:2546
+#: includes/bpgsites-activity.php:2650
 msgid " &amp; "
 msgstr ""
 
-#: includes/bpgsites-activity.php:2575
+#: includes/bpgsites-activity.php:2679
 msgid "%1$s updated a %2$s %3$s in the group %4$s:"
 msgstr ""
 
-#: includes/bpgsites-activity.php:2586
+#: includes/bpgsites-activity.php:2690
 msgid "%1$s wrote a new %2$s %3$s in the group %4$s:"
 msgstr ""
 
-#: includes/bpgsites-activity.php:2627
+#: includes/bpgsites-activity.php:2731
 msgid "Group Site Posts"
 msgstr ""
 
