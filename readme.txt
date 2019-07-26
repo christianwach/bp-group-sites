@@ -42,6 +42,10 @@ By default, this plugin will use internal templates for the BuddyPress pages tha
 
 == Changelog ==
 
+= 0.2.9 =
+
+* Implement compatibility with CommentPress AJAX comment editing.
+
 = 0.2.8 =
 
 * Fix notice regarding empty query.
