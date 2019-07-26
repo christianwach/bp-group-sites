@@ -132,14 +132,20 @@ class BP_Group_Sites_Activity {
 			// Register a meta box.
 			add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
 
-			// Intercept comment edit process.
-			add_action( 'edit_comment', array( $this, 'save_comment_metadata' ) );
+			// Intercept comment edit process in WordPress admin.
+			add_action( 'edit_comment', array( $this, 'save_comment_metabox_metadata' ) );
+
+			// Intercept comment edit process in CommentPress front-end.
+			add_action( 'edit_comment', array( $this, 'save_comment_edit_metadata' ) );
 
 			// Show group at top of comment content.
 			add_filter( 'get_comment_text', array( $this, 'show_comment_group' ), 20, 3 );
 
 			// Add group ID to AJAX edit comment data.
 			add_filter( 'commentpress_ajax_get_comment', array( $this, 'filter_ajax_get_comment' ), 10, 1 );
+
+			// Add group data to AJAX edited comment data.
+			add_filter( 'commentpress_ajax_edited_comment', array( $this, 'filter_ajax_edited_comment' ), 10, 1 );
 
 		}
 
@@ -183,7 +189,17 @@ class BP_Group_Sites_Activity {
 			// Wrap name in anchor.
 			$link = '<a href="' . bp_get_group_permalink( $group ) . '">' . $name . '</a>';
 
-			// Construct prefix.
+			/**
+			 * Construct prefix and allow filtering.
+			 *
+			 * @since 0.1
+			 *
+			 * @param str The inner markup.
+			 * @param str $name The group name.
+			 * @param object $comment The comment data object.
+			 * @param int $group_id The group ID.
+			 * @return str The modified inner markup.
+			 */
 			$prefix = apply_filters(
 				'bpgsites_comment_prefix',
 				sprintf( __( 'Posted in: %s', 'bp-group-sites' ), $link ),
@@ -192,10 +208,13 @@ class BP_Group_Sites_Activity {
 				$group_id
 			);
 
+			// Wrap prefix in para tag.
+			$prefix = '<p>' . $prefix . '</p>';
+
 		}
 
 		// Prepend to comment content.
-		$comment_content = '<div class="bpgsites_comment_posted_in"><p>' . $prefix . "</p></div>\n\n" . $comment_content;
+		$comment_content = '<div class="bpgsites_comment_posted_in">' . $prefix . "</div>\n\n" . $comment_content;
 
 		// --<
 		return $comment_content;
@@ -295,19 +314,49 @@ class BP_Group_Sites_Activity {
 
 
 	/**
-	 * Save data returned by our comment meta box.
+	 * Save data returned by our comment meta box in WordPress admin.
 	 *
 	 * @since 0.1
 	 *
 	 * @param int $comment_id The ID of the comment being saved.
 	 */
-	public function save_comment_metadata( $comment_id ) {
+	public function save_comment_metabox_metadata( $comment_id ) {
 
 		// If there's no nonce then there's no comment meta data.
 		if ( ! isset( $_POST['bpgsites_comments_nonce'] ) ) { return; }
 
 		// Authenticate submission.
 		if ( ! wp_verify_nonce( $_POST['bpgsites_comments_nonce'], 'bpgsites_comments_metabox' ) ) { return; }
+
+		// Check capabilities.
+		if ( ! current_user_can( 'edit_comment', $comment_id ) ) {
+
+			// Cheating!
+			wp_die( __( 'You are not allowed to edit comments on this post.', 'bp-group-sites' ) );
+
+		}
+
+		// Save data, ignoring comment status param.
+		$this->save_comment_group_id( $comment_id, null );
+
+	}
+
+
+
+	/**
+	 * Save data returned by editing a comment in CommentPress front-end.
+	 *
+	 * @since 0.2.8
+	 *
+	 * @param int $comment_id The ID of the comment being saved.
+	 */
+	public function save_comment_edit_metadata( $comment_id ) {
+
+		// If there's no nonce then there's no comment meta data.
+		if ( ! isset( $_POST['cpajax_comment_nonce'] ) ) { return; }
+
+		// Bail if there's no POST data for us.
+		if ( ! isset( $_POST['bpgsites-post-in'] ) ) { return; }
 
 		// Check capabilities.
 		if ( ! current_user_can( 'edit_comment', $comment_id ) ) {
@@ -2010,6 +2059,38 @@ class BP_Group_Sites_Activity {
 
 		// Add to array.
 		$data['bpgsites_group_id'] = $group_id;
+
+		// --<
+		return $data;
+
+	}
+
+
+
+	/**
+	 * Filter the comment data returned via AJAX when a comment has been edited.
+	 *
+	 * @since 0.2.8
+	 *
+	 * @param array $data The existing array of comment data.
+	 * @return array $data The modified array of comment data.
+	 */
+	public function filter_ajax_edited_comment( $data ) {
+
+		// Sanity check.
+		if ( ! isset( $data['id'] ) ) return $data;
+
+		// Add tag data.
+		$data = $this->filter_ajax_get_comment( $data );
+
+		// Get comment.
+		$comment = get_comment( $data['id'] );
+
+		// Get markup.
+		$markup = $this->show_comment_group( '', $comment, array() );
+
+		// Add markup to array.
+		$data['bpgsites_group_markup'] = $markup;
 
 		// --<
 		return $data;

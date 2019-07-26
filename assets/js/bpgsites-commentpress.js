@@ -434,6 +434,11 @@ function bpgsites_init_elements() {
 	 */
 	jQuery( document ).on( 'commentpress-ajax-comment-callback', function( event, data ) {
 
+		// Sanity check.
+		if ( ! data.id ) {
+			return;
+		}
+
 		// Set select option.
 		if ( data.bpgsites_group_id ) {
 			jQuery( '#bpgsites-post-in' ).val( data.bpgsites_group_id );
