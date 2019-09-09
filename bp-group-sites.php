@@ -283,7 +283,7 @@ class BP_Group_Sites {
 			// Register Select2 styles.
 			wp_register_style(
 				'bpgsites_select2_css',
-				set_url_scheme( 'http://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css' )
+				set_url_scheme( 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css' )
 			);
 
 			// Enqueue styles.
@@ -328,7 +328,7 @@ class BP_Group_Sites {
 				// Register Select2.
 				wp_register_script(
 					'bpgsites_select2_js',
-					set_url_scheme( 'http://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js' ),
+					set_url_scheme( 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js' ),
 					array( 'jquery' )
 				);
 
