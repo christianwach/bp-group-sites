@@ -1529,8 +1529,8 @@ function bpgsites_group_linkages_get_ajax() {
 	$json = [];
 
 	// Fake a group template.
-	$groups_template = new stdClass;
-	$groups_template->group = new stdClass;
+	$groups_template = new stdClass();
+	$groups_template->group = new stdClass();
 
 	// Loop through our groups.
 	foreach( $groups['groups'] AS $group ) {

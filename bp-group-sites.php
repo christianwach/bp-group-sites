@@ -190,7 +190,7 @@ class BP_Group_Sites {
 		require( BPGSITES_PATH . 'includes/bpgsites-activity.php' );
 
 		// Init object.
-		$this->activity = new BP_Group_Sites_Activity;
+		$this->activity = new BP_Group_Sites_Activity();
 
 		// Load our blogs extension.
 		require( BPGSITES_PATH . 'includes/bpgsites-blogs.php' );
@@ -422,7 +422,7 @@ class BP_Group_Sites {
 
 // Init plugin.
 global $bp_groupsites;
-$bp_groupsites = new BP_Group_Sites;
+$bp_groupsites = new BP_Group_Sites();
 
 // Activation.
 register_activation_hook( __FILE__, [ $bp_groupsites, 'activate' ] );
