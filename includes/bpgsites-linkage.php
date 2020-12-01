@@ -28,7 +28,7 @@ function bpgsites_get_groups_by_blog_id( $blog_id ) {
 	$option_name = BPGSITES_PREFIX . $blog_id;
 
 	// Return option if it exists.
-	return get_site_option( $option_name, array() );
+	return get_site_option( $option_name, [] );
 
 }
 
@@ -48,7 +48,7 @@ function bpgsites_get_blogs_by_group_id( $group_id ) {
 	$blog_ids = groups_get_groupmeta( $group_id, BPGSITES_OPTION );
 
 	// Sanity check.
-	if ( ! is_array( $blog_ids ) ) { $blog_ids = array(); }
+	if ( ! is_array( $blog_ids ) ) { $blog_ids = []; }
 
 	// --<
 	return $blog_ids;
@@ -308,7 +308,7 @@ function bpgsites_remove_group_from_blog( $blog_id, $group_id ) {
 	if ( in_array( $group_id, $group_ids ) ) {
 
 		// Remove group ID and re-index.
-		$updated = array_merge( array_diff( $group_ids, array( $group_id ) ) );
+		$updated = array_merge( array_diff( $group_ids, [ $group_id ] ) );
 
 		// Save updated option.
 		update_site_option( BPGSITES_PREFIX . $blog_id, $updated );
@@ -336,7 +336,7 @@ function bpgsites_remove_blog_from_group( $group_id, $blog_id ) {
 	if ( in_array( $blog_id, $blog_ids ) ) {
 
 		// Yes, remove blog ID and re-index.
-		$updated = array_merge( array_diff( $blog_ids, array( $blog_id ) ) );
+		$updated = array_merge( array_diff( $blog_ids, [ $blog_id ] ) );
 
 		// Save updated option.
 		groups_update_groupmeta( $group_id, BPGSITES_OPTION, $updated );
@@ -522,7 +522,7 @@ function bpgsites_get_groupsites() {
 
 	// Create option if it doesn't exist.
 	if ( ! $bp_groupsites->admin->option_exists( 'bpgsites_groupsites' ) ) {
-		$bp_groupsites->admin->option_set( 'bpgsites_groupsites', array() );
+		$bp_groupsites->admin->option_set( 'bpgsites_groupsites', [] );
 		$bp_groupsites->admin->options_save();
 	}
 
@@ -552,7 +552,7 @@ function bpgsites_get_all_possible_groupsites() {
 	$all = BP_Blogs_Blog::get_all();
 
 	// Init return.
-	$filtered_blogs = array();
+	$filtered_blogs = [];
 
 	// Get array of blog IDs.
 	if ( is_array( $all['blogs'] ) AND count( $all['blogs'] ) > 0 ) {
@@ -591,7 +591,7 @@ function bpgsites_register_groupsite( $blog_id ) {
 
 	// Create option if it doesn't exist.
 	if ( ! $bp_groupsites->admin->option_exists( 'bpgsites_groupsites' ) ) {
-		$bp_groupsites->admin->option_set( 'bpgsites_groupsites', array() );
+		$bp_groupsites->admin->option_set( 'bpgsites_groupsites', [] );
 	}
 
 	// Get existing option.

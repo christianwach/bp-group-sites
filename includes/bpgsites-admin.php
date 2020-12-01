@@ -30,7 +30,7 @@ class BP_Group_Sites_Admin {
 	 * @access public
 	 * @var array $bpgsites_options The plugin options array.
 	 */
-	public $bpgsites_options = array();
+	public $bpgsites_options = [];
 
 
 
@@ -39,10 +39,10 @@ class BP_Group_Sites_Admin {
 	 *
 	 * @since 0.1
 	 */
-	function __construct() {
+	public function __construct() {
 
 		// Get options array, if it exists.
-		$this->bpgsites_options = bpgsites_site_option_get( 'bpgsites_options', array() );
+		$this->bpgsites_options = bpgsites_site_option_get( 'bpgsites_options', [] );
 
 	}
 
@@ -59,7 +59,7 @@ class BP_Group_Sites_Admin {
 		if ( is_admin() ) {
 
 			// Add menu to Network Settings submenu.
-			add_action( 'network_admin_menu', array( $this, 'add_admin_menu' ), 30 );
+			add_action( 'network_admin_menu', [ $this, 'add_admin_menu' ], 30 );
 
 		}
 
@@ -151,14 +151,14 @@ class BP_Group_Sites_Admin {
 			__( 'BP Group Sites', 'bp-group-sites' ),
 			'manage_options',
 			'bpgsites_admin_page',
-			array( $this, '_network_admin_form' )
+			[ $this, '_network_admin_form' ]
 		);
 
 		/*
 		 * Add styles only on our admin page.
 		 * @see http://codex.wordpress.org/Function_Reference/wp_enqueue_script#Load_scripts_only_on_plugin_pages
 		 */
-		add_action( 'admin_print_styles-' . $page, array( $this, 'add_admin_styles' ) );
+		add_action( 'admin_print_styles-' . $page, [ $this, 'add_admin_styles' ] );
 
 	}
 
@@ -581,7 +581,7 @@ class BP_Group_Sites_Admin {
 	public function _get_defaults() {
 
 		// Init return.
-		$defaults = array();
+		$defaults = [];
 
 		// Default visibility of public group comments to off.
 		$defaults['public'] = 0;
@@ -605,7 +605,7 @@ class BP_Group_Sites_Admin {
 		$defaults['slug'] = 'group-sites';
 
 		// Default list of group sites to empty.
-		$defaults['groupsites'] = array();
+		$defaults['groupsites'] = [];
 
 		// --<
 		return $defaults;

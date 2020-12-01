@@ -27,7 +27,7 @@ class BP_Group_Sites_Component extends BP_Component {
 	 *
 	 * @since 0.1
 	 */
-	function __construct() {
+	public function __construct() {
 
 		// Get BP reference.
 		$bp = buddypress();
@@ -65,7 +65,7 @@ class BP_Group_Sites_Component extends BP_Component {
 	 *
 	 * @since 0.1
 	 */
-	public function includes( $includes = array() ) {
+	public function includes( $includes = [] ) {
 
 		// Include screens file.
 		include( BPGSITES_PATH . 'includes/bp-bpgsites-screens.php' );
@@ -83,7 +83,7 @@ class BP_Group_Sites_Component extends BP_Component {
 	 *
 	 * @param array $args See {@link BP_Component::setup_globals()}.
 	 */
-	public function setup_globals( $args = array() ) {
+	public function setup_globals( $args = [] ) {
 
 		// Get BP reference.
 		$bp = buddypress();
@@ -95,12 +95,12 @@ class BP_Group_Sites_Component extends BP_Component {
 		);
 
 		// Construct args.
-		$args = array(
+		$args = [
 			// Non-multisite installs don't need a top-level BP Group Sites directory, since there's only one site.
 			'root_slug'             => isset( $bp->pages->{$this->id}->slug ) ? $bp->pages->{$this->id}->slug : $this->id,
 			'has_directory'         => true,
 			'search_string'         => $search_string,
-		);
+		];
 
 		// Set up the globals.
 		parent::setup_globals( $args );

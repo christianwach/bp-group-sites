@@ -35,7 +35,7 @@ class BP_Group_Sites_Theme_Compat {
 	public function __construct() {
 
 		// Add theme comaptibility action.
-		add_action( 'bp_setup_theme_compat', array( $this, 'is_bpgsites' ) );
+		add_action( 'bp_setup_theme_compat', [ $this, 'is_bpgsites' ] );
 
 	}
 
@@ -61,9 +61,9 @@ class BP_Group_Sites_Theme_Compat {
 			do_action( 'bp_blogs_screen_index' );
 
 			// Add hooks.
-			add_filter( 'bp_get_buddypress_template',                array( $this, 'directory_template_hierarchy' ) );
-			add_action( 'bp_template_include_reset_dummy_post_data', array( $this, 'directory_dummy_post' ) );
-			add_filter( 'bp_replace_the_content',                    array( $this, 'directory_content'    ) );
+			add_filter( 'bp_get_buddypress_template',                [ $this, 'directory_template_hierarchy' ] );
+			add_action( 'bp_template_include_reset_dummy_post_data', [ $this, 'directory_dummy_post' ] );
+			add_filter( 'bp_replace_the_content',                    [ $this, 'directory_content'    ] );
 
 		}
 
@@ -82,9 +82,9 @@ class BP_Group_Sites_Theme_Compat {
 	public function directory_template_hierarchy( $templates ) {
 
 		// Set up our templates based on priority.
-		$new_templates = apply_filters( 'bp_template_hierarchy_bpgsites_directory', array(
-			'bpgsites/index.php'
-		) );
+		$new_templates = apply_filters( 'bp_template_hierarchy_bpgsites_directory', [
+			'bpgsites/index.php',
+		] );
 
 		// Merge new templates with existing stack.
 		// @see bp_get_theme_compat_templates()
@@ -108,7 +108,7 @@ class BP_Group_Sites_Theme_Compat {
 		$title = apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) );
 
 		// Create dummy post.
-		bp_theme_compat_reset_post( array(
+		bp_theme_compat_reset_post( [
 			'ID'             => 0,
 			'post_title'     => $title,
 			'post_author'    => 0,
@@ -117,8 +117,8 @@ class BP_Group_Sites_Theme_Compat {
 			'post_type'      => 'bp_bpgsites',
 			'post_status'    => 'publish',
 			'is_page'        => true,
-			'comment_status' => 'closed'
-		) );
+			'comment_status' => 'closed',
+		] );
 
 	}
 

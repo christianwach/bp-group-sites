@@ -30,7 +30,7 @@ class BP_Group_Sites_Activity {
 	 * @access public
 	 * @var object $groups The groups array.
 	 */
-	public $groups = array();
+	public $groups = [];
 
 
 
@@ -39,7 +39,7 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 */
-	function __construct() {
+	public function __construct() {
 
 	}
 
@@ -56,96 +56,96 @@ class BP_Group_Sites_Activity {
 
 		/*
 		// Add our posts filter.
-		add_action( 'bp_activity_filter_options', array( $this, 'posts_filter_option' ) );
-		add_action( 'bp_group_activity_filter_options', array( $this, 'posts_filter_option' ) );
-		add_action( 'bp_member_activity_filter_options', array( $this, 'posts_filter_option' ) );
+		add_action( 'bp_activity_filter_options', [ $this, 'posts_filter_option' ] );
+		add_action( 'bp_group_activity_filter_options', [ $this, 'posts_filter_option' ] );
+		add_action( 'bp_member_activity_filter_options', [ $this, 'posts_filter_option' ] );
 		*/
 
 		// Add our comments filter.
-		add_action( 'bp_activity_filter_options', array( $this, 'comments_filter_option' ) );
-		add_action( 'bp_group_activity_filter_options', array( $this, 'comments_filter_option' ) );
-		add_action( 'bp_member_activity_filter_options', array( $this, 'comments_filter_option' ) );
+		add_action( 'bp_activity_filter_options', [ $this, 'comments_filter_option' ] );
+		add_action( 'bp_group_activity_filter_options', [ $this, 'comments_filter_option' ] );
+		add_action( 'bp_member_activity_filter_options', [ $this, 'comments_filter_option' ] );
 
 		// Filter the AJAX query string to add the "action" variable.
-		add_filter( 'bp_ajax_querystring', array( $this, 'comments_ajax_querystring' ), 20, 2 );
+		add_filter( 'bp_ajax_querystring', [ $this, 'comments_ajax_querystring' ], 20, 2 );
 
 		// Filter the comment link so replies are done in CommentPress.
-		add_filter( 'bp_get_activity_comment_link', array( $this, 'filter_comment_link' ) );
+		add_filter( 'bp_get_activity_comment_link', [ $this, 'filter_comment_link' ] );
 
 		// Filter the activity item permalink to point to the comment.
-		add_filter( 'bp_activity_get_permalink', array( $this, 'filter_comment_permalink' ), 20, 2 );
+		add_filter( 'bp_activity_get_permalink', [ $this, 'filter_comment_permalink' ], 20, 2 );
 
 		// If the current blog is a group site.
 		if ( bpgsites_is_groupsite( get_current_blog_id() ) ) {
 
 			// Add custom post activity. (Disabled until later)
-			//add_action( 'bp_activity_before_save', array( $this, 'custom_post_activity' ), 10, 1 );
+			//add_action( 'bp_activity_before_save', [ $this, 'custom_post_activity' ], 10, 1 );
 
 			// Make sure "Allow activity stream commenting on blog and forum posts" is disabled for group sites.
-			add_action( 'bp_disable_blogforum_comments', array( $this, 'disable_blogforum_comments' ), 100, 1 );
+			add_action( 'bp_disable_blogforum_comments', [ $this, 'disable_blogforum_comments' ], 100, 1 );
 
 			// Add custom comment activity.
-			add_action( 'bp_activity_before_save', array( $this, 'custom_comment_activity' ), 10, 1 );
+			add_action( 'bp_activity_before_save', [ $this, 'custom_comment_activity' ], 10, 1 );
 
 			// Add our dropdown (or hidden input) to comment form.
-			add_filter( 'comment_id_fields', array( $this, 'get_comment_group_selector' ), 10, 3 );
+			add_filter( 'comment_id_fields', [ $this, 'get_comment_group_selector' ], 10, 3 );
 
 			// Hook into comment save process.
-			add_action( 'comment_post', array( $this, 'save_comment_group_id' ), 10, 2 );
+			add_action( 'comment_post', [ $this, 'save_comment_group_id' ], 10, 2 );
 
 			// Add action for checking comment moderation.
-			add_filter( 'pre_comment_approved', array( $this, 'check_comment_approval' ), 100, 2 );
+			add_filter( 'pre_comment_approved', [ $this, 'check_comment_approval' ], 100, 2 );
 
 			// Allow comment authors to edit their own comments.
-			add_filter( 'map_meta_cap', array( $this, 'enable_comment_editing' ), 10, 4 );
+			add_filter( 'map_meta_cap', [ $this, 'enable_comment_editing' ], 10, 4 );
 
 			// Add navigation items for groups.
-			add_filter( 'cp_nav_after_network_home_title', array( $this, 'get_group_navigation_links' ) );
+			add_filter( 'cp_nav_after_network_home_title', [ $this, 'get_group_navigation_links' ] );
 
 			// Override reply to link.
-			add_filter( 'comment_reply_link', array( $this, 'override_reply_to_link' ), 10, 4 );
+			add_filter( 'comment_reply_link', [ $this, 'override_reply_to_link' ], 10, 4 );
 
 			// Override CommentPress TinyMCE.
-			add_filter( 'cp_override_tinymce', array( $this, 'disable_tinymce' ), 10, 1 );
+			add_filter( 'cp_override_tinymce', [ $this, 'disable_tinymce' ], 10, 1 );
 
 			// Add action to insert comments-by-group filter.
-			add_action( 'commentpress_before_scrollable_comments', array( $this, 'get_group_comments_filter' ) );
+			add_action( 'commentpress_before_scrollable_comments', [ $this, 'get_group_comments_filter' ] );
 
 			// Add group ID as class to comment.
-			add_filter( 'comment_class', array( $this, 'add_group_to_comment_class' ), 10, 4 );
+			add_filter( 'comment_class', [ $this, 'add_group_to_comment_class' ], 10, 4 );
 
 			// Filter comments by group membership.
-			add_action( 'parse_comment_query', array( $this, 'filter_comments' ), 100, 1 );
+			add_action( 'parse_comment_query', [ $this, 'filter_comments' ], 100, 1 );
 
 			// Override what is reported by get_comments_number.
-			add_filter( 'get_comments_number', array( $this, 'get_comments_number' ), 20, 2 );
+			add_filter( 'get_comments_number', [ $this, 'get_comments_number' ], 20, 2 );
 
 			// Override comment form if no group membership.
-			add_filter( 'commentpress_show_comment_form', array( $this, 'show_comment_form' ), 10, 1 );
+			add_filter( 'commentpress_show_comment_form', [ $this, 'show_comment_form' ], 10, 1 );
 
 			// Add section to activity sidebar in CommentPress.
-			add_filter( 'commentpress_bp_activity_sidebar_before_members', array( $this, 'get_activity_sidebar_section' ) );
+			add_filter( 'commentpress_bp_activity_sidebar_before_members', [ $this, 'get_activity_sidebar_section' ] );
 
 			// Override cp_activity_tab_recent_title_blog.
-			add_filter( 'cp_activity_tab_recent_title_blog', array( $this, 'get_activity_sidebar_recent_title' ) );
+			add_filter( 'cp_activity_tab_recent_title_blog', [ $this, 'get_activity_sidebar_recent_title' ] );
 
 			// Register a meta box.
-			add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
+			add_action( 'add_meta_boxes', [ $this, 'add_meta_box' ] );
 
 			// Intercept comment edit process in WordPress admin.
-			add_action( 'edit_comment', array( $this, 'save_comment_metabox_metadata' ) );
+			add_action( 'edit_comment', [ $this, 'save_comment_metabox_metadata' ] );
 
 			// Intercept comment edit process in CommentPress front-end.
-			add_action( 'edit_comment', array( $this, 'save_comment_edit_metadata' ) );
+			add_action( 'edit_comment', [ $this, 'save_comment_edit_metadata' ] );
 
 			// Show group at top of comment content.
-			add_filter( 'get_comment_text', array( $this, 'show_comment_group' ), 20, 3 );
+			add_filter( 'get_comment_text', [ $this, 'show_comment_group' ], 20, 3 );
 
 			// Add group ID to AJAX edit comment data.
-			add_filter( 'commentpress_ajax_get_comment', array( $this, 'filter_ajax_get_comment' ), 10, 1 );
+			add_filter( 'commentpress_ajax_get_comment', [ $this, 'filter_ajax_get_comment' ], 10, 1 );
 
 			// Add group data to AJAX edited comment data.
-			add_filter( 'commentpress_ajax_edited_comment', array( $this, 'filter_ajax_edited_comment' ), 10, 1 );
+			add_filter( 'commentpress_ajax_edited_comment', [ $this, 'filter_ajax_edited_comment' ], 10, 1 );
 
 		}
 
@@ -179,9 +179,7 @@ class BP_Group_Sites_Activity {
 		if ( is_numeric( $group_id ) AND $group_id > 0 ) {
 
 			// Get the group.
-			$group = groups_get_group( array(
-				'group_id'   => $group_id
-			) );
+			$group = groups_get_group( [ 'group_id'   => $group_id ] );
 
 			// Get group name.
 			$name = bp_get_group_name( $group );
@@ -234,7 +232,7 @@ class BP_Group_Sites_Activity {
 		add_meta_box(
 			'bpgsites_comment_options_meta_box',
 			__( 'BuddyPress Comment Group', 'bp-group-sites' ),
-			array( $this, 'comment_meta_box' ),
+			[ $this, 'comment_meta_box' ],
 			'comment',
 			'normal'
 		);
@@ -274,7 +272,7 @@ class BP_Group_Sites_Activity {
 				echo '<p>' . __( 'This comment is a reply. It appears in the same group as the comment it is in reply to. If there is a deeper thread of replies, then the original comment determines the group in which it appears.', 'bp-group-sites' ) . '</p>';
 
 				// Get group name.
-				$name = bp_get_group_name( groups_get_group( array( 'group_id' => $group_id ) ) );
+				$name = bp_get_group_name( groups_get_group( [ 'group_id' => $group_id ] ) );
 
 				// Construct message.
 				$message = sprintf(
@@ -426,26 +424,26 @@ class BP_Group_Sites_Activity {
 		$type = 'new_groupsite_comment';
 
 		// Okay, let's get the group object.
-		$group = groups_get_group( array( 'group_id' => $group_id ) );
+		$group = groups_get_group( [ 'group_id' => $group_id ] );
 
 		// See if we already have the modified activity for this blog post.
-		$id = bp_activity_get_activity_id( array(
+		$id = bp_activity_get_activity_id( [
 			'user_id' => $activity->user_id,
 			'type' => $type,
 			'item_id' => $group_id,
-			'secondary_item_id' => $activity->secondary_item_id
-		) );
+			'secondary_item_id' => $activity->secondary_item_id,
+		] );
 
 		// If we don't find a modified item.
 		if ( ! $id ) {
 
 			// See if we have an unmodified activity item.
-			$id = bp_activity_get_activity_id( array(
+			$id = bp_activity_get_activity_id( [
 				'user_id' => $activity->user_id,
 				'type' => $activity->type,
 				'item_id' => $activity->item_id,
-				'secondary_item_id' => $activity->secondary_item_id
-			) );
+				'secondary_item_id' => $activity->secondary_item_id,
+			] );
 
 		}
 
@@ -515,7 +513,7 @@ class BP_Group_Sites_Activity {
 		$activity->type = $type;
 
 		// Prevent from firing again.
-		remove_action( 'bp_activity_before_save', array( $this, 'custom_comment_activity' ) );
+		remove_action( 'bp_activity_before_save', [ $this, 'custom_comment_activity' ] );
 
 		// --<
 		return $activity;
@@ -537,7 +535,7 @@ class BP_Group_Sites_Activity {
 	public function filter_comment_permalink( $args, $activity ) {
 
 		// Our custom activity types.
-		$types = array( 'new_groupsite_comment' );
+		$types = [ 'new_groupsite_comment' ];
 
 		// Not one of ours?
 		if ( ! in_array( $activity->type, $types ) ) return $args;
@@ -563,7 +561,7 @@ class BP_Group_Sites_Activity {
 		$type = bp_get_activity_action_name();
 
 		// Our custom activity types.
-		$types = array( 'new_groupsite_comment' );
+		$types = [ 'new_groupsite_comment' ];
 
 		// Not one of ours?
 		if ( ! in_array( $type, $types ) ) return $link;
@@ -666,9 +664,7 @@ class BP_Group_Sites_Activity {
 	public function get_comments_number( $count, $post_id ) {
 
 		// Get comments for this post again.
-		$comments = get_comments( array(
-			'post_id' => $post_id
-		) );
+		$comments = get_comments( [ 'post_id' => $post_id ] );
 
 		// Did we get any?
 		if ( is_array( $comments ) ) {
@@ -698,7 +694,7 @@ class BP_Group_Sites_Activity {
 		if ( is_admin() ) return $comments;
 
 		// Init array.
-		$groups = array();
+		$groups = [];
 
 		// Get the groups this user can see.
 		$user_group_ids = $this->get_groups_for_user();
@@ -730,7 +726,7 @@ class BP_Group_Sites_Activity {
 		) {
 
 			// Set a non-existent group ID.
-			$groups = array( 0 );
+			$groups = [ 0 ];
 
 		}
 
@@ -742,23 +738,23 @@ class BP_Group_Sites_Activity {
 		 */
 
 		// Construct our meta query addition.
-		$meta_query = array(
+		$meta_query = [
 			'relation' => 'OR',
-			array(
+			[
 				'key'   => BPGSITES_COMMENT_META_KEY,
 				'value' => $groups,
-				'compare' => 'IN'
-			),
-			array(
+				'compare' => 'IN',
+			],
+			[
 				'key'   => BPGSITES_COMMENT_META_KEY,
 				'value' => '',
 				'compare' => 'NOT EXISTS',
-			),
-		);
+			],
+		];
 
 		// Make sure meta query is an array.
 		if ( ! is_array( $comments->query_vars['meta_query'] ) ) {
-			$comments->query_vars['meta_query'] = array();
+			$comments->query_vars['meta_query'] = [];
 		}
 
 		// Add our meta query.
@@ -877,9 +873,9 @@ class BP_Group_Sites_Activity {
 
 
 		// Get the group.
-		$group = groups_get_group( array(
+		$group = groups_get_group( [
 			'group_id'   => $group_id
-		) );
+		] );
 
 		// Get showcase groups.
 		$showcase_groups = bpgsites_showcase_groups_get();
@@ -924,9 +920,9 @@ class BP_Group_Sites_Activity {
 		if ( ! $this->is_user_in_group_reading_this_site() ) {
 
 			// Add filters on reply to link.
-			add_filter( 'commentpress_reply_to_para_link_text', array( $this, 'override_reply_to_text' ), 10, 2 );
-			add_filter( 'commentpress_reply_to_para_link_href', array( $this, 'override_reply_to_href' ), 10, 2 );
-			add_filter( 'commentpress_reply_to_para_link_onclick', array( $this, 'override_reply_to_onclick' ), 10, 1 );
+			add_filter( 'commentpress_reply_to_para_link_text', [ $this, 'override_reply_to_text' ], 10, 2 );
+			add_filter( 'commentpress_reply_to_para_link_href', [ $this, 'override_reply_to_href' ], 10, 2 );
+			add_filter( 'commentpress_reply_to_para_link_onclick', [ $this, 'override_reply_to_onclick' ], 10, 1 );
 
 			// Disable.
 			return 0;
@@ -963,7 +959,7 @@ class BP_Group_Sites_Activity {
 		if ( $this->is_user_in_group_reading_this_site() ) return $show;
 
 		// Filter the comment form message.
-		add_filter( 'commentpress_comment_form_hidden', array( $this, 'override_comment_form_hidden' ), 10, 1 );
+		add_filter( 'commentpress_comment_form_hidden', [ $this, 'override_comment_form_hidden' ], 10, 1 );
 
 		// --<
 		return false;
@@ -1191,7 +1187,7 @@ class BP_Group_Sites_Activity {
 			if ( $comment->user_id == $user_id ) {
 
 				// Allow.
-				$caps = array( 'exist' );
+				$caps = [ 'exist' ];
 
 			}
 
@@ -1255,7 +1251,7 @@ class BP_Group_Sites_Activity {
 			}
 
 			// Init array.
-			$groups = array();
+			$groups = [];
 
 			// If any has entries.
 			if (
@@ -1273,12 +1269,12 @@ class BP_Group_Sites_Activity {
 			}
 
 			// Define config array.
-			$config_array = array(
+			$config_array = [
 				//'user_id' => $user_id,
 				'type' => 'alphabetical',
 				'populate_extras' => 0,
-				'include' => $groups
-			);
+				'include' => $groups,
+			];
 
 			// Get groups.
 			if ( bp_has_groups( $config_array ) ) {
@@ -1305,9 +1301,9 @@ class BP_Group_Sites_Activity {
 					$html .= '<ul class="children" id="groupsites-list">' . "\n";
 
 					// Init lists.
-					$mine = array();
-					$linked = array();
-					$public = array();
+					$mine = [];
+					$linked = [];
+					$public = [];
 
 					// Do the loop.
 					while ( bp_groups() ) {  bp_the_group();
@@ -1507,7 +1503,7 @@ class BP_Group_Sites_Activity {
 		}
 
 		// Init array.
-		$groups = array();
+		$groups = [];
 
 		// If any has entries.
 		if (
@@ -1528,14 +1524,14 @@ class BP_Group_Sites_Activity {
 		}
 
 		// Define config array.
-		$config_array = array(
+		$config_array = [
 			//'user_id' => $user_id,
 			'type' => 'alphabetical',
 			'max' => 100,
 			'per_page' => 100,
 			'populate_extras' => 0,
 			'include' => $groups
-		);
+		];
 
 		// Get groups.
 		if ( bp_has_groups( $config_array ) ) {
@@ -1558,10 +1554,10 @@ class BP_Group_Sites_Activity {
 				$html .= '<form id="bpgsites_comment_group_filter" name="bpgsites_comment_group_filter" action="' . get_permalink( $post->ID ) . '" method="post">' . "\n";
 
 				// Init lists.
-				$auth = array();
-				$mine = array();
-				$linked = array();
-				$public = array();
+				$auth = [];
+				$mine = [];
+				$linked = [];
+				$public = [];
 
 				// Init checked for public groups.
 				$checked = '';
@@ -1835,7 +1831,7 @@ class BP_Group_Sites_Activity {
 		// Super admins can see all groups.
 		if ( is_super_admin() ) {
 			$user_group_ids['my_groups'] = bpgsites_get_groups_by_blog_id( $blog_id );
-			$user_group_ids['linked_groups'] = array();
+			$user_group_ids['linked_groups'] = [];
 		}
 
 		// Kick out if the ones the user can post into are empty.
@@ -1848,7 +1844,7 @@ class BP_Group_Sites_Activity {
 		}
 
 		// Init array.
-		$groups = array();
+		$groups = [];
 
 		// If any has entries.
 		if (
@@ -1865,14 +1861,14 @@ class BP_Group_Sites_Activity {
 		}
 
 		// Define config array.
-		$config_array = array(
+		$config_array = [
 			//'user_id' => bp_loggedin_user_id(),
 			'type' => 'alphabetical',
 			'max' => 100,
 			'per_page' => 100,
 			'populate_extras' => 0,
 			'include' => $groups
-		);
+		];
 
 		// Get groups.
 		if ( bp_has_groups( $config_array ) ) {
@@ -1888,8 +1884,8 @@ class BP_Group_Sites_Activity {
 				}
 
 				// Init lists.
-				$mine = array();
-				$linked = array();
+				$mine = [];
+				$linked = [];
 
 				// Do the loop.
 				while ( bp_groups() ) { bp_the_group();
@@ -2087,7 +2083,7 @@ class BP_Group_Sites_Activity {
 		$comment = get_comment( $data['id'] );
 
 		// Get markup.
-		$markup = $this->show_comment_group( '', $comment, array() );
+		$markup = $this->show_comment_group( '', $comment, [] );
 
 		// Add markup to array.
 		$data['bpgsites_group_markup'] = $markup;
@@ -2200,12 +2196,12 @@ class BP_Group_Sites_Activity {
 		if ( isset( $this->user_group_ids ) ) return $this->user_group_ids;
 
 		// Init return.
-		$this->user_group_ids = array(
-			'my_groups' => array(),
-			'linked_groups' => array(),
-			'public_groups' => array(),
+		$this->user_group_ids = [
+			'my_groups' => [],
+			'linked_groups' => [],
+			'public_groups' => [],
 			'auth_groups' => bpgsites_showcase_groups_get(),
-		);
+		];
 
 		// Get current blog.
 		$current_blog_id = get_current_blog_id();
@@ -2233,9 +2229,7 @@ class BP_Group_Sites_Activity {
 			} else {
 
 				// Get the group.
-				$group = groups_get_group( array(
-					'group_id' => $group_id
-				) );
+				$group = groups_get_group( [ 'group_id' => $group_id ] );
 
 				// Get status of group.
 				$status = bp_get_group_status( $group );
@@ -2353,12 +2347,10 @@ class BP_Group_Sites_Activity {
 		// All Activity.
 
 		// Get activities.
-		if ( bp_has_activities( array(
-
+		if ( bp_has_activities( [
 			'scope' => 'groups',
 			'action' => 'new_groupsite_comment,new_groupsite_post',
-
-		) ) ) {
+		] ) ) {
 
 			// Change header depending on logged in status.
 			if ( is_user_logged_in() ) {
@@ -2412,12 +2404,10 @@ class BP_Group_Sites_Activity {
 		if ( is_user_logged_in() ) {
 
 			// Get activities.
-			if ( bp_has_activities( array(
-
+			if ( bp_has_activities( [
 				'scope' => 'friends',
 				'action' => 'new_groupsite_comment,new_groupsite_post',
-
-			) ) ) {
+			] ) ) {
 
 				// Set default.
 				$section_header_text = apply_filters(
@@ -2575,29 +2565,29 @@ class BP_Group_Sites_Activity {
 
 
 		// Get group.
-		$group = groups_get_group( array( 'group_id' => $group_id ) );
+		$group = groups_get_group( [ 'group_id' => $group_id ] );
 
 		// Set activity type.
 		$type = 'new_groupsite_post';
 
 		// See if we already have the modified activity for this blog post.
-		$id = bp_activity_get_activity_id( array(
+		$id = bp_activity_get_activity_id( [
 			'user_id' => $activity->user_id,
 			'type' => $type,
 			'item_id' => $group_id,
-			'secondary_item_id' => $activity->secondary_item_id
-		) );
+			'secondary_item_id' => $activity->secondary_item_id,
+		] );
 
 		// If we don't find a modified item.
 		if ( ! $id ) {
 
 			// See if we have an unmodified activity item.
-			$id = bp_activity_get_activity_id( array(
+			$id = bp_activity_get_activity_id( [
 				'user_id' => $activity->user_id,
 				'type' => $activity->type,
 				'item_id' => $activity->item_id,
-				'secondary_item_id' => $activity->secondary_item_id
-			) );
+				'secondary_item_id' => $activity->secondary_item_id,
+			] );
 
 		}
 
@@ -2711,7 +2701,7 @@ class BP_Group_Sites_Activity {
 		$activity->type = $type;
 
 		// Prevent from firing again.
-		remove_action( 'bp_activity_before_save', array( $this, 'custom_post_activity' ) );
+		remove_action( 'bp_activity_before_save', [ $this, 'custom_post_activity' ] );
 
 		// --<
 		return $activity;

@@ -56,7 +56,7 @@ function bpgsites_has_blogs( $args = '' ) {
 	}
 
 	// If empty, create array guaranteed to produce no result.
-	if ( empty( $groupsites ) ) $groupsites = array( PHP_INT_MAX );
+	if ( empty( $groupsites ) ) $groupsites = [ PHP_INT_MAX ];
 
 	// Check for and use search terms.
 	$search_terms = ! empty( $_REQUEST['s'] )
@@ -64,7 +64,7 @@ function bpgsites_has_blogs( $args = '' ) {
 		: false;
 
 	// Declare defaults.
-	$defaults = array(
+	$defaults = [
 		'type'         => 'active',
 		'page'         => 1,
 		'per_page'     => 20,
@@ -74,7 +74,7 @@ function bpgsites_has_blogs( $args = '' ) {
 		'include_blog_ids'  => $groupsites,
 		'search_terms' => $search_terms,
 		'update_meta_cache' => true,
-	);
+	];
 
 	// Parse args.
 	$parsed_args = bp_parse_args( $args, $defaults, 'has_blogs' );
@@ -114,7 +114,7 @@ function bpgsites_pre_filter_groupsites( $args ) {
 	$all = BP_Blogs_Blog::get_all();
 
 	// Init ID array.
-	$blog_ids = array();
+	$blog_ids = [];
 
 	if ( is_array( $all['blogs'] ) AND count( $all['blogs'] ) > 0 ) {
 		foreach ( $all['blogs'] AS $blog ) {
@@ -348,7 +348,7 @@ function bpgsites_total_blogs_for_user( $user_id = 0 ) {
 	if ( ! $count = wp_cache_get( 'bpgsites_total_blogs_for_user_' . $user_id, 'bpgsites' ) ) {
 
 		// Get groupsites for this user (kind of meaningless, so empty)
-		$blogs = array();
+		$blogs = [];
 
 		// Get count.
 		$count = bp_core_number_format( count( $blogs ) );
@@ -514,7 +514,7 @@ function bpgsites_commentpress_site_image( $old_value, $new_value ) {
 
 		// Create option if it doesn't exist.
 		if ( ! $bp_groupsites->admin->option_exists( 'bpgsites_bloginfo' ) ) {
-			$bp_groupsites->admin->option_set( 'bpgsites_bloginfo', array() );
+			$bp_groupsites->admin->option_set( 'bpgsites_bloginfo', [] );
 			$bp_groupsites->admin->options_save();
 		}
 
@@ -534,14 +534,14 @@ function bpgsites_commentpress_site_image( $old_value, $new_value ) {
 			$existing = $bp_groupsites->admin->option_get( 'bpgsites_bloginfo' );
 
 			// Overwrite (or create if it doesn't already exist)
-			$existing[$blog_id] = array(
+			$existing[$blog_id] = [
 				'blog_id' => $blog_id,
 				'attachment_id' => $attachment_id,
 				'thumb' => $attachment_thumb,
 				'medium' => $attachment_medium,
 				'large' => $attachment_large,
 				'full' => $attachment_full,
-			);
+			];
 
 		} else {
 

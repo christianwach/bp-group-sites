@@ -82,18 +82,18 @@ class BP_Group_Sites {
 	 *
 	 * @since 0.1
 	 */
-	function __construct() {
+	public function __construct() {
 
 		// Always init admin.
 		$this->initialise_admin();
 
 		// Use translation files.
-		add_action( 'plugins_loaded', array( $this, 'enable_translation' ) );
+		add_action( 'plugins_loaded', [ $this, 'enable_translation' ] );
 
 		// Add actions for plugin init on BuddyPress init.
-		add_action( 'bp_loaded', array( $this, 'initialise' ) );
-		add_action( 'bp_loaded', array( $this, 'register_hooks' ) );
-		add_action( 'bp_include', array( $this, 'register_theme_hooks' ) );
+		add_action( 'bp_loaded', [ $this, 'initialise' ] );
+		add_action( 'bp_loaded', [ $this, 'register_hooks' ] );
+		add_action( 'bp_include', [ $this, 'register_theme_hooks' ] );
 
 	}
 
@@ -217,13 +217,13 @@ class BP_Group_Sites {
 		$this->activity->register_hooks();
 
 		// Register any public styles.
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ), 20 );
+		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_styles' ], 20 );
 
 		// Register any public scripts.
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 20 );
+		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_scripts' ], 20 );
 
 		// Add widgets.
-		add_action( 'widgets_init', array( $this, 'register_widgets' ) );
+		add_action( 'widgets_init', [ $this, 'register_widgets' ] );
 
 		// If the current blog is a group site.
 		if ( bpgsites_is_groupsite( get_current_blog_id() ) ) {
@@ -232,7 +232,7 @@ class BP_Group_Sites {
 			if ( ! is_admin() ) {
 
 				// Register our CommentPress scripts.
-				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_commentpress_scripts' ), 20 );
+				add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_commentpress_scripts' ], 20 );
 
 			}
 
@@ -250,7 +250,7 @@ class BP_Group_Sites {
 	public function register_theme_hooks() {
 
 		// Add our templates to the theme compatibility layer.
-		add_action( 'bp_register_theme_packages', array( $this, 'theme_compat' ) );
+		add_action( 'bp_register_theme_packages', [ $this, 'theme_compat' ] );
 
 	}
 
@@ -318,7 +318,7 @@ class BP_Group_Sites {
 			wp_enqueue_script(
 				'bpgsites_activity_js',
 				BPGSITES_URL . 'assets/js/bpgsites-activity.js',
-				array( 'jquery' ),
+				[ 'jquery' ],
 				BPGSITES_VERSION
 			);
 
@@ -329,7 +329,7 @@ class BP_Group_Sites {
 				wp_register_script(
 					'bpgsites_select2_js',
 					set_url_scheme( 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js' ),
-					array( 'jquery' )
+					[ 'jquery' ]
 				);
 
 				// Enqueue script.
@@ -339,17 +339,17 @@ class BP_Group_Sites {
 				wp_enqueue_script(
 					'bpgsites_select2_custom_js',
 					BPGSITES_URL . 'assets/js/bpgsites-group-admin.js',
-					array( 'bpgsites_select2_js' ),
+					[ 'bpgsites_select2_js' ],
 					BPGSITES_VERSION
 				);
 
 				// Localisation array.
-				$vars = array(
-					'localisation' => array(),
-					'data' => array(
+				$vars = [
+					'localisation' => [],
+					'data' => [
 						'group_id' => bp_get_current_group_id(),
-					),
-				);
+					],
+				];
 
 				// Localise with wp function.
 				wp_localize_script(
@@ -380,14 +380,14 @@ class BP_Group_Sites {
 			wp_enqueue_script(
 				'bpgsites_cp_js',
 				BPGSITES_URL . 'assets/js/bpgsites-commentpress.js',
-				array( 'cp_common_js' ),
+				[ 'cp_common_js' ],
 				BPGSITES_VERSION
 			);
 
 			// Get vars.
-			$vars = array(
-				'show_public' => $this->admin->option_get( 'bpgsites_public' )
-			);
+			$vars = [
+				'show_public' => $this->admin->option_get( 'bpgsites_public' ),
+			];
 
 			// Localise with wp function.
 			wp_localize_script( 'bpgsites_cp_js', 'BpgsitesSettings', $vars );
@@ -425,10 +425,10 @@ global $bp_groupsites;
 $bp_groupsites = new BP_Group_Sites;
 
 // Activation.
-register_activation_hook( __FILE__, array( $bp_groupsites, 'activate' ) );
+register_activation_hook( __FILE__, [ $bp_groupsites, 'activate' ] );
 
 // Deactivation.
-register_deactivation_hook( __FILE__, array( $bp_groupsites, 'deactivate' ) );
+register_deactivation_hook( __FILE__, [ $bp_groupsites, 'deactivate' ] );
 
 // Will use the 'uninstall.php' method.
 // See: http://codex.wordpress.org/Function_Reference/register_uninstall_hook

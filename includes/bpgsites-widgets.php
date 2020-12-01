@@ -28,7 +28,7 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 	 *
 	 * @since 0.2.1
 	 */
-	function __construct() {
+	public function __construct() {
 
 		// Init parent.
 		parent::__construct(
@@ -43,12 +43,12 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 			),
 
 			// Args.
-			array(
+			[
 				'description' => sprintf(
 					__( 'Use this widget to show a list of %s.', 'bp-group-sites' ),
 					apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) )
 				),
-			)
+			]
 
 		);
 
@@ -84,10 +84,10 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 		}
 
 		// Set up params.
-		$params = array(
+		$params = [
 			'max' => $instance['max_blogs'],
 			'per_page' => $instance['max_blogs'],
-		);
+		];
 
 		// Get group sites.
 		if ( bpgsites_has_blogs( $params ) ) { ?>

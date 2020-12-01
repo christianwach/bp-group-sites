@@ -104,7 +104,7 @@ get_header( 'buddypress' );
 
 							<div id="bpgsites-dir-list" class="bpgsites dir-list">
 
-								<?php bp_locate_template( array( 'bpgsites/bpgsites-loop.php' ), true, false ); ?>
+								<?php bp_locate_template( [ 'bpgsites/bpgsites-loop.php' ], true, false ); ?>
 
 							</div><!-- #bpgsites-dir-list -->
 
