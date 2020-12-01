@@ -9,7 +9,9 @@
 
 
 // Exit if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 
 
@@ -49,7 +51,9 @@ class BP_Group_Sites_Theme_Compat {
 	public function is_bpgsites() {
 
 		// Bail if not looking at a group site component page.
-		if ( ! bp_is_bpgsites_component() ) { return; }
+		if ( ! bp_is_bpgsites_component() ) {
+			return;
+		}
 
 		// BP Group Sites Directory.
 		if ( is_multisite() && ! bp_current_action() ) {

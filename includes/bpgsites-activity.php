@@ -321,10 +321,14 @@ class BP_Group_Sites_Activity {
 	public function save_comment_metabox_metadata( $comment_id ) {
 
 		// If there's no nonce then there's no comment meta data.
-		if ( ! isset( $_POST['bpgsites_comments_nonce'] ) ) { return; }
+		if ( ! isset( $_POST['bpgsites_comments_nonce'] ) ) {
+			return;
+		}
 
 		// Authenticate submission.
-		if ( ! wp_verify_nonce( $_POST['bpgsites_comments_nonce'], 'bpgsites_comments_metabox' ) ) { return; }
+		if ( ! wp_verify_nonce( $_POST['bpgsites_comments_nonce'], 'bpgsites_comments_metabox' ) ) {
+			return;
+		}
 
 		// Check capabilities.
 		if ( ! current_user_can( 'edit_comment', $comment_id ) ) {
@@ -351,10 +355,14 @@ class BP_Group_Sites_Activity {
 	public function save_comment_edit_metadata( $comment_id ) {
 
 		// If there's no nonce then there's no comment meta data.
-		if ( ! isset( $_POST['cpajax_comment_nonce'] ) ) { return; }
+		if ( ! isset( $_POST['cpajax_comment_nonce'] ) ) {
+			return;
+		}
 
 		// Bail if there's no POST data for us.
-		if ( ! isset( $_POST['bpgsites-post-in'] ) ) { return; }
+		if ( ! isset( $_POST['bpgsites-post-in'] ) ) {
+			return;
+		}
 
 		// Check capabilities.
 		if ( ! current_user_can( 'edit_comment', $comment_id ) ) {
@@ -390,7 +398,9 @@ class BP_Group_Sites_Activity {
 		$blog_id = get_current_blog_id();
 
 		// If it's is a groupsite, disable.
-		if ( bpgsites_is_groupsite( $blog_id ) ) return 1;
+		if ( bpgsites_is_groupsite( $blog_id ) ) {
+			return 1;
+		}
 
 		// Pass through.
 		return $is_disabled;
@@ -412,13 +422,17 @@ class BP_Group_Sites_Activity {
 	public function custom_comment_activity( $activity ) {
 
 		// Only deal with comments.
-		if ( ( $activity->type != 'new_blog_comment' ) ) return $activity;
+		if ( ( $activity->type != 'new_blog_comment' ) ) {
+			return $activity;
+		}
 
 		// Get group ID from POST.
 		$group_id = $this->get_group_id_from_comment_form();
 
 		// Kick out if not a comment in a group.
-		if ( false === $group_id ) return $activity;
+		if ( false === $group_id ) {
+			return $activity;
+		}
 
 		// Set activity type.
 		$type = 'new_groupsite_comment';
@@ -449,7 +463,9 @@ class BP_Group_Sites_Activity {
 
 		// If we found an activity for this blog comment then overwrite that to avoid having
 		// Multiple activities for every blog comment edit.
-		if ( $id ) $activity->id = $id;
+		if ( $id ) {
+			$activity->id = $id;
+		}
 
 		// Get the comment.
 		$comment = get_comment( $activity->secondary_item_id );
@@ -538,7 +554,9 @@ class BP_Group_Sites_Activity {
 		$types = [ 'new_groupsite_comment' ];
 
 		// Not one of ours?
-		if ( ! in_array( $activity->type, $types ) ) return $args;
+		if ( ! in_array( $activity->type, $types ) ) {
+			return $args;
+		}
 
 		// --<
 		return bp_get_activity_feed_item_link();
@@ -564,7 +582,9 @@ class BP_Group_Sites_Activity {
 		$types = [ 'new_groupsite_comment' ];
 
 		// Not one of ours?
-		if ( ! in_array( $type, $types ) ) return $link;
+		if ( ! in_array( $type, $types ) ) {
+			return $link;
+		}
 
 		/*
 		if ( $type == 'new_groupsite_comment' ) {
@@ -626,16 +646,22 @@ class BP_Group_Sites_Activity {
 	public function comments_ajax_querystring( $qs, $object ) {
 
 		// Bail if not an activity object.
-		if ( $object != 'activity' ) return $qs;
+		if ( $object != 'activity' ) {
+			return $qs;
+		}
 
 		// Parse query string into an array.
 		$r = wp_parse_args( $qs );
 
 		// Bail if no type is set.
-		if ( empty( $r['type'] ) ) return $qs;
+		if ( empty( $r['type'] ) ) {
+			return $qs;
+		}
 
 		// Bail if not a type that we're looking for.
-		if ( 'new_groupsite_comment' !== $r['type'] ) return $qs;
+		if ( 'new_groupsite_comment' !== $r['type'] ) {
+			return $qs;
+		}
 
 		// Add the 'new_groupsite_comment' type if it doesn't exist.
 		if ( ! isset( $r['action'] ) OR false === strpos( $r['action'], 'new_groupsite_comment' ) ) {
@@ -666,12 +692,9 @@ class BP_Group_Sites_Activity {
 		// Get comments for this post again.
 		$comments = get_comments( [ 'post_id' => $post_id ] );
 
-		// Did we get any?
+		// Return the number if we get some.
 		if ( is_array( $comments ) ) {
-
-			// Return the number.
 			return count( $comments );
-
 		}
 
 		// Otherwise, pass through.
@@ -691,7 +714,9 @@ class BP_Group_Sites_Activity {
 	public function filter_comments( $comments ) {
 
 		// Only on front-end.
-		if ( is_admin() ) return $comments;
+		if ( is_admin() ) {
+			return $comments;
+		}
 
 		// Init array.
 		$groups = [];
@@ -843,7 +868,9 @@ class BP_Group_Sites_Activity {
 		$blog_id = get_current_blog_id();
 
 		// Pass through if not group site.
-		if ( ! bpgsites_is_groupsite( $blog_id ) ) return $link;
+		if ( ! bpgsites_is_groupsite( $blog_id ) ) {
+			return $link;
+		}
 
 		// Get comment group.
 		$group_id = $this->get_comment_group_id( $comment->comment_ID );
@@ -914,7 +941,9 @@ class BP_Group_Sites_Activity {
 		$blog_id = get_current_blog_id();
 
 		// Pass through if not group site.
-		if ( ! bpgsites_is_groupsite( $blog_id ) ) return $tinymce;
+		if ( ! bpgsites_is_groupsite( $blog_id ) ) {
+			return $tinymce;
+		}
 
 		// Is the current member in a relevant group?
 		if ( ! $this->is_user_in_group_reading_this_site() ) {
@@ -930,7 +959,9 @@ class BP_Group_Sites_Activity {
 		}
 
 		// Use TinyMCE if logged in.
-		if ( is_user_logged_in() ) return $tinymce;
+		if ( is_user_logged_in() ) {
+			return $tinymce;
+		}
 
 		// Don't use TinyMCE.
 		return 0;
@@ -953,10 +984,14 @@ class BP_Group_Sites_Activity {
 		$blog_id = get_current_blog_id();
 
 		// Pass through if not group site.
-		if ( ! bpgsites_is_groupsite( $blog_id ) ) return $show;
+		if ( ! bpgsites_is_groupsite( $blog_id ) ) {
+			return $show;
+		}
 
 		// Pass through if the current member is in a relevant group.
-		if ( $this->is_user_in_group_reading_this_site() ) return $show;
+		if ( $this->is_user_in_group_reading_this_site() ) {
+			return $show;
+		}
 
 		// Filter the comment form message.
 		add_filter( 'commentpress_comment_form_hidden', [ $this, 'override_comment_form_hidden' ], 10, 1 );
@@ -1125,7 +1160,9 @@ class BP_Group_Sites_Activity {
 		$blog_id = get_current_blog_id();
 
 		// Pass through if not group site.
-		if ( ! bpgsites_is_groupsite( $blog_id ) ) { return $approved; }
+		if ( ! bpgsites_is_groupsite( $blog_id ) ) {
+			return $approved;
+		}
 
 		// Get the user ID of the comment author.
 		$user_id = absint( $commentdata['user_ID'] );
@@ -1823,7 +1860,9 @@ class BP_Group_Sites_Activity {
 		$blog_id = get_current_blog_id();
 
 		// Kick out if not group site.
-		if ( ! bpgsites_is_groupsite( $blog_id ) ) { return $result; }
+		if ( ! bpgsites_is_groupsite( $blog_id ) ) {
+			return $result;
+		}
 
 		// Get the groups this user can see.
 		$user_group_ids = $this->get_groups_for_user();
@@ -2074,7 +2113,9 @@ class BP_Group_Sites_Activity {
 	public function filter_ajax_edited_comment( $data ) {
 
 		// Sanity check.
-		if ( ! isset( $data['id'] ) ) return $data;
+		if ( ! isset( $data['id'] ) ) {
+			return $data;
+		}
 
 		// Add tag data.
 		$data = $this->filter_ajax_get_comment( $data );
@@ -2193,7 +2234,9 @@ class BP_Group_Sites_Activity {
 	public function get_groups_for_user() {
 
 		// Have we already calculated this?
-		if ( isset( $this->user_group_ids ) ) return $this->user_group_ids;
+		if ( isset( $this->user_group_ids ) ) {
+			return $this->user_group_ids;
+		}
 
 		// Init return.
 		$this->user_group_ids = [
@@ -2300,7 +2343,9 @@ class BP_Group_Sites_Activity {
 	public function is_user_in_group_reading_this_site() {
 
 		// Have we already calculated this?
-		if ( isset( $this->user_in_group ) ) return $this->user_in_group;
+		if ( isset( $this->user_in_group ) ) {
+			return $this->user_in_group;
+		}
 
 		// Init return.
 		$this->user_in_group = false;
@@ -2541,7 +2586,9 @@ class BP_Group_Sites_Activity {
 
 
 		// Only on new blog posts.
-		if ( ( $activity->type != 'new_blog_post' ) ) return $activity;
+		if ( ( $activity->type != 'new_blog_post' ) ) {
+			return $activity;
+		}
 
 		// Clarify data.
 		$blog_id = $activity->item_id;
@@ -2554,7 +2601,9 @@ class BP_Group_Sites_Activity {
 		$group_ids = bpgsites_get_groups_by_blog_id( $blog_id );
 
 		// Sanity check.
-		if ( ! is_array( $group_ids ) OR count( $group_ids ) == 0 ) return $activity;
+		if ( ! is_array( $group_ids ) OR count( $group_ids ) == 0 ) {
+			return $activity;
+		}
 
 
 
@@ -2642,7 +2691,9 @@ class BP_Group_Sites_Activity {
 						}
 
 						// If we're on the last, don't add.
-						if ( $n == $author_count ) { $sep = ''; }
+						if ( $n == $author_count ) {
+							$sep = '';
+						}
 
 						// Add name.
 						$activity_author .= bp_core_get_userlink( $author->ID );

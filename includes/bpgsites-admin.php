@@ -75,7 +75,9 @@ class BP_Group_Sites_Admin {
 	public function activate() {
 
 		// Kick out if we are re-activating.
-		if ( bpgsites_site_option_exists( 'bpgsites_installed', 'false' ) === 'true' ) return;
+		if ( bpgsites_site_option_exists( 'bpgsites_installed', 'false' ) === 'true' ) {
+			return;
+		}
 
 		// Get defaults.
 		$defaults = $this->_get_defaults();
@@ -139,7 +141,9 @@ class BP_Group_Sites_Admin {
 	public function add_admin_menu() {
 
 		// We must be network admin.
-		if ( ! is_super_admin() ) { return false; }
+		if ( ! is_super_admin() ) {
+			return false;
+		}
 
 		// Try and update options.
 		$saved = $this->options_update();
@@ -201,7 +205,9 @@ class BP_Group_Sites_Admin {
 		if ( is_super_admin() AND isset( $_POST['bpgsites_debug'] ) ) {
 			$settings_debug = absint( $_POST['bpgsites_debug'] );
 			$debug = $settings_debug ? 1 : 0;
-			if ( $debug ) { $this->do_debug(); }
+			if ( $debug ) {
+				$this->do_debug();
+			}
 			return;
 		}
 
@@ -422,34 +428,48 @@ class BP_Group_Sites_Admin {
 		// Sanitise admin page url.
 		$url = $_SERVER['REQUEST_URI'];
 		$url_array = explode( '&', $url );
-		if ( is_array( $url_array ) ) { $url = $url_array[0]; }
+		if ( is_array( $url_array ) ) {
+			$url = $url_array[0];
+		}
 
 		// Get defaults.
 		$defaults = $this->_get_defaults();
 
 		// Init public comments checkbox.
 		$bpgsites_public = '';
-		if ( $this->option_get( 'bpgsites_public' ) == '1' ) $bpgsites_public = ' checked="checked"';
+		if ( $this->option_get( 'bpgsites_public' ) == '1' ) {
+			$bpgsites_public = ' checked="checked"';
+		}
 
 		// Init name change checkbox.
 		$bpgsites_overrides = '';
-		if ( $this->option_get( 'bpgsites_overrides' ) == '1' ) $bpgsites_overrides = ' checked="checked"';
+		if ( $this->option_get( 'bpgsites_overrides' ) == '1' ) {
+			$bpgsites_overrides = ' checked="checked"';
+		}
 
 		// Init plugin title.
 		$bpgsites_overrides_title = $this->option_get( 'bpgsites_overrides_title' );
-		if ( $bpgsites_overrides_title == '' ) $bpgsites_overrides_title = esc_attr( $defaults['title'] );
+		if ( $bpgsites_overrides_title == '' ) {
+			$bpgsites_overrides_title = esc_attr( $defaults['title'] );
+		}
 
 		// Init name.
 		$bpgsites_overrides_name = $this->option_get( 'bpgsites_overrides_name' );
-		if ( $bpgsites_overrides_name == '' ) $bpgsites_overrides_name = esc_attr( $defaults['name'] );
+		if ( $bpgsites_overrides_name == '' ) {
+			$bpgsites_overrides_name = esc_attr( $defaults['name'] );
+		}
 
 		// Init plural.
 		$bpgsites_overrides_plural = $this->option_get( 'bpgsites_overrides_plural' );
-		if ( $bpgsites_overrides_plural == '' ) $bpgsites_overrides_plural = esc_attr( $defaults['plural'] );
+		if ( $bpgsites_overrides_plural == '' ) {
+			$bpgsites_overrides_plural = esc_attr( $defaults['plural'] );
+		}
 
 		// Init button.
 		$bpgsites_overrides_button = $this->option_get( 'bpgsites_overrides_button' );
-		if ( $bpgsites_overrides_button == '' ) $bpgsites_overrides_button = esc_attr( $defaults['button'] );
+		if ( $bpgsites_overrides_button == '' ) {
+			$bpgsites_overrides_button = esc_attr( $defaults['button'] );
+		}
 
 
 

@@ -9,7 +9,9 @@
  */
 
 // Exit if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 
 
@@ -129,10 +131,7 @@ function bp_is_bpgsites_component() {
 
 	// Is this our component?
 	if ( is_multisite() AND bp_is_current_component( 'bpgsites' ) ) {
-
-		// Yep.
 		return true;
-
 	}
 
 	// --<

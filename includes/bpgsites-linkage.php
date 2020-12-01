@@ -48,7 +48,9 @@ function bpgsites_get_blogs_by_group_id( $group_id ) {
 	$blog_ids = groups_get_groupmeta( $group_id, BPGSITES_OPTION );
 
 	// Sanity check.
-	if ( ! is_array( $blog_ids ) ) { $blog_ids = []; }
+	if ( ! is_array( $blog_ids ) ) {
+		$blog_ids = [];
+	}
 
 	// --<
 	return $blog_ids;
@@ -176,7 +178,9 @@ function bpgsites_unlink_blog_and_group( $blog_id, $group_id ) {
 function bpgsites_configure_blog_options( $blog_id ) {
 
 	// Kick out if already a group site.
-	if ( bpgsites_is_groupsite( $blog_id ) ) return;
+	if ( bpgsites_is_groupsite( $blog_id ) ) {
+		return;
+	}
 
 	// Go there.
 	switch_to_blog( $blog_id );
@@ -216,7 +220,9 @@ function bpgsites_configure_blog_options( $blog_id ) {
 function bpgsites_reset_blog_options( $blog_id ) {
 
 	// Kick out if still a group site.
-	if ( bpgsites_is_groupsite( $blog_id ) ) return;
+	if ( bpgsites_is_groupsite( $blog_id ) ) {
+		return;
+	}
 
 	// Go there.
 	switch_to_blog( $blog_id );
@@ -469,7 +475,9 @@ function bpgsites_is_groupblog( $blog_id ) {
 		$group_id = get_groupblog_group_id( $blog_id );
 
 		// Is this blog a groupblog?
-		if ( is_numeric( $group_id ) AND $group_id > 0 ) { $return = true; }
+		if ( is_numeric( $group_id ) AND $group_id > 0 ) {
+			$return = true;
+		}
 
 	}
 
@@ -559,10 +567,14 @@ function bpgsites_get_all_possible_groupsites() {
 		foreach ( $all['blogs'] AS $blog ) {
 
 			// Is it the BP root blog?
-			if ( $blog->blog_id == bp_get_root_blog_id() ) continue;
+			if ( $blog->blog_id == bp_get_root_blog_id() ) {
+				continue;
+			}
 
 			// Is it a groupblog?
-			if ( bpgsites_is_groupblog( $blog->blog_id ) ) continue;
+			if ( bpgsites_is_groupblog( $blog->blog_id ) ) {
+				continue;
+			}
 
 			// Okay, none of those - add it.
 			$filtered_blogs[] = $blog->blog_id;
@@ -598,7 +610,9 @@ function bpgsites_register_groupsite( $blog_id ) {
 	$existing = $bp_groupsites->admin->option_get( 'bpgsites_groupsites' );
 
 	// Bail if the blog already present.
-	if ( in_array( $blog_id, $existing ) ) return;
+	if ( in_array( $blog_id, $existing ) ) {
+		return;
+	}
 
 	// Add to the array (key is the same for easier removal)
 	$existing[$blog_id] = $blog_id;
@@ -626,10 +640,14 @@ function bpgsites_deregister_groupsite( $blog_id ) {
 	$existing = $bp_groupsites->admin->option_get( 'bpgsites_groupsites' );
 
 	// Sanity check.
-	if ( $existing === false ) return;
+	if ( $existing === false ) {
+		return;
+	}
 
 	// Bail if the blog is not present.
-	if ( ! in_array( $blog_id, $existing ) ) return;
+	if ( ! in_array( $blog_id, $existing ) ) {
+		return;
+	}
 
 	// Add to the array (key is the same as the value)
 	unset( $existing[$blog_id] );

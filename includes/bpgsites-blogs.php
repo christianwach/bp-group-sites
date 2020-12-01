@@ -56,7 +56,9 @@ function bpgsites_has_blogs( $args = '' ) {
 	}
 
 	// If empty, create array guaranteed to produce no result.
-	if ( empty( $groupsites ) ) $groupsites = [ PHP_INT_MAX ];
+	if ( empty( $groupsites ) ) {
+		$groupsites = [ PHP_INT_MAX ];
+	}
 
 	// Check for and use search terms.
 	$search_terms = ! empty( $_REQUEST['s'] )
@@ -135,7 +137,9 @@ function bpgsites_pre_filter_groupsites( $args ) {
 		$args['include_blog_ids'] = array_merge( array_diff( $include_blog_ids, $groupsites ) );
 
 		// If we have none left, set as false.
-		if ( count( $args['include_blog_ids'] ) === 0 ) $args['include_blog_ids'] = false;
+		if ( count( $args['include_blog_ids'] ) === 0 ) {
+			$args['include_blog_ids'] = false;
+		}
 
 	} else {
 

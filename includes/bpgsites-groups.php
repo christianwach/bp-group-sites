@@ -14,7 +14,9 @@ NOTES
 
 
 // Prevent problems during upgrade or when Groups are disabled.
-if ( ! class_exists( 'BP_Group_Extension' ) ) { return; }
+if ( ! class_exists( 'BP_Group_Extension' ) ) {
+	return;
+}
 
 
 
@@ -112,7 +114,9 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	public function edit_screen( $group_id = null ) {
 
 		// Kick out if not on our edit screen.
-		if ( ! bp_is_group_admin_screen( $this->slug ) ) { return false; }
+		if ( ! bp_is_group_admin_screen( $this->slug ) ) {
+			return false;
+		}
 
 		// Show pending received.
 		bpgsites_group_linkages_pending_get_markup();
@@ -138,7 +142,9 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 		check_admin_referer( 'groups_edit_save_' . $this->slug );
 
 		// Kick out if current group ID is missing.
-		if ( ! isset( $_POST['group-id'] ) ) { return false; }
+		if ( ! isset( $_POST['group-id'] ) ) {
+			return false;
+		}
 
 		// Get current group ID.
 		$primary_group_id = (int) $_POST['group-id'];
@@ -159,13 +165,17 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 			$blog_id = $parsed['blog_id'];
 
 			// Kick out if blog ID is still invalid.
-			if ( ! is_numeric( $blog_id ) ) { return false; }
+			if ( ! is_numeric( $blog_id ) ) {
+				return false;
+			}
 
 			// Get ID of the secondary group.
 			$secondary_group_id = $parsed['group_id'];
 
 			// Kick out if secondary group ID is somehow invalid.
-			if ( ! is_numeric( $secondary_group_id ) ) { return false; }
+			if ( ! is_numeric( $secondary_group_id ) ) {
+				return false;
+			}
 
 		}
 
@@ -804,7 +814,9 @@ function bpgsites_group_linkages_pending_get_markup( $echo = true ) {
 	$current_group_id = bp_get_current_group_id();
 
 	// Bail if we have no pending invitations.
-	if ( ! bpgsites_group_linkages_pending_received_exists( $current_group_id ) ) return;
+	if ( ! bpgsites_group_linkages_pending_received_exists( $current_group_id ) ) {
+		return;
+	}
 
 	// Init HTML output.
 	$html = '';
@@ -863,7 +875,9 @@ function bpgsites_group_linkages_pending_get_markup( $echo = true ) {
 	$html .= '</div>' . "\n\n\n\n";
 
 	// Output unless overridden.
-	if ( $echo ) echo $html;
+	if ( $echo ) {
+		echo $html;
+	}
 
 }
 
@@ -887,8 +901,12 @@ function bpgsites_group_linkages_pending_get( $group_id ) {
 	}
 
 	// Sanity check sub-arrays.
-	if ( ! isset( $pending_groups['sent'] ) ) $pending_groups['sent'] = [];
-	if ( ! isset( $pending_groups['received'] ) ) $pending_groups['received'] = [];
+	if ( ! isset( $pending_groups['sent'] ) ) {
+		$pending_groups['sent'] = [];
+	}
+	if ( ! isset( $pending_groups['received'] ) ) {
+		$pending_groups['received'] = [];
+	}
 
 	// --<
 	return $pending_groups;
@@ -1008,7 +1026,9 @@ function bpgsites_group_linkages_pending_sent_exists( $group_id ) {
 	$pending_sent = bpgsites_group_linkages_pending_sent_get( $group_id );
 
 	// If we have any.
-	if ( count( $pending_sent ) > 0 ) return true;
+	if ( count( $pending_sent ) > 0 ) {
+		return true;
+	}
 
 	// Fallback.
 	return false;
@@ -1128,7 +1148,9 @@ function bpgsites_group_linkages_pending_received_exists( $group_id ) {
 	$pending_received = bpgsites_group_linkages_pending_received_get( $group_id );
 
 	// If we have any.
-	if ( count( $pending_received ) > 0 ) return true;
+	if ( count( $pending_received ) > 0 ) {
+		return true;
+	}
 
 	// Fallback
 	return false;
@@ -1250,7 +1272,9 @@ function bpgsites_group_linkages_get_markup( $echo = true ) {
 	$linked_groups = bpgsites_group_linkages_get( $current_group_id, $blog_id );
 
 	// If empty, set to impossible value.
-	if ( count( $linked_groups ) == 0 ) { $linked_groups = [ PHP_INT_MAX ]; };
+	if ( count( $linked_groups ) == 0 ) {
+		$linked_groups = [ PHP_INT_MAX ];
+	}
 
 	// Define config array.
 	$config_array = [
@@ -1326,7 +1350,9 @@ function bpgsites_group_linkages_get_markup( $echo = true ) {
 	unset( $groups_query );
 
 	// Output unless overridden.
-	if ( $echo ) echo $html;
+	if ( $echo ) {
+		echo $html;
+	}
 
 	// --<
 	return $has_linkage;
@@ -1354,7 +1380,9 @@ function bpgsites_group_linkages_get( $group_id, $blog_id = 0 ) {
 	$linked_groups = groups_get_groupmeta( $group_id, BPGSITES_LINKED );
 
 	// Sanity check.
-	if ( ! is_array( $linked_groups ) ) { $linked_groups = []; }
+	if ( ! is_array( $linked_groups ) ) {
+		$linked_groups = [];
+	}
 
 	// Did we request a particular blog?
 	if ( $blog_id !== 0 ) {
@@ -1456,7 +1484,9 @@ function bpgsites_group_linkages_link_exists( $blog_id, $primary_group_id, $seco
 	$linked_group_ids = isset( $linked[$blog_id] ) ? $linked[$blog_id] : [];
 
 	// If the secondary group is in the list, there must be a linkage.
-	if ( in_array( $secondary_group_id, $linked_group_ids ) ) return true;
+	if ( in_array( $secondary_group_id, $linked_group_ids ) ) {
+		return true;
+	}
 
 	// Fallback.
 	return false;
@@ -1724,7 +1754,9 @@ function bpgsites_showcase_group_save( $group ) {
 	} else {
 
 		// Kick out if value is not 1.
-		if ( absint( $_POST['bpgsites-showcase-group'] ) !== 1 ) { return; }
+		if ( absint( $_POST['bpgsites-showcase-group'] ) !== 1 ) {
+			return;
+		}
 
 		// Is this group's ID missing from the list?
 		if ( ! in_array( $group->id, $showcase_groups ) ) {
@@ -1808,7 +1840,9 @@ function bpgsites_is_showcase_group( $group_id ) {
 function bpgsites_is_showcase_group_member() {
 
 	// Super admins can post anywhere, so allow.
-	if ( is_super_admin() ) return true;
+	if ( is_super_admin() ) {
+		return true;
+	}
 
 	// False by default.
 	$passed = false;
@@ -1866,7 +1900,9 @@ function bpgsites_showcase_group_media_buttons( $allowed ) {
 	$current_blog_id = get_current_blog_id();
 
 	// If this isn't a group site, pass through.
-	if ( ! bpgsites_is_groupsite( $current_blog_id ) ) return $allowed;
+	if ( ! bpgsites_is_groupsite( $current_blog_id ) ) {
+		return $allowed;
+	}
 
 	// Disallow by default.
 	$allowed = false;
@@ -1903,7 +1939,9 @@ function bpgsites_showcase_group_quicktags( $quicktags ) {
 	$current_blog_id = get_current_blog_id();
 
 	// If this isn't a group site, pass through.
-	if ( ! bpgsites_is_groupsite( $current_blog_id ) ) return $quicktags;
+	if ( ! bpgsites_is_groupsite( $current_blog_id ) ) {
+		return $quicktags;
+	}
 
 	// Disallow quicktags by default.
 	$quicktags = false;
