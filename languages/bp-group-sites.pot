@@ -1,20 +1,20 @@
-# Copyright (C) 2019 BP Group Sites
+# Copyright (C) 2020 BP Group Sites
 # This file is distributed under the same license as the BP Group Sites package.
 msgid ""
 msgstr ""
-"Project-Id-Version: BP Group Sites 0.2.9\n"
+"Project-Id-Version: BP Group Sites 0.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/bp-group-sites\n"
-"POT-Creation-Date: 2019-07-26 13:16:49+00:00\n"
+"POT-Creation-Date: 2020-12-01 17:02:42+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2019-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2020-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
 #: assets/templates/bpgsites/bpgsites-loop.php:127
 #: assets/templates/twentysixteen/bpgsites-loop.php:127
-#: includes/bpgsites-groups.php:626 includes/bpgsites-groups.php:739
+#: includes/bpgsites-groups.php:634 includes/bpgsites-groups.php:747
 msgid "Sorry, there were no sites found."
 msgstr ""
 
@@ -27,12 +27,12 @@ msgstr ""
 #: assets/templates/bpgsites/index.php:48
 #: assets/templates/twentysixteen/index.php:27
 #: assets/templates/twentysixteen/index.php:56
-#: includes/bp-bpgsites-component.php:40 includes/bp-bpgsites-component.php:94
-#: includes/bp-bpgsites-screens.php:108 includes/bpgsites-activity.php:601
-#: includes/bpgsites-activity.php:2371 includes/bpgsites-activity.php:2382
-#: includes/bpgsites-activity.php:2427 includes/bpgsites-admin.php:593
-#: includes/bpgsites-admin.php:599 includes/bpgsites-groups.php:73
-#: includes/bpgsites-groups.php:494 includes/bpgsites-groups.php:1644
+#: includes/bp-bpgsites-component.php:42 includes/bp-bpgsites-component.php:96
+#: includes/bp-bpgsites-screens.php:112 includes/bpgsites-activity.php:619
+#: includes/bpgsites-activity.php:2408 includes/bpgsites-activity.php:2419
+#: includes/bpgsites-activity.php:2462 includes/bpgsites-admin.php:613
+#: includes/bpgsites-admin.php:619 includes/bpgsites-groups.php:75
+#: includes/bpgsites-groups.php:504 includes/bpgsites-groups.php:1672
 #: includes/bpgsites-widgets.php:42 includes/bpgsites-widgets.php:49
 #: includes/bpgsites-widgets.php:143
 msgid "Group Sites"
@@ -63,374 +63,374 @@ msgstr ""
 msgid "Alphabetical"
 msgstr ""
 
-#: includes/bp-bpgsites-component.php:93
+#: includes/bp-bpgsites-component.php:95
 msgid "Search %s..."
 msgstr ""
 
-#: includes/bpgsites-activity.php:205
+#: includes/bpgsites-activity.php:203
 msgid "Posted in: %s"
 msgstr ""
 
-#: includes/bpgsites-activity.php:236
+#: includes/bpgsites-activity.php:234
 msgid "BuddyPress Comment Group"
 msgstr ""
 
-#: includes/bpgsites-activity.php:274
+#: includes/bpgsites-activity.php:272
 msgid "This comment is a reply. It appears in the same group as the comment it is in reply to. If there is a deeper thread of replies, then the original comment determines the group in which it appears."
 msgstr ""
 
-#: includes/bpgsites-activity.php:281
+#: includes/bpgsites-activity.php:279
 msgid "This comment appears in the group %1$s."
 msgstr ""
 
-#: includes/bpgsites-activity.php:335 includes/bpgsites-activity.php:365
+#: includes/bpgsites-activity.php:337 includes/bpgsites-activity.php:371
 msgid "You are not allowed to edit comments on this post."
 msgstr ""
 
-#: includes/bpgsites-activity.php:474
+#: includes/bpgsites-activity.php:488
 msgid "Anonymous"
 msgstr ""
 
-#: includes/bpgsites-activity.php:481 includes/bpgsites-activity.php:2613
+#: includes/bpgsites-activity.php:495 includes/bpgsites-activity.php:2652
 msgid "post"
 msgstr ""
 
-#: includes/bpgsites-activity.php:492
+#: includes/bpgsites-activity.php:506
 msgid "%1$s left a %2$s on a %3$s %4$s in the group %5$s:"
 msgstr ""
 
-#: includes/bpgsites-activity.php:494
+#: includes/bpgsites-activity.php:508
 msgid "comment"
 msgstr ""
 
-#: includes/bpgsites-activity.php:600
+#: includes/bpgsites-activity.php:618
 msgid "Comments in %s"
 msgstr ""
 
-#: includes/bpgsites-activity.php:831
+#: includes/bpgsites-activity.php:852
 msgid "Create an account to reply"
 msgstr ""
 
-#: includes/bpgsites-activity.php:834
+#: includes/bpgsites-activity.php:855
 msgid "Login to reply"
 msgstr ""
 
-#: includes/bpgsites-activity.php:896
+#: includes/bpgsites-activity.php:919
 msgid "Join group to reply"
 msgstr ""
 
-#: includes/bpgsites-activity.php:990 includes/bpgsites-activity.php:1041
+#: includes/bpgsites-activity.php:1021 includes/bpgsites-activity.php:1072
 msgid "Create an account to leave a comment"
 msgstr ""
 
-#: includes/bpgsites-activity.php:993 includes/bpgsites-activity.php:1043
+#: includes/bpgsites-activity.php:1024 includes/bpgsites-activity.php:1074
 msgid "Login to leave a comment"
 msgstr ""
 
-#: includes/bpgsites-activity.php:1000 includes/bpgsites-activity.php:1015
+#: includes/bpgsites-activity.php:1031 includes/bpgsites-activity.php:1046
 msgid "<a href=\"%1$s\">%2$s</a>"
 msgstr ""
 
-#: includes/bpgsites-activity.php:1009
+#: includes/bpgsites-activity.php:1040
 msgid "Join a group to leave a comment"
 msgstr ""
 
-#: includes/bpgsites-activity.php:1053
+#: includes/bpgsites-activity.php:1084
 msgid "Join a group to leave a comment on %s"
 msgstr ""
 
-#: includes/bpgsites-activity.php:1296
+#: includes/bpgsites-activity.php:1329
 msgid "Groups reading this %s"
 msgstr ""
 
-#: includes/bpgsites-activity.php:1297 includes/bpgsites-blogs.php:258
+#: includes/bpgsites-activity.php:1330 includes/bpgsites-blogs.php:262
 msgid "site"
 msgstr ""
 
-#: includes/bpgsites-activity.php:1354 includes/bpgsites-activity.php:1710
-#: includes/bpgsites-activity.php:1940
+#: includes/bpgsites-activity.php:1387 includes/bpgsites-activity.php:1743
+#: includes/bpgsites-activity.php:1975
 msgid "My Groups"
 msgstr ""
 
-#: includes/bpgsites-activity.php:1389 includes/bpgsites-activity.php:1726
-#: includes/bpgsites-activity.php:1971
+#: includes/bpgsites-activity.php:1422 includes/bpgsites-activity.php:1759
+#: includes/bpgsites-activity.php:2006
 msgid "Linked Groups"
 msgstr ""
 
-#: includes/bpgsites-activity.php:1424 includes/bpgsites-activity.php:1742
+#: includes/bpgsites-activity.php:1457 includes/bpgsites-activity.php:1775
 msgid "Public Groups"
 msgstr ""
 
-#: includes/bpgsites-activity.php:1456
+#: includes/bpgsites-activity.php:1489
 msgid "Group Home Page"
 msgstr ""
 
-#: includes/bpgsites-activity.php:1551
+#: includes/bpgsites-activity.php:1584
 msgid "Filter comments by group"
 msgstr ""
 
-#: includes/bpgsites-activity.php:1681
+#: includes/bpgsites-activity.php:1714
 msgid "Show all groups"
 msgstr ""
 
-#: includes/bpgsites-activity.php:1694
+#: includes/bpgsites-activity.php:1727
 msgid "Showcase Groups"
 msgstr ""
 
-#: includes/bpgsites-activity.php:1752
+#: includes/bpgsites-activity.php:1785
 msgid "Filter"
 msgstr ""
 
-#: includes/bpgsites-activity.php:1927
+#: includes/bpgsites-activity.php:1962
 msgid "Post in"
 msgstr ""
 
-#: includes/bpgsites-activity.php:2370
+#: includes/bpgsites-activity.php:2407
 msgid "All Recent Activity in your %s"
 msgstr ""
 
-#: includes/bpgsites-activity.php:2381
+#: includes/bpgsites-activity.php:2418
 msgid "Recent Activity in Public %s"
 msgstr ""
 
-#: includes/bpgsites-activity.php:2426
+#: includes/bpgsites-activity.php:2461
 msgid "Friends Activity in your %s"
 msgstr ""
 
-#: includes/bpgsites-activity.php:2515
+#: includes/bpgsites-activity.php:2550
 msgid "Recent Comments in this %s"
 msgstr ""
 
-#: includes/bpgsites-activity.php:2516 includes/bpgsites-admin.php:596
-#: includes/bpgsites-groups.php:173 includes/bpgsites-groups.php:491
+#: includes/bpgsites-activity.php:2551 includes/bpgsites-admin.php:616
+#: includes/bpgsites-groups.php:183 includes/bpgsites-groups.php:501
 msgid "Group Site"
 msgstr ""
 
-#: includes/bpgsites-activity.php:2650
+#: includes/bpgsites-activity.php:2689
 msgid " &amp; "
 msgstr ""
 
-#: includes/bpgsites-activity.php:2679
+#: includes/bpgsites-activity.php:2720
 msgid "%1$s updated a %2$s %3$s in the group %4$s:"
 msgstr ""
 
-#: includes/bpgsites-activity.php:2690
+#: includes/bpgsites-activity.php:2731
 msgid "%1$s wrote a new %2$s %3$s in the group %4$s:"
 msgstr ""
 
-#: includes/bpgsites-activity.php:2731
+#: includes/bpgsites-activity.php:2772
 msgid "Group Site Posts"
 msgstr ""
 
-#: includes/bpgsites-admin.php:150 includes/bpgsites-admin.php:151
+#: includes/bpgsites-admin.php:154 includes/bpgsites-admin.php:155
 msgid "BP Group Sites"
 msgstr ""
 
-#: includes/bpgsites-admin.php:313
+#: includes/bpgsites-admin.php:319
 msgid "You must supply an option to option_exists()"
 msgstr ""
 
-#: includes/bpgsites-admin.php:336
+#: includes/bpgsites-admin.php:342
 msgid "You must supply an option to option_get()"
 msgstr ""
 
-#: includes/bpgsites-admin.php:358
+#: includes/bpgsites-admin.php:364
 msgid "You must supply an option to option_set()"
 msgstr ""
 
-#: includes/bpgsites-admin.php:363
+#: includes/bpgsites-admin.php:369
 msgid "You must supply the option as a string to option_set()"
 msgstr ""
 
-#: includes/bpgsites-admin.php:384
+#: includes/bpgsites-admin.php:390
 msgid "You must supply an option to option_delete()"
 msgstr ""
 
-#: includes/bpgsites-admin.php:414
+#: includes/bpgsites-admin.php:420
 msgid "You do not have permission to access this page."
 msgstr ""
 
-#: includes/bpgsites-admin.php:419
+#: includes/bpgsites-admin.php:425
 msgid "Options saved."
 msgstr ""
 
-#: includes/bpgsites-admin.php:462 includes/bpgsites-admin.php:475
+#: includes/bpgsites-admin.php:482 includes/bpgsites-admin.php:495
 msgid "BP Group Sites Settings"
 msgstr ""
 
-#: includes/bpgsites-admin.php:477
+#: includes/bpgsites-admin.php:497
 msgid "Configure how BP Group Sites behaves."
 msgstr ""
 
-#: includes/bpgsites-admin.php:483
+#: includes/bpgsites-admin.php:503
 msgid "Global Options"
 msgstr ""
 
-#: includes/bpgsites-admin.php:488
+#: includes/bpgsites-admin.php:508
 msgid "Should comments in public groups be visible to readers who are not members of those groups?"
 msgstr ""
 
-#: includes/bpgsites-admin.php:498
+#: includes/bpgsites-admin.php:518
 msgid "Naming Options"
 msgstr ""
 
-#: includes/bpgsites-admin.php:503
+#: includes/bpgsites-admin.php:523
 msgid "Enable name changes?"
 msgstr ""
 
-#: includes/bpgsites-admin.php:508
+#: includes/bpgsites-admin.php:528
 msgid "Component Title"
 msgstr ""
 
-#: includes/bpgsites-admin.php:513
+#: includes/bpgsites-admin.php:533
 msgid "Singular name for a Group Site"
 msgstr ""
 
-#: includes/bpgsites-admin.php:518
+#: includes/bpgsites-admin.php:538
 msgid "Plural name for Group Sites"
 msgstr ""
 
-#: includes/bpgsites-admin.php:523
+#: includes/bpgsites-admin.php:543
 msgid "Visit Group Site button text"
 msgstr ""
 
-#: includes/bpgsites-admin.php:536
+#: includes/bpgsites-admin.php:556
 msgid "Developer Testing"
 msgstr ""
 
-#: includes/bpgsites-admin.php:541
+#: includes/bpgsites-admin.php:561
 msgid "Debug"
 msgstr ""
 
-#: includes/bpgsites-admin.php:544
+#: includes/bpgsites-admin.php:564
 msgid "Check this to trigger do_debug() . "
 msgstr ""
 
-#: includes/bpgsites-admin.php:562
+#: includes/bpgsites-admin.php:582
 msgid "Save Changes"
 msgstr ""
 
-#: includes/bpgsites-admin.php:602
+#: includes/bpgsites-admin.php:622
 msgid "Visit Group Site"
 msgstr ""
 
-#: includes/bpgsites-admin.php:823
+#: includes/bpgsites-admin.php:843
 msgid "You must supply an option to bpgsites_option_wpms_exists()"
 msgstr ""
 
-#: includes/bpgsites-admin.php:850
+#: includes/bpgsites-admin.php:870
 msgid "You must supply an option to bpgsites_site_option_get()"
 msgstr ""
 
-#: includes/bpgsites-admin.php:873
+#: includes/bpgsites-admin.php:893
 msgid "You must supply an option to bpgsites_site_option_set()"
 msgstr ""
 
-#: includes/bpgsites-blogs.php:261
+#: includes/bpgsites-blogs.php:265
 msgid "sites"
 msgstr ""
 
-#: includes/bpgsites-blogs.php:265
+#: includes/bpgsites-blogs.php:269
 msgid "Viewing %1$s %2$s to %3$s (of %4$s %5$s)"
 msgstr ""
 
-#: includes/bpgsites-blogs.php:437
+#: includes/bpgsites-blogs.php:441
 msgid "Remove"
 msgstr ""
 
-#: includes/bpgsites-blogs.php:439
+#: includes/bpgsites-blogs.php:443
 msgid "Add"
 msgstr ""
 
-#: includes/bpgsites-groups.php:185
+#: includes/bpgsites-groups.php:195
 msgid "%s successfully added to Group"
 msgstr ""
 
-#: includes/bpgsites-groups.php:196
+#: includes/bpgsites-groups.php:206
 msgid "%s successfully removed from Group"
 msgstr ""
 
-#: includes/bpgsites-groups.php:218
+#: includes/bpgsites-groups.php:228
 msgid "Group successfully invited"
 msgstr ""
 
-#: includes/bpgsites-groups.php:223
+#: includes/bpgsites-groups.php:233
 msgid "Something went wrong - group invitation not sent."
 msgstr ""
 
-#: includes/bpgsites-groups.php:236
+#: includes/bpgsites-groups.php:246
 msgid "The invitation has been accepted"
 msgstr ""
 
-#: includes/bpgsites-groups.php:247
+#: includes/bpgsites-groups.php:257
 msgid "The invitation has been declined"
 msgstr ""
 
-#: includes/bpgsites-groups.php:265
+#: includes/bpgsites-groups.php:275
 msgid "Your group is no longer reading \"%1$s\" with %2$s"
 msgstr ""
 
-#: includes/bpgsites-groups.php:483
+#: includes/bpgsites-groups.php:493
 msgid "You are receiving this message because you are an administrator of the group \"%1$s\""
 msgstr ""
 
-#: includes/bpgsites-groups.php:484
+#: includes/bpgsites-groups.php:494
 msgid "Your group has been invited to read the %2$s \"%3$s\" with the group \"%4$s\". To accept or decline the invitation, click the link below to visit the %5$s admin page for your group."
 msgstr ""
 
-#: includes/bpgsites-groups.php:500
+#: includes/bpgsites-groups.php:510
 msgid "An invitation to read \"%1$s\" with the group \"%2$s\""
 msgstr ""
 
-#: includes/bpgsites-groups.php:759
+#: includes/bpgsites-groups.php:767
 msgid "BP Group Sites Admin Screen"
 msgstr ""
 
-#: includes/bpgsites-groups.php:818
+#: includes/bpgsites-groups.php:828
 msgid "Invitations to read with other groups"
 msgstr ""
 
-#: includes/bpgsites-groups.php:843
+#: includes/bpgsites-groups.php:853
 msgid "Read \"%1$s\" with \"%2$s\""
 msgstr ""
 
-#: includes/bpgsites-groups.php:851
+#: includes/bpgsites-groups.php:861
 msgid "Accept"
 msgstr ""
 
-#: includes/bpgsites-groups.php:852
+#: includes/bpgsites-groups.php:862
 msgid "Decline"
 msgstr ""
 
-#: includes/bpgsites-groups.php:1237
+#: includes/bpgsites-groups.php:1257
 msgid "Read with other groups"
 msgstr ""
 
-#: includes/bpgsites-groups.php:1281
+#: includes/bpgsites-groups.php:1303
 msgid "Reading with"
 msgstr ""
 
-#: includes/bpgsites-groups.php:1293
+#: includes/bpgsites-groups.php:1315
 msgid "Stop"
 msgstr ""
 
-#: includes/bpgsites-groups.php:1310
+#: includes/bpgsites-groups.php:1332
 msgid "Invite to read"
 msgstr ""
 
-#: includes/bpgsites-groups.php:1313
+#: includes/bpgsites-groups.php:1335
 msgid "Find a group to invite"
 msgstr ""
 
-#: includes/bpgsites-groups.php:1316
+#: includes/bpgsites-groups.php:1338
 msgid "Send invitation"
 msgstr ""
 
-#: includes/bpgsites-groups.php:1671
+#: includes/bpgsites-groups.php:1699
 msgid "To make this group a showcase group, make sure that it is set to \"Private\" above, then check the box below. The effect will be that the comments left by members of this group will always appear to readers. Only other members of this group will be able to reply to those comments."
 msgstr ""
 
-#: includes/bpgsites-groups.php:1674
+#: includes/bpgsites-groups.php:1702
 msgid "Make this group a showcase group"
 msgstr ""
 
