@@ -1,6 +1,6 @@
 === BP Group Sites ===
 Contributors: needle
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8MZNB9D3PF48S
+Donate link: https://www.paypal.me/interactivist
 Tags: buddypress, groups, sites, reading groups
 Requires at least: 4.2.1
 Tested up to: 5.2
