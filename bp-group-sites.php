@@ -2,7 +2,7 @@
 --------------------------------------------------------------------------------
 Plugin Name: BP Group Sites
 Description: Creates many-to-many relationships between BuddyPress Groups and WordPress Sites.
-Version: 0.3
+Version: 0.3.1
 Author: Christian Wach
 Author URI: http://haystack.co.uk
 Plugin URI: https://github.com/christianwach/bp-group-sites
@@ -15,7 +15,7 @@ Network: true
 
 
 // Set our version here.
-define( 'BPGSITES_VERSION', '0.3' );
+define( 'BPGSITES_VERSION', '0.3.1' );
 
 // Store reference to this file.
 if ( ! defined( 'BPGSITES_FILE' ) ) {
