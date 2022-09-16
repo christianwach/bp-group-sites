@@ -23,6 +23,7 @@ get_header( 'buddypress' );
 
 					// Show title.
 					echo sprintf(
+						/* translators: %s: The plural name for Group Sites. */
 						__( '%s Directory', 'bp-group-sites' ),
 						apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) )
 					);
@@ -50,12 +51,13 @@ get_header( 'buddypress' );
 								<ul>
 									<li class="selected" id="bpgsites-all"><a href="<?php bp_root_domain(); ?>/<?php bpgsites_root_slug(); ?>"><?php
 
-										// Filter subnav title.
-										printf(
-											__( 'All %1$s <span>%2$s</span>', 'bp-group-sites' ),
-											apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) ),
-											bpgsites_get_total_blog_count()
-										);
+									// Filter subnav title.
+									printf(
+										/* translators: %s: The plural name for Group Sites. */
+										__( 'All %1$s <span>%2$s</span>', 'bp-group-sites' ),
+										apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) ),
+										bpgsites_get_total_blog_count()
+									);
 
 									?></a></li>
 
@@ -65,9 +67,6 @@ get_header( 'buddypress' );
 									------------------------------------------------------------
 									What would we mean by "My Texts"?
 									------------------------------------------------------------
-									*/
-
-									/*
 									if ( is_user_logged_in() && bp_get_total_blog_count_for_user( bp_loggedin_user_id() ) ) : ?>
 
 										<li id="bpgsites-personal"><a href="<?php echo bp_loggedin_user_domain() . bp_get_blogs_slug(); ?>"><?php printf( __( 'My Group Sites <span>%s</span>', 'bp-group-sites' ), bp_get_total_blog_count_for_user( bp_loggedin_user_id() ) ); ?></a></li>
@@ -89,11 +88,11 @@ get_header( 'buddypress' );
 
 									<li id="bpgsites-order-select" class="last filter">
 
-										<label for="bpgsites-order-by"><?php _e( 'Order By:', 'bp-group-sites' ); ?></label>
+										<label for="bpgsites-order-by"><?php esc_html_e( 'Order By:', 'bp-group-sites' ); ?></label>
 										<select id="bpgsites-order-by">
-											<option value="active"><?php _e( 'Last Active', 'bp-group-sites' ); ?></option>
-											<option value="newest"><?php _e( 'Newest', 'bp-group-sites' ); ?></option>
-											<option value="alphabetical"><?php _e( 'Alphabetical', 'bp-group-sites' ); ?></option>
+											<option value="active"><?php esc_html_e( 'Last Active', 'bp-group-sites' ); ?></option>
+											<option value="newest"><?php esc_html_e( 'Newest', 'bp-group-sites' ); ?></option>
+											<option value="alphabetical"><?php esc_html_e( 'Alphabetical', 'bp-group-sites' ); ?></option>
 
 											<?php do_action( 'bp_blogs_directory_order_options' ); ?>
 

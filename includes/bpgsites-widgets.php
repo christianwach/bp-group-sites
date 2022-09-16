@@ -1,18 +1,17 @@
-<?php /*
-================================================================================
-BP Group Sites Widgets
-================================================================================
-AUTHOR: Christian Wach <needle@haystack.co.uk>
---------------------------------------------------------------------------------
-NOTES
-=====
+<?php
+/**
+ * BP Group Sites Widgets.
+ *
+ * Widgets defined here.
+ *
+ * @package BP_Group_Sites
+ * @since 0.2.1
+ */
 
-Widgets defined here.
-
---------------------------------------------------------------------------------
-*/
-
-
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Creates a custom Widget for displaying a list of Group Sites.
@@ -21,8 +20,6 @@ Widgets defined here.
  */
 class BP_Group_Sites_List_Widget extends WP_Widget {
 
-
-
 	/**
 	 * Constructor registers widget with WordPress.
 	 *
@@ -30,31 +27,30 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 	 */
 	public function __construct() {
 
-		// Init parent.
-		parent::__construct(
+		// Define widget name.
+		$name = sprintf(
+			/* translators: %s: The plural name of Group Sites. */
+			__( 'List of %s', 'bp-group-sites' ),
+			apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) )
+		);
 
-			// Base ID.
-			'bpgsites_list_widget',
-
-			// Name.
-			sprintf(
-				__( 'List of %s', 'bp-group-sites' ),
+		// Define widget args.
+		$args = [
+			'description' => sprintf(
+				/* translators: %s: The plural name of Group Sites. */
+				__( 'Use this widget to show a list of %s.', 'bp-group-sites' ),
 				apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) )
 			),
+		];
 
-			// Args.
-			[
-				'description' => sprintf(
-					__( 'Use this widget to show a list of %s.', 'bp-group-sites' ),
-					apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) )
-				),
-			]
-
+		// Init parent.
+		parent::__construct(
+			'bpgsites_list_widget', // Base ID.
+			$name,
+			$args
 		);
 
 	}
-
-
 
 	/**
 	 * Outputs the HTML for this widget.
@@ -79,7 +75,7 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 		}
 
 		// Set default max blogs if absent.
-		if ( empty( $instance['max_blogs'] ) OR ! is_numeric( $instance['max_blogs'] ) ) {
+		if ( empty( $instance['max_blogs'] ) || ! is_numeric( $instance['max_blogs'] ) ) {
 			$instance['max_blogs'] = 5;
 		}
 
@@ -94,7 +90,8 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 
 			<ul class="item-list bpgsites-list">
 
-			<?php while ( bp_blogs() ) : bp_the_blog(); ?>
+			<?php while ( bp_blogs() ) : ?>
+				<?php bp_the_blog(); ?>
 
 				<li>
 					<div class="item-avatar">
@@ -122,8 +119,6 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 
 	}
 
-
-
 	/**
 	 * Back-end widget form.
 	 *
@@ -136,9 +131,10 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 
 		// Get title.
 		if ( isset( $instance['title'] ) ) {
-			$title = strip_tags( $instance['title'] );
+			$title = wp_strip_all_tags( $instance['title'] );
 		} else {
 			$title = sprintf(
+				/* translators: %s: The plural name of Group Sites. */
 				__( 'List of %s', 'bp-group-sites' ),
 				apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) )
 			);
@@ -146,7 +142,7 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 
 		// Get max blogs.
 		if ( isset( $instance['max_blogs'] ) ) {
-			$max_blogs = strip_tags( $instance['max_blogs'] );
+			$max_blogs = wp_strip_all_tags( $instance['max_blogs'] );
 		} else {
 			$max_blogs = 5;
 		}
@@ -154,18 +150,16 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 		?>
 
 		<p>
-		<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', 'bp-group-sites' ); ?> <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>"></label>
+		<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php esc_html_e( 'Title:', 'bp-group-sites' ); ?> <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>"></label>
 		</p>
 
 		<p>
-		<label for="<?php echo $this->get_field_id( 'max_blogs' ); ?>"><?php _e( 'Max number to show:', 'bp-group-sites' ); ?> <input class="widefat" id="<?php echo $this->get_field_id( 'max_blogs' ); ?>" name="<?php echo $this->get_field_name( 'max_blogs' ); ?>" type="text" value="<?php echo esc_attr( $max_blogs ); ?>" style="width: 30%" /></label>
+		<label for="<?php echo $this->get_field_id( 'max_blogs' ); ?>"><?php esc_html_e( 'Max number to show:', 'bp-group-sites' ); ?> <input class="widefat" id="<?php echo $this->get_field_id( 'max_blogs' ); ?>" name="<?php echo $this->get_field_name( 'max_blogs' ); ?>" type="text" value="<?php echo esc_attr( $max_blogs ); ?>" style="width: 30%" /></label>
 		</p>
 
 		<?php
 
 	}
-
-
 
 	/**
 	 * Sanitize widget form values as they are saved.
@@ -187,14 +181,7 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 
 	}
 
-
-
-} // Ends class BP_Group_Sites_List_Widget.
-
-
+}
 
 // Register this widget.
 register_widget( 'BP_Group_Sites_List_Widget' );
-
-
-

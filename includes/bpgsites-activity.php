@@ -1,18 +1,17 @@
-<?php /*
-================================================================================
-BP Group Sites Activity Functions
-================================================================================
-AUTHOR: Christian Wach <needle@haystack.co.uk>
---------------------------------------------------------------------------------
-NOTES
-=====
+<?php
+/**
+ * BP Group Sites Activity class.
+ *
+ * Handles BuddyPress Activity functionality.
+ *
+ * @package BP_Group_Sites
+ * @since 0.1
+ */
 
-Throw any functions which deal with BuddyPress activity in here.
-
---------------------------------------------------------------------------------
-*/
-
-
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * BP Group Sites Activity class.
@@ -32,8 +31,6 @@ class BP_Group_Sites_Activity {
 	 */
 	public $groups = [];
 
-
-
 	/**
 	 * Constructor.
 	 *
@@ -42,8 +39,6 @@ class BP_Group_Sites_Activity {
 	public function __construct() {
 
 	}
-
-
 
 	/**
 	 * Register hooks for this class.
@@ -78,7 +73,8 @@ class BP_Group_Sites_Activity {
 		// If the current blog is a group site.
 		if ( bpgsites_is_groupsite( get_current_blog_id() ) ) {
 
-			// Add custom post activity. (Disabled until later)
+			// Add custom post activity. Disabled until later.
+			// phpcs:ignore Squiz.Commenting.InlineComment.InvalidEndChar
 			//add_action( 'bp_activity_before_save', [ $this, 'custom_post_activity' ], 10, 1 );
 
 			// Make sure "Allow activity stream commenting on blog and forum posts" is disabled for group sites.
@@ -151,11 +147,7 @@ class BP_Group_Sites_Activity {
 
 	}
 
-
-
 	//##########################################################################
-
-
 
 	/**
 	 * Show the group into which a comment has been posted.
@@ -176,10 +168,10 @@ class BP_Group_Sites_Activity {
 		$group_id = $this->get_comment_group_id( $comment->comment_ID );
 
 		// Sanity check.
-		if ( is_numeric( $group_id ) AND $group_id > 0 ) {
+		if ( is_numeric( $group_id ) && $group_id > 0 ) {
 
 			// Get the group.
-			$group = groups_get_group( [ 'group_id'   => $group_id ] );
+			$group = groups_get_group( [ 'group_id' => $group_id ] );
 
 			// Get group name.
 			$name = bp_get_group_name( $group );
@@ -200,6 +192,7 @@ class BP_Group_Sites_Activity {
 			 */
 			$prefix = apply_filters(
 				'bpgsites_comment_prefix',
+				/* translators: %s The link to the Group. */
 				sprintf( __( 'Posted in: %s', 'bp-group-sites' ), $link ),
 				$name,
 				$comment,
@@ -219,8 +212,6 @@ class BP_Group_Sites_Activity {
 
 	}
 
-
-
 	/**
 	 * Register a meta box for the comment edit screen.
 	 *
@@ -238,8 +229,6 @@ class BP_Group_Sites_Activity {
 		);
 
 	}
-
-
 
 	/**
 	 * Add a meta box to the comment edit screen.
@@ -266,7 +255,7 @@ class BP_Group_Sites_Activity {
 			$group_id = $this->get_comment_group_id( $comment_id );
 
 			// Sanity check.
-			if ( is_numeric( $group_id ) AND $group_id > 0 ) {
+			if ( is_numeric( $group_id ) && $group_id > 0 ) {
 
 				// Show message.
 				echo '<p>' . __( 'This comment is a reply. It appears in the same group as the comment it is in reply to. If there is a deeper thread of replies, then the original comment determines the group in which it appears.', 'bp-group-sites' ) . '</p>';
@@ -276,7 +265,8 @@ class BP_Group_Sites_Activity {
 
 				// Construct message.
 				$message = sprintf(
-					__( 'This comment appears in the group %1$s.', 'bp-group-sites' ),
+					/* translators: %s The name of the Group. */
+					__( 'This comment appears in the group %s.', 'bp-group-sites' ),
 					$name
 				);
 
@@ -309,8 +299,6 @@ class BP_Group_Sites_Activity {
 
 	}
 
-
-
 	/**
 	 * Save data returned by our comment meta box in WordPress admin.
 	 *
@@ -326,7 +314,8 @@ class BP_Group_Sites_Activity {
 		}
 
 		// Authenticate submission.
-		if ( ! wp_verify_nonce( $_POST['bpgsites_comments_nonce'], 'bpgsites_comments_metabox' ) ) {
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		if ( ! wp_verify_nonce( wp_unslash( $_POST['bpgsites_comments_nonce'] ), 'bpgsites_comments_metabox' ) ) {
 			return;
 		}
 
@@ -343,8 +332,6 @@ class BP_Group_Sites_Activity {
 
 	}
 
-
-
 	/**
 	 * Save data returned by editing a comment in CommentPress front-end.
 	 *
@@ -355,11 +342,13 @@ class BP_Group_Sites_Activity {
 	public function save_comment_edit_metadata( $comment_id ) {
 
 		// If there's no nonce then there's no comment meta data.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( ! isset( $_POST['cpajax_comment_nonce'] ) ) {
 			return;
 		}
 
 		// Bail if there's no POST data for us.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( ! isset( $_POST['bpgsites-post-in'] ) ) {
 			return;
 		}
@@ -376,8 +365,6 @@ class BP_Group_Sites_Activity {
 		$this->save_comment_group_id( $comment_id, null );
 
 	}
-
-
 
 	/**
 	 * Disable comment sync because parent activity items may not be in the same
@@ -406,8 +393,6 @@ class BP_Group_Sites_Activity {
 		return $is_disabled;
 
 	}
-
-
 
 	/**
 	 * Record the blog activity for the group.
@@ -474,7 +459,7 @@ class BP_Group_Sites_Activity {
 		$post = get_post( $comment->comment_post_ID );
 
 		// Was it a registered user?
-		if ($comment->user_id != '0') {
+		if ( $comment->user_id != '0' ) {
 
 			// Get user details.
 			$user = get_userdata( $comment->user_id );
@@ -503,6 +488,7 @@ class BP_Group_Sites_Activity {
 
 		// Replace the necessary values to display in group activity stream.
 		$activity->action = sprintf(
+			/* translators: 1: The User link, 2: The link to the comment, 3: The activity name, 4: The link to the post, 5: The link to the group. */
 			__( '%1$s left a %2$s on a %3$s %4$s in the group %5$s:', 'bp-group-sites' ),
 			$user_link,
 			'<a href="' . $activity->primary_link . '">' . __( 'comment', 'bp-group-sites' ) . '</a>',
@@ -512,7 +498,7 @@ class BP_Group_Sites_Activity {
 		);
 
 		// Apply group id.
-		$activity->item_id = (int)$group_id;
+		$activity->item_id = (int) $group_id;
 
 		// Change to groups component.
 		$activity->component = 'groups';
@@ -535,8 +521,6 @@ class BP_Group_Sites_Activity {
 		return $activity;
 
 	}
-
-
 
 	/**
 	 * Filter the activity comment permalink on activity items to point to the
@@ -563,14 +547,13 @@ class BP_Group_Sites_Activity {
 
 	}
 
-
-
 	/**
 	 * Filter the comment reply link on activity items. This is called during the
 	 * loop, so we can assume that the activity item API will work.
 	 *
 	 * @since 0.1
 	 *
+	 * @param string $link The existing comment reply link.
 	 * @return string $link The overridden comment reply link.
 	 */
 	public function filter_comment_link( $link ) {
@@ -587,22 +570,19 @@ class BP_Group_Sites_Activity {
 		}
 
 		/*
+		// Check for our custom activity type.
 		if ( $type == 'new_groupsite_comment' ) {
-			$link_text = __( 'Reply', 'bpwpapers' );
+			$link_text = __( 'Reply', 'bp-group-sites' );
 		}
 
 		// Construct new link to actual comment.
-		$link = '<a href="' . bp_get_activity_feed_item_link() . '" class="button acomment-reply bp-primary-action">' .
-					$link_text .
-				'</a>';
+		$link = '<a href="' . bp_get_activity_feed_item_link() . '" class="button acomment-reply bp-primary-action">' . $link_text . '</a>';
 		*/
 
 		// --<
 		return bp_get_activity_feed_item_link();
 
 	}
-
-
 
 	/**
 	 * Add a filter option to the filter select box on group activity pages.
@@ -615,6 +595,7 @@ class BP_Group_Sites_Activity {
 		$comment_name = apply_filters(
 			'bpgsites_comment_name',
 			sprintf(
+				/* translators: %s: The plural name for Group Sites. */
 				__( 'Comments in %s', 'bp-group-sites' ),
 				apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) )
 			)
@@ -626,13 +607,7 @@ class BP_Group_Sites_Activity {
 		// Print.
 		echo $option;
 
-		/*
-		__( 'Group Site Comments', 'bp-group-sites' )
-		*/
-
 	}
-
-
 
 	/**
 	 * Modify the AJAX query string.
@@ -664,7 +639,7 @@ class BP_Group_Sites_Activity {
 		}
 
 		// Add the 'new_groupsite_comment' type if it doesn't exist.
-		if ( ! isset( $r['action'] ) OR false === strpos( $r['action'], 'new_groupsite_comment' ) ) {
+		if ( ! isset( $r['action'] ) || false === strpos( $r['action'], 'new_groupsite_comment' ) ) {
 			// 'action' filters activity items by the 'type' column.
 			$r['action'] = 'new_groupsite_comment';
 		}
@@ -676,8 +651,6 @@ class BP_Group_Sites_Activity {
 		return build_query( $r );
 
 	}
-
-
 
 	/**
 	 * Add a filter option to the filter select box on group activity pages.
@@ -702,8 +675,6 @@ class BP_Group_Sites_Activity {
 
 	}
 
-
-
 	/**
 	 * When get_comments is called, show only those from groups to which the user belongs.
 	 *
@@ -726,9 +697,9 @@ class BP_Group_Sites_Activity {
 
 		// If we get some.
 		if (
-			count( $user_group_ids['my_groups'] ) > 0 OR
-			count( $user_group_ids['linked_groups'] ) > 0 OR
-			count( $user_group_ids['public_groups'] ) > 0 OR
+			count( $user_group_ids['my_groups'] ) > 0 ||
+			count( $user_group_ids['linked_groups'] ) > 0 ||
+			count( $user_group_ids['public_groups'] ) > 0 ||
 			count( $user_group_ids['auth_groups'] ) > 0
 		) {
 
@@ -744,9 +715,9 @@ class BP_Group_Sites_Activity {
 
 		// If none.
 		if (
-			count( $user_group_ids['my_groups'] ) === 0 AND
-			count( $user_group_ids['linked_groups'] ) === 0 AND
-			count( $user_group_ids['public_groups'] ) === 0 AND
+			count( $user_group_ids['my_groups'] ) === 0 &&
+			count( $user_group_ids['linked_groups'] ) === 0 &&
+			count( $user_group_ids['public_groups'] ) === 0 &&
 			count( $user_group_ids['auth_groups'] ) === 0
 		) {
 
@@ -779,6 +750,7 @@ class BP_Group_Sites_Activity {
 
 		// Make sure meta query is an array.
 		if ( ! is_array( $comments->query_vars['meta_query'] ) ) {
+			// phpcs:ignore: WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 			$comments->query_vars['meta_query'] = [];
 		}
 
@@ -793,8 +765,6 @@ class BP_Group_Sites_Activity {
 		$comments->meta_query->parse_query_vars( $comments->query_vars );
 
 	}
-
-
 
 	/**
 	 * When a comment is saved, this also saves the ID of the group it was submitted to.
@@ -828,8 +798,6 @@ class BP_Group_Sites_Activity {
 		}
 
 	}
-
-
 
 	/**
 	 * Override CommentPress "Reply To" link.
@@ -876,7 +844,7 @@ class BP_Group_Sites_Activity {
 		$group_id = $this->get_comment_group_id( $comment->comment_ID );
 
 		// Sanity check.
-		if ( ! is_numeric( $group_id ) OR $group_id == 0 ) {
+		if ( ! is_numeric( $group_id ) || $group_id == 0 ) {
 
 			// Comments can pre-exist that are not group-linked.
 			return $link;
@@ -891,17 +859,16 @@ class BP_Group_Sites_Activity {
 
 		// Is this group one of these?
 		if (
-			in_array( $group_id, $user_group_ids['my_groups'] ) OR
+			in_array( $group_id, $user_group_ids['my_groups'] ) ||
 			in_array( $group_id, $user_group_ids['linked_groups'] )
 		) {
 			// --<
 			return $link;
 		}
 
-
 		// Get the group.
 		$group = groups_get_group( [
-			'group_id'   => $group_id
+			'group_id'   => $group_id,
 		] );
 
 		// Get showcase groups.
@@ -924,8 +891,6 @@ class BP_Group_Sites_Activity {
 		return $link;
 
 	}
-
-
 
 	/**
 	 * Override CommentPress TinyMCE setting.
@@ -968,8 +933,6 @@ class BP_Group_Sites_Activity {
 
 	}
 
-
-
 	/**
 	 * Decides whether or not to show comment form.
 	 *
@@ -1001,14 +964,12 @@ class BP_Group_Sites_Activity {
 
 	}
 
-
-
 	/**
 	 * Show a message if we are hiding the comment form.
 	 *
 	 * @since 0.1
 	 *
-	 * @param str $hidden The message shown when the comment form is hidden.
+	 * @param str $hidden_text The message shown when the comment form is hidden.
 	 * @return str $link The overridden message shown when the comment form is hidden.
 	 */
 	public function override_comment_form_hidden( $hidden_text ) {
@@ -1028,7 +989,8 @@ class BP_Group_Sites_Activity {
 			// Construct link.
 			$link = apply_filters(
 				'bpgsites_override_comment_form_hidden_denied',
-				sprintf( __( '<a href="%1$s">%2$s</a>', 'commentpress-core' ), $href, $text )
+				/* translators: 1: The URL, 2: The anchor text. */
+				sprintf( __( '<a href="%1$s">%2$s</a>', 'bp-group-sites' ), $href, $text )
 			);
 
 			// Show link.
@@ -1043,15 +1005,14 @@ class BP_Group_Sites_Activity {
 		// Construct link.
 		$link = apply_filters(
 			'bpgsites_override_comment_form_hidden',
-			sprintf( __( '<a href="%1$s">%2$s</a>', 'commentpress-core' ), $href, $text )
+			/* translators: 1: The URL, 2: The anchor text. */
+			sprintf( __( '<a href="%1$s">%2$s</a>', 'bp-group-sites' ), $href, $text )
 		);
 
 		// Show link.
 		return $link;
 
 	}
-
-
 
 	/**
 	 * Override content of the reply to link.
@@ -1081,6 +1042,7 @@ class BP_Group_Sites_Activity {
 
 		// Construct link content.
 		$link_text = sprintf(
+			/* translators: %s: The paragraph text. */
 			__( 'Join a group to leave a comment on %s', 'bp-group-sites' ),
 			$paragraph_text
 		);
@@ -1089,8 +1051,6 @@ class BP_Group_Sites_Activity {
 		return apply_filters( 'bpgsites_override_reply_to_text', $link_text, $paragraph_text );
 
 	}
-
-
 
 	/**
 	 * Override content of the reply to link target.
@@ -1126,8 +1086,6 @@ class BP_Group_Sites_Activity {
 
 	}
 
-
-
 	/**
 	 * Override content of the reply to link.
 	 *
@@ -1142,8 +1100,6 @@ class BP_Group_Sites_Activity {
 		return '';
 
 	}
-
-
 
 	/**
 	 * For group sites, if the user is a member of the group, allow unmoderated comments.
@@ -1174,7 +1130,7 @@ class BP_Group_Sites_Activity {
 		$user_group_ids = $this->get_groups_for_user();
 
 		// Did we get one?
-		if ( $group_id != '' AND is_numeric( $group_id ) AND $group_id > 0 ) {
+		if ( $group_id != '' && is_numeric( $group_id ) && $group_id > 0 ) {
 
 			// Is this user a member?
 			if ( in_array( $group_id, $user_group_ids['my_groups'] ) ) {
@@ -1196,12 +1152,10 @@ class BP_Group_Sites_Activity {
 
 		}
 
-		// Pass through
+		// Pass through.
 		return $approved;
 
 	}
-
-
 
 	/**
 	 * For group sites, add capability to edit own comments.
@@ -1235,8 +1189,6 @@ class BP_Group_Sites_Activity {
 
 	}
 
-
-
 	/**
 	 * For a given comment ID, get the ID of the group it is posted in.
 	 *
@@ -1259,8 +1211,6 @@ class BP_Group_Sites_Activity {
 
 	}
 
-
-
 	/**
 	 * Adds links to the Special Pages menu in CommentPress themes.
 	 *
@@ -1279,8 +1229,8 @@ class BP_Group_Sites_Activity {
 
 			// Kick out if all are empty.
 			if (
-				count( $user_group_ids['my_groups'] ) == 0 AND
-				count( $user_group_ids['linked_groups'] ) == 0 AND
+				count( $user_group_ids['my_groups'] ) == 0 &&
+				count( $user_group_ids['linked_groups'] ) == 0 &&
 				count( $user_group_ids['public_groups'] ) == 0
 			) {
 				// --<
@@ -1292,7 +1242,7 @@ class BP_Group_Sites_Activity {
 
 			// If any has entries.
 			if (
-				count( $user_group_ids['my_groups'] ) > 0 OR
+				count( $user_group_ids['my_groups'] ) > 0 ||
 				count( $user_group_ids['public_groups'] ) > 0
 			) {
 
@@ -1326,6 +1276,7 @@ class BP_Group_Sites_Activity {
 					$title = apply_filters(
 						'bpgsites_groupsites_menu_item_title',
 						sprintf(
+							/* translators: %s: The singular name of a Group Site. */
 							__( 'Groups reading this %s', 'bp-group-sites' ),
 							apply_filters( 'bpgsites_extension_name', __( 'site', 'bp-group-sites' ) )
 						)
@@ -1343,7 +1294,8 @@ class BP_Group_Sites_Activity {
 					$public = [];
 
 					// Do the loop.
-					while ( bp_groups() ) {  bp_the_group();
+					while ( bp_groups() ) {
+						bp_the_group();
 
 						// Construct item.
 						$item = '<li>' .
@@ -1381,7 +1333,7 @@ class BP_Group_Sites_Activity {
 						$items = implode( "\n", $mine );
 
 						// Only show if we one of the other lists is populated.
-						if ( count( $linked ) > 0 OR count( $public ) > 0 ) {
+						if ( count( $linked ) > 0 || count( $public ) > 0 ) {
 
 							// Construct title.
 							$title = __( 'My Groups', 'bp-group-sites' );
@@ -1416,7 +1368,7 @@ class BP_Group_Sites_Activity {
 						$items = implode( "\n", $linked );
 
 						// Only show if we one of the other lists is populated.
-						if ( count( $mine ) > 0 OR count( $public ) > 0 ) {
+						if ( count( $mine ) > 0 || count( $public ) > 0 ) {
 
 							// Construct title.
 							$title = __( 'Linked Groups', 'bp-group-sites' );
@@ -1451,7 +1403,7 @@ class BP_Group_Sites_Activity {
 						$items = implode( "\n", $public );
 
 						// Only show if we one of the other lists is populated.
-						if ( count( $mine ) > 0 OR count( $linked ) > 0 ) {
+						if ( count( $mine ) > 0 || count( $linked ) > 0 ) {
 
 							// Construct title.
 							$title = __( 'Public Groups', 'bp-group-sites' );
@@ -1488,17 +1440,18 @@ class BP_Group_Sites_Activity {
 					// Set title.
 					$title = __( 'Group Home Page', 'bp-group-sites' );
 
-					// Do we want to use bp_get_group_name()
+					// Do we want to use bp_get_group_name()?
 
 					// Do the loop (though there will only be one item.
-					while ( bp_groups() ) {  bp_the_group();
+					while ( bp_groups() ) {
+						bp_the_group();
 
 						// Construct item.
 						$html .= '<li>' .
-									'<a href="' . bp_get_group_permalink() . '" id="btn_groupsites" class="css_btn" title="' . $title . '">' .
-										$title .
-									'</a>' .
-								 '</li>';
+							'<a href="' . bp_get_group_permalink() . '" id="btn_groupsites" class="css_btn" title="' . $title . '">' .
+								$title .
+							'</a>' .
+						'</li>';
 
 					}
 
@@ -1512,8 +1465,6 @@ class BP_Group_Sites_Activity {
 		}
 
 	}
-
-
 
 	/**
 	 * Adds filtering above scrollable comments in CommentPress Responsive.
@@ -1530,9 +1481,9 @@ class BP_Group_Sites_Activity {
 
 		// Kick out if all are empty.
 		if (
-			count( $user_group_ids['auth_groups'] ) == 0 AND
-			count( $user_group_ids['my_groups'] ) == 0 AND
-			count( $user_group_ids['linked_groups'] ) == 0 AND
+			count( $user_group_ids['auth_groups'] ) == 0 &&
+			count( $user_group_ids['my_groups'] ) == 0 &&
+			count( $user_group_ids['linked_groups'] ) == 0 &&
 			count( $user_group_ids['public_groups'] ) == 0
 		) {
 			// --<
@@ -1544,9 +1495,9 @@ class BP_Group_Sites_Activity {
 
 		// If any has entries.
 		if (
-			count( $user_group_ids['auth_groups'] ) > 0 OR
-			count( $user_group_ids['my_groups'] ) > 0 OR
-			count( $user_group_ids['linked_groups'] ) > 0 OR
+			count( $user_group_ids['auth_groups'] ) > 0 ||
+			count( $user_group_ids['my_groups'] ) > 0 ||
+			count( $user_group_ids['linked_groups'] ) > 0 ||
 			count( $user_group_ids['public_groups'] ) > 0
 		) {
 
@@ -1567,7 +1518,7 @@ class BP_Group_Sites_Activity {
 			'max' => 100,
 			'per_page' => 100,
 			'populate_extras' => 0,
-			'include' => $groups
+			'include' => $groups,
 		];
 
 		// Get groups.
@@ -1579,10 +1530,10 @@ class BP_Group_Sites_Activity {
 			// Only show if user has more than one.
 			if ( $groups_template->group_count > 1 ) {
 
-				// Construct heading (the no_comments class prevents this from printing)
+				// Construct heading - the no_comments class prevents this from printing.
 				$html .= '<h3 class="bpgsites_group_filter_heading no_comments">' .
-							'<a href="#bpgsites_group_filter">' . __( 'Filter comments by group', 'bp-group-sites' ) . '</a>' .
-						 '</h3>' . "\n";
+					'<a href="#bpgsites_group_filter">' . __( 'Filter comments by group', 'bp-group-sites' ) . '</a>' .
+				'</h3>' . "\n";
 
 				// Open div.
 				$html .= '<div id="bpgsites_group_filter" class="bpgsites_group_filter no_comments">' . "\n";
@@ -1609,7 +1560,8 @@ class BP_Group_Sites_Activity {
 				}
 
 				// Do the loop.
-				while ( bp_groups() ) {  bp_the_group();
+				while ( bp_groups() ) {
+					bp_the_group();
 
 					// Add arbitrary divider.
 					$item = '<span class="bpgsites_comment_group">' . "\n";
@@ -1625,8 +1577,8 @@ class BP_Group_Sites_Activity {
 
 						// Add label.
 						$item .= '<label class="bpgsites_comment_group_label" for="bpgsites_comment_group_' . $group_id . '">' .
-									bp_get_group_name() .
-								 '</label>' . "\n";
+							bp_get_group_name() .
+						'</label>' . "\n";
 
 						// Close arbitrary divider.
 						$item .= '</span>' . "\n";
@@ -1647,8 +1599,8 @@ class BP_Group_Sites_Activity {
 
 						// Add label.
 						$item .= '<label class="bpgsites_comment_group_label" for="bpgsites_comment_group_' . $group_id . '">' .
-									bp_get_group_name() .
-								 '</label>' . "\n";
+							bp_get_group_name() .
+						'</label>' . "\n";
 
 						// Close arbitrary divider.
 						$item .= '</span>' . "\n";
@@ -1669,8 +1621,8 @@ class BP_Group_Sites_Activity {
 
 						// Add label.
 						$item .= '<label class="bpgsites_comment_group_label" for="bpgsites_comment_group_' . $group_id . '">' .
-									bp_get_group_name() .
-								 '</label>' . "\n";
+							bp_get_group_name() .
+						'</label>' . "\n";
 
 						// Close arbitrary divider.
 						$item .= '</span>' . "\n";
@@ -1691,8 +1643,8 @@ class BP_Group_Sites_Activity {
 
 						// Add label.
 						$item .= '<label class="bpgsites_comment_group_label" for="bpgsites_comment_group_' . $group_id . '">' .
-									bp_get_group_name() .
-								 '</label>' . "\n";
+							bp_get_group_name() .
+						'</label>' . "\n";
 
 						// Close arbitrary divider.
 						$item .= '</span>' . "\n";
@@ -1711,8 +1663,7 @@ class BP_Group_Sites_Activity {
 				$html .= '<input type="checkbox" name="bpgsites_comment_group_toggle" id="bpgsites_comment_group_toggle" class="bpgsites_group_checkbox_toggle" value="" checked="checked" />' . "\n";
 
 				// Add label.
-				$html .= '<label class="bpgsites_comment_group_label" for="bpgsites_comment_group_toggle">' . __( 'Show all groups', 'bp-group-sites' ) .
-						 '</label>' . "\n";
+				$html .= '<label class="bpgsites_comment_group_label" for="bpgsites_comment_group_toggle">' . __( 'Show all groups', 'bp-group-sites' ) . '</label>' . "\n";
 
 				// Close arbitrary divider.
 				$html .= '</span>' . "\n";
@@ -1721,7 +1672,7 @@ class BP_Group_Sites_Activity {
 				if ( count( $auth ) > 0 ) {
 
 					// Only show if we one of the other lists is populated.
-					if ( count( $mine ) > 0 OR  count( $public ) > 0 OR count( $linked ) > 0 ) {
+					if ( count( $mine ) > 0 || count( $public ) > 0 || count( $linked ) > 0 ) {
 
 						// Add heading.
 						$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_header bpgsites_comment_group_auth">' . __( 'Showcase Groups', 'bp-group-sites' ) . '</span>' . "\n";
@@ -1737,7 +1688,7 @@ class BP_Group_Sites_Activity {
 				if ( count( $mine ) > 0 ) {
 
 					// Only show if we one of the other lists is populated.
-					if ( count( $auth ) > 0 OR count( $public ) > 0 OR count( $linked ) > 0 ) {
+					if ( count( $auth ) > 0 || count( $public ) > 0 || count( $linked ) > 0 ) {
 
 						// Add heading.
 						$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_header bpgsites_comment_group_mine">' . __( 'My Groups', 'bp-group-sites' ) . '</span>' . "\n";
@@ -1753,7 +1704,7 @@ class BP_Group_Sites_Activity {
 				if ( count( $linked ) > 0 ) {
 
 					// Only show if we one of the other lists is populated.
-					if ( count( $auth ) > 0 OR count( $mine ) > 0 OR count( $linked ) > 0 ) {
+					if ( count( $auth ) > 0 || count( $mine ) > 0 || count( $linked ) > 0 ) {
 
 						// Add heading.
 						$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_header bpgsites_comment_group_linked">' . __( 'Linked Groups', 'bp-group-sites' ) . '</span>' . "\n";
@@ -1769,7 +1720,7 @@ class BP_Group_Sites_Activity {
 				if ( count( $public ) > 0 ) {
 
 					// Only show if we one of the other lists is populated.
-					if (  count( $auth ) > 0 OR count( $mine ) > 0 OR count( $linked ) > 0 ) {
+					if ( count( $auth ) > 0 || count( $mine ) > 0 || count( $linked ) > 0 ) {
 
 						// Add heading.
 						$html .= '<span class="bpgsites_comment_group bpgsites_comment_group_header bpgsites_comment_group_public">' . __( 'Public Groups', 'bp-group-sites' ) . '</span>' . "\n";
@@ -1797,8 +1748,6 @@ class BP_Group_Sites_Activity {
 
 	}
 
-
-
 	/**
 	 * Inserts a dropdown (or hidden input) into the comment form.
 	 *
@@ -1815,8 +1764,6 @@ class BP_Group_Sites_Activity {
 		return $this->get_comment_group_select( $result, $comment_id, $reply_to_id );
 
 	}
-
-
 
 	/**
 	 * Gets a dropdown (or hidden input) for a comment.
@@ -1844,7 +1791,7 @@ class BP_Group_Sites_Activity {
 			$group_id = $this->get_comment_group_id( $reply_to_id );
 
 			// Did we get one?
-			if ( $group_id != '' AND is_numeric( $group_id ) AND $group_id > 0 ) {
+			if ( $group_id != '' && is_numeric( $group_id ) && $group_id > 0 ) {
 
 				// Show a hidden input so that this comment is also posted in that group.
 				$result .= '<input type="hidden" id="bpgsites-post-in" name="bpgsites-post-in" value="' . $group_id . '" />' . "\n";
@@ -1875,7 +1822,7 @@ class BP_Group_Sites_Activity {
 
 		// Kick out if the ones the user can post into are empty.
 		if (
-			count( $user_group_ids['my_groups'] ) == 0 AND
+			count( $user_group_ids['my_groups'] ) == 0 &&
 			count( $user_group_ids['linked_groups'] ) == 0
 		) {
 			// --<
@@ -1887,7 +1834,7 @@ class BP_Group_Sites_Activity {
 
 		// If any has entries.
 		if (
-			count( $user_group_ids['my_groups'] ) > 0 OR
+			count( $user_group_ids['my_groups'] ) > 0 ||
 			count( $user_group_ids['linked_groups'] ) > 0
 		) {
 
@@ -1906,7 +1853,7 @@ class BP_Group_Sites_Activity {
 			'max' => 100,
 			'per_page' => 100,
 			'populate_extras' => 0,
-			'include' => $groups
+			'include' => $groups,
 		];
 
 		// Get groups.
@@ -1927,7 +1874,8 @@ class BP_Group_Sites_Activity {
 				$linked = [];
 
 				// Do the loop.
-				while ( bp_groups() ) { bp_the_group();
+				while ( bp_groups() ) {
+					bp_the_group();
 
 					// Get group ID.
 					$group_id = bp_get_group_id();
@@ -2031,7 +1979,8 @@ class BP_Group_Sites_Activity {
 			} else {
 
 				// Do the loop, but only has one item.
-				while ( bp_groups() ) { bp_the_group();
+				while ( bp_groups() ) {
+					bp_the_group();
 
 					// Show a hidden input.
 					$result .= '<input type="hidden" id="bpgsites-post-in" name="bpgsites-post-in" value="' . bp_get_group_id() . '" />' . "\n";
@@ -2047,8 +1996,6 @@ class BP_Group_Sites_Activity {
 
 	}
 
-
-
 	/**
 	 * When a comment is saved, get the ID of the group it was submitted to.
 	 *
@@ -2062,10 +2009,11 @@ class BP_Group_Sites_Activity {
 		$group_id = false;
 
 		// Is this a comment in a group?
-		if ( isset( $_POST['bpgsites-post-in'] ) AND is_numeric( $_POST['bpgsites-post-in'] ) ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		if ( isset( $_POST['bpgsites-post-in'] ) && is_numeric( wp_unslash( $_POST['bpgsites-post-in'] ) ) ) {
 
 			// Get group ID.
-			$group_id = absint( $_POST['bpgsites-post-in'] );
+			$group_id = (int) wp_unslash( $_POST['bpgsites-post-in'] );
 
 		}
 
@@ -2073,8 +2021,6 @@ class BP_Group_Sites_Activity {
 		return $group_id;
 
 	}
-
-
 
 	/**
 	 * Filter the comment data returned via AJAX when editing a comment.
@@ -2087,7 +2033,9 @@ class BP_Group_Sites_Activity {
 	public function filter_ajax_get_comment( $data ) {
 
 		// Sanity check.
-		if ( ! isset( $data['id'] ) ) return $data;
+		if ( ! isset( $data['id'] ) ) {
+			return $data;
+		}
 
 		// Get the group ID of the comment.
 		$group_id = $this->get_comment_group_id( $data['id'] );
@@ -2099,8 +2047,6 @@ class BP_Group_Sites_Activity {
 		return $data;
 
 	}
-
-
 
 	/**
 	 * Filter the comment data returned via AJAX when a comment has been edited.
@@ -2134,8 +2080,6 @@ class BP_Group_Sites_Activity {
 
 	}
 
-
-
 	/**
 	 * When our filtering form is is submitted, parse groups by selection.
 	 *
@@ -2147,7 +2091,7 @@ class BP_Group_Sites_Activity {
 	public function filter_groups_by_checkboxes( $group_ids ) {
 
 		// Is this a comment in a group?
-		if ( isset( $_POST['bpgsites_comment_groups'] ) AND is_array( $_POST['bpgsites_comment_groups'] ) ) {
+		if ( isset( $_POST['bpgsites_comment_groups'] ) && is_array( $_POST['bpgsites_comment_groups'] ) ) {
 
 			// Overwrite with post array.
 			$group_ids = $_POST['bpgsites_comment_groups'];
@@ -2155,7 +2099,8 @@ class BP_Group_Sites_Activity {
 			// Sanitise all the items.
 			$group_ids = array_map( 'intval', $group_ids );
 
-			// Set cookie with delmited array.
+			// Set cookie with delimited array.
+			// phpcs:ignore Squiz.Commenting.InlineComment.InvalidEndChar
 			//setcookie( 'bpgsites_comment_groups', implode( '-', $group_ids ) );
 
 		} else {
@@ -2180,8 +2125,6 @@ class BP_Group_Sites_Activity {
 
 	}
 
-
-
 	/**
 	 * When our filtering form is is submitted, parse groups by selection.
 	 *
@@ -2202,7 +2145,7 @@ class BP_Group_Sites_Activity {
 		$group_id = $this->get_comment_group_id( $comment_id );
 
 		// Did we get one?
-		if ( $group_id != '' AND is_numeric( $group_id ) AND $group_id > 0 ) {
+		if ( $group_id != '' && is_numeric( $group_id ) && $group_id > 0 ) {
 
 			// Add group identifier.
 			$classes[] = 'bpgsites-group-' . $group_id;
@@ -2221,8 +2164,6 @@ class BP_Group_Sites_Activity {
 		return $classes;
 
 	}
-
-
 
 	/**
 	 * Parse groups by user membership.
@@ -2256,7 +2197,7 @@ class BP_Group_Sites_Activity {
 		$user_id = bp_loggedin_user_id();
 
 		// Loop through the groups.
-		foreach( $group_ids AS $group_id ) {
+		foreach ( $group_ids as $group_id ) {
 
 			// If this user is a member, add it.
 			if ( groups_is_user_member( $user_id, $group_id ) ) {
@@ -2281,14 +2222,17 @@ class BP_Group_Sites_Activity {
 				if ( $status == 'public' ) {
 
 					// Access object.
+					// phpcs:ignore Squiz.Commenting.InlineComment.InvalidEndChar
 					//global $bp_groupsites;
 
 					// Do we allow public comments?
+					// phpcs:ignore Squiz.Commenting.InlineComment.InvalidEndChar
 					//if ( $bp_groupsites->admin->option_get( 'bpgsites_public' ) ) {
 
 						// Add to our array.
 						$this->user_group_ids['public_groups'][] = $group_id;
 
+					// phpcs:ignore Squiz.Commenting.InlineComment.InvalidEndChar
 					//}
 
 				} else {
@@ -2300,7 +2244,7 @@ class BP_Group_Sites_Activity {
 					$linked_groups = bpgsites_group_linkages_get_groups_by_blog_id( $group_id, $current_blog_id );
 
 					// Loop through them.
-					foreach( $linked_groups AS $linked_group_id ) {
+					foreach ( $linked_groups as $linked_group_id ) {
 
 						// If the user is a member.
 						if ( groups_is_user_member( $user_id, $linked_group_id ) ) {
@@ -2331,8 +2275,6 @@ class BP_Group_Sites_Activity {
 
 	}
 
-
-
 	/**
 	 * Check if the user is a member of a group reading this site.
 	 *
@@ -2357,11 +2299,11 @@ class BP_Group_Sites_Activity {
 		$groups = groups_get_user_groups( bp_loggedin_user_id() );
 
 		// Loop through them.
-		foreach( $groups['groups'] AS $group ) {
+		foreach ( $groups['groups'] as $group ) {
 
 			// If the user is a member.
 			if (
-				in_array( $group, $user_group_ids['my_groups'] ) OR
+				in_array( $group, $user_group_ids['my_groups'] ) ||
 				in_array( $group, $user_group_ids['linked_groups'] )
 			) {
 
@@ -2379,8 +2321,6 @@ class BP_Group_Sites_Activity {
 		return $this->user_in_group;
 
 	}
-
-
 
 	/**
 	 * Show group sites activity in sidebar.
@@ -2404,6 +2344,7 @@ class BP_Group_Sites_Activity {
 				$section_header_text = apply_filters(
 					'bpgsites_activity_tab_recent_title_all_yours',
 					sprintf(
+						/* translators: %s: The plural name of Group Sites. */
 						__( 'All Recent Activity in your %s', 'bp-group-sites' ),
 						apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) )
 					)
@@ -2415,6 +2356,7 @@ class BP_Group_Sites_Activity {
 				$section_header_text = apply_filters(
 					'bpgsites_activity_tab_recent_title_all_public',
 					sprintf(
+						/* translators: %s: The plural name of Group Sites. */
 						__( 'Recent Activity in Public %s', 'bp-group-sites' ),
 						apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) )
 					)
@@ -2430,7 +2372,8 @@ class BP_Group_Sites_Activity {
 			<ol class="comment_activity">';
 
 			// Do the loop.
-			while ( bp_activities() ) { bp_the_activity();
+			while ( bp_activities() ) {
+				bp_the_activity();
 				echo $this->get_activity_item();
 			}
 
@@ -2440,8 +2383,6 @@ class BP_Group_Sites_Activity {
 			</div>';
 
 		}
-
-
 
 		// Friends Activity.
 
@@ -2458,6 +2399,7 @@ class BP_Group_Sites_Activity {
 				$section_header_text = apply_filters(
 					'bpgsites_activity_tab_recent_title_all_yours',
 					sprintf(
+						/* translators: %s: The plural name of Group Sites. */
 						__( 'Friends Activity in your %s', 'bp-group-sites' ),
 						apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) )
 					)
@@ -2471,7 +2413,8 @@ class BP_Group_Sites_Activity {
 				<ol class="comment_activity">';
 
 				// Do the loop.
-				while ( bp_activities() ) { bp_the_activity();
+				while ( bp_activities() ) {
+					bp_the_activity();
 					echo $this->get_activity_item();
 				}
 
@@ -2486,8 +2429,6 @@ class BP_Group_Sites_Activity {
 
 	}
 
-
-
 	/**
 	 * Show group sites activity in sidebar.
 	 *
@@ -2501,7 +2442,7 @@ class BP_Group_Sites_Activity {
 
 		<?php do_action( 'bp_before_activity_entry' ); ?>
 
-		<li class="<?php bp_activity_css_class(); echo $same_post; ?>" id="activity-<?php bp_activity_id(); ?>">
+		<li class="<?php bp_activity_css_class(); /* echo $same_post; */ ?>" id="activity-<?php bp_activity_id(); ?>">
 
 			<div class="comment-wrapper">
 
@@ -2534,8 +2475,6 @@ class BP_Group_Sites_Activity {
 
 	}
 
-
-
 	/**
 	 * Override the title of the Recent Posts section in the activity sidebar.
 	 *
@@ -2547,6 +2486,7 @@ class BP_Group_Sites_Activity {
 
 		// Set title, but allow plugins to override.
 		$title = sprintf(
+			/* translators: %s: The singular name of a Group Site. */
 			__( 'Recent Comments in this %s', 'bp-group-sites' ),
 			apply_filters( 'bpgsites_extension_name', __( 'Group Site', 'bp-group-sites' ) )
 		);
@@ -2556,13 +2496,9 @@ class BP_Group_Sites_Activity {
 
 	}
 
-
-
 	// =============================================================================
 	// We may or may not use what follows...
 	// =============================================================================
-
-
 
 	/**
 	 * Record the blog post activity for the group.
@@ -2579,11 +2515,8 @@ class BP_Group_Sites_Activity {
 		// Kick out until we figure out how to do this with multiple groups.
 		return $activity;
 
-
-
+		/*
 		// -------------------------------------------------------------------------
-
-
 
 		// Only on new blog posts.
 		if ( ( $activity->type != 'new_blog_post' ) ) {
@@ -2595,23 +2528,17 @@ class BP_Group_Sites_Activity {
 		$post_id = $activity->secondary_item_id;
 		$post = get_post( $post_id );
 
-
-
 		// Get the group IDs for this blog.
 		$group_ids = bpgsites_get_groups_by_blog_id( $blog_id );
 
 		// Sanity check.
-		if ( ! is_array( $group_ids ) OR count( $group_ids ) == 0 ) {
+		if ( ! is_array( $group_ids ) || count( $group_ids ) == 0 ) {
 			return $activity;
 		}
-
-
 
 		// -------------------------------------------------------------------------
 		// WHAT NOW???
 		// -------------------------------------------------------------------------
-
-
 
 		// Get group.
 		$group = groups_get_group( [ 'group_id' => $group_id ] );
@@ -2677,13 +2604,13 @@ class BP_Group_Sites_Activity {
 					$author_count = count( $authors );
 
 					// Loop.
-					foreach( $authors AS $author ) {
+					foreach ( $authors as $author ) {
 
 						// Default to comma.
 						$sep = ', ';
 
 						// If we're on the penultimate.
-						if ( $n == ($author_count - 1) ) {
+						if ( $n == ( $author_count - 1 ) ) {
 
 							// Use ampersand.
 							$sep = __( ' &amp; ', 'bp-group-sites' );
@@ -2737,7 +2664,7 @@ class BP_Group_Sites_Activity {
 
 		}
 
-		$activity->item_id = (int)$group_id;
+		$activity->item_id = (int) $group_id;
 		$activity->component = 'groups';
 
 		// Having marked all groupblogs as public, we need to hide activity from them if the group is private
@@ -2756,10 +2683,9 @@ class BP_Group_Sites_Activity {
 
 		// --<
 		return $activity;
+		*/
 
 	}
-
-
 
 	/**
 	 * Add a filter option to the filter select box on group activity pages.
@@ -2782,9 +2708,4 @@ class BP_Group_Sites_Activity {
 
 	}
 
-
-
-} // End class BP_Group_Sites_Activity.
-
-
-
+}

@@ -8,7 +8,7 @@ BP Group Sites
 **Tested up to:** 5.2<br/>
 **Stable tag:** 0.3.1<br/>
 **License:** GPLv2 or later<br/>
-**License URI:** https://www.gnu.org/licenses/gpl-2.0.html
+**License URI:** https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
 Enables the creation of a many-to-many relationship between *BuddyPress* Groups and *WordPress* Sites in a Multisite context.
 

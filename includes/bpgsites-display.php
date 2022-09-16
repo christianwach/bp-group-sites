@@ -1,18 +1,17 @@
-<?php /*
-================================================================================
-BP Group Sites Display Functions
-================================================================================
-AUTHOR: Christian Wach <needle@haystack.co.uk>
---------------------------------------------------------------------------------
-NOTES
-=====
+<?php
+/**
+ * BP Group Sites Display Functions.
+ *
+ * Functions which build markup live here.
+ *
+ * @package BP_Group_Sites
+ * @since 0.1
+ */
 
-Throw any functions which build markup in here.
-
---------------------------------------------------------------------------------
-*/
-
-
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Adds icon to menu in CBOX theme.
@@ -29,7 +28,7 @@ function bpgsites_cbox_theme_compatibility() {
 
 		<style type="text/css">
 		/* <![CDATA[ */
-		#nav-<?php echo apply_filters( 'bpgsites_extension_slug', 'group-sites' ) ?>:before
+		#nav-<?php echo apply_filters( 'bpgsites_extension_slug', 'group-sites' ); ?>:before
 		{
 			content: "C";
 		}
@@ -44,6 +43,3 @@ function bpgsites_cbox_theme_compatibility() {
 
 // Add action for the above.
 add_action( 'wp_head', 'bpgsites_cbox_theme_compatibility' );
-
-
-

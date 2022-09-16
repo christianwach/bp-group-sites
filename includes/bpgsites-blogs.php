@@ -1,19 +1,17 @@
-<?php /*
-================================================================================
-BP Group Sites Blogs Functions
-================================================================================
-AUTHOR: Christian Wach <needle@haystack.co.uk>
---------------------------------------------------------------------------------
-NOTES
-=====
+<?php
+/**
+ * BP Group Sites Blogs functions.
+ *
+ * Functions that relate to Group Site blogs live here.
+ *
+ * @package BP_Group_Sites
+ * @since 0.1
+ */
 
-We extend the BuddyPress BP Blogs template class so that we can filter by group
-association, whilst retaining useful stuff like pagination.
-
---------------------------------------------------------------------------------
-*/
-
-
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Query only Group Site blogs.
@@ -35,7 +33,7 @@ function bpgsites_has_blogs( $args = '' ) {
 	}
 
 	// Do we want all possible group sites?
-	if ( isset( $args['possible_sites'] ) AND $args['possible_sites'] === true ) {
+	if ( isset( $args['possible_sites'] ) && $args['possible_sites'] === true ) {
 
 		// Get all possible group sites.
 		$groupsites = bpgsites_get_all_possible_groupsites();
@@ -48,7 +46,7 @@ function bpgsites_has_blogs( $args = '' ) {
 	}
 
 	// Check for a passed group ID.
-	if ( isset( $args['group_id'] ) AND ! empty( $args['group_id'] ) ) {
+	if ( isset( $args['group_id'] ) && ! empty( $args['group_id'] ) ) {
 
 		// Get groupsite IDs for this group.
 		$groupsites = bpgsites_get_blogs_by_group_id( $args['group_id'] );
@@ -61,9 +59,7 @@ function bpgsites_has_blogs( $args = '' ) {
 	}
 
 	// Check for and use search terms.
-	$search_terms = ! empty( $_REQUEST['s'] )
-		? $_REQUEST['s']
-		: false;
+	$search_terms = ! empty( $_REQUEST['s'] ) ? wp_unslash( $_REQUEST['s'] ) : false;
 
 	// Declare defaults.
 	$defaults = [
@@ -97,8 +93,6 @@ function bpgsites_has_blogs( $args = '' ) {
 
 }
 
-
-
 /**
  * Intercept blogs query and manage display of blogs.
  *
@@ -118,8 +112,8 @@ function bpgsites_pre_filter_groupsites( $args ) {
 	// Init ID array.
 	$blog_ids = [];
 
-	if ( is_array( $all['blogs'] ) AND count( $all['blogs'] ) > 0 ) {
-		foreach ( $all['blogs'] AS $blog ) {
+	if ( is_array( $all['blogs'] ) && count( $all['blogs'] ) > 0 ) {
+		foreach ( $all['blogs'] as $blog ) {
 			$blog_ids[] = $blog->blog_id;
 		}
 	}
@@ -128,7 +122,7 @@ function bpgsites_pre_filter_groupsites( $args ) {
 	$groupsites_excluded = array_merge( array_diff( $blog_ids, $groupsites ) );
 
 	// Do we have an array of blogs to include?
-	if ( isset( $args['include_blog_ids'] ) AND ! empty( $args['include_blog_ids'] ) ) {
+	if ( isset( $args['include_blog_ids'] ) && ! empty( $args['include_blog_ids'] ) ) {
 
 		// Convert from comma-delimited if needed.
 		$include_blog_ids = array_filter( wp_parse_id_list( $args['include_blog_ids'] ) );
@@ -152,17 +146,13 @@ function bpgsites_pre_filter_groupsites( $args ) {
 	return $args;
 
 }
-
-
 // Only on front end OR ajax.
-if ( ! is_admin() OR ( defined( 'DOING_AJAX' ) AND DOING_AJAX ) ) {
+if ( ! is_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
 
-	// Use bp_parse_args post-parse filter (requires BP 2.0)
+	// Use bp_parse_args post-parse filter. Requires BP 2.0.
 	add_filter( 'bp_after_has_blogs_parse_args', 'bpgsites_pre_filter_groupsites', 30, 1 );
 
 }
-
-
 
 /**
  * Override the total number of sites, excluding groupsites.
@@ -194,14 +184,12 @@ function bpgsites_filter_total_blog_count() {
 }
 
 // Only on front end OR ajax.
-if ( ! is_admin() OR ( defined( 'DOING_AJAX' ) AND DOING_AJAX ) ) {
+if ( ! is_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
 
 	// Add filter for the above.
 	add_filter( 'bp_get_total_blog_count', 'bpgsites_filter_total_blog_count', 50 );
 
 }
-
-
 
 /**
  * Override the total number of sites for a user, excluding groupsites.
@@ -228,22 +216,16 @@ function bpgsites_filter_total_blog_count_for_user( $count ) {
 }
 
 // Only on front end OR ajax.
-if ( ! is_admin() OR ( defined( 'DOING_AJAX' ) AND DOING_AJAX ) ) {
+if ( ! is_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
 
 	// Add filter for the above, before BP applies its number formatting.
 	add_filter( 'bp_get_total_blog_count_for_user', 'bpgsites_filter_total_blog_count_for_user', 8, 1 );
 
 }
 
-
-
-/*
-================================================================================
-Functions which may only be used in the loop.
-================================================================================
-*/
-
-
+// =============================================================================
+// Functions which may only be used in the loop.
+// =============================================================================
 
 /**
  * Copied from bp_blogs_pagination_count() and amended.
@@ -266,6 +248,7 @@ function bpgsites_blogs_pagination_count() {
 
 	// We need to override the singular name.
 	echo sprintf(
+		/* translators: 1: The singular name for Group Sites, 2: Starting page number, 3: Ending page number, 4: Total number of pages, 5: The plural name for Group Sites. */
 		__( 'Viewing %1$s %2$s to %3$s (of %4$s %5$s)', 'bp-group-sites' ),
 		$singular,
 		$from_num,
@@ -275,8 +258,6 @@ function bpgsites_blogs_pagination_count() {
 	);
 
 }
-
-
 
 /**
  * Get the total number of groupsites being tracked.
@@ -289,7 +270,8 @@ function bpgsites_blogs_pagination_count() {
 function bpgsites_total_blogs() {
 
 	// Get from cache if possible.
-	if ( ! $count = wp_cache_get( 'bpgsites_groupsites', 'bpgsites' ) ) {
+	$count = wp_cache_get( 'bpgsites_groupsites', 'bpgsites' );
+	if ( ! $count ) {
 
 		// Use function.
 		$groupsites = bpgsites_get_groupsites();
@@ -307,8 +289,6 @@ function bpgsites_total_blogs() {
 
 }
 
-
-
 /**
  * Output the total number of groupsites on the site.
  *
@@ -318,21 +298,19 @@ function bpgsites_total_blog_count() {
 	echo bpgsites_get_total_blog_count();
 }
 
-	/**
-	 * Return the total number of groupsites on the site.
-	 *
-	 * @since 0.1
-	 *
-	 * @return int Total number of groupsites.
-	 */
-	function bpgsites_get_total_blog_count() {
-		return apply_filters( 'bpgsites_get_total_blog_count', bpgsites_total_blogs() );
-	}
+/**
+ * Return the total number of groupsites on the site.
+ *
+ * @since 0.1
+ *
+ * @return int Total number of groupsites.
+ */
+function bpgsites_get_total_blog_count() {
+	return apply_filters( 'bpgsites_get_total_blog_count', bpgsites_total_blogs() );
+}
 
-	// Format number that gets returned.
-	add_filter( 'bpgsites_get_total_blog_count', 'bp_core_number_format' );
-
-
+// Format number that gets returned.
+add_filter( 'bpgsites_get_total_blog_count', 'bp_core_number_format' );
 
 /**
  * Get the total number of groupsites for a user
@@ -340,6 +318,7 @@ function bpgsites_total_blog_count() {
  *
  * @since 0.1
  *
+ * @param int $user_id The numeric ID of a user.
  * @return int $count Total blog count for a user.
  */
 function bpgsites_total_blogs_for_user( $user_id = 0 ) {
@@ -349,9 +328,10 @@ function bpgsites_total_blogs_for_user( $user_id = 0 ) {
 		$user_id = ( bp_displayed_user_id() ) ? bp_displayed_user_id() : bp_loggedin_user_id();
 	}
 
-	if ( ! $count = wp_cache_get( 'bpgsites_total_blogs_for_user_' . $user_id, 'bpgsites' ) ) {
+	$count = wp_cache_get( 'bpgsites_total_blogs_for_user_' . $user_id, 'bpgsites' );
+	if ( ! $count ) {
 
-		// Get groupsites for this user (kind of meaningless, so empty)
+		// Get groupsites for this user - kind of meaningless, so empty.
 		$blogs = [];
 
 		// Get count.
@@ -367,32 +347,31 @@ function bpgsites_total_blogs_for_user( $user_id = 0 ) {
 
 }
 
-
-
 /**
  * Output the total number of working blogs for a user.
  *
  * @since 0.1
+ *
+ * @param int $user_id The numeric ID of a user.
  */
 function bpgsites_total_blog_count_for_user( $user_id = 0 ) {
 	echo bpgsites_get_total_blog_count_for_user( $user_id );
 }
 
-	/**
-	 * Return the total number of working blogs for this user.
-	 *
-	 * @since 0.1
-	 *
-	 * @return int Total number of working blogs for this user.
-	 */
-	function bpgsites_get_total_blog_count_for_user( $user_id = 0 ) {
-		return apply_filters( 'bpgsites_get_total_blog_count_for_user', bpgsites_total_blogs_for_user( $user_id ) );
-	}
+/**
+ * Return the total number of working blogs for this user.
+ *
+ * @since 0.1
+ *
+ * @param int $user_id The numeric ID of a user.
+ * @return int Total number of working blogs for this user.
+ */
+function bpgsites_get_total_blog_count_for_user( $user_id = 0 ) {
+	return apply_filters( 'bpgsites_get_total_blog_count_for_user', bpgsites_total_blogs_for_user( $user_id ) );
+}
 
-	// Format number that gets returned.
-	add_filter( 'bpgsites_get_total_blog_count_for_user', 'bp_core_number_format' );
-
-
+// Format number that gets returned.
+add_filter( 'bpgsites_get_total_blog_count_for_user', 'bp_core_number_format' );
 
 /**
  * For a blog in the loop, check if it is associated with the current group.
@@ -410,10 +389,7 @@ function bpgsites_is_blog_in_group() {
 	$return = false;
 
 	// Sanity check.
-	if (
-		is_array( $groups ) AND
-		count( $groups ) > 0
-	) {
+	if ( is_array( $groups ) && count( $groups ) > 0 ) {
 
 		// Is the current group in the array?
 		if ( in_array( bp_get_current_group_id(), $groups ) ) {
@@ -426,8 +402,6 @@ function bpgsites_is_blog_in_group() {
 	return apply_filters( 'bpgsites_is_blog_in_group', $return );
 
 }
-
-
 
 /**
  * Get the text value of a submit button.
@@ -445,8 +419,6 @@ function bpgsites_admin_button_value() {
 
 }
 
-
-
 /**
  * Get the action of a submit button.
  *
@@ -463,8 +435,6 @@ function bpgsites_admin_button_action() {
 
 }
 
-
-
 /**
  * Output the group sites component root slug.
  *
@@ -476,26 +446,20 @@ function bpgsites_root_slug() {
 	echo bpgsites_get_root_slug();
 }
 
-	/**
-	 * Return the group sites component root slug.
-	 *
-	 * @since 0.1
-	 *
-	 * @return string The 'blogs' root slug.
-	 */
-	function bpgsites_get_root_slug() {
-		return apply_filters( 'bpgsites_get_root_slug', buddypress()->bpgsites->root_slug );
-	}
+/**
+ * Return the group sites component root slug.
+ *
+ * @since 0.1
+ *
+ * @return string The 'blogs' root slug.
+ */
+function bpgsites_get_root_slug() {
+	return apply_filters( 'bpgsites_get_root_slug', buddypress()->bpgsites->root_slug );
+}
 
-
-
-/*
-================================================================================
-Functions which enable loop compatibility with CommentPress "Site Image".
-================================================================================
-*/
-
-
+// =============================================================================
+// Functions which enable loop compatibility with CommentPress "Site Image".
+// =============================================================================
 
 /**
  * Capture "Site Image" uploads and store.
@@ -523,7 +487,7 @@ function bpgsites_commentpress_site_image( $old_value, $new_value ) {
 		}
 
 		// Do we have a site image?
-		if ( isset( $new_value['cp_site_image'] ) AND ! empty( $new_value['cp_site_image'] ) ) {
+		if ( ! empty( $new_value['cp_site_image'] ) ) {
 
 			// We should get the attachment ID.
 			$attachment_id = $new_value['cp_site_image'];
@@ -537,8 +501,8 @@ function bpgsites_commentpress_site_image( $old_value, $new_value ) {
 			// Get existing option.
 			$existing = $bp_groupsites->admin->option_get( 'bpgsites_bloginfo' );
 
-			// Overwrite (or create if it doesn't already exist)
-			$existing[$blog_id] = [
+			// Overwrite - or create if it doesn't already exist.
+			$existing[ $blog_id ] = [
 				'blog_id' => $blog_id,
 				'attachment_id' => $attachment_id,
 				'thumb' => $attachment_thumb,
@@ -553,7 +517,7 @@ function bpgsites_commentpress_site_image( $old_value, $new_value ) {
 			$existing = $bp_groupsites->admin->option_get( 'bpgsites_bloginfo' );
 
 			// Remove entry.
-			unset( $existing[$blog_id] );
+			unset( $existing[ $blog_id ] );
 
 		}
 
@@ -569,8 +533,6 @@ function bpgsites_commentpress_site_image( $old_value, $new_value ) {
 
 // Add action for the above.
 add_action( 'update_option_commentpress_theme_settings', 'bpgsites_commentpress_site_image', 10, 2 );
-
-
 
 /**
  * Replace groupsite avatar with "Site Image".
@@ -591,16 +553,16 @@ function bpgsites_commentpress_site_image_avatar( $avatar, $blog_id, $r ) {
 	$existing = $bp_groupsites->admin->option_get( 'bpgsites_bloginfo' );
 
 	// Do we have an entry?
-	if ( is_array( $existing ) AND array_key_exists( $blog_id, $existing ) ) {
+	if ( is_array( $existing ) && array_key_exists( $blog_id, $existing ) ) {
 
 		// Get type to use.
 		$type = apply_filters( 'bpgsites_bloginfo_avatar_type', 'thumb' );
 
 		// Sanity check.
-		if ( isset( $existing[$blog_id][$type] ) ) {
+		if ( isset( $existing[ $blog_id ][ $type ] ) ) {
 
 			// Get image by type.
-			$image = $existing[$blog_id][$type];
+			$image = $existing[ $blog_id ][ $type ];
 
 			// Get blog name.
 			$blog_name = bp_blogs_get_blogmeta( $blog_id, 'name' );
@@ -619,6 +581,3 @@ function bpgsites_commentpress_site_image_avatar( $avatar, $blog_id, $r ) {
 
 // Add action for the above.
 add_filter( 'bp_get_blog_avatar', 'bpgsites_commentpress_site_image_avatar', 100, 3 );
-
-
-

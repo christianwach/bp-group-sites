@@ -39,11 +39,14 @@ if ( bpgsites_has_blogs( bp_ajax_querystring( 'bpgsites' ) ) ) {
 	 *
 	 * @since 1.1.0
 	 */
-	do_action( 'bp_before_directory_blogs_list' ); ?>
+	do_action( 'bp_before_directory_blogs_list' );
+
+	?>
 
 	<ul id="blogs-list" class="item-list">
 
-	<?php while ( bp_blogs() ) : bp_the_blog(); ?>
+	<?php while ( bp_blogs() ) : ?>
+		<?php bp_the_blog(); ?>
 
 		<li>
 			<div class="item-avatar">
@@ -61,7 +64,9 @@ if ( bpgsites_has_blogs( bp_ajax_querystring( 'bpgsites' ) ) ) {
 				 *
 				 * @since 1.2.0
 				 */
-				do_action( 'bp_directory_blogs_item' ); ?>
+				do_action( 'bp_directory_blogs_item' );
+
+				?>
 			</div>
 
 			<div class="action">
@@ -73,7 +78,9 @@ if ( bpgsites_has_blogs( bp_ajax_querystring( 'bpgsites' ) ) ) {
 				 *
 				 * @since 1.1.0
 				 */
-				do_action( 'bp_directory_blogs_actions' ); ?>
+				do_action( 'bp_directory_blogs_actions' );
+
+				?>
 
 				<div class="meta">
 
@@ -97,7 +104,9 @@ if ( bpgsites_has_blogs( bp_ajax_querystring( 'bpgsites' ) ) ) {
 	 *
 	 * @since 1.1.0
 	 */
-	do_action( 'bp_after_directory_blogs_list' ); ?>
+	do_action( 'bp_after_directory_blogs_list' );
+
+	?>
 
 	<?php bp_blog_hidden_fields(); ?>
 
@@ -124,7 +133,7 @@ if ( bpgsites_has_blogs( bp_ajax_querystring( 'bpgsites' ) ) ) {
 	?>
 
 	<div id="message" class="info">
-		<p><?php _e( 'Sorry, there were no sites found.', 'bp-group-sites' ); ?></p>
+		<p><?php esc_html_e( 'Sorry, there were no sites found.', 'bp-group-sites' ); ?></p>
 	</div>
 
 	<?php

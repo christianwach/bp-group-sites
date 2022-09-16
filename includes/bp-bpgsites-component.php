@@ -1,10 +1,10 @@
 <?php
-
 /**
- * BP Group Sites Component
+ * BP Group Sites Component.
  *
  * The group sites component, for listing group sites.
  *
+ * @package BP_Group_Sites
  * @since 0.1
  */
 
@@ -13,16 +13,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-
-
 /**
  * Class definition.
  *
  * @since 0.1
  */
 class BP_Group_Sites_Component extends BP_Component {
-
-
 
 	/**
 	 * Start the group_sites component creation process.
@@ -42,7 +38,7 @@ class BP_Group_Sites_Component extends BP_Component {
 		$this->name = apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) );
 
 		// Add this component to active components.
-		$bp->active_components[$this->id] = '1';
+		$bp->active_components[ $this->id ] = '1';
 
 		// Init parent.
 		parent::start(
@@ -56,25 +52,23 @@ class BP_Group_Sites_Component extends BP_Component {
 		 * BuddyPress-dependent plugins are loaded too late to depend on BP_Component's
 		 * hooks, so we must call the function directly.
 		 */
-		 $this->includes();
+		$this->includes();
 
 	}
-
-
 
 	/**
 	 * Include our component's files.
 	 *
 	 * @since 0.1
+	 *
+	 * @param array $includes An array of file names, or file name chunks, to be parsed and then included.
 	 */
 	public function includes( $includes = [] ) {
 
 		// Include screens file.
-		include( BPGSITES_PATH . 'includes/bp-bpgsites-screens.php' );
+		include BPGSITES_PATH . 'includes/bp-bpgsites-screens.php';
 
 	}
-
-
 
 	/**
 	 * Set up global settings for the group_sites component.
@@ -92,6 +86,7 @@ class BP_Group_Sites_Component extends BP_Component {
 
 		// Construct search string.
 		$search_string = sprintf(
+			/* translators: %s: The plural name for Group Sites. */
 			__( 'Search %s...', 'bp-group-sites' ),
 			apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) )
 		);
@@ -99,9 +94,9 @@ class BP_Group_Sites_Component extends BP_Component {
 		// Construct args.
 		$args = [
 			// Non-multisite installs don't need a top-level BP Group Sites directory, since there's only one site.
-			'root_slug'             => isset( $bp->pages->{$this->id}->slug ) ? $bp->pages->{$this->id}->slug : $this->id,
-			'has_directory'         => true,
-			'search_string'         => $search_string,
+			'root_slug'     => isset( $bp->pages->{$this->id}->slug ) ? $bp->pages->{$this->id}->slug : $this->id,
+			'has_directory' => true,
+			'search_string' => $search_string,
 		];
 
 		// Set up the globals.
@@ -109,16 +104,10 @@ class BP_Group_Sites_Component extends BP_Component {
 
 	}
 
-
-
-} // Class ends
-
-
+}
 
 // Set up the bp-group-sites component now, since this file is included on bp_loaded.
 buddypress()->bpgsites = new BP_Group_Sites_Component();
-
-
 
 /**
  * Check whether the current page is part of the BP Group Sites component.
@@ -130,7 +119,7 @@ buddypress()->bpgsites = new BP_Group_Sites_Component();
 function bp_is_bpgsites_component() {
 
 	// Is this our component?
-	if ( is_multisite() AND bp_is_current_component( 'bpgsites' ) ) {
+	if ( is_multisite() && bp_is_current_component( 'bpgsites' ) ) {
 		return true;
 	}
 
@@ -138,8 +127,6 @@ function bp_is_bpgsites_component() {
 	return false;
 
 }
-
-
 
 /**
  * A custom load template filter for this component.
@@ -185,8 +172,6 @@ function bpgsites_load_template_filter( $found_template, $templates ) {
 // NOTE: adding this disables BP_Group_Sites_Theme_Compat.
 add_filter( 'bp_located_template', 'bpgsites_load_template_filter', 10, 2 );
 
-
-
 /**
  * Load our loop when requested.
  *
@@ -195,29 +180,32 @@ add_filter( 'bp_located_template', 'bpgsites_load_template_filter', 10, 2 );
 function bpgsites_object_template_loader() {
 
 	// Bail if not a POST action.
-	if ( 'POST' !== strtoupper( $_SERVER['REQUEST_METHOD'] ) ) {
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$method = isset( $_SERVER['REQUEST_METHOD'] ) ? wp_unslash( $_SERVER['REQUEST_METHOD'] ) : '';
+	if ( 'POST' !== strtoupper( $method ) ) {
 		return;
 	}
 
 	// Bail if no object passed.
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 	if ( empty( $_POST['object'] ) ) {
 		return;
 	}
 
 	// Sanitize the object.
-	$object = sanitize_title( $_POST['object'] );
+	$object = sanitize_title( wp_unslash( $_POST['object'] ) );
 
 	// Bail if object is not an active component to prevent arbitrary file inclusion.
 	if ( ! bp_is_active( $object ) ) {
 		return;
 	}
 
-	// Enable visit button
+	// Enable visit button.
 	if ( bp_is_active( 'bpgsites' ) ) {
-		add_action( 'bp_directory_blogs_actions',  'bp_blogs_visit_blog_button' );
+		add_action( 'bp_directory_blogs_actions', 'bp_blogs_visit_blog_button' );
 	}
 
- 	/*
+	/*
 	 * AJAX requests happen too early to be seen by bp_update_is_directory()
 	 * so we do it manually here to ensure templates load with the correct
 	 * context. Without this check, templates will load the 'single' version
@@ -236,6 +224,3 @@ function bpgsites_object_template_loader() {
 // Add ajax actions for the above.
 add_action( 'wp_ajax_bpgsites_filter', 'bpgsites_object_template_loader' );
 add_action( 'wp_ajax_nopriv_bpgsites_filter', 'bpgsites_object_template_loader' );
-
-
-

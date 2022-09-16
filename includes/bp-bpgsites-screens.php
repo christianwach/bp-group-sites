@@ -1,21 +1,17 @@
 <?php
-
 /**
  * BP Group Sites Screens.
  *
+ * Handles theme compatibility for BP Group Sites.
+ *
+ * @package BP_Group_Sites
  * @since 0.1
  */
-
-
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-
-
-
-/** Theme Compatability *******************************************************/
 
 /**
  * The main theme compat class for BP Group Sites.
@@ -26,8 +22,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 0.1
  */
 class BP_Group_Sites_Theme_Compat {
-
-
 
 	/**
 	 * Set up theme compatibility for the BP Group Sites component.
@@ -40,8 +34,6 @@ class BP_Group_Sites_Theme_Compat {
 		add_action( 'bp_setup_theme_compat', [ $this, 'is_bpgsites' ] );
 
 	}
-
-
 
 	/**
 	 * Are we looking at something that needs BP Group Sites theme compatability?
@@ -65,15 +57,13 @@ class BP_Group_Sites_Theme_Compat {
 			do_action( 'bp_blogs_screen_index' );
 
 			// Add hooks.
-			add_filter( 'bp_get_buddypress_template',                [ $this, 'directory_template_hierarchy' ] );
+			add_filter( 'bp_get_buddypress_template', [ $this, 'directory_template_hierarchy' ] );
 			add_action( 'bp_template_include_reset_dummy_post_data', [ $this, 'directory_dummy_post' ] );
-			add_filter( 'bp_replace_the_content',                    [ $this, 'directory_content'    ] );
+			add_filter( 'bp_replace_the_content', [ $this, 'directory_content' ] );
 
 		}
 
 	}
-
-
 
 	/**
 	 * Add template hierarchy to theme compat for the BP Group Sites directory page.
@@ -90,16 +80,17 @@ class BP_Group_Sites_Theme_Compat {
 			'bpgsites/index.php',
 		] );
 
-		// Merge new templates with existing stack.
-		// @see bp_get_theme_compat_templates()
+		/*
+		 * Merge new templates with existing stack.
+		 *
+		 * @see bp_get_theme_compat_templates()
+		 */
 		$templates = array_merge( (array) $new_templates, $templates );
 
 		// --<
 		return $templates;
 
 	}
-
-
 
 	/**
 	 * Update the global $post with directory data.
@@ -126,8 +117,6 @@ class BP_Group_Sites_Theme_Compat {
 
 	}
 
-
-
 	/**
 	 * Filter the_content with the BP Group Sites index template part.
 	 *
@@ -142,20 +131,12 @@ class BP_Group_Sites_Theme_Compat {
 
 	}
 
+}
 
-
-} // Class ends
-
-
-
-// Init
+// Init.
 new BP_Group_Sites_Theme_Compat();
 
-
-
 //==============================================================================
-
-
 
 /**
  * Load the top-level BP Group Sites directory.
@@ -182,6 +163,3 @@ function bpgsites_screen_index() {
 
 // Add action for the above.
 add_action( 'bp_screens', 'bpgsites_screen_index', 20 );
-
-
-

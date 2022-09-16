@@ -1,18 +1,17 @@
-<?php /*
---------------------------------------------------------------------------------
-Plugin Name: BP Group Sites
-Description: Creates many-to-many relationships between BuddyPress Groups and WordPress Sites.
-Version: 0.3.1
-Author: Christian Wach
-Author URI: http://haystack.co.uk
-Plugin URI: https://github.com/christianwach/bp-group-sites
-Text Domain: bp-group-sites
-Domain Path: /languages
-Network: true
---------------------------------------------------------------------------------
-*/
-
-
+<?php
+/**
+ * Plugin Name: BP Group Sites
+ * Description: Creates many-to-many relationships between BuddyPress Groups and WordPress Sites.
+ * Version: 0.3.1
+ * Author: Christian Wach
+ * Author URI: https://haystack.co.uk
+ * Plugin URI: https://github.com/christianwach/bp-group-sites
+ * Text Domain: bp-group-sites
+ * Domain Path: /languages
+ * Network: true
+ *
+ * @package BP_Group_Sites
+ */
 
 // Set our version here.
 define( 'BPGSITES_VERSION', '0.3.1' );
@@ -46,8 +45,6 @@ define( 'BPGSITES_OPTION', 'bpgsites_group_blogs' );
 // Set comment meta key.
 define( 'BPGSITES_COMMENT_META_KEY', 'bpgsites_group_id' );
 
-
-
 /**
  * BP Group Sites class.
  *
@@ -75,8 +72,6 @@ class BP_Group_Sites {
 	 */
 	public $activity;
 
-
-
 	/**
 	 * Constructor.
 	 *
@@ -97,11 +92,7 @@ class BP_Group_Sites {
 
 	}
 
-
-
 	//##########################################################################
-
-
 
 	/**
 	 * Actions to perform on plugin activation.
@@ -115,8 +106,6 @@ class BP_Group_Sites {
 
 	}
 
-
-
 	/**
 	 * Actions to perform on plugin deactivation (NOT deletion).
 	 *
@@ -129,11 +118,7 @@ class BP_Group_Sites {
 
 	}
 
-
-
 	//##########################################################################
-
-
 
 	/**
 	 * Load translation files.
@@ -146,6 +131,7 @@ class BP_Group_Sites {
 	public function enable_translation() {
 
 		// Enable translation.
+		// phpcs:ignore WordPress.WP.DeprecatedParameters.Load_plugin_textdomainParam2Found
 		load_plugin_textdomain(
 			'bp-group-sites', // Unique name.
 			false, // Deprecated argument.
@@ -153,8 +139,6 @@ class BP_Group_Sites {
 		);
 
 	}
-
-
 
 	/**
 	 * Initialise the admin object.
@@ -164,14 +148,12 @@ class BP_Group_Sites {
 	public function initialise_admin() {
 
 		// Load our admin class file.
-		require( BPGSITES_PATH . 'includes/bpgsites-admin.php' );
+		require BPGSITES_PATH . 'includes/bpgsites-admin.php';
 
 		// Init object, sending reference to this class.
 		$this->admin = new BP_Group_Sites_Admin( $this );
 
 	}
-
-
 
 	/**
 	 * Do stuff on plugin init.
@@ -181,29 +163,27 @@ class BP_Group_Sites {
 	public function initialise() {
 
 		// Load our linkage functions file.
-		require( BPGSITES_PATH . 'includes/bpgsites-linkage.php' );
+		require BPGSITES_PATH . 'includes/bpgsites-linkage.php';
 
 		// Load our display functions file.
-		require( BPGSITES_PATH . 'includes/bpgsites-display.php' );
+		require BPGSITES_PATH . 'includes/bpgsites-display.php';
 
 		// Load our activity functions file.
-		require( BPGSITES_PATH . 'includes/bpgsites-activity.php' );
+		require BPGSITES_PATH . 'includes/bpgsites-activity.php';
 
 		// Init object.
 		$this->activity = new BP_Group_Sites_Activity();
 
 		// Load our blogs extension.
-		require( BPGSITES_PATH . 'includes/bpgsites-blogs.php' );
+		require BPGSITES_PATH . 'includes/bpgsites-blogs.php';
 
 		// Load our group extension.
-		require( BPGSITES_PATH . 'includes/bpgsites-groups.php' );
+		require BPGSITES_PATH . 'includes/bpgsites-groups.php';
 
 		// Load our component file.
-		require( BPGSITES_PATH . 'includes/bp-bpgsites-component.php' );
+		require BPGSITES_PATH . 'includes/bp-bpgsites-component.php';
 
 	}
-
-
 
 	/**
 	 * Register hooks on plugin init.
@@ -228,19 +208,14 @@ class BP_Group_Sites {
 		// If the current blog is a group site.
 		if ( bpgsites_is_groupsite( get_current_blog_id() ) ) {
 
-			// If on front end.
+			// Register our CommentPress scripts if on front end.
 			if ( ! is_admin() ) {
-
-				// Register our CommentPress scripts.
 				add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_commentpress_scripts' ], 20 );
-
 			}
 
 		}
 
 	}
-
-
 
 	/**
 	 * Register theme hooks on bp include.
@@ -254,8 +229,6 @@ class BP_Group_Sites {
 
 	}
 
-
-
 	/**
 	 * Add our templates to the theme stack.
 	 *
@@ -264,11 +237,9 @@ class BP_Group_Sites {
 	public function theme_compat() {
 
 		// Add templates dir to BuddyPress.
-		bp_register_template_stack( 'bpgsites_templates_dir',  16 );
+		bp_register_template_stack( 'bpgsites_templates_dir', 16 );
 
 	}
-
-
 
 	/**
 	 * Add our front-end stylesheets.
@@ -283,7 +254,9 @@ class BP_Group_Sites {
 			// Register Select2 styles.
 			wp_register_style(
 				'bpgsites_select2_css',
-				set_url_scheme( 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css' )
+				set_url_scheme( 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css' ),
+				null,
+				'4.0.10'
 			);
 
 			// Enqueue styles.
@@ -302,8 +275,6 @@ class BP_Group_Sites {
 
 	}
 
-
-
 	/**
 	 * Add our front-end Javascripts.
 	 *
@@ -311,15 +282,16 @@ class BP_Group_Sites {
 	 */
 	public function enqueue_scripts() {
 
-		// Only on root blog
-		if ( is_multisite() AND bp_is_root_blog() ) {
+		// Only on root blog.
+		if ( is_multisite() && bp_is_root_blog() ) {
 
 			// Enqueue activity stream javascript.
 			wp_enqueue_script(
 				'bpgsites_activity_js',
 				BPGSITES_URL . 'assets/js/bpgsites-activity.js',
 				[ 'jquery' ],
-				BPGSITES_VERSION
+				BPGSITES_VERSION,
+				true
 			);
 
 			// If on group admin screen.
@@ -329,7 +301,9 @@ class BP_Group_Sites {
 				wp_register_script(
 					'bpgsites_select2_js',
 					set_url_scheme( 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js' ),
-					[ 'jquery' ]
+					[ 'jquery' ],
+					'4.0.10',
+					true
 				);
 
 				// Enqueue script.
@@ -340,7 +314,8 @@ class BP_Group_Sites {
 					'bpgsites_select2_custom_js',
 					BPGSITES_URL . 'assets/js/bpgsites-group-admin.js',
 					[ 'bpgsites_select2_js' ],
-					BPGSITES_VERSION
+					BPGSITES_VERSION,
+					true
 				);
 
 				// Localisation array.
@@ -364,8 +339,6 @@ class BP_Group_Sites {
 
 	}
 
-
-
 	/**
 	 * Add our CommentPress-specific scripts.
 	 *
@@ -381,7 +354,8 @@ class BP_Group_Sites {
 				'bpgsites_cp_js',
 				BPGSITES_URL . 'assets/js/bpgsites-commentpress.js',
 				[ 'cp_common_js' ],
-				BPGSITES_VERSION
+				BPGSITES_VERSION,
+				true
 			);
 
 			// Get vars.
@@ -396,8 +370,6 @@ class BP_Group_Sites {
 
 	}
 
-
-
 	/**
 	 * Register widgets for this plugin.
 	 *
@@ -406,19 +378,11 @@ class BP_Group_Sites {
 	public function register_widgets() {
 
 		// Include widgets.
-		require_once( BPGSITES_PATH . 'includes/bpgsites-widgets.php' );
+		require_once BPGSITES_PATH . 'includes/bpgsites-widgets.php';
 
 	}
 
-
-
-	//##########################################################################
-
-
-
-} // Class ends.
-
-
+}
 
 // Init plugin.
 global $bp_groupsites;
@@ -430,10 +394,11 @@ register_activation_hook( __FILE__, [ $bp_groupsites, 'activate' ] );
 // Deactivation.
 register_deactivation_hook( __FILE__, [ $bp_groupsites, 'deactivate' ] );
 
-// Will use the 'uninstall.php' method.
-// See: http://codex.wordpress.org/Function_Reference/register_uninstall_hook
-
-
+/*
+ * Will use the 'uninstall.php' method.
+ *
+ * @see: https://codex.wordpress.org/Function_Reference/register_uninstall_hook
+ */
 
 /**
  * Returns the path to our templates directory.
@@ -444,16 +409,16 @@ register_deactivation_hook( __FILE__, [ $bp_groupsites, 'deactivate' ] );
  */
 function bpgsites_templates_dir() {
 
-	// Return filterable path to templates.
-	$path = apply_filters(
-		'bpgsites_templates_dir', // Hook.
-		BPGSITES_PATH . 'assets/templates' // Path.
-	);
+	/**
+	 * Return filterable path to templates.
+	 *
+	 * @since 0.1
+	 *
+	 * @param str The default path to this plugin's templates directory.
+	 */
+	$path = apply_filters( 'bpgsites_templates_dir', BPGSITES_PATH . 'assets/templates' );
 
 	// --<
 	return $path;
 
 }
-
-
-

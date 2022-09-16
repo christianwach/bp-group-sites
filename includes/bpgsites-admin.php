@@ -1,18 +1,17 @@
-<?php /*
-================================================================================
-BP Group Sites Admin Functions
-================================================================================
-AUTHOR: Christian Wach <needle@haystack.co.uk>
---------------------------------------------------------------------------------
-NOTES
-=====
+<?php
+/**
+ * BP Group Sites Admin class.
+ *
+ * Handles admin screen functionality.
+ *
+ * @package BP_Group_Sites
+ * @since 0.1
+ */
 
-The plugin's admin screen logic
-
---------------------------------------------------------------------------------
-*/
-
-
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * BP Group Sites Admin class.
@@ -32,8 +31,6 @@ class BP_Group_Sites_Admin {
 	 */
 	public $bpgsites_options = [];
 
-
-
 	/**
 	 * Constructor.
 	 *
@@ -45,8 +42,6 @@ class BP_Group_Sites_Admin {
 		$this->bpgsites_options = bpgsites_site_option_get( 'bpgsites_options', [] );
 
 	}
-
-
 
 	/**
 	 * Register hooks on plugin init.
@@ -65,8 +60,6 @@ class BP_Group_Sites_Admin {
 
 	}
 
-
-
 	/**
 	 * Actions to perform on plugin activation.
 	 *
@@ -80,7 +73,7 @@ class BP_Group_Sites_Admin {
 		}
 
 		// Get defaults.
-		$defaults = $this->_get_defaults();
+		$defaults = $this->get_defaults();
 
 		// Default public comment visibility to "off".
 		$this->option_set( 'bpgsites_public', $defaults['public'] );
@@ -114,8 +107,6 @@ class BP_Group_Sites_Admin {
 
 	}
 
-
-
 	/**
 	 * Actions to perform on plugin deactivation (NOT deletion).
 	 *
@@ -130,8 +121,6 @@ class BP_Group_Sites_Admin {
 		delete_site_option( 'bpgsites_auth_groups' );
 
 	}
-
-
 
 	/**
 	 * Add an admin page for this plugin.
@@ -155,7 +144,7 @@ class BP_Group_Sites_Admin {
 			__( 'BP Group Sites', 'bp-group-sites' ),
 			'manage_options',
 			'bpgsites_admin_page',
-			[ $this, '_network_admin_form' ]
+			[ $this, 'network_admin_form' ]
 		);
 
 		/*
@@ -165,8 +154,6 @@ class BP_Group_Sites_Admin {
 		add_action( 'admin_print_styles-' . $page, [ $this, 'add_admin_styles' ] );
 
 	}
-
-
 
 	/**
 	 * Enqueue any styles and scripts needed by our admin page.
@@ -186,8 +173,6 @@ class BP_Group_Sites_Admin {
 
 	}
 
-
-
 	/**
 	 * Update options based on content of form.
 	 *
@@ -195,14 +180,16 @@ class BP_Group_Sites_Admin {
 	 */
 	public function options_update() {
 
-	 	// Kick out if the form was not submitted.
-		if( ! isset( $_POST['bpgsites_submit'] ) ) return;
+		// Kick out if the form was not submitted.
+		if ( ! isset( $_POST['bpgsites_submit'] ) ) {
+			return;
+		}
 
 		// Check that we trust the source of the data.
 		check_admin_referer( 'bpgsites_admin_action', 'bpgsites_nonce' );
 
 		// Debugging switch for admins and network admins - if set, triggers do_debug() below.
-		if ( is_super_admin() AND isset( $_POST['bpgsites_debug'] ) ) {
+		if ( is_super_admin() && isset( $_POST['bpgsites_debug'] ) ) {
 			$settings_debug = absint( $_POST['bpgsites_debug'] );
 			$debug = $settings_debug ? 1 : 0;
 			if ( $debug ) {
@@ -223,7 +210,7 @@ class BP_Group_Sites_Admin {
 		extract( $_POST );
 
 		// Get defaults.
-		$defaults = $this->_get_defaults();
+		$defaults = $this->get_defaults();
 
 		// Set public comments visibility on/off option.
 		$bpgsites_public = absint( $bpgsites_public );
@@ -286,8 +273,6 @@ class BP_Group_Sites_Admin {
 
 	}
 
-
-
 	/**
 	 * Save array as site option.
 	 *
@@ -301,8 +286,6 @@ class BP_Group_Sites_Admin {
 		return bpgsites_site_option_set( 'bpgsites_options', $this->bpgsites_options );
 
 	}
-
-
 
 	/**
 	 * Return a value for a specified option.
@@ -324,8 +307,6 @@ class BP_Group_Sites_Admin {
 
 	}
 
-
-
 	/**
 	 * Return a value for a specified option.
 	 *
@@ -346,8 +327,6 @@ class BP_Group_Sites_Admin {
 		return ( array_key_exists( $option_name, $this->bpgsites_options ) ) ? $this->bpgsites_options[ $option_name ] : $default;
 
 	}
-
-
 
 	/**
 	 * Sets a value for a specified option.
@@ -374,8 +353,6 @@ class BP_Group_Sites_Admin {
 
 	}
 
-
-
 	/**
 	 * Deletes a specified option.
 	 *
@@ -395,8 +372,6 @@ class BP_Group_Sites_Admin {
 
 	}
 
-
-
 	/**
 	 * General debugging utility.
 	 *
@@ -406,17 +381,15 @@ class BP_Group_Sites_Admin {
 
 	}
 
-
-
 	/**
 	 * Show our admin page.
 	 *
 	 * @since 0.1
 	 */
-	public function _network_admin_form() {
+	public function network_admin_form() {
 
 		// Only allow network admins through.
-		if( is_super_admin() == false ) {
+		if ( is_super_admin() == false ) {
 			wp_die( __( 'You do not have permission to access this page.', 'bp-group-sites' ) );
 		}
 
@@ -426,14 +399,14 @@ class BP_Group_Sites_Admin {
 		}
 
 		// Sanitise admin page url.
-		$url = $_SERVER['REQUEST_URI'];
+		$url = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '';
 		$url_array = explode( '&', $url );
 		if ( is_array( $url_array ) ) {
 			$url = $url_array[0];
 		}
 
 		// Get defaults.
-		$defaults = $this->_get_defaults();
+		$defaults = $this->get_defaults();
 
 		// Init public comments checkbox.
 		$bpgsites_public = '';
@@ -471,8 +444,6 @@ class BP_Group_Sites_Admin {
 			$bpgsites_overrides_button = esc_attr( $defaults['button'] );
 		}
 
-
-
 		// Open admin page.
 		echo '
 		<div class="wrap" id="bpgsites_admin_wrapper">
@@ -486,8 +457,6 @@ class BP_Group_Sites_Admin {
 		' . wp_nonce_field( 'bpgsites_admin_action', 'bpgsites_nonce', true, false ) . '
 		' . wp_referer_field( false ) . "\n\n";
 
-
-
 		// Show multisite options.
 		echo '
 		<div id="bpgsites_admin_options">
@@ -495,8 +464,6 @@ class BP_Group_Sites_Admin {
 		<h3>' . __( 'BP Group Sites Settings', 'bp-group-sites' ) . '</h3>
 
 		<p>' . __( 'Configure how BP Group Sites behaves.', 'bp-group-sites' ) . '</p>' . "\n\n";
-
-
 
 		// Add global options.
 		echo '
@@ -510,8 +477,6 @@ class BP_Group_Sites_Admin {
 			</tr>
 
 		</table>' . "\n\n";
-
-
 
 		// Add global options.
 		echo '
@@ -546,8 +511,6 @@ class BP_Group_Sites_Admin {
 
 		</table>' . "\n\n";
 
-
-
 		if ( is_super_admin() ) {
 
 			// Show debugger.
@@ -569,12 +532,8 @@ class BP_Group_Sites_Admin {
 
 		}
 
-
-
 		// Close form.
 		echo '</div>' . "\n\n";
-
-
 
 		// Close admin form.
 		echo '
@@ -589,8 +548,6 @@ class BP_Group_Sites_Admin {
 
 	}
 
-
-
 	/**
 	 * Get default values for this plugin.
 	 *
@@ -598,7 +555,7 @@ class BP_Group_Sites_Admin {
 	 *
 	 * @return array The default values for this plugin.
 	 */
-	public function _get_defaults() {
+	public function get_defaults() {
 
 		// Init return.
 		$defaults = [];
@@ -632,19 +589,11 @@ class BP_Group_Sites_Admin {
 
 	}
 
+}
 
-
-} // End class BP_Group_Sites_Admin.
-
-
-
-/*
-================================================================================
-Primary filters for overrides.
-================================================================================
-*/
-
-
+// =============================================================================
+// Primary filters for overrides.
+// =============================================================================
 
 /**
  * Override group extension title.
@@ -675,8 +624,6 @@ function bpgsites_override_extension_title( $title ) {
 // Add filter for the above.
 add_filter( 'bpgsites_extension_title', 'bpgsites_override_extension_title', 10, 1 );
 
-
-
 /**
  * Override group extension singular name.
  *
@@ -705,8 +652,6 @@ function bpgsites_override_extension_name( $name ) {
 
 // Add filter for the above.
 add_filter( 'bpgsites_extension_name', 'bpgsites_override_extension_name', 10, 1 );
-
-
 
 /**
  * Override group extension plural.
@@ -737,8 +682,6 @@ function bpgsites_override_extension_plural( $plural ) {
 // Add filter for the above.
 add_filter( 'bpgsites_extension_plural', 'bpgsites_override_extension_plural', 10, 1 );
 
-
-
 /**
  * Override group extension slug.
  *
@@ -767,8 +710,6 @@ function bpgsites_override_extension_slug( $slug ) {
 
 // Add filter for the above.
 add_filter( 'bpgsites_extension_slug', 'bpgsites_override_extension_slug', 10, 1 );
-
-
 
 /**
  * Override the name of the button on the BP Group Sites "sites" screen.
@@ -818,15 +759,9 @@ function bpgsites_get_visit_site_button( $button ) {
 // Add fliter for the above.
 add_filter( 'bp_get_blogs_visit_blog_button', 'bpgsites_get_visit_site_button', 30, 1 );
 
-
-
-/*
-================================================================================
-Globally available utility functions.
-================================================================================
-*/
-
-
+// =============================================================================
+// Globally available utility functions.
+// =============================================================================
 
 /**
  * Test existence of a specified site option.
@@ -852,8 +787,6 @@ function bpgsites_site_option_exists( $option_name = '' ) {
 
 }
 
-
-
 /**
  * Return a value for a specified site option.
  *
@@ -875,8 +808,6 @@ function bpgsites_site_option_get( $option_name = '', $default = false ) {
 
 }
 
-
-
 /**
  * Set a value for a specified site option.
  *
@@ -897,6 +828,3 @@ function bpgsites_site_option_set( $option_name = '', $value = '' ) {
 	return update_site_option( $option_name, $value );
 
 }
-
-
-
