@@ -92,7 +92,7 @@ class BP_Group_Sites {
 
 	}
 
-	//##########################################################################
+	// -------------------------------------------------------------------------
 
 	/**
 	 * Actions to perform on plugin activation.
@@ -118,13 +118,12 @@ class BP_Group_Sites {
 
 	}
 
-	//##########################################################################
+	// -------------------------------------------------------------------------
 
 	/**
 	 * Load translation files.
 	 *
-	 * A good reference on how to implement translation in WordPress:
-	 * http://ottopress.com/2012/internationalization-youre-probably-doing-it-wrong/
+	 * @see http://ottopress.com/2012/internationalization-youre-probably-doing-it-wrong/
 	 *
 	 * @since 0.1
 	 */

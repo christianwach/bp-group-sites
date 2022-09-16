@@ -23,7 +23,7 @@ if ( ! class_exists( 'BP_Group_Extension' ) ) {
  *
  * This class extends BP_Group_Extension to create the screens our plugin requires.
  *
- * @see http://codex.buddypress.org/developer/plugin-development/group-extension-api/
+ * @see https://codex.buddypress.org/developer/group-extension-api/
  *
  * @since 0.1
  */

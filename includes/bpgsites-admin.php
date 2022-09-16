@@ -147,10 +147,7 @@ class BP_Group_Sites_Admin {
 			[ $this, 'network_admin_form' ]
 		);
 
-		/*
-		 * Add styles only on our admin page.
-		 * @see http://codex.wordpress.org/Function_Reference/wp_enqueue_script#Load_scripts_only_on_plugin_pages
-		 */
+		// Add styles only on our admin page.
 		add_action( 'admin_print_styles-' . $page, [ $this, 'add_admin_styles' ] );
 
 	}
@@ -722,16 +719,16 @@ add_filter( 'bpgsites_extension_slug', 'bpgsites_override_extension_slug', 10, 1
 function bpgsites_get_visit_site_button( $button ) {
 
 	/*
-	[id] => visit_blog
-	[component] => blogs
-	[must_be_logged_in] =>
-	[block_self] =>
-	[wrapper_class] => blog-button visit
-	[link_href] => http://domain/site-slug/
-	[link_class] => blog-button visit
-	[link_text] => Visit Site
-	[link_title] => Visit Site
-	*/
+	 * [id] => visit_blog
+	 * [component] => blogs
+	 * [must_be_logged_in] =>
+	 * [block_self] =>
+	 * [wrapper_class] => blog-button visit
+	 * [link_href] => https://domain/site-slug/
+	 * [link_class] => blog-button visit
+	 * [link_text] => Visit Site
+	 * [link_title] => Visit Site
+	 */
 
 	// Switch by blogtype.
 	if ( bpgsites_is_groupsite( bp_get_blog_id() ) ) {
