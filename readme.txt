@@ -42,6 +42,10 @@ By default, this plugin will use internal templates for the BuddyPress pages tha
 
 == Changelog ==
 
+= 0.3.1 =
+
+* Code audit and compatibility check.
+
 = 0.3 =
 
 * Code audit and compatibility check.
