@@ -20,7 +20,7 @@ The *BP Group Sites* plugin enables the creation of a many-to-many relationship 
 
 The plugin is designed to work with [*CommentPress Core*](https://wordpress.org/plugins/commentpress-core/) "documents" (which are themselves complete sub-sites) so that there can be many reading groups for each document and many documents for each reading group.
 
-This plugin was developed for [The Readers' Thoreau](http://commons.digitalthoreau.org/) where it enables multiple reading groups to collectively discuss the works of Henry David Thoreau.
+This plugin was developed for [The Readers' Thoreau](https://commons.digitalthoreau.org/) where it enables multiple reading groups to collectively discuss the works of Henry David Thoreau.
 
 If you're a developer, any contributions are most welcome here. If you're not a developer, it's probably better to install this plugin from the [WordPress Plugin Directory](https://wordpress.org/plugins/bp-group-sites/).
 
