@@ -4,8 +4,8 @@ BP Group Sites
 **Contributors:** [needle](https://profiles.wordpress.org/needle/)<br/>
 **Donate link:** https://www.paypal.me/interactivist<br/>
 **Tags:** buddypress, groups, sites, reading groups<br/>
-**Requires at least:** 4.2.1<br/>
-**Tested up to:** 5.2<br/>
+**Requires at least:** 4.9<br/>
+**Tested up to:** 6.4<br/>
 **Stable tag:** 0.3.2a<br/>
 **License:** GPLv2 or later<br/>
 **License URI:** https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
