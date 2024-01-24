@@ -54,7 +54,7 @@ get_header( 'buddypress' );
 
 											// Filter subnav title.
 											printf(
-												/* translators: %s: The plural name for Group Sites. */
+												/* translators: 1: The plural name for Group Sites, 2: The number of Group Sites. */
 												__( 'All %1$s <span>%2$s</span>', 'bp-group-sites' ),
 												apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) ),
 												bpgsites_get_total_blog_count()

@@ -1,20 +1,22 @@
-# Copyright (C) 2022 Christian Wach
+# Copyright (C) 2024 Christian Wach
 # This file is distributed under the same license as the BP Group Sites plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: BP Group Sites 0.3.1\n"
+"Project-Id-Version: BP Group Sites 0.3.2a\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/bp-group-sites\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-09-16T11:57:54+00:00\n"
+"POT-Creation-Date: 2024-01-24T20:36:08+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.6.0\n"
+"X-Generator: WP-CLI 2.9.0\n"
 "X-Domain: bp-group-sites\n"
 
 #. Plugin Name of the plugin
+#: includes/bpgsites-admin.php:143
+#: includes/bpgsites-admin.php:144
 msgid "BP Group Sites"
 msgstr ""
 
@@ -34,327 +36,424 @@ msgstr ""
 msgid "https://haystack.co.uk"
 msgstr ""
 
+#: assets/templates/bpgsites/bpgsites-loop.php:136
+#: assets/templates/twentysixteen/bpgsites-loop.php:136
+#: includes/bpgsites-groups.php:615
+#: includes/bpgsites-groups.php:729
 msgid "Sorry, there were no sites found."
 msgstr ""
 
 #. translators: %s: The plural name for Group Sites.
+#: assets/templates/bpgsites/index.php:28
+#: assets/templates/twentysixteen/index.php:27
 msgid "%s Directory"
 msgstr ""
 
+#: assets/templates/bpgsites/index.php:29
+#: assets/templates/bpgsites/index.php:51
+#: assets/templates/twentysixteen/index.php:28
+#: assets/templates/twentysixteen/index.php:59
+#: includes/bp-bpgsites-component.php:38
+#: includes/bp-bpgsites-component.php:91
+#: includes/bp-bpgsites-screens.php:103
+#: includes/bpgsites-activity.php:601
+#: includes/bpgsites-activity.php:2351
+#: includes/bpgsites-activity.php:2363
+#: includes/bpgsites-activity.php:2406
+#: includes/bpgsites-admin.php:472
+#: includes/bpgsites-admin.php:478
+#: includes/bpgsites-groups.php:49
+#: includes/bpgsites-groups.php:489
+#: includes/bpgsites-groups.php:1598
+#: includes/bpgsites-widgets.php:34
+#: includes/bpgsites-widgets.php:42
+#: includes/bpgsites-widgets.php:139
 msgid "Group Sites"
 msgstr ""
 
 #. translators: 1: The plural name for Group Sites, 2: The number of Group Sites.
-#. translators: %s: The plural name for Group Sites.
+#: assets/templates/bpgsites/index.php:50
+#: assets/templates/twentysixteen/index.php:58
 msgid "All %1$s <span>%2$s</span>"
 msgstr ""
 
+#: assets/templates/bpgsites/index.php:71
+#: assets/templates/twentysixteen/index.php:79
 msgid "Order By:"
 msgstr ""
 
+#: assets/templates/bpgsites/index.php:73
+#: assets/templates/twentysixteen/index.php:81
 msgid "Last Active"
 msgstr ""
 
+#: assets/templates/bpgsites/index.php:74
+#: assets/templates/twentysixteen/index.php:82
 msgid "Newest"
 msgstr ""
 
+#: assets/templates/bpgsites/index.php:75
+#: assets/templates/twentysixteen/index.php:83
 msgid "Alphabetical"
 msgstr ""
 
 #. translators: %s: The plural name for Group Sites.
+#: includes/bp-bpgsites-component.php:90
 msgid "Search %s..."
 msgstr ""
 
 #. translators: %s The link to the Group.
+#: includes/bpgsites-activity.php:197
 msgid "Posted in: %s"
 msgstr ""
 
+#: includes/bpgsites-activity.php:226
 msgid "BuddyPress Comment Group"
 msgstr ""
 
+#: includes/bpgsites-activity.php:262
 msgid "This comment is a reply. It appears in the same group as the comment it is in reply to. If there is a deeper thread of replies, then the original comment determines the group in which it appears."
 msgstr ""
 
 #. translators: %s The name of the Group.
+#: includes/bpgsites-activity.php:270
 msgid "This comment appears in the group %s."
 msgstr ""
 
+#: includes/bpgsites-activity.php:327
+#: includes/bpgsites-activity.php:361
 msgid "You are not allowed to edit comments on this post."
 msgstr ""
 
+#: includes/bpgsites-activity.php:474
 msgid "Anonymous"
 msgstr ""
 
+#: includes/bpgsites-activity.php:481
 msgid "post"
 msgstr ""
 
 #. translators: 1: The User link, 2: The link to the comment, 3: The activity name, 4: The link to the post, 5: The link to the group.
+#: includes/bpgsites-activity.php:493
 msgid "%1$s left a %2$s on a %3$s %4$s in the group %5$s:"
 msgstr ""
 
+#: includes/bpgsites-activity.php:495
 msgid "comment"
 msgstr ""
 
 #. translators: %s: The plural name for Group Sites.
+#: includes/bpgsites-activity.php:600
 msgid "Comments in %s"
 msgstr ""
 
+#: includes/bpgsites-activity.php:821
 msgid "Create an account to reply"
 msgstr ""
 
+#: includes/bpgsites-activity.php:824
 msgid "Login to reply"
 msgstr ""
 
+#: includes/bpgsites-activity.php:887
 msgid "Join group to reply"
 msgstr ""
 
+#: includes/bpgsites-activity.php:983
+#: includes/bpgsites-activity.php:1034
 msgid "Create an account to leave a comment"
 msgstr ""
 
+#: includes/bpgsites-activity.php:986
+#: includes/bpgsites-activity.php:1036
 msgid "Login to leave a comment"
 msgstr ""
 
 #. translators: 1: The URL, 2: The anchor text.
+#: includes/bpgsites-activity.php:994
+#: includes/bpgsites-activity.php:1010
 msgid "<a href=\"%1$s\">%2$s</a>"
 msgstr ""
 
+#: includes/bpgsites-activity.php:1003
 msgid "Join a group to leave a comment"
 msgstr ""
 
 #. translators: %s: The paragraph text.
+#: includes/bpgsites-activity.php:1047
 msgid "Join a group to leave a comment on %s"
 msgstr ""
 
 #. translators: %s: The singular name of a Group Site.
+#: includes/bpgsites-activity.php:1281
 msgid "Groups reading this %s"
 msgstr ""
 
+#: includes/bpgsites-activity.php:1282
+#: includes/bpgsites-blogs.php:244
 msgid "site"
 msgstr ""
 
+#: includes/bpgsites-activity.php:1340
+#: includes/bpgsites-activity.php:1695
+#: includes/bpgsites-activity.php:1924
 msgid "My Groups"
 msgstr ""
 
+#: includes/bpgsites-activity.php:1375
+#: includes/bpgsites-activity.php:1711
+#: includes/bpgsites-activity.php:1955
 msgid "Linked Groups"
 msgstr ""
 
+#: includes/bpgsites-activity.php:1410
+#: includes/bpgsites-activity.php:1727
 msgid "Public Groups"
 msgstr ""
 
+#: includes/bpgsites-activity.php:1442
 msgid "Group Home Page"
 msgstr ""
 
+#: includes/bpgsites-activity.php:1536
 msgid "Filter comments by group"
 msgstr ""
 
+#: includes/bpgsites-activity.php:1667
 msgid "Show all groups"
 msgstr ""
 
+#: includes/bpgsites-activity.php:1679
 msgid "Showcase Groups"
 msgstr ""
 
+#: includes/bpgsites-activity.php:1737
 msgid "Filter"
 msgstr ""
 
+#: includes/bpgsites-activity.php:1911
 msgid "Post in"
 msgstr ""
 
 #. translators: %s: The plural name of Group Sites.
+#: includes/bpgsites-activity.php:2350
 msgid "All Recent Activity in your %s"
 msgstr ""
 
 #. translators: %s: The plural name of Group Sites.
+#: includes/bpgsites-activity.php:2362
 msgid "Recent Activity in Public %s"
 msgstr ""
 
 #. translators: %s: The plural name of Group Sites.
+#: includes/bpgsites-activity.php:2405
 msgid "Friends Activity in your %s"
 msgstr ""
 
 #. translators: %s: The singular name of a Group Site.
+#: includes/bpgsites-activity.php:2490
 msgid "Recent Comments in this %s"
 msgstr ""
 
+#: includes/bpgsites-activity.php:2491
+#: includes/bpgsites-admin.php:475
+#: includes/bpgsites-groups.php:159
+#: includes/bpgsites-groups.php:486
 msgid "Group Site"
 msgstr ""
 
+#: includes/bpgsites-activity.php:2698
 msgid "Group Site Posts"
 msgstr ""
 
-msgid "You must supply an option to option_exists()"
-msgstr ""
-
-msgid "You must supply an option to option_get()"
-msgstr ""
-
-msgid "You must supply an option to option_set()"
-msgstr ""
-
-msgid "You must supply the option as a string to option_set()"
-msgstr ""
-
-msgid "You must supply an option to option_delete()"
-msgstr ""
-
+#: includes/bpgsites-admin.php:316
 msgid "You do not have permission to access this page."
 msgstr ""
 
+#: includes/bpgsites-admin.php:321
 msgid "Options saved."
 msgstr ""
 
+#: includes/bpgsites-admin.php:376
+#: includes/bpgsites-admin.php:387
 msgid "BP Group Sites Settings"
 msgstr ""
 
+#: includes/bpgsites-admin.php:389
 msgid "Configure how BP Group Sites behaves."
 msgstr ""
 
+#: includes/bpgsites-admin.php:393
 msgid "Global Options"
 msgstr ""
 
+#: includes/bpgsites-admin.php:398
 msgid "Should comments in public groups be visible to readers who are not members of those groups?"
 msgstr ""
 
+#: includes/bpgsites-admin.php:406
 msgid "Naming Options"
 msgstr ""
 
+#: includes/bpgsites-admin.php:411
 msgid "Enable name changes?"
 msgstr ""
 
+#: includes/bpgsites-admin.php:416
 msgid "Component Title"
 msgstr ""
 
+#: includes/bpgsites-admin.php:421
 msgid "Singular name for a Group Site"
 msgstr ""
 
+#: includes/bpgsites-admin.php:426
 msgid "Plural name for Group Sites"
 msgstr ""
 
+#: includes/bpgsites-admin.php:431
 msgid "Visit Group Site button text"
 msgstr ""
 
-msgid "Developer Testing"
-msgstr ""
-
-msgid "Debug"
-msgstr ""
-
-msgid "Check this to trigger do_debug() . "
-msgstr ""
-
+#: includes/bpgsites-admin.php:443
 msgid "Save Changes"
 msgstr ""
 
+#: includes/bpgsites-admin.php:481
 msgid "Visit Group Site"
 msgstr ""
 
-msgid "You must supply an option to bpgsites_option_wpms_exists()"
-msgstr ""
-
-msgid "You must supply an option to bpgsites_site_option_get()"
-msgstr ""
-
-msgid "You must supply an option to bpgsites_site_option_set()"
-msgstr ""
-
+#: includes/bpgsites-blogs.php:247
 msgid "sites"
 msgstr ""
 
 #. translators: 1: The singular name for Group Sites, 2: Starting page number, 3: Ending page number, 4: Total number of pages, 5: The plural name for Group Sites.
+#: includes/bpgsites-blogs.php:252
 msgid "Viewing %1$s %2$s to %3$s (of %4$s %5$s)"
 msgstr ""
 
+#: includes/bpgsites-blogs.php:415
 msgid "Remove"
 msgstr ""
 
+#: includes/bpgsites-blogs.php:417
 msgid "Add"
 msgstr ""
 
 #. translators: %s: The singular name for Group Sites.
+#: includes/bpgsites-groups.php:174
 msgid "%s successfully added to Group"
 msgstr ""
 
 #. translators: %s: The singular name for Group Sites.
+#: includes/bpgsites-groups.php:191
 msgid "%s successfully removed from Group"
 msgstr ""
 
+#: includes/bpgsites-groups.php:215
 msgid "Group successfully invited"
 msgstr ""
 
+#: includes/bpgsites-groups.php:220
 msgid "Something went wrong - group invitation not sent."
 msgstr ""
 
+#: includes/bpgsites-groups.php:233
 msgid "The invitation has been accepted"
 msgstr ""
 
+#: includes/bpgsites-groups.php:244
 msgid "The invitation has been declined"
 msgstr ""
 
 #. translators: 1: The name of the site, 2: The name of the Group.
+#: includes/bpgsites-groups.php:264
 msgid "Your group is no longer reading \"%1$s\" with %2$s"
 msgstr ""
 
 #. translators: 1: The name of the invited group.
+#: includes/bpgsites-groups.php:476
 msgid "You are receiving this message because you are an administrator of the group \"%1$s\""
 msgstr ""
 
 #. translators: 2: The singular name for Group Sites, 3: The name of the site, 4: The name of the inviting group, 5: The plural name for Group Sites.
+#: includes/bpgsites-groups.php:478
 msgid "Your group has been invited to read the %2$s \"%3$s\" with the group \"%4$s\". To accept or decline the invitation, click the link below to visit the %5$s admin page for your group."
 msgstr ""
 
 #. translators: 1: The blog name, 2: The name of the inviting group.
+#: includes/bpgsites-groups.php:496
 msgid "An invitation to read \"%1$s\" with the group \"%2$s\""
 msgstr ""
 
+#: includes/bpgsites-groups.php:747
 msgid "BP Group Sites Admin Screen"
 msgstr ""
 
+#: includes/bpgsites-groups.php:803
 msgid "Invitations to read with other groups"
 msgstr ""
 
 #. translators: 1: The name of the blog, 2: The name of the inviting group.
+#: includes/bpgsites-groups.php:829
 msgid "Read \"%1$s\" with \"%2$s\""
 msgstr ""
 
+#: includes/bpgsites-groups.php:836
 msgid "Accept"
 msgstr ""
 
+#: includes/bpgsites-groups.php:837
 msgid "Decline"
 msgstr ""
 
+#: includes/bpgsites-groups.php:1208
 msgid "Read with other groups"
 msgstr ""
 
+#: includes/bpgsites-groups.php:1254
 msgid "Reading with"
 msgstr ""
 
+#: includes/bpgsites-groups.php:1267
 msgid "Stop"
 msgstr ""
 
+#: includes/bpgsites-groups.php:1283
 msgid "Invite to read"
 msgstr ""
 
+#: includes/bpgsites-groups.php:1286
 msgid "Find a group to invite"
 msgstr ""
 
+#: includes/bpgsites-groups.php:1289
 msgid "Send invitation"
 msgstr ""
 
+#: includes/bpgsites-groups.php:1622
 msgid "To make this group a showcase group, make sure that it is set to \"Private\" above, then check the box below. The effect will be that the comments left by members of this group will always appear to readers. Only other members of this group will be able to reply to those comments."
 msgstr ""
 
+#: includes/bpgsites-groups.php:1625
 msgid "Make this group a showcase group"
 msgstr ""
 
 #. translators: %s: The plural name of Group Sites.
+#: includes/bpgsites-widgets.php:33
+#: includes/bpgsites-widgets.php:138
 msgid "List of %s"
 msgstr ""
 
 #. translators: %s: The plural name of Group Sites.
+#: includes/bpgsites-widgets.php:41
 msgid "Use this widget to show a list of %s."
 msgstr ""
 
+#: includes/bpgsites-widgets.php:153
 msgid "Title:"
 msgstr ""
 
+#: includes/bpgsites-widgets.php:157
 msgid "Max number to show:"
 msgstr ""
