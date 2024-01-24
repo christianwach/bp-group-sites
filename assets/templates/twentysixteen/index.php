@@ -41,43 +41,28 @@ get_header( 'buddypress' );
 						<?php do_action( 'bp_before_directory_groupsites_content' ); ?>
 
 						<div id="blog-dir-search" class="dir-search" role="search">
-
 							<?php bp_directory_blogs_search_form(); ?>
-
 						</div><!-- #blog-dir-search -->
 
 						<form action="" method="post" id="bpgsites-directory-form" class="dir-form">
 
 							<div class="item-list-tabs" role="navigation">
 								<ul>
-									<li class="selected" id="bpgsites-all"><a href="<?php bp_root_domain(); ?>/<?php bpgsites_root_slug(); ?>">
-										<?php
+									<li class="selected" id="bpgsites-all">
+										<a href="<?php bp_root_domain(); ?>/<?php bpgsites_root_slug(); ?>">
+											<?php
 
-										// Filter subnav title.
-										printf(
-											/* translators: %s: The plural name for Group Sites. */
-											esc_html__( 'All %1$s <span>%2$s</span>', 'bp-group-sites' ),
-											apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) ),
-											bpgsites_get_total_blog_count()
-										);
+											// Filter subnav title.
+											printf(
+												/* translators: %s: The plural name for Group Sites. */
+												__( 'All %1$s <span>%2$s</span>', 'bp-group-sites' ),
+												apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) ),
+												bpgsites_get_total_blog_count()
+											);
 
-										?>
-									</a></li>
-
-									<?php
-
-									/*
-									------------------------------------------------------------
-									What would we mean by "My Texts"?
-									------------------------------------------------------------
-									if ( is_user_logged_in() && bp_get_total_blog_count_for_user( bp_loggedin_user_id() ) ) : ?>
-
-										<li id="bpgsites-personal"><a href="<?php echo bp_loggedin_user_domain() . bp_get_blogs_slug(); ?>"><?php printf( __( 'My Group Sites <span>%s</span>', 'bp-group-sites' ), bp_get_total_blog_count_for_user( bp_loggedin_user_id() ) ); ?></a></li>
-
-									<?php endif;
-									*/
-
-									?>
+											?>
+										</a>
+									</li>
 
 									<?php do_action( 'bp_blogs_directory_blog_types' ); ?>
 

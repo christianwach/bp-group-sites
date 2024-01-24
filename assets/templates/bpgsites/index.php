@@ -10,11 +10,11 @@ get_header( 'buddypress' );
 
 ?>
 
-<!-- bpgsites/index.php -->
-	<?php do_action( 'bp_before_directory_groupsites_page' ); ?>
+<!-- assets/templates/bpgsites/index.php -->
+<?php do_action( 'bp_before_directory_groupsites_page' ); ?>
 
-	<div id="content" role="main" class="<?php do_action( 'content_class' ); ?>">
-		<div id="buddypress">
+<div id="content" role="main" class="<?php do_action( 'content_class' ); ?>">
+	<div id="buddypress">
 
 		<?php do_action( 'bp_before_directory_groupsites' ); ?>
 
@@ -35,26 +35,26 @@ get_header( 'buddypress' );
 			<?php do_action( 'bp_before_directory_groupsites_content' ); ?>
 
 			<div id="blog-dir-search" class="dir-search" role="search">
-
 				<?php bp_directory_blogs_search_form(); ?>
-
 			</div><!-- #blog-dir-search -->
 
 			<div class="item-list-tabs" role="navigation">
 				<ul>
-					<li class="selected" id="bpgsites-all"><a href="<?php bp_root_domain(); ?>/<?php bpgsites_root_slug(); ?>">
-						<?php
+					<li class="selected" id="bpgsites-all">
+						<a href="<?php bp_root_domain(); ?>/<?php bpgsites_root_slug(); ?>">
+							<?php
 
-						// Filter subnav title.
-						printf(
-							/* translators: 1: The plural name for Group Sites, 2: The number of Group Sites. */
-							esc_html__( 'All %1$s <span>%2$s</span>', 'bp-group-sites' ),
-							apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) ),
-							bpgsites_get_total_blog_count()
-						);
+							// Filter subnav title.
+							printf(
+								/* translators: 1: The plural name for Group Sites, 2: The number of Group Sites. */
+								__( 'All %1$s <span>%2$s</span>', 'bp-group-sites' ),
+								apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) ),
+								bpgsites_get_total_blog_count()
+							);
 
-						?>
-					</a></li>
+							?>
+						</a>
+					</li>
 
 					<?php do_action( 'bp_blogs_directory_blog_types' ); ?>
 
@@ -97,10 +97,10 @@ get_header( 'buddypress' );
 
 		<?php do_action( 'bp_after_directory_groupsites' ); ?>
 
-		</div><!-- .buddypress -->
-	</div><!-- #content -->
+	</div><!-- .buddypress -->
+</div><!-- #content -->
 
-	<?php do_action( 'bp_after_directory_groupsites_page' ); ?>
+<?php do_action( 'bp_after_directory_groupsites_page' ); ?>
 
 <?php get_sidebar( 'buddypress' ); ?>
 <?php get_footer( 'buddypress' ); ?>
