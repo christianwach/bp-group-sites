@@ -24,6 +24,10 @@ This plugin was developed for [The Readers' Thoreau](https://commons.digitalthor
 
 This plugin requires a minimum of *WordPress 4.2.1* and *BuddyPress 2.0*.
 
+### BuddyPress 12.x
+
+This plugin has not yet been tested with the new BP Rewrites API in *BuddyPress 12.x*. It is therefore recommended to remain on *BuddyPress 11.4* or install the [BP Classic](https://wordpress.org/plugins/bp-classic/) plugin until compatibility has been written and tested.
+
 ### Plugin Development
 
 This plugin is in active development. For feature requests and bug reports (or if you're a plugin author and want to contribute) please visit the plugin's [GitHub repository](https://github.com/christianwach/bp-group-sites).

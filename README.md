@@ -28,6 +28,10 @@ If you're a developer, any contributions are most welcome here. If you're not a 
 
 This plugin requires a minimum of *WordPress 4.2.1* and *BuddyPress 2.0*.
 
+### BuddyPress 12.x
+
+This plugin has not yet been tested with the new BP Rewrites API in *BuddyPress 12.x*. It is therefore recommended to remain on *BuddyPress 11.4* or install the [BP Classic](https://wordpress.org/plugins/bp-classic/) plugin until compatibility has been written and tested.
+
 ## Installation
 
 ### GitHub
