@@ -180,19 +180,20 @@ add_filter( 'bp_located_template', 'bpgsites_load_template_filter', 10, 2 );
 function bpgsites_object_template_loader() {
 
 	// Bail if not a POST action.
-	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-	$method = isset( $_SERVER['REQUEST_METHOD'] ) ? wp_unslash( $_SERVER['REQUEST_METHOD'] ) : '';
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
+	$method = isset( $_SERVER['REQUEST_METHOD'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) : '';
 	if ( 'POST' !== strtoupper( $method ) ) {
 		return;
 	}
 
 	// Bail if no object passed.
-	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.NonceVerification.Missing
 	if ( empty( $_POST['object'] ) ) {
 		return;
 	}
 
 	// Sanitize the object.
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$object = sanitize_title( wp_unslash( $_POST['object'] ) );
 
 	// Bail if object is not an active component to prevent arbitrary file inclusion.

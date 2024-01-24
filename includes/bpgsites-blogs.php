@@ -59,7 +59,7 @@ function bpgsites_has_blogs( $args = '' ) {
 	}
 
 	// Check for and use search terms.
-	$search_terms = ! empty( $_REQUEST['s'] ) ? wp_unslash( $_REQUEST['s'] ) : false;
+	$search_terms = ! empty( $_REQUEST['s'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['s'] ) ) : false;
 
 	// Declare defaults.
 	$defaults = [

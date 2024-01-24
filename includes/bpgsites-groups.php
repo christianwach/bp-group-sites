@@ -123,7 +123,7 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 		}
 
 		// Get current group ID.
-		$primary_group_id = (int) $_POST['group-id'];
+		$primary_group_id = (int) sanitize_text_field( wp_unslash( $_POST['group-id'] ) );
 
 		// Parse input name for our values.
 		$parsed = $this->parse_input_name();
@@ -343,6 +343,7 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 		];
 
 		// Get keys of POST array.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$keys = array_keys( $_POST );
 
 		// Did we get any?
@@ -391,6 +392,7 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 		];
 
 		// Get keys of POST array.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$keys = array_keys( $_POST );
 
 		// Did we get any?
@@ -1446,11 +1448,11 @@ function bpgsites_group_linkages_get_ajax() {
 
 	// Get current group - or set impossible value if not present.
 	// phpcs:ignore WordPress.Security.NonceVerification.Missing
-	$current_group_id = isset( $_POST['group_id'] ) ? (int) wp_unslash( $_POST['group_id'] ) : PHP_INT_MAX;
+	$current_group_id = isset( $_POST['group_id'] ) ? (int) sanitize_text_field( wp_unslash( $_POST['group_id'] ) ) : PHP_INT_MAX;
 
 	// Get current blog.
 	// phpcs:ignore WordPress.Security.NonceVerification.Missing
-	$current_blog_id = isset( $_POST['blog_id'] ) ? (int) wp_unslash( $_POST['blog_id'] ) : PHP_INT_MAX;
+	$current_blog_id = isset( $_POST['blog_id'] ) ? (int) sanitize_text_field( wp_unslash( $_POST['blog_id'] ) ) : PHP_INT_MAX;
 
 	// Get already-linked groups for this blog.
 	$linked = bpgsites_group_linkages_get( $current_group_id, $current_blog_id );
@@ -1461,8 +1463,7 @@ function bpgsites_group_linkages_get_ajax() {
 	// Get groups this user can see for this search.
 	$groups = groups_get_groups( [
 		'user_id' => is_super_admin() ? 0 : bp_loggedin_user_id(),
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-		'search_terms' => $_POST['s'],
+		'search_terms' => isset( $_POST['s'] ) ? sanitize_text_field( wp_unslash( $_POST['s'] ) ) : '',
 		'show_hidden' => true,
 		'populate_extras' => false,
 		'exclude' => $exclude,
@@ -1611,12 +1612,9 @@ function bpgsites_showcase_group_settings_form() {
 	// Sanity check list and group ID.
 	if ( count( $showcase_groups ) > 0 && ! is_null( $group_id ) ) {
 
-		// Is this group's ID in the list.
+		// Override checked if this group's ID is in the list.
 		if ( in_array( $group_id, $showcase_groups ) ) {
-
-			// Override checked.
 			$checked = ' checked="checked"';
-
 		}
 
 	}

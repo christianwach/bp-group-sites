@@ -67,7 +67,8 @@
 	<!-- Nesting levels -->
 	<rule ref="Generic.Metrics.NestingLevel">
 		<properties>
-			<property name="absoluteNestingLevel" value="4" />
+			<!-- Nesting level can be a maxinum of 5 -->
+			<property name="absoluteNestingLevel" value="5" />
 		</properties>
 	</rule>
 

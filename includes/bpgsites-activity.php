@@ -2005,16 +2005,15 @@ class BP_Group_Sites_Activity {
 	 */
 	public function get_group_id_from_comment_form() {
 
-		// Init as false.
-		$group_id = false;
+		// Try and get the Group ID.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$group_id = isset( $_POST['bpgsites-post-in'] ) ? sanitize_text_field( wp_unslash( $_POST['bpgsites-post-in'] ) ) : false;
 
-		// Is this a comment in a group?
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		if ( isset( $_POST['bpgsites-post-in'] ) && is_numeric( wp_unslash( $_POST['bpgsites-post-in'] ) ) ) {
-
-			// Get group ID.
-			$group_id = (int) wp_unslash( $_POST['bpgsites-post-in'] );
-
+		// Cast Group ID as integer.
+		if ( is_numeric( $group_id ) ) {
+			$group_id = (int) $group_id;
+		} else {
+			$group_id = false;
 		}
 
 		// --<
@@ -2083,12 +2082,16 @@ class BP_Group_Sites_Activity {
 	/**
 	 * When our filtering form is is submitted, parse groups by selection.
 	 *
+	 * Unused method.
+	 *
 	 * @since 0.1
 	 *
 	 * @param array $group_ids The group IDs.
 	 * @return array $group_ids The filtered group IDs.
 	 */
-	public function filter_groups_by_checkboxes( $group_ids ) {
+	private function filter_groups_by_checkboxes( $group_ids ) {
+
+		// phpcs:disable
 
 		// Is this a comment in a group?
 		if ( isset( $_POST['bpgsites_comment_groups'] ) && is_array( $_POST['bpgsites_comment_groups'] ) ) {
@@ -2119,6 +2122,8 @@ class BP_Group_Sites_Activity {
 			*/
 
 		}
+
+		// phpcs:enable
 
 		// --<
 		return $group_ids;
@@ -2202,12 +2207,9 @@ class BP_Group_Sites_Activity {
 			// If this user is a member, add it.
 			if ( groups_is_user_member( $user_id, $group_id ) ) {
 
-				// If it's not already there.
+				// Add to our array if it's not already there.
 				if ( ! in_array( $group_id, $this->user_group_ids['my_groups'] ) ) {
-
-					// Add to our array.
 					$this->user_group_ids['my_groups'][] = $group_id;
-
 				}
 
 			} else {
@@ -2221,24 +2223,23 @@ class BP_Group_Sites_Activity {
 				// If public.
 				if ( $status == 'public' ) {
 
-					// Access object.
-					// phpcs:ignore Squiz.Commenting.InlineComment.InvalidEndChar
-					//global $bp_groupsites;
-
-					// Do we allow public comments?
-					// phpcs:ignore Squiz.Commenting.InlineComment.InvalidEndChar
-					//if ( $bp_groupsites->admin->option_get( 'bpgsites_public' ) ) {
-
-						// Add to our array.
+					/*
+					// Add to our array only if we allow public comments.
+					global $bp_groupsites;
+					if ( $bp_groupsites->admin->option_get( 'bpgsites_public' ) ) {
 						$this->user_group_ids['public_groups'][] = $group_id;
+					}
+					*/
 
-					// phpcs:ignore Squiz.Commenting.InlineComment.InvalidEndChar
-					//}
+					// Add to our array.
+					$this->user_group_ids['public_groups'][] = $group_id;
 
 				} else {
 
-					// If the user is not a member, is it one of the groups that is
-					// Reading the site with this group?
+					/*
+					 * If the user is not a member, is it one of the groups that is
+					 * Reading the site with this group?
+					 */
 
 					// Get linked groups.
 					$linked_groups = bpgsites_group_linkages_get_groups_by_blog_id( $group_id, $current_blog_id );

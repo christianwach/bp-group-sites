@@ -19,16 +19,17 @@ get_header( 'buddypress' );
 			<article id="post-0" class="post-0 page type-page status-publish hentry">
 
 				<header class="entry-header">
-					<h1 class="entry-title"><?php
+					<h1 class="entry-title">
+						<?php
 
-					// Show title.
-					echo sprintf(
-						/* translators: %s: The plural name for Group Sites. */
-						__( '%s Directory', 'bp-group-sites' ),
-						apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) )
-					);
+						echo sprintf(
+							/* translators: %s: The plural name for Group Sites. */
+							esc_html__( '%s Directory', 'bp-group-sites' ),
+							apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) )
+						);
 
-					?></h1>
+						?>
+					</h1>
 				</header><!-- .entry-header -->
 
 				<div class="entry-content">
@@ -49,17 +50,19 @@ get_header( 'buddypress' );
 
 							<div class="item-list-tabs" role="navigation">
 								<ul>
-									<li class="selected" id="bpgsites-all"><a href="<?php bp_root_domain(); ?>/<?php bpgsites_root_slug(); ?>"><?php
+									<li class="selected" id="bpgsites-all"><a href="<?php bp_root_domain(); ?>/<?php bpgsites_root_slug(); ?>">
+										<?php
 
-									// Filter subnav title.
-									printf(
-										/* translators: %s: The plural name for Group Sites. */
-										__( 'All %1$s <span>%2$s</span>', 'bp-group-sites' ),
-										apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) ),
-										bpgsites_get_total_blog_count()
-									);
+										// Filter subnav title.
+										printf(
+											/* translators: %s: The plural name for Group Sites. */
+											esc_html__( 'All %1$s <span>%2$s</span>', 'bp-group-sites' ),
+											apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) ),
+											bpgsites_get_total_blog_count()
+										);
 
-									?></a></li>
+										?>
+									</a></li>
 
 									<?php
 

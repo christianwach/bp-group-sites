@@ -185,85 +185,36 @@ class BP_Group_Sites_Admin {
 		// Check that we trust the source of the data.
 		check_admin_referer( 'bpgsites_admin_action', 'bpgsites_nonce' );
 
-		// Debugging switch for admins and network admins - if set, triggers do_debug() below.
-		if ( is_super_admin() && isset( $_POST['bpgsites_debug'] ) ) {
-			$settings_debug = absint( $_POST['bpgsites_debug'] );
-			$debug = $settings_debug ? 1 : 0;
-			if ( $debug ) {
-				$this->do_debug();
-			}
-			return;
-		}
-
-		// Init vars.
-		$bpgsites_public = 0;
-		$bpgsites_overrides = 0;
-		$bpgsites_overrides_title = '';
-		$bpgsites_overrides_name = '';
-		$bpgsites_overrides_plural = '';
-		$bpgsites_overrides_button = '';
-
-		// Okay, we're through - get variables.
-		extract( $_POST );
-
 		// Get defaults.
 		$defaults = $this->get_defaults();
 
 		// Set public comments visibility on/off option.
-		$bpgsites_public = absint( $bpgsites_public );
-		$this->option_set( 'bpgsites_public', ( $bpgsites_public ? 1 : 0 ) );
+		$public = isset( $_POST['bpgsites_public'] ) ? (int) sanitize_text_field( wp_unslash( $_POST['bpgsites_public'] ) ) : $defaults['public'];
+		$this->option_set( 'bpgsites_public', ( $public ? 1 : 0 ) );
 
 		// Set name change on/off option.
-		$bpgsites_overrides = absint( $bpgsites_overrides );
-		$this->option_set( 'bpgsites_overrides', ( $bpgsites_overrides ? 1 : 0 ) );
-
-		// Get plugin title option.
-		$bpgsites_overrides_title = esc_sql( $bpgsites_overrides_title );
-
-		// Revert to default if we didn't get one.
-		if ( $bpgsites_overrides_title == '' ) {
-			$bpgsites_overrides_title = $defaults['title'];
-		}
+		$overrides = isset( $_POST['bpgsites_overrides'] ) ? (int) sanitize_text_field( wp_unslash( $_POST['bpgsites_overrides'] ) ) : $defaults['overrides'];
+		$this->option_set( 'bpgsites_overrides', ( $overrides ? 1 : 0 ) );
 
 		// Set title option.
-		$this->option_set( 'bpgsites_overrides_title', $bpgsites_overrides_title );
-
-		// Get name option.
-		$bpgsites_overrides_name = esc_sql( $bpgsites_overrides_name );
-
-		// Revert to default if we didn't get one.
-		if ( $bpgsites_overrides_name == '' ) {
-			$bpgsites_overrides_name = $defaults['name'];
-		}
+		$overrides_title = isset( $_POST['bpgsites_overrides_title'] ) ? sanitize_text_field( wp_unslash( $_POST['bpgsites_overrides_title'] ) ) : $defaults['title'];
+		$this->option_set( 'bpgsites_overrides_title', $overrides_title );
 
 		// Set name option.
-		$this->option_set( 'bpgsites_overrides_name', $bpgsites_overrides_name );
-
-		// Get plural option.
-		$bpgsites_overrides_plural = esc_sql( $bpgsites_overrides_plural );
-
-		// Revert to default if we didn't get one.
-		if ( $bpgsites_overrides_plural == '' ) {
-			$bpgsites_overrides_plural = $defaults['plural'];
-		}
+		$overrides_name = isset( $_POST['bpgsites_overrides_name'] ) ? sanitize_text_field( wp_unslash( $_POST['bpgsites_overrides_name'] ) ) : $defaults['name'];
+		$this->option_set( 'bpgsites_overrides_name', $overrides_name );
 
 		// Set plural option.
-		$this->option_set( 'bpgsites_overrides_plural', $bpgsites_overrides_plural );
-
-		// Get button option.
-		$bpgsites_overrides_button = esc_sql( $bpgsites_overrides_button );
-
-		// Revert to default if we didn't get one.
-		if ( $bpgsites_overrides_button == '' ) {
-			$bpgsites_overrides_button = $defaults['button'];
-		}
+		$overrides_plural = isset( $_POST['bpgsites_overrides_plural'] ) ? sanitize_text_field( wp_unslash( $_POST['bpgsites_overrides_plural'] ) ) : $defaults['plural'];
+		$this->option_set( 'bpgsites_overrides_plural', $overrides_plural );
 
 		// Set button option.
-		$this->option_set( 'bpgsites_overrides_button', $bpgsites_overrides_button );
+		$overrides_button = isset( $_POST['bpgsites_overrides_button'] ) ? sanitize_text_field( wp_unslash( $_POST['bpgsites_overrides_button'] ) ) : $defaults['button'];
+		$this->option_set( 'bpgsites_overrides_button', $overrides_button );
 
 		// Set slug option.
-		$bpgsites_overrides_slug = sanitize_title( $bpgsites_overrides_plural );
-		$this->option_set( 'bpgsites_overrides_slug', $bpgsites_overrides_slug );
+		$overrides_slug = sanitize_title( $overrides_plural );
+		$this->option_set( 'bpgsites_overrides_slug', $overrides_slug );
 
 		// Save.
 		$this->options_save();
@@ -396,7 +347,7 @@ class BP_Group_Sites_Admin {
 		}
 
 		// Sanitise admin page url.
-		$url = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '';
+		$url = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
 		$url_array = explode( '&', $url );
 		if ( is_array( $url_array ) ) {
 			$url = $url_array[0];
@@ -507,27 +458,6 @@ class BP_Group_Sites_Admin {
 			</tr>
 
 		</table>' . "\n\n";
-
-		if ( is_super_admin() ) {
-
-			// Show debugger.
-			echo '
-			<hr>
-			<h3>' . __( 'Developer Testing', 'bp-group-sites' ) . '</h3>
-
-			<table class="form-table">
-
-				<tr>
-					<th scope="row">' . __( 'Debug', 'bp-group-sites' ) . '</th>
-					<td>
-						<input type="checkbox" class="settings-checkbox" name="bpgsites_debug" id="bpgsites_debug" value="1" />
-						<label class="bpgsites_settings_label" for="bpgsites_debug">' . __( 'Check this to trigger do_debug() . ', 'bp-group-sites' ) . '</label>
-					</td>
-				</tr>
-
-			</table>' . "\n\n";
-
-		}
 
 		// Close form.
 		echo '</div>' . "\n\n";
