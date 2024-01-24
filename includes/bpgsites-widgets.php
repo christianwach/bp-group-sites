@@ -81,7 +81,7 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 
 		// Set up params.
 		$params = [
-			'max' => $instance['max_blogs'],
+			'max'      => $instance['max_blogs'],
 			'per_page' => $instance['max_blogs'],
 		];
 

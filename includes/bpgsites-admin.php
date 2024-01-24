@@ -312,7 +312,7 @@ class BP_Group_Sites_Admin {
 	public function network_admin_form() {
 
 		// Only allow network admins through.
-		if ( is_super_admin() == false ) {
+		if ( ! is_super_admin() ) {
 			wp_die( __( 'You do not have permission to access this page.', 'bp-group-sites' ) );
 		}
 
@@ -322,7 +322,7 @@ class BP_Group_Sites_Admin {
 		}
 
 		// Sanitise admin page url.
-		$url = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+		$url       = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
 		$url_array = explode( '&', $url );
 		if ( is_array( $url_array ) ) {
 			$url = $url_array[0];
@@ -333,13 +333,13 @@ class BP_Group_Sites_Admin {
 
 		// Init public comments checkbox.
 		$bpgsites_public = '';
-		if ( $this->option_get( 'bpgsites_public' ) == '1' ) {
+		if ( 1 === (int) $this->option_get( 'bpgsites_public' ) ) {
 			$bpgsites_public = ' checked="checked"';
 		}
 
 		// Init name change checkbox.
 		$bpgsites_overrides = '';
-		if ( $this->option_get( 'bpgsites_overrides' ) == '1' ) {
+		if ( 1 === (int) $this->option_get( 'bpgsites_overrides' ) ) {
 			$bpgsites_overrides = ' checked="checked"';
 		}
 
@@ -645,8 +645,8 @@ function bpgsites_get_visit_site_button( $button ) {
 		if ( $bp_groupsites->admin->option_get( 'bpgsites_overrides' ) ) {
 
 			// Override with our option.
-			$label = $bp_groupsites->admin->option_get( 'bpgsites_overrides_button' );
-			$button['link_text'] = apply_filters( 'bpgsites_visit_site_button_text', $label );
+			$label                = $bp_groupsites->admin->option_get( 'bpgsites_overrides_button' );
+			$button['link_text']  = apply_filters( 'bpgsites_visit_site_button_text', $label );
 			$button['link_title'] = apply_filters( 'bpgsites_visit_site_button_title', $label );
 
 		}
@@ -676,7 +676,7 @@ add_filter( 'bp_get_blogs_visit_blog_button', 'bpgsites_get_visit_site_button', 
 function bpgsites_site_option_exists( $option_name ) {
 
 	// Test by getting option with unlikely default.
-	if ( bpgsites_site_option_get( $option_name, 'fenfgehgefdfdjgrkj' ) == 'fenfgehgefdfdjgrkj' ) {
+	if ( 'fenfgehgefdfdjgrkj' === bpgsites_site_option_get( $option_name, 'fenfgehgefdfdjgrkj' ) ) {
 		return false;
 	} else {
 		return true;

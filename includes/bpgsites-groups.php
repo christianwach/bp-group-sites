@@ -48,7 +48,7 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 		// Init vars with filters applied.
 		$name = apply_filters( 'bpgsites_extension_title', __( 'Group Sites', 'bp-group-sites' ) );
 		$slug = apply_filters( 'bpgsites_extension_slug', 'group-sites' );
-		$pos = apply_filters( 'bpgsites_extension_pos', 31 );
+		$pos  = apply_filters( 'bpgsites_extension_pos', 31 );
 
 		/*
 		 * Test for BP 1.8+.
@@ -58,9 +58,9 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 
 			// Init array.
 			$args = [
-				'name' => $name,
-				'slug' => $slug,
-				'nav_item_position' => $pos,
+				'name'               => $name,
+				'slug'               => $slug,
+				'nav_item_position'  => $pos,
 				'enable_create_step' => false,
 			];
 
@@ -322,9 +322,7 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	 * @param int $group_id The numeric ID of the group being edited.
 	 */
 	public function admin_screen_save( $group_id = null ) {
-
 		// Grab your data out of the $_POST global and save as necessary.
-
 	}
 
 	/**
@@ -339,7 +337,7 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 		// Init return.
 		$return = [
 			'blog_id' => false,
-			'action' => false,
+			'action'  => false,
 		];
 
 		// Get keys of POST array.
@@ -386,9 +384,9 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 
 		// Init return.
 		$return = [
-			'blog_id' => false,
+			'blog_id'  => false,
 			'group_id' => false,
-			'action' => false,
+			'action'   => false,
 		];
 
 		// Get keys of POST array.
@@ -765,12 +763,11 @@ function bpgsites_get_current_group_id() {
 	// Init return.
 	$group_id = null;
 
-	// Test for new group ID.
 	if ( isset( $bp->groups->new_group_id ) ) {
+		// Use new group ID.
 		$group_id = $bp->groups->new_group_id;
-
-	// Test for current group ID.
 	} elseif ( isset( $bp->groups->current_group->id ) ) {
+		// Use current group ID.
 		$group_id = $bp->groups->current_group->id;
 	}
 
@@ -875,7 +872,7 @@ function bpgsites_group_linkages_pending_get( $group_id ) {
 	// Sanity check master array.
 	if ( ! is_array( $pending_groups ) || empty( $pending_groups ) ) {
 		$pending_groups = [
-			'sent' => [],
+			'sent'     => [],
 			'received' => [],
 		];
 	}
@@ -1226,19 +1223,19 @@ function bpgsites_group_linkages_get_markup( $echo = true ) {
 	$linked_groups = bpgsites_group_linkages_get( $current_group_id, $blog_id );
 
 	// If empty, set to impossible value.
-	if ( count( $linked_groups ) == 0 ) {
+	if ( count( $linked_groups ) === 0 ) {
 		$linked_groups = [ PHP_INT_MAX ];
 	}
 
 	// Define config array.
 	$config_array = [
-		//'user_id' => $user_id,
-		'type' => 'alphabetical',
-		'max' => 1000,
-		'per_page' => 1000,
+		//'user_id'         => $user_id,
+		'type'            => 'alphabetical',
+		'max'             => 1000,
+		'per_page'        => 1000,
 		'populate_extras' => 0,
-		'include' => $linked_groups,
-		'page_arg' => 'bpgsites',
+		'include'         => $linked_groups,
+		'page_arg'        => 'bpgsites',
 	];
 
 	// New groups query.
@@ -1462,18 +1459,18 @@ function bpgsites_group_linkages_get_ajax() {
 
 	// Get groups this user can see for this search.
 	$groups = groups_get_groups( [
-		'user_id' => is_super_admin() ? 0 : bp_loggedin_user_id(),
-		'search_terms' => isset( $_POST['s'] ) ? sanitize_text_field( wp_unslash( $_POST['s'] ) ) : '',
-		'show_hidden' => true,
+		'user_id'         => is_super_admin() ? 0 : bp_loggedin_user_id(),
+		'search_terms'    => isset( $_POST['s'] ) ? sanitize_text_field( wp_unslash( $_POST['s'] ) ) : '',
+		'show_hidden'     => true,
 		'populate_extras' => false,
-		'exclude' => $exclude,
+		'exclude'         => $exclude,
 	] );
 
 	// Init return.
 	$json = [];
 
 	// Fake a group template.
-	$groups_template = new stdClass();
+	$groups_template        = new stdClass();
 	$groups_template->group = new stdClass();
 
 	// Loop through our groups.
@@ -1487,20 +1484,20 @@ function bpgsites_group_linkages_get_ajax() {
 			wp_strip_all_tags( stripslashes( $group->description ) ), // Content.
 			70, // Max length.
 			[
-				'ending' => '&hellip;',
+				'ending'            => '&hellip;',
 				'filter_shortcodes' => false,
 			]
 		);
 
 		// Add item to output array.
 		$json[] = [
-			'id'          => $group->id,
-			'name'        => stripslashes( $group->name ),
-			'type'        => bp_get_group_type(),
-			'description' => $description,
-			'avatar' => bp_get_group_avatar_mini(),
+			'id'                 => $group->id,
+			'name'               => stripslashes( $group->name ),
+			'type'               => bp_get_group_type(),
+			'description'        => $description,
+			'avatar'             => bp_get_group_avatar_mini(),
 			'total_member_count' => $group->total_member_count,
-			'private' => ( 'public' !== $group->status ),
+			'private'            => ( 'public' !== $group->status ),
 		];
 
 	}

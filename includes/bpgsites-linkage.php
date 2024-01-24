@@ -396,6 +396,8 @@ add_action( 'wp_uninitialize_site', 'bpgsites_remove_site_from_groups', 10, 1 );
 /**
  * Sever link before a group gets deleted so we can still access meta.
  *
+ * Our option will be deleted by groups_delete_group().
+ *
  * @since 0.1
  *
  * @param int $group_id The numeric ID of the group.
@@ -406,19 +408,14 @@ function bpgsites_remove_group_from_blogs( $group_id ) {
 	$blog_ids = bpgsites_get_blogs_by_group_id( $group_id );
 
 	// Sanity check.
-	if ( count( $blog_ids ) > 0 ) {
-
-		// Loop through them.
-		foreach ( $blog_ids as $blog_id ) {
-
-			// Unlink.
-			bpgsites_remove_group_from_blog( $blog_id, $group_id );
-
-		}
-
+	if ( count( $blog_ids ) === 0 ) {
+		return;
 	}
 
-	// Our option will be deleted by groups_delete_group().
+	// Unlink them.
+	foreach ( $blog_ids as $blog_id ) {
+		bpgsites_remove_group_from_blog( $blog_id, $group_id );
+	}
 
 }
 

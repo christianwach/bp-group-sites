@@ -320,7 +320,7 @@ class BP_Group_Sites {
 				// Localisation array.
 				$vars = [
 					'localisation' => [],
-					'data' => [
+					'data'         => [
 						'group_id' => bp_get_current_group_id(),
 					],
 				];

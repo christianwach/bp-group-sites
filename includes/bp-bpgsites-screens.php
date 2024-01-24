@@ -136,7 +136,7 @@ class BP_Group_Sites_Theme_Compat {
 // Init.
 new BP_Group_Sites_Theme_Compat();
 
-//==============================================================================
+// ==============================================================================
 
 /**
  * Load the top-level BP Group Sites directory.

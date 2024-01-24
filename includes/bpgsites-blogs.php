@@ -63,14 +63,14 @@ function bpgsites_has_blogs( $args = '' ) {
 
 	// Declare defaults.
 	$defaults = [
-		'type'         => 'active',
-		'page'         => 1,
-		'per_page'     => 20,
-		'max'          => false,
-		'page_arg'     => 'bpage',
-		'user_id'      => $user_id,
+		'type'              => 'active',
+		'page'              => 1,
+		'per_page'          => 20,
+		'max'               => false,
+		'page_arg'          => 'bpage',
+		'user_id'           => $user_id,
 		'include_blog_ids'  => $groupsites,
-		'search_terms' => $search_terms,
+		'search_terms'      => $search_terms,
 		'update_meta_cache' => true,
 	];
 
@@ -493,22 +493,22 @@ function bpgsites_commentpress_site_image( $old_value, $new_value ) {
 			$attachment_id = $new_value['cp_site_image'];
 
 			// Get the attachment data.
-			$attachment_thumb = wp_get_attachment_image_src( $attachment_id, 'thumbnail' );
+			$attachment_thumb  = wp_get_attachment_image_src( $attachment_id, 'thumbnail' );
 			$attachment_medium = wp_get_attachment_image_src( $attachment_id, 'medium' );
-			$attachment_large = wp_get_attachment_image_src( $attachment_id, 'large' );
-			$attachment_full = wp_get_attachment_image_src( $attachment_id, 'full' );
+			$attachment_large  = wp_get_attachment_image_src( $attachment_id, 'large' );
+			$attachment_full   = wp_get_attachment_image_src( $attachment_id, 'full' );
 
 			// Get existing option.
 			$existing = $bp_groupsites->admin->option_get( 'bpgsites_bloginfo' );
 
 			// Overwrite - or create if it doesn't already exist.
 			$existing[ $blog_id ] = [
-				'blog_id' => $blog_id,
+				'blog_id'       => $blog_id,
 				'attachment_id' => $attachment_id,
-				'thumb' => $attachment_thumb,
-				'medium' => $attachment_medium,
-				'large' => $attachment_large,
-				'full' => $attachment_full,
+				'thumb'         => $attachment_thumb,
+				'medium'        => $attachment_medium,
+				'large'         => $attachment_large,
+				'full'          => $attachment_full,
 			];
 
 		} else {

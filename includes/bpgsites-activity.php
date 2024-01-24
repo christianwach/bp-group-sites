@@ -73,9 +73,10 @@ class BP_Group_Sites_Activity {
 		// If the current blog is a group site.
 		if ( bpgsites_is_groupsite( get_current_blog_id() ) ) {
 
+			/*
 			// Add custom post activity. Disabled until later.
-			// phpcs:ignore Squiz.Commenting.InlineComment.InvalidEndChar
-			//add_action( 'bp_activity_before_save', [ $this, 'custom_post_activity' ], 10, 1 );
+			add_action( 'bp_activity_before_save', [ $this, 'custom_post_activity' ], 10, 1 );
+			*/
 
 			// Make sure "Allow activity stream commenting on blog and forum posts" is disabled for group sites.
 			add_action( 'bp_disable_blogforum_comments', [ $this, 'disable_blogforum_comments' ], 100, 1 );
@@ -427,9 +428,9 @@ class BP_Group_Sites_Activity {
 
 		// See if we already have the modified activity for this blog post.
 		$id = bp_activity_get_activity_id( [
-			'user_id' => $activity->user_id,
-			'type' => $type,
-			'item_id' => $group_id,
+			'user_id'           => $activity->user_id,
+			'type'              => $type,
+			'item_id'           => $group_id,
 			'secondary_item_id' => $activity->secondary_item_id,
 		] );
 
@@ -438,9 +439,9 @@ class BP_Group_Sites_Activity {
 
 			// See if we have an unmodified activity item.
 			$id = bp_activity_get_activity_id( [
-				'user_id' => $activity->user_id,
-				'type' => $activity->type,
-				'item_id' => $activity->item_id,
+				'user_id'           => $activity->user_id,
+				'type'              => $activity->type,
+				'item_id'           => $activity->item_id,
 				'secondary_item_id' => $activity->secondary_item_id,
 			] );
 
@@ -505,7 +506,7 @@ class BP_Group_Sites_Activity {
 
 		// Having marked all groupblogs as public, we need to hide activity from them if the group is private
 		// Or hidden, so they don't show up in sitewide activity feeds.
-		if ( 'public' != $group->status ) {
+		if ( 'public' !== $group->status ) {
 			$activity->hide_sitewide = true;
 		} else {
 			$activity->hide_sitewide = false;
@@ -737,13 +738,13 @@ class BP_Group_Sites_Activity {
 		$meta_query = [
 			'relation' => 'OR',
 			[
-				'key'   => BPGSITES_COMMENT_META_KEY,
-				'value' => $groups,
+				'key'     => BPGSITES_COMMENT_META_KEY,
+				'value'   => $groups,
 				'compare' => 'IN',
 			],
 			[
-				'key'   => BPGSITES_COMMENT_META_KEY,
-				'value' => '',
+				'key'     => BPGSITES_COMMENT_META_KEY,
+				'value'   => '',
 				'compare' => 'NOT EXISTS',
 			],
 		];
@@ -818,10 +819,10 @@ class BP_Group_Sites_Activity {
 			// Is registration allowed?
 			if ( bp_get_signup_allowed() ) {
 				$link_text = __( 'Create an account to reply', 'bp-group-sites' );
-				$href = bp_get_signup_page();
+				$href      = bp_get_signup_page();
 			} else {
 				$link_text = __( 'Login to reply', 'bp-group-sites' );
-				$href = wp_login_url();
+				$href      = wp_login_url();
 			}
 
 			// Construct link.
@@ -868,7 +869,7 @@ class BP_Group_Sites_Activity {
 
 		// Get the group.
 		$group = groups_get_group( [
-			'group_id'   => $group_id,
+			'group_id' => $group_id,
 		] );
 
 		// Get showcase groups.
@@ -1169,13 +1170,13 @@ class BP_Group_Sites_Activity {
 	public function enable_comment_editing( $caps, $cap, $user_id, $args ) {
 
 		// Only apply this to queries for edit_comment cap.
-		if ( 'edit_comment' == $cap ) {
+		if ( 'edit_comment' === $cap ) {
 
 			// Get comment.
 			$comment = get_comment( $args[0] );
 
 			// Is the user the same as the comment author?
-			if ( $comment->user_id == $user_id ) {
+			if ( (int) $comment->user_id === (int) $user_id ) {
 
 				// Allow.
 				$caps = [ 'exist' ];
@@ -1229,9 +1230,9 @@ class BP_Group_Sites_Activity {
 
 			// Kick out if all are empty.
 			if (
-				count( $user_group_ids['my_groups'] ) == 0 &&
-				count( $user_group_ids['linked_groups'] ) == 0 &&
-				count( $user_group_ids['public_groups'] ) == 0
+				count( $user_group_ids['my_groups'] ) === 0 &&
+				count( $user_group_ids['linked_groups'] ) === 0 &&
+				count( $user_group_ids['public_groups'] ) === 0
 			) {
 				// --<
 				return;
@@ -1257,10 +1258,10 @@ class BP_Group_Sites_Activity {
 
 			// Define config array.
 			$config_array = [
-				//'user_id' => $user_id,
-				'type' => 'alphabetical',
+				//'user_id'         => $user_id,
+				'type'            => 'alphabetical',
 				'populate_extras' => 0,
-				'include' => $groups,
+				'include'         => $groups,
 			];
 
 			// Get groups.
@@ -1289,7 +1290,7 @@ class BP_Group_Sites_Activity {
 					$html .= '<ul class="children" id="groupsites-list">' . "\n";
 
 					// Init lists.
-					$mine = [];
+					$mine   = [];
 					$linked = [];
 					$public = [];
 
@@ -1481,10 +1482,10 @@ class BP_Group_Sites_Activity {
 
 		// Kick out if all are empty.
 		if (
-			count( $user_group_ids['auth_groups'] ) == 0 &&
-			count( $user_group_ids['my_groups'] ) == 0 &&
-			count( $user_group_ids['linked_groups'] ) == 0 &&
-			count( $user_group_ids['public_groups'] ) == 0
+			count( $user_group_ids['auth_groups'] ) === 0 &&
+			count( $user_group_ids['my_groups'] ) === 0 &&
+			count( $user_group_ids['linked_groups'] ) === 0 &&
+			count( $user_group_ids['public_groups'] ) === 0
 		) {
 			// --<
 			return;
@@ -1513,12 +1514,12 @@ class BP_Group_Sites_Activity {
 
 		// Define config array.
 		$config_array = [
-			//'user_id' => $user_id,
-			'type' => 'alphabetical',
-			'max' => 100,
-			'per_page' => 100,
+			//'user_id'         => $user_id,
+			'type'            => 'alphabetical',
+			'max'             => 100,
+			'per_page'        => 100,
 			'populate_extras' => 0,
-			'include' => $groups,
+			'include'         => $groups,
 		];
 
 		// Get groups.
@@ -1542,8 +1543,8 @@ class BP_Group_Sites_Activity {
 				$html .= '<form id="bpgsites_comment_group_filter" name="bpgsites_comment_group_filter" action="' . get_permalink( $post->ID ) . '" method="post">' . "\n";
 
 				// Init lists.
-				$auth = [];
-				$mine = [];
+				$auth   = [];
+				$mine   = [];
 				$linked = [];
 				$public = [];
 
@@ -1816,14 +1817,14 @@ class BP_Group_Sites_Activity {
 
 		// Super admins can see all groups.
 		if ( is_super_admin() ) {
-			$user_group_ids['my_groups'] = bpgsites_get_groups_by_blog_id( $blog_id );
+			$user_group_ids['my_groups']     = bpgsites_get_groups_by_blog_id( $blog_id );
 			$user_group_ids['linked_groups'] = [];
 		}
 
 		// Kick out if the ones the user can post into are empty.
 		if (
-			count( $user_group_ids['my_groups'] ) == 0 &&
-			count( $user_group_ids['linked_groups'] ) == 0
+			count( $user_group_ids['my_groups'] ) === 0 &&
+			count( $user_group_ids['linked_groups'] ) === 0
 		) {
 			// --<
 			return $result;
@@ -1848,12 +1849,12 @@ class BP_Group_Sites_Activity {
 
 		// Define config array.
 		$config_array = [
-			//'user_id' => bp_loggedin_user_id(),
-			'type' => 'alphabetical',
-			'max' => 100,
-			'per_page' => 100,
+			//'user_id'         => bp_loggedin_user_id(),
+			'type'            => 'alphabetical',
+			'max'             => 100,
+			'per_page'        => 100,
 			'populate_extras' => 0,
-			'include' => $groups,
+			'include'         => $groups,
 		];
 
 		// Get groups.
@@ -1870,7 +1871,7 @@ class BP_Group_Sites_Activity {
 				}
 
 				// Init lists.
-				$mine = [];
+				$mine   = [];
 				$linked = [];
 
 				// Do the loop.
@@ -1887,7 +1888,7 @@ class BP_Group_Sites_Activity {
 					if ( $edit ) {
 
 						// Insert selected if this is the relevant group.
-						if ( $comment_group_id == $group_id ) {
+						if ( (int) $comment_group_id === (int) $group_id ) {
 							$selected = ' selected="selected"';
 						}
 
@@ -2186,10 +2187,10 @@ class BP_Group_Sites_Activity {
 
 		// Init return.
 		$this->user_group_ids = [
-			'my_groups' => [],
+			'my_groups'     => [],
 			'linked_groups' => [],
 			'public_groups' => [],
-			'auth_groups' => bpgsites_showcase_groups_get(),
+			'auth_groups'   => bpgsites_showcase_groups_get(),
 		];
 
 		// Get current blog.
@@ -2334,7 +2335,7 @@ class BP_Group_Sites_Activity {
 
 		// Get activities.
 		if ( bp_has_activities( [
-			'scope' => 'groups',
+			'scope'  => 'groups',
 			'action' => 'new_groupsite_comment,new_groupsite_post',
 		] ) ) {
 
@@ -2392,7 +2393,7 @@ class BP_Group_Sites_Activity {
 
 			// Get activities.
 			if ( bp_has_activities( [
-				'scope' => 'friends',
+				'scope'  => 'friends',
 				'action' => 'new_groupsite_comment,new_groupsite_post',
 			] ) ) {
 
@@ -2437,13 +2438,11 @@ class BP_Group_Sites_Activity {
 	 */
 	public function get_activity_item() {
 
-		$same_post = '';
-
 		?>
 
 		<?php do_action( 'bp_before_activity_entry' ); ?>
 
-		<li class="<?php bp_activity_css_class(); /* echo $same_post; */ ?>" id="activity-<?php bp_activity_id(); ?>">
+		<li class="<?php bp_activity_css_class(); ?>" id="activity-<?php bp_activity_id(); ?>">
 
 			<div class="comment-wrapper">
 
