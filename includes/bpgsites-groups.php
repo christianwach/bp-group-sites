@@ -203,7 +203,7 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 				$invited_group_id = isset( $_POST[ 'bpgsites_group_linkages_invite_select_' . $blog_id ] ) ? (int) wp_unslash( $_POST[ 'bpgsites_group_linkages_invite_select_' . $blog_id ] ) : 0;
 
 				// If we get a valid one.
-				if ( $invited_group_id !== 0 ) {
+				if ( 0 !== $invited_group_id ) {
 
 					// Flag groups as linked, but pending.
 					bpgsites_group_linkages_pending_create( $blog_id, $primary_group_id, $invited_group_id );
@@ -908,7 +908,7 @@ function bpgsites_group_linkages_pending_sent_get( $group_id, $blog_id = 0 ) {
 	$pending_groups = bpgsites_group_linkages_pending_get( $group_id );
 
 	// Did we request a particular blog?
-	if ( $blog_id !== 0 ) {
+	if ( 0 !== $blog_id ) {
 
 		// Overwrite with just the nested array for that blog.
 		$pending_groups['sent'] = isset( $pending_groups['sent'][ $blog_id ] ) ? $pending_groups['sent'][ $blog_id ] : [];
@@ -1022,7 +1022,7 @@ function bpgsites_group_linkages_pending_received_get( $group_id, $blog_id = 0 )
 	$pending_groups = bpgsites_group_linkages_pending_get( $group_id );
 
 	// Did we request a particular blog?
-	if ( $blog_id !== 0 ) {
+	if ( 0 !== $blog_id ) {
 
 		// Overwrite with just the nested array for that blog.
 		$pending_groups['received'] = isset( $pending_groups['received'][ $blog_id ] ) ? $pending_groups['received'][ $blog_id ] : [];
@@ -1337,7 +1337,7 @@ function bpgsites_group_linkages_get( $group_id, $blog_id = 0 ) {
 	}
 
 	// Did we request a particular blog?
-	if ( $blog_id !== 0 ) {
+	if ( 0 !== $blog_id ) {
 
 		// Overwrite with just the nested array for that blog.
 		$linked_groups = isset( $linked_groups[ $blog_id ] ) ? $linked_groups[ $blog_id ] : [];
@@ -1500,7 +1500,7 @@ function bpgsites_group_linkages_get_ajax() {
 			'description' => $description,
 			'avatar' => bp_get_group_avatar_mini(),
 			'total_member_count' => $group->total_member_count,
-			'private' => ( $group->status !== 'public' ),
+			'private' => ( 'public' !== $group->status ),
 		];
 
 	}

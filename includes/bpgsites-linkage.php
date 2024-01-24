@@ -333,7 +333,7 @@ function bpgsites_remove_blog_from_group( $group_id, $blog_id ) {
  *
  * @since 0.1
  *
- * @param int $blog_id The numeric ID of the blog.
+ * @param int  $blog_id The numeric ID of the blog.
  * @param bool $drop Dummy param to avoid callback errors.
  */
 function bpgsites_remove_blog_from_groups( $blog_id, $drop = false ) {
@@ -531,7 +531,7 @@ function bpgsites_get_all_possible_groupsites() {
 		foreach ( $all['blogs'] as $blog ) {
 
 			// Is it the BP root blog?
-			if ( $blog->blog_id == bp_get_root_blog_id() ) {
+			if ( (int) bp_get_root_blog_id() === (int) $blog->blog_id ) {
 				continue;
 			}
 
@@ -600,7 +600,7 @@ function bpgsites_deregister_groupsite( $blog_id ) {
 	$existing = $bp_groupsites->admin->option_get( 'bpgsites_groupsites' );
 
 	// Sanity check.
-	if ( $existing === false ) {
+	if ( false === $existing ) {
 		return;
 	}
 

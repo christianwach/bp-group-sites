@@ -11,21 +11,8 @@
 
 	<rule ref="WordPress">
 
-		<!-- I prefer slash-delimited Hooks -->
-		<exclude name="WordPress.NamingConventions.ValidHookName.UseUnderscores" />
-
-		<!-- Ignore docblock formatting -->
-		<exclude name="Squiz.Commenting.FunctionComment.SpacingAfterParamType" />
-
-		<!-- Yoda? Really? -->
-		<exclude name="WordPress.PHP.YodaConditions.NotYoda" />
-
 		<!-- I prefer my control structures -->
 		<exclude name="WordPress.WhiteSpace.ControlStructureSpacing.BlankLineAfterEnd" />
-
-		<!-- Not a fan of arrow or equals alignment -->
-		<exclude name="WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned" />
-		<exclude name="Generic.Formatting.MultipleStatementAlignment.NotSameWarning" />
 
 		<!-- PSR4 -->
 		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />

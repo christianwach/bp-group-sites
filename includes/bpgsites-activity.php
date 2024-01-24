@@ -154,9 +154,9 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 *
-	 * @param str $comment_content The content of the comment.
+	 * @param str    $comment_content The content of the comment.
 	 * @param object $comment The comment object.
-	 * @param array $args The arguments.
+	 * @param array  $args The arguments.
 	 * @return str $comment_content The content of the comment.
 	 */
 	public function show_comment_group( $comment_content, $comment, $args ) {
@@ -247,7 +247,7 @@ class BP_Group_Sites_Activity {
 		$reply_to_id = is_numeric( $comment->comment_parent ) ? absint( $comment->comment_parent ) : 0;
 
 		// If this is a reply.
-		if ( $reply_to_id !== 0 ) {
+		if ( 0 !== $reply_to_id ) {
 
 			// The group that comment replies have must be the same as its parent.
 
@@ -407,7 +407,7 @@ class BP_Group_Sites_Activity {
 	public function custom_comment_activity( $activity ) {
 
 		// Only deal with comments.
-		if ( ( $activity->type != 'new_blog_comment' ) ) {
+		if ( 'new_blog_comment' !== $activity->type ) {
 			return $activity;
 		}
 
@@ -459,7 +459,7 @@ class BP_Group_Sites_Activity {
 		$post = get_post( $comment->comment_post_ID );
 
 		// Was it a registered user?
-		if ( $comment->user_id != '0' ) {
+		if ( 0 !== (int) $comment->user_id ) {
 
 			// Get user details.
 			$user = get_userdata( $comment->user_id );
@@ -528,7 +528,7 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 *
-	 * @param array $args Existing activity permalink data.
+	 * @param array  $args Existing activity permalink data.
 	 * @param object $activity The activity item.
 	 * @return array $args The overridden activity permalink data.
 	 */
@@ -621,7 +621,7 @@ class BP_Group_Sites_Activity {
 	public function comments_ajax_querystring( $qs, $object ) {
 
 		// Bail if not an activity object.
-		if ( $object != 'activity' ) {
+		if ( 'activity' !== $object ) {
 			return $qs;
 		}
 
@@ -805,7 +805,7 @@ class BP_Group_Sites_Activity {
 	 * @since 0.1
 	 *
 	 * @param string $link The existing link.
-	 * @param array $args The setup array.
+	 * @param array  $args The setup array.
 	 * @param object $comment The comment.
 	 * @param object $post The post.
 	 * @return string $link The modified link.
@@ -844,7 +844,7 @@ class BP_Group_Sites_Activity {
 		$group_id = $this->get_comment_group_id( $comment->comment_ID );
 
 		// Sanity check.
-		if ( ! is_numeric( $group_id ) || $group_id == 0 ) {
+		if ( ! is_numeric( $group_id ) || 0 === (int) $group_id ) {
 
 			// Comments can pre-exist that are not group-linked.
 			return $link;
@@ -1106,7 +1106,7 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 *
-	 * @param int $approved The comment status.
+	 * @param int   $approved The comment status.
 	 * @param array $commentdata The comment data.
 	 * @return int $approved The modified comment status.
 	 */
@@ -1130,7 +1130,7 @@ class BP_Group_Sites_Activity {
 		$user_group_ids = $this->get_groups_for_user();
 
 		// Did we get one?
-		if ( $group_id != '' && is_numeric( $group_id ) && $group_id > 0 ) {
+		if ( ! empty( $group_id ) && is_numeric( $group_id ) && 0 < $group_id ) {
 
 			// Is this user a member?
 			if ( in_array( $group_id, $user_group_ids['my_groups'] ) ) {
@@ -1161,8 +1161,8 @@ class BP_Group_Sites_Activity {
 	 * For group sites, add capability to edit own comments.
 	 *
 	 * @param array $caps The existing capabilities array for the WordPress user.
-	 * @param str $cap The capability in question.
-	 * @param int $user_id The numerical ID of the WordPress user.
+	 * @param str   $cap The capability in question.
+	 * @param int   $user_id The numerical ID of the WordPress user.
 	 * @param array $args The additional arguments.
 	 * @return array $caps The modified capabilities array for the WordPress user.
 	 */
@@ -1555,7 +1555,7 @@ class BP_Group_Sites_Activity {
 				$public_shown = $bp_groupsites->admin->option_get( 'bpgsites_public' );
 
 				// Are they to be shown?
-				if ( $public_shown == '1' ) {
+				if ( 1 === (int) $public_shown ) {
 					$checked = ' checked="checked"';
 				}
 
@@ -1754,8 +1754,8 @@ class BP_Group_Sites_Activity {
 	 * @since 0.1
 	 *
 	 * @param string $result Existing markup to be sent to browser.
-	 * @param int $comment_id The comment ID.
-	 * @param int $reply_to_id The comment ID to which this comment is a reply.
+	 * @param int    $comment_id The comment ID.
+	 * @param int    $reply_to_id The comment ID to which this comment is a reply.
 	 * @return string $result The modified markup sent to the browser.
 	 */
 	public function get_comment_group_selector( $result, $comment_id, $reply_to_id ) {
@@ -1771,15 +1771,15 @@ class BP_Group_Sites_Activity {
 	 * @since 0.1
 	 *
 	 * @param string $result Existing markup to be sent to browser.
-	 * @param int $comment_id The comment ID.
-	 * @param int $reply_to_id The comment ID to which this comment is a reply.
-	 * @param bool $edit Triggers edit mode to return an option selected.
+	 * @param int    $comment_id The comment ID.
+	 * @param int    $reply_to_id The comment ID to which this comment is a reply.
+	 * @param bool   $edit Triggers edit mode to return an option selected.
 	 * @return string $result The modified markup sent to the browser.
 	 */
 	public function get_comment_group_select( $result, $comment_id, $reply_to_id, $edit = false ) {
 
 		// If the comment is a reply to another.
-		if ( $reply_to_id !== 0 ) {
+		if ( 0 !== $reply_to_id ) {
 
 			/*
 			 * This will only kick in if Javascript is off or the moveForm script is
@@ -1791,7 +1791,7 @@ class BP_Group_Sites_Activity {
 			$group_id = $this->get_comment_group_id( $reply_to_id );
 
 			// Did we get one?
-			if ( $group_id != '' && is_numeric( $group_id ) && $group_id > 0 ) {
+			if ( ! empty( $group_id ) && is_numeric( $group_id ) && 0 < $group_id ) {
 
 				// Show a hidden input so that this comment is also posted in that group.
 				$result .= '<input type="hidden" id="bpgsites-post-in" name="bpgsites-post-in" value="' . $group_id . '" />' . "\n";
@@ -2150,7 +2150,7 @@ class BP_Group_Sites_Activity {
 		$group_id = $this->get_comment_group_id( $comment_id );
 
 		// Did we get one?
-		if ( $group_id != '' && is_numeric( $group_id ) && $group_id > 0 ) {
+		if ( ! empty( $group_id ) && is_numeric( $group_id ) && 0 < $group_id ) {
 
 			// Add group identifier.
 			$classes[] = 'bpgsites-group-' . $group_id;
@@ -2221,7 +2221,7 @@ class BP_Group_Sites_Activity {
 				$status = bp_get_group_status( $group );
 
 				// If public.
-				if ( $status == 'public' ) {
+				if ( 'public' === $status ) {
 
 					/*
 					// Add to our array only if we allow public comments.

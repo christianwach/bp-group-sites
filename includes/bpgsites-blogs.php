@@ -33,7 +33,7 @@ function bpgsites_has_blogs( $args = '' ) {
 	}
 
 	// Do we want all possible group sites?
-	if ( isset( $args['possible_sites'] ) && $args['possible_sites'] === true ) {
+	if ( isset( $args['possible_sites'] ) && true === $args['possible_sites'] ) {
 
 		// Get all possible group sites.
 		$groupsites = bpgsites_get_all_possible_groupsites();

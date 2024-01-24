@@ -243,12 +243,7 @@ class BP_Group_Sites_Admin {
 	 * @param string $option_name The name of the option.
 	 * @return bool Whether or not the option exists.
 	 */
-	public function option_exists( $option_name = '' ) {
-
-		// Test for null.
-		if ( $option_name == '' ) {
-			die( __( 'You must supply an option to option_exists()', 'bp-group-sites' ) );
-		}
+	public function option_exists( $option_name ) {
 
 		// Get existence of option in array.
 		return array_key_exists( $option_name, $this->bpgsites_options );
@@ -261,15 +256,10 @@ class BP_Group_Sites_Admin {
 	 * @since 0.1
 	 *
 	 * @param string $option_name The name of the option.
-	 * @param mixed $default The default value if the option does not exist.
+	 * @param mixed  $default The default value if the option does not exist.
 	 * @return mixed The option or the default.
 	 */
-	public function option_get( $option_name = '', $default = false ) {
-
-		// Test for null.
-		if ( $option_name == '' ) {
-			die( __( 'You must supply an option to option_get()', 'bp-group-sites' ) );
-		}
+	public function option_get( $option_name, $default = false ) {
 
 		// Get option.
 		return ( array_key_exists( $option_name, $this->bpgsites_options ) ) ? $this->bpgsites_options[ $option_name ] : $default;
@@ -282,19 +272,9 @@ class BP_Group_Sites_Admin {
 	 * @since 0.1
 	 *
 	 * @param string $option_name The name of the option.
-	 * @param mixed $value The value of the option.
+	 * @param mixed  $value The value of the option.
 	 */
-	public function option_set( $option_name = '', $value = '' ) {
-
-		// Test for null.
-		if ( $option_name == '' ) {
-			die( __( 'You must supply an option to option_set()', 'bp-group-sites' ) );
-		}
-
-		// Test for other than string.
-		if ( ! is_string( $option_name ) ) {
-			die( __( 'You must supply the option as a string to option_set()', 'bp-group-sites' ) );
-		}
+	public function option_set( $option_name, $value = '' ) {
 
 		// Set option.
 		$this->bpgsites_options[ $option_name ] = $value;
@@ -308,12 +288,7 @@ class BP_Group_Sites_Admin {
 	 *
 	 * @param string $option_name The name of the option.
 	 */
-	public function option_delete( $option_name = '' ) {
-
-		// Test for null.
-		if ( $option_name == '' ) {
-			die( __( 'You must supply an option to option_delete()', 'bp-group-sites' ) );
-		}
+	public function option_delete( $option_name ) {
 
 		// Unset option.
 		unset( $this->bpgsites_options[ $option_name ] );
@@ -370,25 +345,25 @@ class BP_Group_Sites_Admin {
 
 		// Init plugin title.
 		$bpgsites_overrides_title = $this->option_get( 'bpgsites_overrides_title' );
-		if ( $bpgsites_overrides_title == '' ) {
+		if ( empty( $bpgsites_overrides_title ) ) {
 			$bpgsites_overrides_title = esc_attr( $defaults['title'] );
 		}
 
 		// Init name.
 		$bpgsites_overrides_name = $this->option_get( 'bpgsites_overrides_name' );
-		if ( $bpgsites_overrides_name == '' ) {
+		if ( empty( $bpgsites_overrides_name ) ) {
 			$bpgsites_overrides_name = esc_attr( $defaults['name'] );
 		}
 
 		// Init plural.
 		$bpgsites_overrides_plural = $this->option_get( 'bpgsites_overrides_plural' );
-		if ( $bpgsites_overrides_plural == '' ) {
+		if ( empty( $bpgsites_overrides_plural ) ) {
 			$bpgsites_overrides_plural = esc_attr( $defaults['plural'] );
 		}
 
 		// Init button.
 		$bpgsites_overrides_button = $this->option_get( 'bpgsites_overrides_button' );
-		if ( $bpgsites_overrides_button == '' ) {
+		if ( empty( $bpgsites_overrides_button ) ) {
 			$bpgsites_overrides_button = esc_attr( $defaults['button'] );
 		}
 
@@ -698,12 +673,7 @@ add_filter( 'bp_get_blogs_visit_blog_button', 'bpgsites_get_visit_site_button', 
  * @param str $option_name The name of the option.
  * @return bool $exists Whether or not the option exists.
  */
-function bpgsites_site_option_exists( $option_name = '' ) {
-
-	// Test for null.
-	if ( $option_name == '' ) {
-		die( __( 'You must supply an option to bpgsites_option_wpms_exists()', 'bp-group-sites' ) );
-	}
+function bpgsites_site_option_exists( $option_name ) {
 
 	// Test by getting option with unlikely default.
 	if ( bpgsites_site_option_get( $option_name, 'fenfgehgefdfdjgrkj' ) == 'fenfgehgefdfdjgrkj' ) {
@@ -723,12 +693,7 @@ function bpgsites_site_option_exists( $option_name = '' ) {
  * @param str $default The default value of the option if it has no value.
  * @return mixed $value The value of the option.
  */
-function bpgsites_site_option_get( $option_name = '', $default = false ) {
-
-	// Test for null.
-	if ( $option_name == '' ) {
-		die( __( 'You must supply an option to bpgsites_site_option_get()', 'bp-group-sites' ) );
-	}
+function bpgsites_site_option_get( $option_name, $default = false ) {
 
 	// Get option.
 	return get_site_option( $option_name, $default );
@@ -740,16 +705,11 @@ function bpgsites_site_option_get( $option_name = '', $default = false ) {
  *
  * @since 0.1
  *
- * @param str $option_name The name of the option.
+ * @param str   $option_name The name of the option.
  * @param mixed $value The value to set the option to.
  * @return bool $success If the value of the option was successfully saved.
  */
-function bpgsites_site_option_set( $option_name = '', $value = '' ) {
-
-	// Test for null.
-	if ( $option_name == '' ) {
-		die( __( 'You must supply an option to bpgsites_site_option_set()', 'bp-group-sites' ) );
-	}
+function bpgsites_site_option_set( $option_name, $value = '' ) {
 
 	// Set option.
 	return update_site_option( $option_name, $value );

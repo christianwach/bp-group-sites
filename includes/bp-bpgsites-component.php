@@ -133,7 +133,7 @@ function bp_is_bpgsites_component() {
  *
  * @since 0.1
  *
- * @param str $found_template The existing path to the template.
+ * @param str   $found_template The existing path to the template.
  * @param array $templates The array of template paths.
  * @return str $found_template The modified path to the template.
  */
