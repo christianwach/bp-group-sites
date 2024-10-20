@@ -1,16 +1,35 @@
 <?php
 /**
- * Plugin Name: BP Group Sites
- * Description: Creates many-to-many relationships between BuddyPress Groups and WordPress Sites.
- * Version: 0.3.3a
- * Author: Christian Wach
- * Author URI: https://haystack.co.uk
- * Plugin URI: https://github.com/christianwach/bp-group-sites
- * Text Domain: bp-group-sites
- * Domain Path: /languages
- * Network: true
+ * BP Group Sites
+ *
+ * Plugin Name:       BP Group Sites
+ * Description:       Creates many-to-many relationships between BuddyPress Groups and WordPress Sites.
+ * Plugin URI:        https://github.com/christianwach/bp-group-sites
+ * GitHub Plugin URI: https://github.com/christianwach/bp-group-sites
+ * Version:           0.3.3a
+ * Author:            Christian Wach
+ * Author URI:        https://haystack.co.uk
+ * License:           GPLv2 or later
+ * License URI:       https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * Requires at least: 5.7
+ * Requires PHP:      7.4
+ * Text Domain:       bp-group-sites
+ * Domain Path:       /languages
+ * Network:           true
  *
  * @package BP_Group_Sites
+ * @link    https://github.com/christianwach/bp-group-sites
+ * @license GPL v2 or later
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  */
 
 // Set our version here.
