@@ -27,7 +27,7 @@ class BP_Group_Sites_Activity {
 	 *
 	 * @since 0.1
 	 * @access public
-	 * @var object $groups The groups array.
+	 * @var array
 	 */
 	public $groups = [];
 

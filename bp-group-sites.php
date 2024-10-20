@@ -78,7 +78,7 @@ class BP_Group_Sites {
 	 *
 	 * @since 0.1
 	 * @access public
-	 * @var object $admin The admin object.
+	 * @var BP_Group_Sites_Admin
 	 */
 	public $admin;
 
@@ -87,7 +87,7 @@ class BP_Group_Sites {
 	 *
 	 * @since 0.1
 	 * @access public
-	 * @var object $activity The activity object.
+	 * @var BP_Group_Sites_Activity
 	 */
 	public $activity;
 

@@ -34,7 +34,7 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	 *
 	 * @since 0.1
 	 * @access public
-	 * @var bool $enable_create_step Disable the creation step.
+	 * @var bool
 	 */
 	public $enable_create_step = false;
 

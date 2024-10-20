@@ -27,7 +27,7 @@ class BP_Group_Sites_Admin {
 	 *
 	 * @since 0.1
 	 * @access public
-	 * @var array $bpgsites_options The plugin options array.
+	 * @var array
 	 */
 	public $bpgsites_options = [];
 
