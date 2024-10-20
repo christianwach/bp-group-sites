@@ -3,7 +3,7 @@ Contributors: needle
 Donate link: https://www.paypal.me/interactivist
 Tags: buddypress, groups, sites, reading groups
 Requires at least: 4.9
-Tested up to: 6.4
+Tested up to: 6.6
 Stable tag: 0.3.3a
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html

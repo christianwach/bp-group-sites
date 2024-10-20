@@ -5,7 +5,7 @@ BP Group Sites
 **Donate link:** https://www.paypal.me/interactivist<br/>
 **Tags:** buddypress, groups, sites, reading groups<br/>
 **Requires at least:** 4.9<br/>
-**Tested up to:** 6.4<br/>
+**Tested up to:** 6.6<br/>
 **Stable tag:** 0.3.3a<br/>
 **License:** GPLv2 or later<br/>
 **License URI:** https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
