@@ -9,9 +9,7 @@
  */
 
 // Exit if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Creates a custom Widget for displaying a list of Group Sites.
@@ -31,7 +29,7 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 		$name = sprintf(
 			/* translators: %s: The plural name of Group Sites. */
 			__( 'List of %s', 'bp-group-sites' ),
-			apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) )
+			bpgsites_get_extension_plural()
 		);
 
 		// Define widget args.
@@ -39,7 +37,7 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 			'description' => sprintf(
 				/* translators: %s: The plural name of Group Sites. */
 				__( 'Use this widget to show a list of %s.', 'bp-group-sites' ),
-				apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) )
+				bpgsites_get_extension_plural()
 			),
 		];
 
@@ -65,13 +63,16 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? '' : $instance['title'], $instance, $this->id_base );
 
 		// Show widget prefix.
-		echo ( isset( $args['before_widget'] ) ? $args['before_widget'] : '' );
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo isset( $args['before_widget'] ) ? $args['before_widget'] : '';
 
 		// Show title if there is one.
 		if ( ! empty( $title ) ) {
-			echo ( isset( $args['before_title'] ) ? $args['before_title'] : '' );
-			echo $title;
-			echo ( isset( $args['after_title'] ) ? $args['after_title'] : '' );
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo isset( $args['before_title'] ) ? $args['before_title'] : '';
+			echo esc_html( $title );
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo isset( $args['after_title'] ) ? $args['after_title'] : '';
 		}
 
 		// Set default max blogs if absent.
@@ -115,7 +116,8 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 		}
 
 		// Show widget suffix.
-		echo ( isset( $args['after_widget'] ) ? $args['after_widget'] : '' );
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo isset( $args['after_widget'] ) ? $args['after_widget'] : '';
 
 	}
 
@@ -136,7 +138,7 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 			$title = sprintf(
 				/* translators: %s: The plural name of Group Sites. */
 				__( 'List of %s', 'bp-group-sites' ),
-				apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) )
+				bpgsites_get_extension_plural()
 			);
 		}
 
@@ -150,11 +152,11 @@ class BP_Group_Sites_List_Widget extends WP_Widget {
 		?>
 
 		<p>
-		<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php esc_html_e( 'Title:', 'bp-group-sites' ); ?> <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>"></label>
+		<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title:', 'bp-group-sites' ); ?> <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>"></label>
 		</p>
 
 		<p>
-		<label for="<?php echo $this->get_field_id( 'max_blogs' ); ?>"><?php esc_html_e( 'Max number to show:', 'bp-group-sites' ); ?> <input class="widefat" id="<?php echo $this->get_field_id( 'max_blogs' ); ?>" name="<?php echo $this->get_field_name( 'max_blogs' ); ?>" type="text" value="<?php echo esc_attr( $max_blogs ); ?>" style="width: 30%" /></label>
+		<label for="<?php echo esc_attr( $this->get_field_id( 'max_blogs' ) ); ?>"><?php esc_html_e( 'Max number to show:', 'bp-group-sites' ); ?> <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'max_blogs' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'max_blogs' ) ); ?>" type="text" value="<?php echo esc_attr( $max_blogs ); ?>" style="width: 30%" /></label>
 		</p>
 
 		<?php

@@ -9,9 +9,7 @@
  */
 
 // Exit if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Class definition.
@@ -35,7 +33,7 @@ class BP_Group_Sites_Component extends BP_Component {
 
 		// Store component name.
 		// NOTE: ideally we'll use BP theme compatibility - see bpgsites_load_template_filter() below.
-		$this->name = apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) );
+		$this->name = bpgsites_get_extension_plural();
 
 		// Add this component to active components.
 		$bp->active_components[ $this->id ] = '1';
@@ -88,7 +86,7 @@ class BP_Group_Sites_Component extends BP_Component {
 		$search_string = sprintf(
 			/* translators: %s: The plural name for Group Sites. */
 			__( 'Search %s...', 'bp-group-sites' ),
-			apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) )
+			bpgsites_get_extension_plural()
 		);
 
 		// Construct args.

@@ -26,7 +26,7 @@ If you're a developer, any contributions are most welcome here. If you're not a 
 
 ### Requirements
 
-This plugin requires a minimum of *WordPress 4.2.1* and *BuddyPress 2.0*.
+This plugin requires a minimum of *WordPress 4.9* and *BuddyPress 2.0*.
 
 ### BuddyPress 12.x
 

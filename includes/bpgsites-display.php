@@ -9,9 +9,7 @@
  */
 
 // Exit if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Adds icon to menu in CBOX theme.
@@ -28,7 +26,7 @@ function bpgsites_cbox_theme_compatibility() {
 
 		<style type="text/css">
 		/* <![CDATA[ */
-		#nav-<?php echo apply_filters( 'bpgsites_extension_slug', 'group-sites' ); ?>:before
+		#nav-<?php echo esc_attr( bpgsites_get_extension_slug() ); ?>:before
 		{
 			content: "C";
 		}

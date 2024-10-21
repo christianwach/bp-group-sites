@@ -9,9 +9,7 @@
  */
 
 // Exit if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Query only Group Site blogs.
@@ -32,25 +30,16 @@ function bpgsites_has_blogs( $args = '' ) {
 		$user_id = bp_displayed_user_id();
 	}
 
-	// Do we want all possible group sites?
+	// Do we want all possible group sites or just groupsite IDs?
 	if ( isset( $args['possible_sites'] ) && true === $args['possible_sites'] ) {
-
-		// Get all possible group sites.
 		$groupsites = bpgsites_get_all_possible_groupsites();
-
 	} else {
-
-		// Get just groupsite IDs.
 		$groupsites = bpgsites_get_groupsites();
-
 	}
 
-	// Check for a passed group ID.
+	// Get groupsite IDs for this group if a group ID is passed.
 	if ( isset( $args['group_id'] ) && ! empty( $args['group_id'] ) ) {
-
-		// Get groupsite IDs for this group.
 		$groupsites = bpgsites_get_blogs_by_group_id( $args['group_id'] );
-
 	}
 
 	// If empty, create array guaranteed to produce no result.
@@ -59,6 +48,7 @@ function bpgsites_has_blogs( $args = '' ) {
 	}
 
 	// Check for and use search terms.
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$search_terms = ! empty( $_REQUEST['s'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['s'] ) ) : false;
 
 	// Declare defaults.
@@ -241,21 +231,31 @@ function bpgsites_blogs_pagination_count() {
 	$total     = bp_core_number_format( $blogs_template->total_blog_count );
 
 	// Get singular name.
-	$singular = strtolower( apply_filters( 'bpgsites_extension_name', __( 'site', 'bp-group-sites' ) ) );
+	$singular = strtolower( bpgsites_get_extension_name() );
 
 	// Get plural name.
-	$plural = strtolower( apply_filters( 'bpgsites_extension_plural', __( 'sites', 'bp-group-sites' ) ) );
+	$plural = strtolower( bpgsites_get_extension_plural() );
 
-	// We need to override the singular name.
-	echo sprintf(
-		/* translators: 1: The singular name for Group Sites, 2: Starting page number, 3: Ending page number, 4: Total number of pages, 5: The plural name for Group Sites. */
-		__( 'Viewing %1$s %2$s to %3$s (of %4$s %5$s)', 'bp-group-sites' ),
-		$singular,
-		$from_num,
-		$to_num,
-		$total,
-		$plural
-	);
+	if ( 1 === (int) $blogs_template->total_blog_count ) {
+		$message = sprintf(
+			/* translators: %s: The singular name for Group Sites. */
+			__( 'Viewing 1 %s', 'bp-group-sites' ),
+			$singular,
+		);
+	} else {
+		$message = sprintf(
+			/* translators: 1: The site from number, 2: The site to number, 3: The total number of sites, 4: The singular name for Group Sites, 5: The plural name for Group Sites. */
+			_n( 'Viewing %1$s - %2$s of %3$s %4$s', 'Viewing %1$s - %2$s of %3$s %5$s', $blogs_template->total_blog_count, 'bp-group-sites' ), // phpcs:ignore WordPress.WP.I18n.MismatchedPlaceholders
+			$from_num,
+			$to_num,
+			$total,
+			$singular,
+			$plural
+		);
+	}
+
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	echo $message;
 
 }
 
@@ -295,6 +295,7 @@ function bpgsites_total_blogs() {
  * @since 0.1
  */
 function bpgsites_total_blog_count() {
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	echo bpgsites_get_total_blog_count();
 }
 
@@ -355,6 +356,7 @@ function bpgsites_total_blogs_for_user( $user_id = 0 ) {
  * @param int $user_id The numeric ID of a user.
  */
 function bpgsites_total_blog_count_for_user( $user_id = 0 ) {
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	echo bpgsites_get_total_blog_count_for_user( $user_id );
 }
 
@@ -367,7 +369,16 @@ function bpgsites_total_blog_count_for_user( $user_id = 0 ) {
  * @return int Total number of working blogs for this user.
  */
 function bpgsites_get_total_blog_count_for_user( $user_id = 0 ) {
+
+	/**
+	 * Filter the total number of working blogs for this user.
+	 *
+	 * @since 0.1
+	 *
+	 * @param int Total number of working blogs for this user.
+	 */
 	return apply_filters( 'bpgsites_get_total_blog_count_for_user', bpgsites_total_blogs_for_user( $user_id ) );
+
 }
 
 // Format number that gets returned.
@@ -382,23 +393,26 @@ add_filter( 'bpgsites_get_total_blog_count_for_user', 'bp_core_number_format' );
  */
 function bpgsites_is_blog_in_group() {
 
-	// Get groups for this blog.
-	$groups = bpgsites_get_groups_by_blog_id( bp_get_blog_id() );
-
 	// Init return.
 	$return = false;
 
-	// Sanity check.
-	if ( is_array( $groups ) && count( $groups ) > 0 ) {
+	// Get groups for this blog.
+	$groups = bpgsites_get_groups_by_blog_id( bp_get_blog_id() );
 
-		// Is the current group in the array?
-		if ( in_array( bp_get_current_group_id(), $groups ) ) {
+	// Is the current group in the array?
+	if ( is_array( $groups ) && count( $groups ) > 0 ) {
+		if ( in_array( (int) bp_get_current_group_id(), $groups, true ) ) {
 			$return = true;
 		}
-
 	}
 
-	// --<
+	/**
+	 * Filter whether the blog is associated with the current group.
+	 *
+	 * @since 0.1
+	 *
+	 * @param bool $return True if the blog is in the group, false otherwise.
+	 */
 	return apply_filters( 'bpgsites_is_blog_in_group', $return );
 
 }
@@ -412,9 +426,9 @@ function bpgsites_admin_button_value() {
 
 	// Is this blog already associated?
 	if ( bpgsites_is_blog_in_group() ) {
-		echo __( 'Remove', 'bp-group-sites' );
+		echo esc_attr__( 'Remove', 'bp-group-sites' );
 	} else {
-		echo __( 'Add', 'bp-group-sites' );
+		echo esc_attr__( 'Add', 'bp-group-sites' );
 	}
 
 }
@@ -428,9 +442,9 @@ function bpgsites_admin_button_action() {
 
 	// Is this blog already associated?
 	if ( bpgsites_is_blog_in_group() ) {
-		echo 'remove';
+		echo esc_attr( 'remove' );
 	} else {
-		echo 'add';
+		echo esc_attr( 'add' );
 	}
 
 }
@@ -443,6 +457,7 @@ function bpgsites_admin_button_action() {
  * @uses bpgsites_get_root_slug()
  */
 function bpgsites_root_slug() {
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	echo bpgsites_get_root_slug();
 }
 
@@ -454,7 +469,16 @@ function bpgsites_root_slug() {
  * @return string The 'blogs' root slug.
  */
 function bpgsites_get_root_slug() {
+
+	/**
+	 * Filter the group sites component root slug.
+	 *
+	 * @since 0.1
+	 *
+	 * @param string The 'blogs' root slug.
+	 */
 	return apply_filters( 'bpgsites_get_root_slug', buddypress()->bpgsites->root_slug );
+
 }
 
 // =============================================================================

@@ -9,9 +9,7 @@
  */
 
 // Exit if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 /**
  * BP Group Sites Admin class.
@@ -32,6 +30,24 @@ class BP_Group_Sites_Admin {
 	public $bpgsites_options = [];
 
 	/**
+	 * Settings Page reference.
+	 *
+	 * @since 0.3.3
+	 * @access public
+	 * @var string
+	 */
+	public $settings_page;
+
+	/**
+	 * Settings Page slug.
+	 *
+	 * @since 0.3.3
+	 * @access public
+	 * @var string
+	 */
+	public $settings_page_slug = 'bpgsites_settings';
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 0.1
@@ -50,13 +66,8 @@ class BP_Group_Sites_Admin {
 	 */
 	public function register_hooks() {
 
-		// If on back end.
-		if ( is_admin() ) {
-
-			// Add menu to Network Settings submenu.
-			add_action( 'network_admin_menu', [ $this, 'add_admin_menu' ], 30 );
-
-		}
+		// Add menu to Network Settings submenu.
+		add_action( 'network_admin_menu', [ $this, 'add_admin_menu' ], 30 );
 
 	}
 
@@ -114,7 +125,11 @@ class BP_Group_Sites_Admin {
 	 */
 	public function deactivate() {
 
-		// We'll delete our options in 'uninstall.php'
+		// We'll delete our options in 'uninstall.php'.
+		if ( false === BPGSITES_DEBUG ) {
+			return;
+		}
+
 		// But for testing let's delete them here.
 		delete_site_option( 'bpgsites_options' );
 		delete_site_option( 'bpgsites_installed' );
@@ -134,21 +149,21 @@ class BP_Group_Sites_Admin {
 			return false;
 		}
 
-		// Try and update options.
-		$saved = $this->options_update();
-
 		// Always add the admin page to the Settings menu.
-		$page = add_submenu_page(
+		$this->settings_page = add_submenu_page(
 			'settings.php',
 			__( 'BP Group Sites', 'bp-group-sites' ),
 			__( 'BP Group Sites', 'bp-group-sites' ),
 			'manage_options',
-			'bpgsites_admin_page',
+			$this->settings_page_slug, // Slug name.
 			[ $this, 'network_admin_form' ]
 		);
 
+		// Register our form submit hander.
+		add_action( 'load-' . $this->settings_page, [ $this, 'form_submitted' ] );
+
 		// Add styles only on our admin page.
-		add_action( 'admin_print_styles-' . $page, [ $this, 'add_admin_styles' ] );
+		add_action( 'admin_print_styles-' . $this->settings_page, [ $this, 'add_admin_styles' ] );
 
 	}
 
@@ -171,11 +186,110 @@ class BP_Group_Sites_Admin {
 	}
 
 	/**
-	 * Update options based on content of form.
+	 * Show our admin page.
 	 *
 	 * @since 0.1
 	 */
-	public function options_update() {
+	public function network_admin_form() {
+
+		// Only allow network admins through.
+		if ( ! is_super_admin() ) {
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'bp-group-sites' ) );
+		}
+
+		// Get Settings Page submit URL.
+		$submit_url = $this->network_menu_page_url( $this->settings_page_slug, false );
+
+		// Init public comments checkbox.
+		$public = 0;
+		if ( 1 === (int) $this->option_get( 'bpgsites_public' ) ) {
+			$public = 1;
+		}
+
+		// Init name change checkbox.
+		$overrides = 0;
+		if ( 1 === (int) $this->option_get( 'bpgsites_overrides' ) ) {
+			$overrides = 1;
+		}
+
+		// Get defaults.
+		$defaults = $this->get_defaults();
+
+		// Init plugin title.
+		$title = $this->option_get( 'bpgsites_overrides_title' );
+		if ( empty( $title ) ) {
+			$title = $defaults['title'];
+		}
+
+		// Init name.
+		$name = $this->option_get( 'bpgsites_overrides_name' );
+		if ( empty( $name ) ) {
+			$name = $defaults['name'];
+		}
+
+		// Init plural.
+		$plural = $this->option_get( 'bpgsites_overrides_plural' );
+		if ( empty( $plural ) ) {
+			$plural = $defaults['plural'];
+		}
+
+		// Init button.
+		$button = $this->option_get( 'bpgsites_overrides_button' );
+		if ( empty( $button ) ) {
+			$button = $defaults['button'];
+		}
+
+		// Include admin page template.
+		include BPGSITES_PATH . 'assets/admin/page-settings.php';
+
+	}
+
+	/**
+	 * Get the URL to access a particular menu Page.
+	 *
+	 * The URL based on the slug it was registered with. If the slug hasn't been
+	 * registered properly no url will be returned.
+	 *
+	 * @since 0.3.3
+	 *
+	 * @param string $menu_slug The slug name to refer to this menu by (should be unique for this menu).
+	 * @param bool   $echo Whether or not to echo the url - default is true.
+	 * @return string $url The URL.
+	 */
+	public function network_menu_page_url( $menu_slug, $echo = true ) {
+
+		global $_parent_pages;
+
+		if ( isset( $_parent_pages[ $menu_slug ] ) ) {
+			$parent_slug = $_parent_pages[ $menu_slug ];
+			if ( $parent_slug && ! isset( $_parent_pages[ $parent_slug ] ) ) {
+				$url = network_admin_url( add_query_arg( 'page', $menu_slug, $parent_slug ) );
+			} else {
+				$url = network_admin_url( 'admin.php?page=' . $menu_slug );
+			}
+		} else {
+			$url = '';
+		}
+
+		$url = esc_url( $url );
+
+		if ( $echo ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo $url;
+		}
+
+		// --<
+		return $url;
+
+	}
+
+	/**
+	 * Update options based on content of form.
+	 *
+	 * @since 0.1
+	 * @since 0.3.3 Renamed.
+	 */
+	public function form_submitted() {
 
 		// Kick out if the form was not submitted.
 		if ( ! isset( $_POST['bpgsites_submit'] ) ) {
@@ -218,6 +332,28 @@ class BP_Group_Sites_Admin {
 
 		// Save.
 		$this->options_save();
+
+		// Now redirect.
+		$this->form_redirect();
+
+	}
+
+	/**
+	 * Form redirection handler.
+	 *
+	 * @since 0.3.3
+	 */
+	public function form_redirect() {
+
+		// Get the Network Settings Page URL.
+		$url = $this->network_menu_page_url( $this->settings_page_slug, false );
+
+		// Our array of arguments.
+		$args = [ 'updated' => 'true' ];
+
+		// Redirect to our Settings Page.
+		wp_safe_redirect( add_query_arg( $args, $url ) );
+		exit;
 
 	}
 
@@ -305,152 +441,6 @@ class BP_Group_Sites_Admin {
 	}
 
 	/**
-	 * Show our admin page.
-	 *
-	 * @since 0.1
-	 */
-	public function network_admin_form() {
-
-		// Only allow network admins through.
-		if ( ! is_super_admin() ) {
-			wp_die( __( 'You do not have permission to access this page.', 'bp-group-sites' ) );
-		}
-
-		// Show message.
-		if ( isset( $_GET['updated'] ) ) {
-			echo '<div id="message" class="updated"><p>' . __( 'Options saved.', 'bp-group-sites' ) . '</p></div>';
-		}
-
-		// Sanitise admin page url.
-		$url       = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
-		$url_array = explode( '&', $url );
-		if ( is_array( $url_array ) ) {
-			$url = $url_array[0];
-		}
-
-		// Get defaults.
-		$defaults = $this->get_defaults();
-
-		// Init public comments checkbox.
-		$bpgsites_public = '';
-		if ( 1 === (int) $this->option_get( 'bpgsites_public' ) ) {
-			$bpgsites_public = ' checked="checked"';
-		}
-
-		// Init name change checkbox.
-		$bpgsites_overrides = '';
-		if ( 1 === (int) $this->option_get( 'bpgsites_overrides' ) ) {
-			$bpgsites_overrides = ' checked="checked"';
-		}
-
-		// Init plugin title.
-		$bpgsites_overrides_title = $this->option_get( 'bpgsites_overrides_title' );
-		if ( empty( $bpgsites_overrides_title ) ) {
-			$bpgsites_overrides_title = esc_attr( $defaults['title'] );
-		}
-
-		// Init name.
-		$bpgsites_overrides_name = $this->option_get( 'bpgsites_overrides_name' );
-		if ( empty( $bpgsites_overrides_name ) ) {
-			$bpgsites_overrides_name = esc_attr( $defaults['name'] );
-		}
-
-		// Init plural.
-		$bpgsites_overrides_plural = $this->option_get( 'bpgsites_overrides_plural' );
-		if ( empty( $bpgsites_overrides_plural ) ) {
-			$bpgsites_overrides_plural = esc_attr( $defaults['plural'] );
-		}
-
-		// Init button.
-		$bpgsites_overrides_button = $this->option_get( 'bpgsites_overrides_button' );
-		if ( empty( $bpgsites_overrides_button ) ) {
-			$bpgsites_overrides_button = esc_attr( $defaults['button'] );
-		}
-
-		// Open admin page.
-		echo '
-		<div class="wrap" id="bpgsites_admin_wrapper">
-
-		<div class="icon32" id="icon-options-general"><br/></div>
-
-		<h2>' . __( 'BP Group Sites Settings', 'bp-group-sites' ) . '</h2>
-
-		<form method="post" action="' . htmlentities( $url . '&updated=true' ) . '">
-
-		' . wp_nonce_field( 'bpgsites_admin_action', 'bpgsites_nonce', true, false ) . '
-		' . wp_referer_field( false ) . "\n\n";
-
-		// Show multisite options.
-		echo '
-		<div id="bpgsites_admin_options">
-
-		<h3>' . __( 'BP Group Sites Settings', 'bp-group-sites' ) . '</h3>
-
-		<p>' . __( 'Configure how BP Group Sites behaves.', 'bp-group-sites' ) . '</p>' . "\n\n";
-
-		// Add global options.
-		echo '
-		<h4>' . __( 'Global Options', 'bp-group-sites' ) . '</h4>
-
-		<table class="form-table">
-
-			<tr valign="top">
-				<th scope="row"><label for="bpgsites_public">' . __( 'Should comments in public groups be visible to readers who are not members of those groups?', 'bp-group-sites' ) . '</label></th>
-				<td><input id="bpgsites_public" name="bpgsites_public" value="1" type="checkbox"' . $bpgsites_public . ' /></td>
-			</tr>
-
-		</table>' . "\n\n";
-
-		// Add global options.
-		echo '
-		<h4>' . __( 'Naming Options', 'bp-group-sites' ) . '</h4>
-
-		<table class="form-table">
-
-			<tr valign="top">
-				<th scope="row"><label for="bpgsites_overrides">' . __( 'Enable name changes?', 'bp-group-sites' ) . '</label></th>
-				<td><input id="bpgsites_overrides" name="bpgsites_overrides" value="1" type="checkbox"' . $bpgsites_overrides . ' /></td>
-			</tr>
-
-			<tr valign="top">
-				<th scope="row"><label for="bpgsites_overrides_title">' . __( 'Component Title', 'bp-group-sites' ) . '</label></th>
-				<td><input id="bpgsites_overrides_title" name="bpgsites_overrides_title" value="' . $bpgsites_overrides_title . '" type="text" /></td>
-			</tr>
-
-			<tr valign="top">
-				<th scope="row"><label for="bpgsites_overrides_name">' . __( 'Singular name for a Group Site', 'bp-group-sites' ) . '</label></th>
-				<td><input id="bpgsites_overrides_name" name="bpgsites_overrides_name" value="' . $bpgsites_overrides_name . '" type="text" /></td>
-			</tr>
-
-			<tr valign="top">
-				<th scope="row"><label for="bpgsites_overrides_plural">' . __( 'Plural name for Group Sites', 'bp-group-sites' ) . '</label></th>
-				<td><input id="bpgsites_overrides_plural" name="bpgsites_overrides_plural" value="' . $bpgsites_overrides_plural . '" type="text" /></td>
-			</tr>
-
-			<tr valign="top">
-				<th scope="row"><label for="bpgsites_overrides_button">' . __( 'Visit Group Site button text', 'bp-group-sites' ) . '</label></th>
-				<td><input id="bpgsites_overrides_button" name="bpgsites_overrides_button" value="' . $bpgsites_overrides_button . '" type="text" /></td>
-			</tr>
-
-		</table>' . "\n\n";
-
-		// Close form.
-		echo '</div>' . "\n\n";
-
-		// Close admin form.
-		echo '
-		<p class="submit">
-			<input type="submit" name="bpgsites_submit" value="' . __( 'Save Changes', 'bp-group-sites' ) . '" class="button-primary" />
-		</p>
-
-		</form>
-
-		</div>
-		' . "\n\n\n\n";
-
-	}
-
-	/**
 	 * Get default values for this plugin.
 	 *
 	 * @since 0.1
@@ -498,6 +488,26 @@ class BP_Group_Sites_Admin {
 // =============================================================================
 
 /**
+ * Gets the group extension title.
+ *
+ * @since 0.3.3
+ *
+ * @return str $title The group extension title.
+ */
+function bpgsites_get_extension_title() {
+
+	/**
+	 * Filters the group extension plural.
+	 *
+	 * @since 0.1
+	 *
+	 * @param string $title The default group extension title.
+	 */
+	return apply_filters( 'bpgsites_extension_title', __( 'Group Sites', 'bp-group-sites' ) );
+
+}
+
+/**
  * Override group extension title.
  *
  * @since 0.1
@@ -524,7 +534,27 @@ function bpgsites_override_extension_title( $title ) {
 }
 
 // Add filter for the above.
-add_filter( 'bpgsites_extension_title', 'bpgsites_override_extension_title', 10, 1 );
+add_filter( 'bpgsites_extension_title', 'bpgsites_override_extension_title', 10 );
+
+/**
+ * Gets the group extension singular name.
+ *
+ * @since 0.3.3
+ *
+ * @return string $name The singular name.
+ */
+function bpgsites_get_extension_name() {
+
+	/**
+	 * Filters the group extension plural.
+	 *
+	 * @since 0.1
+	 *
+	 * @param string $name The default group extension singular name.
+	 */
+	return apply_filters( 'bpgsites_extension_name', __( 'Group Site', 'bp-group-sites' ) );
+
+}
 
 /**
  * Override group extension singular name.
@@ -553,7 +583,27 @@ function bpgsites_override_extension_name( $name ) {
 }
 
 // Add filter for the above.
-add_filter( 'bpgsites_extension_name', 'bpgsites_override_extension_name', 10, 1 );
+add_filter( 'bpgsites_extension_name', 'bpgsites_override_extension_name', 10 );
+
+/**
+ * Gets the group extension plural name.
+ *
+ * @since 0.3.3
+ *
+ * @return str $plural The group extension plural name.
+ */
+function bpgsites_get_extension_plural() {
+
+	/**
+	 * Filters the group extension plural.
+	 *
+	 * @since 0.1
+	 *
+	 * @param string $name The default group extension plural name.
+	 */
+	return apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) );
+
+}
 
 /**
  * Override group extension plural.
@@ -582,7 +632,27 @@ function bpgsites_override_extension_plural( $plural ) {
 }
 
 // Add filter for the above.
-add_filter( 'bpgsites_extension_plural', 'bpgsites_override_extension_plural', 10, 1 );
+add_filter( 'bpgsites_extension_plural', 'bpgsites_override_extension_plural', 10 );
+
+/**
+ * Gets the group extension slug.
+ *
+ * @since 0.3.3
+ *
+ * @return str $slug The group extension slug.
+ */
+function bpgsites_get_extension_slug() {
+
+	/**
+	 * Filters the group extension slug.
+	 *
+	 * @since 0.1
+	 *
+	 * @param string $slug The default group extension slug.
+	 */
+	return apply_filters( 'bpgsites_extension_slug', 'group-sites' );
+
+}
 
 /**
  * Override group extension slug.
@@ -611,7 +681,7 @@ function bpgsites_override_extension_slug( $slug ) {
 }
 
 // Add filter for the above.
-add_filter( 'bpgsites_extension_slug', 'bpgsites_override_extension_slug', 10, 1 );
+add_filter( 'bpgsites_extension_slug', 'bpgsites_override_extension_slug', 10 );
 
 /**
  * Override the name of the button on the BP Group Sites "sites" screen.

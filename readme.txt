@@ -22,7 +22,7 @@ This plugin was developed for [The Readers' Thoreau](https://commons.digitalthor
 
 ### Requirements
 
-This plugin requires a minimum of *WordPress 4.2.1* and *BuddyPress 2.0*.
+This plugin requires a minimum of *WordPress 4.9* and *BuddyPress 2.0*.
 
 ### BuddyPress 12.x
 

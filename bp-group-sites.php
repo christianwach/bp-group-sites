@@ -11,7 +11,7 @@
  * Author URI:        https://haystack.co.uk
  * License:           GPLv2 or later
  * License URI:       https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * Requires at least: 5.7
+ * Requires at least: 4.9
  * Requires PHP:      7.4
  * Text Domain:       bp-group-sites
  * Domain Path:       /languages
@@ -32,6 +32,9 @@
  * GNU General Public License for more details.
  */
 
+// Exit if accessed directly.
+defined( 'ABSPATH' ) || exit;
+
 // Set our version here.
 define( 'BPGSITES_VERSION', '0.3.3a' );
 
@@ -44,9 +47,15 @@ if ( ! defined( 'BPGSITES_FILE' ) ) {
 if ( ! defined( 'BPGSITES_URL' ) ) {
 	define( 'BPGSITES_URL', plugin_dir_url( BPGSITES_FILE ) );
 }
+
 // Store PATH to this plugin's directory.
 if ( ! defined( 'BPGSITES_PATH' ) ) {
 	define( 'BPGSITES_PATH', plugin_dir_path( BPGSITES_FILE ) );
+}
+
+// Set our testing flag.
+if ( ! defined( 'BPGSITES_DEBUG' ) ) {
+	define( 'BPGSITES_DEBUG', false );
 }
 
 // Set site option prefix.
@@ -267,7 +276,7 @@ class BP_Group_Sites {
 	public function enqueue_styles() {
 
 		// If on group admin screen.
-		if ( bp_is_group_admin_screen( apply_filters( 'bpgsites_extension_slug', 'group-sites' ) ) ) {
+		if ( bp_is_group_admin_screen( bpgsites_get_extension_slug() ) ) {
 
 			// Register Select2 styles.
 			wp_register_style(
@@ -313,7 +322,7 @@ class BP_Group_Sites {
 			);
 
 			// If on group admin screen.
-			if ( bp_is_group_admin_screen( apply_filters( 'bpgsites_extension_slug', 'group-sites' ) ) ) {
+			if ( bp_is_group_admin_screen( bpgsites_get_extension_slug() ) ) {
 
 				// Register Select2.
 				wp_register_script(
@@ -402,15 +411,35 @@ class BP_Group_Sites {
 
 }
 
-// Init plugin.
-global $bp_groupsites;
-$bp_groupsites = new BP_Group_Sites();
+/**
+ * Gets a reference to this plugin.
+ *
+ * @since 0.3.3
+ *
+ * @return BP_Group_Sites $bp_groupsites The plugin reference.
+ */
+function bp_groupsites() {
+
+	global $bp_groupsites;
+
+	// Maybe init plugin.
+	if ( ! isset( $bp_groupsites ) ) {
+		$bp_groupsites = new BP_Group_Sites();
+	}
+
+	// --<
+	return $bp_groupsites;
+
+}
+
+// Init immediately.
+bp_groupsites();
 
 // Activation.
-register_activation_hook( __FILE__, [ $bp_groupsites, 'activate' ] );
+register_activation_hook( __FILE__, [ bp_groupsites(), 'activate' ] );
 
 // Deactivation.
-register_deactivation_hook( __FILE__, [ $bp_groupsites, 'deactivate' ] );
+register_deactivation_hook( __FILE__, [ bp_groupsites(), 'deactivate' ] );
 
 /*
  * Will use the 'uninstall.php' method.

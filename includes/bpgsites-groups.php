@@ -9,9 +9,7 @@
  */
 
 // Exit if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 // Prevent problems during upgrade or when Groups are disabled.
 if ( ! class_exists( 'BP_Group_Extension' ) ) {
@@ -45,10 +43,18 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	 */
 	public function __construct() {
 
-		// Init vars with filters applied.
-		$name = apply_filters( 'bpgsites_extension_title', __( 'Group Sites', 'bp-group-sites' ) );
-		$slug = apply_filters( 'bpgsites_extension_slug', 'group-sites' );
-		$pos  = apply_filters( 'bpgsites_extension_pos', 31 );
+		// Init vars.
+		$name = bpgsites_get_extension_title();
+		$slug = bpgsites_get_extension_slug();
+
+		/**
+		 * Filters the initial nav item position.
+		 *
+		 * @since 0.1
+		 *
+		 * @param integer $pos The default position.
+		 */
+		$pos = apply_filters( 'bpgsites_extension_pos', 31 );
 
 		/*
 		 * Test for BP 1.8+.
@@ -155,15 +161,11 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 
 		}
 
-		// Get name, but allow plugins to override.
-		$name = apply_filters( 'bpgsites_extension_name', __( 'Group Site', 'bp-group-sites' ) );
-
 		// Action to perform on the chosen blog.
 		switch ( $parsed['action'] ) {
 
 			// Top-level "Add" button.
 			case 'add':
-
 				// Link.
 				bpgsites_link_blog_and_group( $blog_id, $primary_group_id );
 
@@ -172,7 +174,7 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 					sprintf(
 						/* translators: %s: The singular name for Group Sites. */
 						__( '%s successfully added to Group', 'bp-group-sites' ),
-						$name
+						bpgsites_get_extension_name()
 					)
 				);
 
@@ -180,7 +182,6 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 
 			// Top-level "Remove" button.
 			case 'remove':
-
 				// Unlink.
 				bpgsites_unlink_blog_and_group( $blog_id, $primary_group_id );
 
@@ -189,7 +190,7 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 					sprintf(
 						/* translators: %s: The singular name for Group Sites. */
 						__( '%s successfully removed from Group', 'bp-group-sites' ),
-						$name
+						bpgsites_get_extension_name()
 					)
 				);
 
@@ -197,7 +198,6 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 
 			// Read with "Invite" button.
 			case 'invite':
-
 				// Get invited group ID from POST.
 				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 				$invited_group_id = isset( $_POST[ 'bpgsites_group_linkages_invite_select_' . $blog_id ] ) ? (int) wp_unslash( $_POST[ 'bpgsites_group_linkages_invite_select_' . $blog_id ] ) : 0;
@@ -212,42 +212,38 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 					$this->send_invitation_message( $blog_id, $primary_group_id, $invited_group_id );
 
 					// Feedback.
-					bp_core_add_message( sprintf( __( 'Group successfully invited', 'bp-group-sites' ), $name ) );
+					bp_core_add_message( __( 'Group successfully invited', 'bp-group-sites' ) );
 
 				} else {
 
 					// Feedback.
-					bp_core_add_message( sprintf( __( 'Something went wrong - group invitation not sent.', 'bp-group-sites' ), $name ) );
+					bp_core_add_message( __( 'Something went wrong - group invitation not sent.', 'bp-group-sites' ) );
 
 				}
-
 				break;
 
 			// Invitation "Accept" button.
 			case 'accept':
-
 				// Create linkages.
 				bpgsites_group_linkages_pending_accept( $blog_id, $primary_group_id, $secondary_group_id );
 
 				// Feedback.
-				bp_core_add_message( sprintf( __( 'The invitation has been accepted', 'bp-group-sites' ), $name ) );
+				bp_core_add_message( __( 'The invitation has been accepted.', 'bp-group-sites' ) );
 
 				break;
 
 			// Invitation "Reject" button.
 			case 'reject':
-
 				// Reject.
 				bpgsites_group_linkages_pending_delete( $blog_id, $primary_group_id, $secondary_group_id );
 
 				// Feedback.
-				bp_core_add_message( sprintf( __( 'The invitation has been declined', 'bp-group-sites' ), $name ) );
+				bp_core_add_message( __( 'The invitation has been declined.', 'bp-group-sites' ) );
 
 				break;
 
 			// Reading with "Stop" button.
 			case 'unlink':
-
 				// Unlink.
 				bpgsites_group_linkages_delete( $blog_id, $primary_group_id, $secondary_group_id );
 
@@ -289,6 +285,7 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	public function display( $group_id = null ) {
 
 		// Hand off to function.
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo bpgsites_get_extension_display();
 
 	}
@@ -310,6 +307,7 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 	public function admin_screen( $group_id = null ) {
 
 		// Hand off to function.
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo bpgsites_get_extension_admin_screen();
 
 	}
@@ -483,10 +481,10 @@ class BPGSites_Group_Extension extends BP_Group_Extension {
 		$content = sprintf(
 			$body,
 			$invited_group->name,
-			apply_filters( 'bpgsites_extension_name', __( 'Group Site', 'bp-group-sites' ) ),
+			bpgsites_get_extension_name(),
 			$blog_name,
 			$inviting_group->name,
-			apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) ),
+			bpgsites_get_extension_plural(),
 			$admin_link
 		);
 
@@ -592,15 +590,11 @@ function bpgsites_get_extension_display() {
 		<div id="pag-bottom" class="pagination">
 
 			<div class="pag-count" id="blog-dir-count-bottom">
-
 				<?php bpgsites_blogs_pagination_count(); ?>
-
 			</div>
 
 			<div class="pagination-links" id="blog-dir-pag-bottom">
-
 				<?php bp_blogs_pagination_links(); ?>
-
 			</div>
 
 		</div>
@@ -706,15 +700,11 @@ function bpgsites_get_extension_edit_screen() {
 		<div id="pag-bottom" class="pagination">
 
 			<div class="pag-count" id="blog-dir-count-bottom">
-
 				<?php bpgsites_blogs_pagination_count(); ?>
-
 			</div>
 
 			<div class="pagination-links" id="blog-dir-pag-bottom">
-
 				<?php bp_blogs_pagination_links(); ?>
-
 			</div>
 
 		</div>
@@ -744,7 +734,7 @@ function bpgsites_get_extension_edit_screen() {
  */
 function bpgsites_get_extension_admin_screen() {
 
-	echo '<p>' . __( 'BP Group Sites Admin Screen', 'bp-group-sites' ) . '</p>';
+	echo '<p>' . esc_html__( 'BP Group Sites Admin Screen', 'bp-group-sites' ) . '</p>';
 
 }
 
@@ -800,7 +790,7 @@ function bpgsites_group_linkages_pending_get_markup( $echo = true ) {
 	$html .= '<div class="bpgsites_group_linkages_pending">' . "\n";
 
 	// Construct heading.
-	$html .= '<h5 class="bpgsites_group_linkages_pending_heading">' . __( 'Invitations to read with other groups', 'bp-group-sites' ) . '</h5>' . "\n";
+	$html .= '<h5 class="bpgsites_group_linkages_pending_heading">' . esc_html__( 'Invitations to read with other groups', 'bp-group-sites' ) . '</h5>' . "\n";
 
 	// Open reveal div.
 	$html .= '<div class="bpgsites_group_linkages_pending_reveal">' . "\n";
@@ -827,14 +817,14 @@ function bpgsites_group_linkages_pending_get_markup( $echo = true ) {
 			$text = sprintf(
 				/* translators: 1: The name of the blog, 2: The name of the inviting group. */
 				__( 'Read "%1$s" with "%2$s"', 'bp-group-sites' ),
-				$blog_name,
+				esc_html( $blog_name ),
 				esc_html( $inviting_group->name )
 			);
 
 			// Add label.
-			$html .= '<li><span class="bpgsites_invite_received">' . $text . '</span> ' .
-				'<input type="submit" class="bpgsites_invite_received_button" name="bpgsites_manage-' . $blog_id . '_' . $inviting_group_id . '-accept" value="' . __( 'Accept', 'bp-group-sites' ) . '" /> ' .
-				'<input type="submit" class="bpgsites_invite_received_button" name="bpgsites_manage-' . $blog_id . '_' . $inviting_group_id . '-reject" value="' . __( 'Decline', 'bp-group-sites' ) . '" /></li>' . "\n";
+			$html .= '<li><span class="bpgsites_invite_received">' . esc_html( $text ) . '</span> ' .
+				'<input type="submit" class="bpgsites_invite_received_button" name="bpgsites_manage-' . esc_attr( $blog_id ) . '_' . esc_attr( $inviting_group_id ) . '-accept" value="' . esc_attr__( 'Accept', 'bp-group-sites' ) . '" /> ' .
+				'<input type="submit" class="bpgsites_invite_received_button" name="bpgsites_manage-' . esc_attr( $blog_id ) . '_' . esc_attr( $inviting_group_id ) . '-reject" value="' . esc_attr__( 'Decline', 'bp-group-sites' ) . '" /></li>' . "\n";
 
 		}
 
@@ -851,6 +841,7 @@ function bpgsites_group_linkages_pending_get_markup( $echo = true ) {
 
 	// Output unless overridden.
 	if ( $echo ) {
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $html;
 	}
 
@@ -884,6 +875,9 @@ function bpgsites_group_linkages_pending_get( $group_id ) {
 	if ( ! isset( $pending_groups['received'] ) ) {
 		$pending_groups['received'] = [];
 	}
+
+	// Make sure the values are integers.
+	array_walk_recursive( $pending_groups, 'intval' );
 
 	// --<
 	return $pending_groups;
@@ -937,10 +931,10 @@ function bpgsites_group_linkages_pending_sent_create( $blog_id, $inviting_group_
 	}
 
 	// If the invited group isn't present.
-	if ( ! in_array( $invited_group_id, $pending_for_inviting_group['sent'][ $blog_id ] ) ) {
+	if ( ! in_array( (int) $invited_group_id, $pending_for_inviting_group['sent'][ $blog_id ], true ) ) {
 
 		// Add it.
-		$pending_for_inviting_group['sent'][ $blog_id ][] = $invited_group_id;
+		$pending_for_inviting_group['sent'][ $blog_id ][] = (int) $invited_group_id;
 
 		// Resave.
 		groups_update_groupmeta( $inviting_group_id, BPGSITES_PENDING, $pending_for_inviting_group );
@@ -969,10 +963,10 @@ function bpgsites_group_linkages_pending_sent_delete( $blog_id, $inviting_group_
 	}
 
 	// If the invited group is present.
-	if ( in_array( $invited_group_id, $pending_for_inviting_group['sent'][ $blog_id ] ) ) {
+	if ( in_array( (int) $invited_group_id, $pending_for_inviting_group['sent'][ $blog_id ], true ) ) {
 
 		// Remove group ID and re-index.
-		$updated = array_merge( array_diff( $pending_for_inviting_group['sent'][ $blog_id ], [ $invited_group_id ] ) );
+		$updated = array_merge( array_diff( $pending_for_inviting_group['sent'][ $blog_id ], [ (int) $invited_group_id ] ) );
 
 		// Resave.
 		groups_update_groupmeta( $inviting_group_id, BPGSITES_PENDING, $updated );
@@ -1051,10 +1045,10 @@ function bpgsites_group_linkages_pending_received_create( $blog_id, $inviting_gr
 	}
 
 	// If the inviting group isn't present.
-	if ( ! in_array( $inviting_group_id, $pending_for_invited_group['received'][ $blog_id ] ) ) {
+	if ( ! in_array( (int) $inviting_group_id, $pending_for_invited_group['received'][ $blog_id ], true ) ) {
 
 		// Add it.
-		$pending_for_invited_group['received'][ $blog_id ][] = $inviting_group_id;
+		$pending_for_invited_group['received'][ $blog_id ][] = (int) $inviting_group_id;
 
 		// Resave.
 		groups_update_groupmeta( $invited_group_id, BPGSITES_PENDING, $pending_for_invited_group );
@@ -1083,10 +1077,10 @@ function bpgsites_group_linkages_pending_received_delete( $blog_id, $invited_gro
 	}
 
 	// If the inviting group is present.
-	if ( in_array( $inviting_group_id, $pending_for_invited_group['received'][ $blog_id ] ) ) {
+	if ( in_array( (int) $inviting_group_id, $pending_for_invited_group['received'][ $blog_id ], true ) ) {
 
 		// Remove group ID and re-index.
-		$updated = array_merge( array_diff( $pending_for_invited_group['received'][ $blog_id ], [ $inviting_group_id ] ) );
+		$updated = array_merge( array_diff( $pending_for_invited_group['received'][ $blog_id ], [ (int) $inviting_group_id ] ) );
 
 		// Resave.
 		groups_update_groupmeta( $invited_group_id, BPGSITES_PENDING, $updated );
@@ -1205,7 +1199,7 @@ function bpgsites_group_linkages_get_markup( $echo = true ) {
 	$html .= '<div class="bpgsites_group_linkage">' . "\n";
 
 	// Construct heading.
-	$html .= '<h5 class="bpgsites_group_linkage_heading">' . __( 'Read with other groups', 'bp-group-sites' ) . '</h5>' . "\n";
+	$html .= '<h5 class="bpgsites_group_linkage_heading">' . esc_html__( 'Read with other groups', 'bp-group-sites' ) . '</h5>' . "\n";
 
 	// Open reveal div.
 	$html .= '<div class="bpgsites_group_linkage_reveal">' . "\n";
@@ -1229,7 +1223,7 @@ function bpgsites_group_linkages_get_markup( $echo = true ) {
 
 	// Define config array.
 	$config_array = [
-		//'user_id'         => $user_id,
+		// 'user_id'         => $user_id,
 		'type'            => 'alphabetical',
 		'max'             => 1000,
 		'per_page'        => 1000,
@@ -1251,7 +1245,7 @@ function bpgsites_group_linkages_get_markup( $echo = true ) {
 		$html .= '<div class="bpgsites_group_linkages">' . "\n";
 
 		// Construct heading.
-		$html .= '<h6 class="bpgsites_group_linkages_heading">' . __( 'Reading with', 'bp-group-sites' ) . '</h6>' . "\n";
+		$html .= '<h6 class="bpgsites_group_linkages_heading">' . esc_html__( 'Reading with', 'bp-group-sites' ) . '</h6>' . "\n";
 
 		// Open list.
 		$html .= '<ol class="bpgsites_group_linkages_list">' . "\n";
@@ -1264,7 +1258,7 @@ function bpgsites_group_linkages_get_markup( $echo = true ) {
 			$group_id = $groups_query->group->id;
 
 			// Add label.
-			$html .= '<li><span class="bpgsites_group_unlink">' . $groups_query->group->name . '</span> <input type="submit" class="bpgsites_unlink_button" name="bpgsites_manage-' . $blog_id . '_' . $group_id . '-unlink" value="' . __( 'Stop', 'bp-group-sites' ) . '" /></li>' . "\n";
+			$html .= '<li><span class="bpgsites_group_unlink">' . esc_html( $groups_query->group->name ) . '</span> <input type="submit" class="bpgsites_unlink_button" name="bpgsites_manage-' . esc_attr( $blog_id ) . '_' . esc_attr( $group_id ) . '-unlink" value="' . esc_attr__( 'Stop', 'bp-group-sites' ) . '" /></li>' . "\n";
 
 		}
 
@@ -1277,16 +1271,16 @@ function bpgsites_group_linkages_get_markup( $echo = true ) {
 	}
 
 	// Open invite div.
-	$html .= '<div id="bpgsites_group_linkages_invite-' . $blog_id . '" class="bpgsites_group_linkages_invite">' . "\n";
+	$html .= '<div id="bpgsites_group_linkages_invite-' . esc_html( $blog_id ) . '" class="bpgsites_group_linkages_invite">' . "\n";
 
 	// Construct heading.
-	$html .= '<h6 class="bpgsites_group_linkage_heading">' . __( 'Invite to read', 'bp-group-sites' ) . '</h6>' . "\n";
+	$html .= '<h6 class="bpgsites_group_linkage_heading">' . esc_html__( 'Invite to read', 'bp-group-sites' ) . '</h6>' . "\n";
 
 	// Add select2.
-	$html .= '<p><select class="bpgsites_group_linkages_invite_select" name="bpgsites_group_linkages_invite_select_' . $blog_id . '" style="width: 70%"><option value="0">' . __( 'Find a group to invite', 'bp-group-sites' ) . '</option></select></p>' . "\n";
+	$html .= '<p><select class="bpgsites_group_linkages_invite_select" name="bpgsites_group_linkages_invite_select_' . esc_attr( $blog_id ) . '" style="width: 70%"><option value="0">' . esc_html__( 'Find a group to invite', 'bp-group-sites' ) . '</option></select></p>' . "\n";
 
 	// Add "Send invitation" button.
-	$html .= '<p class="bpgsites_invite_actions"><input type="submit" class="bpgsites_invite_button" name="bpgsites_manage-' . $blog_id . '-invite" value="' . __( 'Send invitation', 'bp-group-sites' ) . '" /></p>' . "\n";
+	$html .= '<p class="bpgsites_invite_actions"><input type="submit" class="bpgsites_invite_button" name="bpgsites_manage-' . esc_attr( $blog_id ) . '-invite" value="' . esc_html__( 'Send invitation', 'bp-group-sites' ) . '" /></p>' . "\n";
 
 	// Close invite div.
 	$html .= '</div>' . "\n";
@@ -1302,6 +1296,7 @@ function bpgsites_group_linkages_get_markup( $echo = true ) {
 
 	// Output unless overridden.
 	if ( $echo ) {
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $html;
 	}
 
@@ -1333,13 +1328,13 @@ function bpgsites_group_linkages_get( $group_id, $blog_id = 0 ) {
 		$linked_groups = [];
 	}
 
-	// Did we request a particular blog?
+	// Maybe overwrite with just the nested array for a requested blog.
 	if ( 0 !== $blog_id ) {
-
-		// Overwrite with just the nested array for that blog.
 		$linked_groups = isset( $linked_groups[ $blog_id ] ) ? $linked_groups[ $blog_id ] : [];
-
 	}
+
+	// Make sure the group IDs are integers.
+	array_walk_recursive( $linked_groups, 'intval' );
 
 	// --<
 	return $linked_groups;
@@ -1425,7 +1420,7 @@ function bpgsites_group_linkages_link_exists( $blog_id, $primary_group_id, $seco
 	$linked_group_ids = isset( $linked[ $blog_id ] ) ? $linked[ $blog_id ] : [];
 
 	// If the secondary group is in the list, there must be a linkage.
-	if ( in_array( $secondary_group_id, $linked_group_ids ) ) {
+	if ( in_array( (int) $secondary_group_id, $linked_group_ids, true ) ) {
 		return true;
 	}
 
@@ -1458,13 +1453,16 @@ function bpgsites_group_linkages_get_ajax() {
 	$exclude = array_unique( array_merge( $linked, [ $current_group_id ] ) );
 
 	// Get groups this user can see for this search.
-	$groups = groups_get_groups( [
+	$args = [
 		'user_id'         => is_super_admin() ? 0 : bp_loggedin_user_id(),
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		'search_terms'    => isset( $_POST['s'] ) ? sanitize_text_field( wp_unslash( $_POST['s'] ) ) : '',
 		'show_hidden'     => true,
 		'populate_extras' => false,
 		'exclude'         => $exclude,
-	] );
+	];
+
+	$groups = groups_get_groups( $args );
 
 	// Init return.
 	$json = [];
@@ -1533,10 +1531,10 @@ function bpgsites_group_linkage_create( $blog_id, $primary_group_id, $secondary_
 	$linked_group_ids = isset( $linked[ $blog_id ] ) ? $linked[ $blog_id ] : [];
 
 	// Is the invited group in the list?
-	if ( ! in_array( $secondary_group_id, $linked_group_ids ) ) {
+	if ( ! in_array( (int) $secondary_group_id, $linked_group_ids, true ) ) {
 
 		// No, add it.
-		$linked_group_ids[] = $secondary_group_id;
+		$linked_group_ids[] = (int) $secondary_group_id;
 
 		// Overwrite in parent array.
 		$linked[ $blog_id ] = $linked_group_ids;
@@ -1570,10 +1568,10 @@ function bpgsites_group_linkage_delete( $blog_id, $primary_group_id, $secondary_
 	$linked_group_ids = isset( $linked[ $blog_id ] ) ? $linked[ $blog_id ] : [];
 
 	// Is this one in the list?
-	if ( in_array( $secondary_group_id, $linked_group_ids ) ) {
+	if ( in_array( (int) $secondary_group_id, $linked_group_ids, true ) ) {
 
 		// Yes - remove group and re-index.
-		$updated = array_merge( array_diff( $linked_group_ids, [ $secondary_group_id ] ) );
+		$updated = array_merge( array_diff( $linked_group_ids, [ (int) $secondary_group_id ] ) );
 
 		// Overwrite in parent array.
 		$linked[ $blog_id ] = $updated;
@@ -1594,35 +1592,32 @@ function bpgsites_group_linkage_delete( $blog_id, $primary_group_id, $secondary_
  */
 function bpgsites_showcase_group_settings_form() {
 
-	// Get name.
-	$name = apply_filters( 'bpgsites_extension_title', __( 'Group Sites', 'bp-group-sites' ) );
-
-	// Init checked.
-	$checked = '';
-
 	// Get existing option.
 	$showcase_groups = bpgsites_showcase_groups_get();
 
 	// Get current group ID.
 	$group_id = bpgsites_get_current_group_id();
 
+	// Init checked.
+	$checked = 0;
+
 	// Sanity check list and group ID.
-	if ( count( $showcase_groups ) > 0 && ! is_null( $group_id ) ) {
+	if ( count( $showcase_groups ) > 0 && ! empty( $group_id ) ) {
 
 		// Override checked if this group's ID is in the list.
-		if ( in_array( $group_id, $showcase_groups ) ) {
-			$checked = ' checked="checked"';
+		if ( in_array( (int) $group_id, $showcase_groups, true ) ) {
+			$checked = 1;
 		}
 
 	}
 
 	?>
-	<h4><?php echo esc_html( $name ); ?></h4>
+	<h4><?php echo esc_html( bpgsites_get_extension_title() ); ?></h4>
 
 	<p><?php esc_html_e( 'To make this group a showcase group, make sure that it is set to "Private" above, then check the box below. The effect will be that the comments left by members of this group will always appear to readers. Only other members of this group will be able to reply to those comments.', 'bp-group-sites' ); ?></p>
 
 	<div class="checkbox">
-		<label><input type="checkbox" id="bpgsites-showcase-group" name="bpgsites-showcase-group" value="1"<?php echo $checked; ?> /> <?php esc_html_e( 'Make this group a showcase group', 'bp-group-sites' ); ?></label>
+		<label><input type="checkbox" id="bpgsites-showcase-group" name="bpgsites-showcase-group" value="1"<?php checked( 1, $checked ); ?> /> <?php esc_html_e( 'Make this group a showcase group', 'bp-group-sites' ); ?></label>
 	</div>
 
 	<hr />
@@ -1653,16 +1648,17 @@ function bpgsites_showcase_group_save( $group ) {
 	$showcase_groups = bpgsites_showcase_groups_get();
 
 	// If not checked.
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	if ( ! isset( $_POST['bpgsites-showcase-group'] ) ) {
 
 		// Sanity check list.
 		if ( count( $showcase_groups ) > 0 ) {
 
 			// Is this group's ID in the list?
-			if ( in_array( $group->id, $showcase_groups ) ) {
+			if ( in_array( (int) $group->id, $showcase_groups, true ) ) {
 
 				// Yes, remove group ID and re-index.
-				$updated = array_merge( array_diff( $showcase_groups, [ $group->id ] ) );
+				$updated = array_merge( array_diff( $showcase_groups, [ (int) $group->id ] ) );
 
 				// Save option.
 				bpgsites_site_option_set( 'bpgsites_auth_groups', $updated );
@@ -1674,15 +1670,16 @@ function bpgsites_showcase_group_save( $group ) {
 	} else {
 
 		// Kick out if value is not 1.
-		if ( absint( $_POST['bpgsites-showcase-group'] ) !== 1 ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( 1 !== absint( $_POST['bpgsites-showcase-group'] ) ) {
 			return;
 		}
 
 		// Is this group's ID missing from the list?
-		if ( ! in_array( $group->id, $showcase_groups ) ) {
+		if ( ! in_array( (int) $group->id, $showcase_groups, true ) ) {
 
 			// Add it.
-			$showcase_groups[] = $group->id;
+			$showcase_groups[] = (int) $group->id;
 
 			// Save option.
 			bpgsites_site_option_set( 'bpgsites_auth_groups', $showcase_groups );
@@ -1708,6 +1705,9 @@ function bpgsites_showcase_groups_get() {
 	// Get existing option.
 	$showcase_groups = bpgsites_site_option_get( 'bpgsites_auth_groups', [] );
 
+	// Make sure the array contains integers.
+	array_walk( $showcase_groups, 'intval' );
+
 	// --<
 	return $showcase_groups;
 
@@ -1730,7 +1730,7 @@ function bpgsites_is_showcase_group( $group_id ) {
 	if ( count( $showcase_groups ) > 0 ) {
 
 		// Is this group's ID in the list?
-		if ( in_array( $group_id, $showcase_groups ) ) {
+		if ( in_array( (int) $group_id, $showcase_groups, true ) ) {
 
 			// --<
 			return true;
@@ -1833,7 +1833,7 @@ function bpgsites_showcase_group_media_buttons( $allowed ) {
 }
 
 // Add filter for the above.
-add_filter( 'commentpress_rte_media_buttons', 'bpgsites_showcase_group_media_buttons', 10, 1 );
+add_filter( 'commentpress_rte_media_buttons', 'bpgsites_showcase_group_media_buttons', 10 );
 
 /**
  * Filter quicktags by showcase groups context.
@@ -1873,4 +1873,4 @@ function bpgsites_showcase_group_quicktags( $quicktags ) {
 }
 
 // Add filter for the above.
-add_filter( 'commentpress_rte_quicktags', 'bpgsites_showcase_group_quicktags', 10, 1 );
+add_filter( 'commentpress_rte_quicktags', 'bpgsites_showcase_group_quicktags', 10 );

@@ -8,6 +8,9 @@
  * @subpackage BP_Group_Sites
  */
 
+// Exit if accessed directly.
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Fires before the start of the blogs loop.
  *
@@ -113,15 +116,11 @@ if ( bpgsites_has_blogs( bp_ajax_querystring( 'bpgsites' ) ) ) {
 	<div id="pag-bottom" class="pagination">
 
 		<div class="pag-count" id="blog-dir-count-bottom">
-
 			<?php bpgsites_blogs_pagination_count(); ?>
-
 		</div>
 
 		<div class="pagination-links" id="blog-dir-pag-bottom">
-
 			<?php bp_blogs_pagination_links(); ?>
-
 		</div>
 
 	</div>

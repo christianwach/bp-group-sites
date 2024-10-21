@@ -6,6 +6,9 @@
  * @subpackage BP_Group_Sites
  */
 
+// Exit if accessed directly.
+defined( 'ABSPATH' ) || exit;
+
 get_header( 'buddypress' );
 
 ?>
@@ -26,7 +29,7 @@ get_header( 'buddypress' );
 				echo sprintf(
 					/* translators: %s: The plural name for Group Sites. */
 					esc_html__( '%s Directory', 'bp-group-sites' ),
-					apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) )
+					esc_html( bpgsites_get_extension_plural() )
 				);
 
 				?>
@@ -44,12 +47,12 @@ get_header( 'buddypress' );
 						<a href="<?php bp_root_domain(); ?>/<?php bpgsites_root_slug(); ?>">
 							<?php
 
-							// Filter subnav title.
+							// Show subnav title.
 							printf(
 								/* translators: 1: The plural name for Group Sites, 2: The number of Group Sites. */
-								__( 'All %1$s <span>%2$s</span>', 'bp-group-sites' ),
-								apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) ),
-								bpgsites_get_total_blog_count()
+								__( 'All %1$s %2$s', 'bp-group-sites' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+								esc_html( bpgsites_get_extension_plural() ),
+								'<span>' . esc_html( bpgsites_get_total_blog_count() ) . '</span>'
 							);
 
 							?>

@@ -9,9 +9,7 @@
  */
 
 // Exit if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 /**
  * The main theme compat class for BP Group Sites.
@@ -75,10 +73,19 @@ class BP_Group_Sites_Theme_Compat {
 	 */
 	public function directory_template_hierarchy( $templates ) {
 
-		// Set up our templates based on priority.
-		$new_templates = apply_filters( 'bp_template_hierarchy_bpgsites_directory', [
+		// Set the BP Group Sites directory page.
+		$new_templates = [
 			'bpgsites/index.php',
-		] );
+		];
+
+		/**
+		 * Filters our templates based on priority.
+		 *
+		 * @since 0.1
+		 *
+		 * @param array $new_templates The array of BP Group Sites directory pages.
+		 */
+		$new_templates = apply_filters( 'bp_template_hierarchy_bpgsites_directory', $new_templates );
 
 		/*
 		 * Merge new templates with existing stack.
@@ -99,13 +106,10 @@ class BP_Group_Sites_Theme_Compat {
 	 */
 	public function directory_dummy_post() {
 
-		// Set title.
-		$title = apply_filters( 'bpgsites_extension_plural', __( 'Group Sites', 'bp-group-sites' ) );
-
 		// Create dummy post.
-		bp_theme_compat_reset_post( [
+		$args = [
 			'ID'             => 0,
-			'post_title'     => $title,
+			'post_title'     => bpgsites_get_extension_title(),
 			'post_author'    => 0,
 			'post_date'      => 0,
 			'post_content'   => '',
@@ -113,7 +117,9 @@ class BP_Group_Sites_Theme_Compat {
 			'post_status'    => 'publish',
 			'is_page'        => true,
 			'comment_status' => 'closed',
-		] );
+		];
+
+		bp_theme_compat_reset_post( $args );
 
 	}
 
