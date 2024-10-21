@@ -46,6 +46,10 @@ By default, this plugin will use internal templates for the BuddyPress pages tha
 
 == Changelog ==
 
+= 0.3.3 =
+
+* Codestyle improvements
+
 = 0.3.2 =
 
 * Warn about lack of compatibility with BuddyPress 12.x.
