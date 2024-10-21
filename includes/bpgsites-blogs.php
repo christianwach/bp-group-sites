@@ -501,13 +501,10 @@ function bpgsites_commentpress_site_image( $old_value, $new_value ) {
 	// Is this a group site?
 	if ( bpgsites_is_groupsite( $blog_id ) ) {
 
-		// Access object.
-		global $bp_groupsites;
-
 		// Create option if it doesn't exist.
-		if ( ! $bp_groupsites->admin->option_exists( 'bpgsites_bloginfo' ) ) {
-			$bp_groupsites->admin->option_set( 'bpgsites_bloginfo', [] );
-			$bp_groupsites->admin->options_save();
+		if ( ! bp_groupsites()->admin->option_exists( 'bpgsites_bloginfo' ) ) {
+			bp_groupsites()->admin->option_set( 'bpgsites_bloginfo', [] );
+			bp_groupsites()->admin->options_save();
 		}
 
 		// Do we have a site image?
@@ -523,7 +520,7 @@ function bpgsites_commentpress_site_image( $old_value, $new_value ) {
 			$attachment_full   = wp_get_attachment_image_src( $attachment_id, 'full' );
 
 			// Get existing option.
-			$existing = $bp_groupsites->admin->option_get( 'bpgsites_bloginfo' );
+			$existing = bp_groupsites()->admin->option_get( 'bpgsites_bloginfo' );
 
 			// Overwrite - or create if it doesn't already exist.
 			$existing[ $blog_id ] = [
@@ -538,7 +535,7 @@ function bpgsites_commentpress_site_image( $old_value, $new_value ) {
 		} else {
 
 			// Get existing option.
-			$existing = $bp_groupsites->admin->option_get( 'bpgsites_bloginfo' );
+			$existing = bp_groupsites()->admin->option_get( 'bpgsites_bloginfo' );
 
 			// Remove entry.
 			unset( $existing[ $blog_id ] );
@@ -546,10 +543,10 @@ function bpgsites_commentpress_site_image( $old_value, $new_value ) {
 		}
 
 		// Overwrite.
-		$bp_groupsites->admin->option_set( 'bpgsites_bloginfo', $existing );
+		bp_groupsites()->admin->option_set( 'bpgsites_bloginfo', $existing );
 
 		// Save.
-		$bp_groupsites->admin->options_save();
+		bp_groupsites()->admin->options_save();
 
 	}
 
@@ -570,11 +567,8 @@ add_action( 'update_option_commentpress_theme_settings', 'bpgsites_commentpress_
  */
 function bpgsites_commentpress_site_image_avatar( $avatar, $blog_id, $r ) {
 
-	// Access object.
-	global $bp_groupsites;
-
 	// Get existing option.
-	$existing = $bp_groupsites->admin->option_get( 'bpgsites_bloginfo' );
+	$existing = bp_groupsites()->admin->option_get( 'bpgsites_bloginfo' );
 
 	// Do we have an entry?
 	if ( is_array( $existing ) && array_key_exists( $blog_id, $existing ) ) {

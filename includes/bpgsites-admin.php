@@ -517,15 +517,9 @@ function bpgsites_get_extension_title() {
  */
 function bpgsites_override_extension_title( $title ) {
 
-	// Access object.
-	global $bp_groupsites;
-
-	// Are we overriding?
-	if ( $bp_groupsites->admin->option_get( 'bpgsites_overrides' ) ) {
-
-		// Override with our option.
-		$title = $bp_groupsites->admin->option_get( 'bpgsites_overrides_title' );
-
+	// Maybe override with our option.
+	if ( bp_groupsites()->admin->option_get( 'bpgsites_overrides' ) ) {
+		$title = bp_groupsites()->admin->option_get( 'bpgsites_overrides_title' );
 	}
 
 	// --<
@@ -566,15 +560,9 @@ function bpgsites_get_extension_name() {
  */
 function bpgsites_override_extension_name( $name ) {
 
-	// Access object.
-	global $bp_groupsites;
-
-	// Are we overriding?
-	if ( $bp_groupsites->admin->option_get( 'bpgsites_overrides' ) ) {
-
-		// Override with our option.
-		$name = $bp_groupsites->admin->option_get( 'bpgsites_overrides_name' );
-
+	// Maybe override with our option.
+	if ( bp_groupsites()->admin->option_get( 'bpgsites_overrides' ) ) {
+		$name = bp_groupsites()->admin->option_get( 'bpgsites_overrides_name' );
 	}
 
 	// --<
@@ -615,15 +603,9 @@ function bpgsites_get_extension_plural() {
  */
 function bpgsites_override_extension_plural( $plural ) {
 
-	// Access object.
-	global $bp_groupsites;
-
-	// Are we overriding?
-	if ( $bp_groupsites->admin->option_get( 'bpgsites_overrides' ) ) {
-
-		// Override with our option.
-		$plural = $bp_groupsites->admin->option_get( 'bpgsites_overrides_plural' );
-
+	// Maybe override with our option.
+	if ( bp_groupsites()->admin->option_get( 'bpgsites_overrides' ) ) {
+		$plural = bp_groupsites()->admin->option_get( 'bpgsites_overrides_plural' );
 	}
 
 	// --<
@@ -664,15 +646,9 @@ function bpgsites_get_extension_slug() {
  */
 function bpgsites_override_extension_slug( $slug ) {
 
-	// Access object.
-	global $bp_groupsites;
-
-	// Are we overriding?
-	if ( $bp_groupsites->admin->option_get( 'bpgsites_overrides' ) ) {
-
-		// Override with our option.
-		$slug = $bp_groupsites->admin->option_get( 'bpgsites_overrides_slug' );
-
+	// Maybe override with our option.
+	if ( bp_groupsites()->admin->option_get( 'bpgsites_overrides' ) ) {
+		$slug = bp_groupsites()->admin->option_get( 'bpgsites_overrides_slug' );
 	}
 
 	// --<
@@ -708,17 +684,11 @@ function bpgsites_get_visit_site_button( $button ) {
 	// Switch by blogtype.
 	if ( bpgsites_is_groupsite( bp_get_blog_id() ) ) {
 
-		// Access object.
-		global $bp_groupsites;
-
-		// Are we overriding?
-		if ( $bp_groupsites->admin->option_get( 'bpgsites_overrides' ) ) {
-
-			// Override with our option.
-			$label                = $bp_groupsites->admin->option_get( 'bpgsites_overrides_button' );
+		// Maybe override with our option.
+		if ( bp_groupsites()->admin->option_get( 'bpgsites_overrides' ) ) {
+			$label                = bp_groupsites()->admin->option_get( 'bpgsites_overrides_button' );
 			$button['link_text']  = apply_filters( 'bpgsites_visit_site_button_text', $label );
 			$button['link_title'] = apply_filters( 'bpgsites_visit_site_button_title', $label );
-
 		}
 
 	}

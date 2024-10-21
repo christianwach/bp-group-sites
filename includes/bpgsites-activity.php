@@ -1564,8 +1564,7 @@ class BP_Group_Sites_Activity {
 				$checked = '';
 
 				// Get option.
-				global $bp_groupsites;
-				$public_shown = $bp_groupsites->admin->option_get( 'bpgsites_public' );
+				$public_shown = bp_groupsites()->admin->option_get( 'bpgsites_public' );
 
 				// Are they to be shown?
 				if ( 1 === (int) $public_shown ) {
@@ -2229,8 +2228,7 @@ class BP_Group_Sites_Activity {
 
 					/*
 					// Add to our array only if we allow public comments.
-					global $bp_groupsites;
-					if ( $bp_groupsites->admin->option_get( 'bpgsites_public' ) ) {
+					if ( bp_groupsites()->admin->option_get( 'bpgsites_public' ) ) {
 						$this->user_group_ids['public_groups'][] = $group_id;
 					}
 					*/

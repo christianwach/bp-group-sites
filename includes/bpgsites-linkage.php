@@ -495,17 +495,14 @@ function bpgsites_is_groupsite( $blog_id ) {
  */
 function bpgsites_get_groupsites() {
 
-	// Access object.
-	global $bp_groupsites;
-
 	// Create option if it doesn't exist.
-	if ( ! $bp_groupsites->admin->option_exists( 'bpgsites_groupsites' ) ) {
-		$bp_groupsites->admin->option_set( 'bpgsites_groupsites', [] );
-		$bp_groupsites->admin->options_save();
+	if ( ! bp_groupsites()->admin->option_exists( 'bpgsites_groupsites' ) ) {
+		bp_groupsites()->admin->option_set( 'bpgsites_groupsites', [] );
+		bp_groupsites()->admin->options_save();
 	}
 
 	// Get existing option.
-	$existing = $bp_groupsites->admin->option_get( 'bpgsites_groupsites' );
+	$existing = bp_groupsites()->admin->option_get( 'bpgsites_groupsites' );
 
 	// --<
 	return $existing;
@@ -564,16 +561,13 @@ function bpgsites_get_all_possible_groupsites() {
  */
 function bpgsites_register_groupsite( $blog_id ) {
 
-	// Access object.
-	global $bp_groupsites;
-
 	// Create option if it doesn't exist.
-	if ( ! $bp_groupsites->admin->option_exists( 'bpgsites_groupsites' ) ) {
-		$bp_groupsites->admin->option_set( 'bpgsites_groupsites', [] );
+	if ( ! bp_groupsites()->admin->option_exists( 'bpgsites_groupsites' ) ) {
+		bp_groupsites()->admin->option_set( 'bpgsites_groupsites', [] );
 	}
 
 	// Get existing option.
-	$existing = $bp_groupsites->admin->option_get( 'bpgsites_groupsites' );
+	$existing = bp_groupsites()->admin->option_get( 'bpgsites_groupsites' );
 
 	// Make sure IDs are integers.
 	array_walk( $existing, 'intval' );
@@ -587,10 +581,10 @@ function bpgsites_register_groupsite( $blog_id ) {
 	$existing[ (int) $blog_id ] = (int) $blog_id;
 
 	// Overwrite.
-	$bp_groupsites->admin->option_set( 'bpgsites_groupsites', $existing );
+	bp_groupsites()->admin->option_set( 'bpgsites_groupsites', $existing );
 
 	// Save.
-	$bp_groupsites->admin->options_save();
+	bp_groupsites()->admin->options_save();
 
 }
 
@@ -604,7 +598,7 @@ function bpgsites_register_groupsite( $blog_id ) {
 function bpgsites_deregister_groupsite( $blog_id ) {
 
 	// Get existing option.
-	$existing = $bp_groupsites->admin->option_get( 'bpgsites_groupsites' );
+	$existing = bp_groupsites()->admin->option_get( 'bpgsites_groupsites' );
 
 	// Sanity check.
 	if ( false === $existing ) {
@@ -623,9 +617,9 @@ function bpgsites_deregister_groupsite( $blog_id ) {
 	unset( $existing[ $blog_id ], $existing[ (int) $blog_id ] );
 
 	// Overwrite.
-	$bp_groupsites->admin->option_set( 'bpgsites_groupsites', $existing );
+	bp_groupsites()->admin->option_set( 'bpgsites_groupsites', $existing );
 
 	// Save.
-	$bp_groupsites->admin->options_save();
+	bp_groupsites()->admin->options_save();
 
 }
