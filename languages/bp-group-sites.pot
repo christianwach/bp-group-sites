@@ -1,17 +1,17 @@
-# Copyright (C) 2024 Christian Wach
+# Copyright (C) 2026 Christian Wach
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: BP Group Sites 0.3.3a\n"
+"Project-Id-Version: BP Group Sites 0.4.0a\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/bp-group-sites\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-10-21T14:41:27+00:00\n"
+"POT-Creation-Date: 2026-02-05T20:55:09+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.11.0\n"
+"X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: bp-group-sites\n"
 
 #. Plugin Name of the plugin
@@ -95,12 +95,14 @@ msgstr ""
 #. translators: %s: The plural name for Group Sites.
 #: assets/templates/bpgsites/index.php:31
 #: assets/templates/twentysixteen/index.php:30
+#, php-format
 msgid "%s Directory"
 msgstr ""
 
 #. translators: 1: The plural name for Group Sites, 2: The number of Group Sites.
 #: assets/templates/bpgsites/index.php:53
 #: assets/templates/twentysixteen/index.php:61
+#, php-format
 msgid "All %1$s %2$s"
 msgstr ""
 
@@ -126,11 +128,13 @@ msgstr ""
 
 #. translators: %s: The plural name for Group Sites.
 #: includes/bp-bpgsites-component.php:88
+#, php-format
 msgid "Search %s..."
 msgstr ""
 
 #. translators: %s The link to the Group.
 #: includes/bpgsites-activity.php:195
+#, php-format
 msgid "Posted in: %s"
 msgstr ""
 
@@ -144,6 +148,7 @@ msgstr ""
 
 #. translators: %s The name of the Group.
 #: includes/bpgsites-activity.php:268
+#, php-format
 msgid "This comment appears in the group %s."
 msgstr ""
 
@@ -162,6 +167,7 @@ msgstr ""
 
 #. translators: 1: The User link, 2: The link to the comment, 3: The activity name, 4: The link to the post, 5: The link to the group.
 #: includes/bpgsites-activity.php:499
+#, php-format
 msgid "%1$s left a %2$s on a %3$s %4$s in the group %5$s:"
 msgstr ""
 
@@ -171,6 +177,7 @@ msgstr ""
 
 #. translators: %s: The plural name for Group Sites.
 #: includes/bpgsites-activity.php:606
+#, php-format
 msgid "Comments in %s"
 msgstr ""
 
@@ -199,6 +206,7 @@ msgstr ""
 #. translators: 1: The URL, 2: The anchor text.
 #: includes/bpgsites-activity.php:1001
 #: includes/bpgsites-activity.php:1017
+#, php-format
 msgid "<a href=\"%1$s\">%2$s</a>"
 msgstr ""
 
@@ -208,11 +216,13 @@ msgstr ""
 
 #. translators: %s: The paragraph text.
 #: includes/bpgsites-activity.php:1054
+#, php-format
 msgid "Join a group to leave a comment on %s"
 msgstr ""
 
 #. translators: %s: The singular name of a Group Site.
 #: includes/bpgsites-activity.php:1290
+#, php-format
 msgid "Groups reading this %s"
 msgstr ""
 
@@ -259,21 +269,25 @@ msgstr ""
 
 #. translators: %s: The plural name of the User's Group Sites.
 #: includes/bpgsites-activity.php:2350
+#, php-format
 msgid "All Recent Activity in your %s"
 msgstr ""
 
 #. translators: %s: The plural name of the public Group Sites.
 #: includes/bpgsites-activity.php:2368
+#, php-format
 msgid "Recent Activity in Public %s"
 msgstr ""
 
 #. translators: %s: The plural name of Group Sites.
 #: includes/bpgsites-activity.php:2420
+#, php-format
 msgid "Friends Activity in your %s"
 msgstr ""
 
 #. translators: %s: The singular name of a Group Site.
 #: includes/bpgsites-activity.php:2514
+#, php-format
 msgid "Recent Comments in this %s"
 msgstr ""
 
@@ -303,11 +317,13 @@ msgstr ""
 
 #. translators: %s: The singular name for Group Sites.
 #: includes/bpgsites-blogs.php:242
+#, php-format
 msgid "Viewing 1 %s"
 msgstr ""
 
 #. translators: 1: The site from number, 2: The site to number, 3: The total number of sites, 4: The singular name for Group Sites, 5: The plural name for Group Sites.
 #: includes/bpgsites-blogs.php:248
+#, php-format
 msgid "Viewing %1$s - %2$s of %3$s %4$s"
 msgid_plural "Viewing %1$s - %2$s of %3$s %5$s"
 msgstr[0] ""
@@ -323,11 +339,13 @@ msgstr ""
 
 #. translators: %s: The singular name for Group Sites.
 #: includes/bpgsites-groups.php:176
+#, php-format
 msgid "%s successfully added to Group"
 msgstr ""
 
 #. translators: %s: The singular name for Group Sites.
 #: includes/bpgsites-groups.php:192
+#, php-format
 msgid "%s successfully removed from Group"
 msgstr ""
 
@@ -349,21 +367,25 @@ msgstr ""
 
 #. translators: 1: The name of the site, 2: The name of the Group.
 #: includes/bpgsites-groups.php:260
+#, php-format
 msgid "Your group is no longer reading \"%1$s\" with %2$s"
 msgstr ""
 
 #. translators: 1: The name of the invited group.
 #: includes/bpgsites-groups.php:474
+#, php-format
 msgid "You are receiving this message because you are an administrator of the group \"%1$s\""
 msgstr ""
 
 #. translators: 2: The singular name for Group Sites, 3: The name of the site, 4: The name of the inviting group, 5: The plural name for Group Sites.
 #: includes/bpgsites-groups.php:476
+#, php-format
 msgid "Your group has been invited to read the %2$s \"%3$s\" with the group \"%4$s\". To accept or decline the invitation, click the link below to visit the %5$s admin page for your group."
 msgstr ""
 
 #. translators: 1: The blog name, 2: The name of the inviting group.
 #: includes/bpgsites-groups.php:494
+#, php-format
 msgid "An invitation to read \"%1$s\" with the group \"%2$s\""
 msgstr ""
 
@@ -377,6 +399,7 @@ msgstr ""
 
 #. translators: 1: The name of the blog, 2: The name of the inviting group.
 #: includes/bpgsites-groups.php:819
+#, php-format
 msgid "Read \"%1$s\" with \"%2$s\""
 msgstr ""
 
@@ -423,11 +446,13 @@ msgstr ""
 #. translators: %s: The plural name of Group Sites.
 #: includes/bpgsites-widgets.php:31
 #: includes/bpgsites-widgets.php:140
+#, php-format
 msgid "List of %s"
 msgstr ""
 
 #. translators: %s: The plural name of Group Sites.
 #: includes/bpgsites-widgets.php:39
+#, php-format
 msgid "Use this widget to show a list of %s."
 msgstr ""
 
