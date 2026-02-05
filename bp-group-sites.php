@@ -6,7 +6,7 @@
  * Description:       Creates many-to-many relationships between BuddyPress Groups and WordPress Sites.
  * Plugin URI:        https://github.com/christianwach/bp-group-sites
  * GitHub Plugin URI: https://github.com/christianwach/bp-group-sites
- * Version:           0.4.0a
+ * Version:           0.4.0
  * Author:            Christian Wach
  * Author URI:        https://haystack.co.uk
  * License:           GPLv2 or later
@@ -36,7 +36,7 @@
 defined( 'ABSPATH' ) || exit;
 
 // Set our version here.
-define( 'BPGSITES_VERSION', '0.4.0a' );
+define( 'BPGSITES_VERSION', '0.4.0' );
 
 // Store reference to this file.
 if ( ! defined( 'BPGSITES_FILE' ) ) {
