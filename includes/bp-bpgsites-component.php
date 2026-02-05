@@ -31,9 +31,15 @@ class BP_Group_Sites_Component extends BP_Component {
 		// Store component ID.
 		$this->id = 'bpgsites';
 
-		// Store component name.
-		// NOTE: ideally we'll use BP theme compatibility - see bpgsites_load_template_filter() below.
-		$this->name = bpgsites_get_extension_plural();
+		/*
+		 * Store component name.
+		 *
+		 * NOTE: Ideally we'll use BP theme compatibility - see bpgsites_load_template_filter() below.
+		 *
+		 * Since 14.3.0 BuddyPress says: Do not use translatable strings here as this part is set
+		 * before WP's `init` hook.
+		 */
+		$this->name = 'Group Sites';
 
 		// Add this component to active components.
 		$bp->active_components[ $this->id ] = '1';
