@@ -46,6 +46,10 @@ By default, this plugin will use internal templates for the BuddyPress pages tha
 
 == Changelog ==
 
+= 0.4.0 =
+
+* Fixes the "Filter Comments by Group" filter
+
 = 0.3.3 =
 
 * Codestyle improvements
