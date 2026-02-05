@@ -374,26 +374,66 @@ class BP_Group_Sites {
 	public function enqueue_commentpress_scripts() {
 
 		// CommentPress theme compat.
-		if ( function_exists( 'commentpress_get_comments_by_para' ) ) {
+		if ( ! function_exists( 'commentpress_get_comments_by_para' ) ) {
+			return;
+		}
 
-			// Enqueue common js.
+		// Set dependency for original CommentPress-based theme.
+		$dependency = 'jquery_commentpress';
+
+		// Try to discover the current CommentPress-based theme.
+		$theme_slug    = '';
+		$current_theme = wp_get_theme();
+		if ( $current_theme->exists() ) {
+			if ( ! empty( $current_theme->parent() ) ) {
+				$parent_theme = $current_theme->parent();
+				if ( $parent_theme->exists() ) {
+					$theme_slug = $parent_theme->get_stylesheet();
+				}
+			} else {
+				$theme_slug = $current_theme->get_stylesheet();
+			}
+		}
+
+		/*
+		 * Maybe add the jQuery Cookie plugin bundled with CommentPress.
+		 *
+		 * Version 4.0.0 of CommentPress removed this for all but the original theme,
+		 * but the "Filter Comments by Group" selector uses it to retain state so we
+		 * need to enqueue it for other CommentPress-based themes.
+		 */
+		if ( in_array( $theme_slug, [ 'commentpress-modern', 'commentpress-flat' ], true ) ) {
+
+			// Enqueue cookie Javascript.
 			wp_enqueue_script(
-				'bpgsites_cp_js',
-				BPGSITES_URL . 'assets/js/bpgsites-commentpress.js',
+				'bpgsites_cp_jquery_cookie',
+				plugins_url( 'includes/core/assets/js/jquery.biscuit.js', COMMENTPRESS_PLUGIN_FILE ),
 				[ 'cp_common_js' ],
-				BPGSITES_VERSION,
-				true
+				COMMENTPRESS_VERSION, // Version.
+				true // In footer.
 			);
 
-			// Get vars.
-			$vars = [
-				'show_public' => $this->admin->option_get( 'bpgsites_public' ),
-			];
-
-			// Localise with wp function.
-			wp_localize_script( 'bpgsites_cp_js', 'BpgsitesSettings', $vars );
+			// Switch dependency.
+			$dependency = 'bpgsites_cp_jquery_cookie';
 
 		}
+
+		// Enqueue this plugin's Javascript.
+		wp_enqueue_script(
+			'bpgsites_cp_js',
+			BPGSITES_URL . 'assets/js/bpgsites-commentpress.js',
+			[ $dependency ],
+			BPGSITES_VERSION,
+			true // In footer.
+		);
+
+		// Get vars.
+		$vars = [
+			'show_public' => $this->admin->option_get( 'bpgsites_public' ),
+		];
+
+		// Localise with wp function.
+		wp_localize_script( 'bpgsites_cp_js', 'BpgsitesSettings', $vars );
 
 	}
 
