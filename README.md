@@ -6,7 +6,7 @@ BP Group Sites
 **Tags:** buddypress, groups, sites, reading groups<br/>
 **Requires at least:** 4.9<br/>
 **Tested up to:** 6.9<br/>
-**Stable tag:** 0.4.0<br/>
+**Stable tag:** 0.4.1a<br/>
 **License:** GPLv2 or later<br/>
 **License URI:** https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
